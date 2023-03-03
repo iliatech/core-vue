@@ -1,6 +1,21 @@
+@mixin font-s {
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+@mixin font-sm {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
 @mixin font-m {
   font-size: 1rem;
   font-weight: 500;
+}
+
+@mixin font-m-b {
+  font-size: 1rem;
+  font-weight: 600;
 }
 
 @mixin font-l {
