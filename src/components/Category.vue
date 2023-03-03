@@ -7,8 +7,10 @@
       class="p-button-outlined p-button-rounded"
     />
     <div class="category__content">
-      <b>{{ $lang.categoryContent.spent }}</b
-      >: {{ $lang.categoryContent.currentWeek }}: {{ total.currentWeek }}<br />
+      <span class="category__spent-title">{{
+        $lang.categoryContent.spent
+      }}</span>
+      : {{ $lang.categoryContent.currentWeek }}: {{ total.currentWeek }}<br />
       {{ $lang.categoryContent.previousWeek }}: {{ total.previousWeek }}<br />
       {{ $lang.categoryContent.currentMonth }}: {{ total.currentMonth }}<br />
       {{ $lang.categoryContent.previousMonth }}: {{ total.previousMonth }}
@@ -76,12 +78,15 @@ const onClickBack = (): void => {
 
   &__content {
     padding: $space-m 0;
-    @include font-m;
+    @include font-sl;
+  }
+
+  &__spent-title {
+    @include font-m-b;
   }
 
   &__history {
     padding-top: $space-s;
-    @include font-sm;
   }
 
   &__history-title {
