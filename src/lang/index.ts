@@ -15,4 +15,5 @@ export default {
     previousMonth: "previous month",
   },
   emptyCategoryHistory: "It's empty",
+  add: "Add",
 };

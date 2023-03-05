@@ -8,8 +8,8 @@
         class="p-button-outlined p-button-rounded"
       />
       <Button
-        @click="onClickBack"
-        :label="$lang.back"
+        @click="onClickAdd"
+        :label="$lang.add"
         class="p-button-outlined p-button-rounded p-button-danger"
       />
     </div>
@@ -82,6 +82,10 @@ const history = computed((): CategoryHistory => {
 
 const onClickBack = (): void => {
   router.push(routes.home.path);
+};
+
+const onClickAdd = (): void => {
+  console.log("add item");
 };
 </script>
 
