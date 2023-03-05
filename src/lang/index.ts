@@ -7,6 +7,7 @@ export default {
   back: "Back",
   category: "Category",
   categoryContent: {
+    rest: "Rest",
     spent: "Spent",
     currentWeek: "current week",
     previousWeek: "previous week",

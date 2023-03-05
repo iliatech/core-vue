@@ -1,21 +1,37 @@
 <template>
   <div class="category">
     <div class="category__title">{{ $lang.category }}: {{ categoryName }}</div>
-    <Button
-      @click="onClickBack"
-      :label="$lang.back"
-      class="p-button-outlined p-button-rounded"
-    />
+    <div class="category__buttons">
+      <Button
+        @click="onClickBack"
+        :label="$lang.back"
+        class="p-button-outlined p-button-rounded"
+      />
+      <Button
+        @click="onClickBack"
+        :label="$lang.back"
+        class="p-button-outlined p-button-rounded p-button-danger"
+      />
+    </div>
     <div class="category__content">
-      <span class="category__spent-title">{{
-        $lang.categoryContent.spent
-      }}</span>
-      : {{ $lang.categoryContent.currentWeek }}: {{ total.currentWeek }}<br />
-      {{ $lang.categoryContent.previousWeek }}: {{ total.previousWeek }}<br />
-      {{ $lang.categoryContent.currentMonth }}: {{ total.currentMonth }}<br />
-      {{ $lang.categoryContent.previousMonth }}: {{ total.previousMonth }}
-      <div class="category__history">
-        <div class="category__history-title">History:</div>
+      <div class="category__section">
+        <div class="category__section-title">
+          {{ $lang.categoryContent.rest }}
+        </div>
+        USD: {{ rest.usd }}<br />
+        GEL: {{ rest.gel }}
+      </div>
+      <div class="category__section">
+        <div class="category__section-title">
+          {{ $lang.categoryContent.spent }}
+        </div>
+        {{ $lang.categoryContent.currentWeek }}: {{ total.currentWeek }}<br />
+        {{ $lang.categoryContent.previousWeek }}: {{ total.previousWeek }}<br />
+        {{ $lang.categoryContent.currentMonth }}: {{ total.currentMonth }}<br />
+        {{ $lang.categoryContent.previousMonth }}: {{ total.previousMonth }}
+      </div>
+      <div class="category__section">
+        <div class="category__section-title">History:</div>
         <div
           v-for="historyItem in history"
           :key="
@@ -44,10 +60,14 @@ import { useRoute, useRouter } from "vue-router";
 import { routes } from "@/settings/routes";
 import { computed, reactive, ref } from "vue";
 import { categoriesHistoryMock } from "@/mockData/categoriesHistory";
-import type { CategoryHistory, CategoryHistoryItem } from "@/types/category";
+import type { CategoryHistory } from "@/types/category";
+import { useTotalsStore } from "@/stores/totalsStore";
+import { storeToRefs } from "pinia";
 const route = useRoute();
 const router = useRouter();
 const categoryName = route.params.categoryName as string;
+const totalsStore = useTotalsStore();
+const { rest } = storeToRefs(totalsStore);
 
 const total = reactive({
   currentWeek: 0,
@@ -76,20 +96,21 @@ const onClickBack = (): void => {
     @include font-l;
   }
 
+  &__buttons {
+    display: flex;
+    gap: $space-s;
+  }
+
   &__content {
     padding: $space-m 0;
     @include font-sl;
   }
 
-  &__spent-title {
-    @include font-m-b;
+  &__section {
+    padding-bottom: $space-s;
   }
 
-  &__history {
-    padding-top: $space-s;
-  }
-
-  &__history-title {
+  &__section-title {
     @include font-m-b;
   }
 }
