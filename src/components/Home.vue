@@ -19,19 +19,20 @@ import { useRouter } from "vue-router";
 import { apiPaths } from "@/settings/api";
 import Api from "@/api/Api";
 import { getPaletteColor } from "@/settings/colorPalette";
+import type { Category } from "@/types/category";
 
 const router = useRouter();
-const categories = ref([]);
+const categories = ref([] as Category[]);
 
 onBeforeMount(async () => {
   const result = await Api.request({
     path: apiPaths.category,
   });
-  categories.value = result?.length ? result : [];
+  categories.value = result?.length ? (result as Category[]) : [];
 });
 
-const onClickCategory = (tileName: string): void => {
-  router.push(`${routes.category.path}/${tileName}`);
+const onClickCategory = (categoryId: number): void => {
+  router.push(`${routes.category.path}/${categoryId}`);
 };
 </script>
 

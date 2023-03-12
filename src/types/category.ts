@@ -8,3 +8,10 @@ export interface CategoryHistoryItem {
 }
 
 export type CategoryHistory = CategoryHistoryItem[];
+
+export interface Category {
+  id: number;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
+}
