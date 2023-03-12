@@ -24,7 +24,7 @@ const router = useRouter();
 const categories = ref([]);
 
 onBeforeMount(async () => {
-  const result = await Api.request<any>({
+  const result = await Api.request({
     path: apiPaths.category,
   });
   categories.value = result?.length ? result : [];

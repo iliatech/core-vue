@@ -6,7 +6,7 @@ import lang from "@/lang";
 import { apiErrors, apiUrl } from "@/settings/api";
 
 export default class Api {
-  static async request<T>(config: RequestConfig): Promise<T> {
+  static async request(config: RequestConfig): Promise<any> {
     const requestMethod = config.method ?? RequestMethods.Get;
     let requestResult;
 
