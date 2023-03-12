@@ -16,4 +16,5 @@ export default {
   },
   emptyCategoryHistory: "It's empty",
   add: "Add",
+  authTokenIsInvalid: "Authorization token is invalid",
 };

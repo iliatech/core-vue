@@ -1,27 +1,36 @@
 <template>
   <div class="hello">
     <div
-      v-for="tile in tiles"
-      :key="tile.title"
+      v-for="(category, index) in categories"
+      :key="category.id"
       class="hello__tile"
-      :style="{ background: tile.color }"
-      @click="onClickTile(tile.name)"
+      :style="{ background: getPaletteColor(index) }"
+      @click="onClickCategory(category.id)"
     >
-      {{ tile.title }}
+      {{ category.title }}
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { tilesMock } from "@/mockData/tiles";
-import { ref } from "vue";
+import { onBeforeMount, ref } from "vue";
 import { routes } from "@/settings/routes";
 import { useRouter } from "vue-router";
+import { apiPaths } from "@/settings/api";
+import Api from "@/api/Api";
+import { getPaletteColor } from "@/settings/colorPalette";
 
 const router = useRouter();
-const tiles = ref(tilesMock);
+const categories = ref([]);
 
-const onClickTile = (tileName: string): void => {
+onBeforeMount(async () => {
+  const result = await Api.request<any>({
+    path: apiPaths.category,
+  });
+  categories.value = result?.length ? result : [];
+});
+
+const onClickCategory = (tileName: string): void => {
   router.push(`${routes.category.path}/${tileName}`);
 };
 </script>
