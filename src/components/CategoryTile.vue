@@ -5,10 +5,11 @@
   </div>
 </template>
 <script lang="ts" setup>
-import Category from "@/components/Category.vue";
+import type { PropType } from "vue";
+import type { Category } from "@/types/category";
 
 defineProps({
-  data: Category,
+  data: { type: Object as PropType<Category>, required: true },
   backgroundColor: String,
 });
 </script>

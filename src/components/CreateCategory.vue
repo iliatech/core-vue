@@ -24,19 +24,12 @@
 <script lang="ts" setup>
 import Button from "primevue/button";
 
-import { useRoute, useRouter } from "vue-router";
-import { storeToRefs } from "pinia";
+import { useRouter } from "vue-router";
 import { routes } from "@/settings/routes";
-import { computed, onBeforeMount, reactive } from "vue";
-import { categoriesHistoryMock } from "@/mockData/categoriesHistory";
-import type { CategoryHistory } from "@/types/category";
-import { useTotalsStore } from "@/store/totalsStore";
+import { onBeforeMount } from "vue";
 import { useAppStore } from "@/store/appStore";
 
-const route = useRoute();
 const router = useRouter();
-const categoryName = route.params.categoryName as string;
-const totalsStore = useTotalsStore();
 const appStore = useAppStore();
 
 const { startLoading, stopLoading } = appStore;
