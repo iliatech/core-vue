@@ -5,4 +5,7 @@ export const routes = {
   category: {
     path: "/category",
   },
+  createCategory: {
+    path: "/add-category",
+  },
 };

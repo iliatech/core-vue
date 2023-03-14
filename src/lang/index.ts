@@ -18,4 +18,6 @@ export default {
   add: "Add",
   authTokenIsInvalid: "Authorization token is invalid",
   loaderLabel: "Loading",
+  createCategory: "Add category",
+  create: "Create",
 };

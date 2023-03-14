@@ -7,12 +7,17 @@ const router = createRouter({
     {
       path: routes.home.path,
       name: "home",
-      component: () => import("@/components/Home.vue"),
+      component: () => import("@/components/Categories.vue"),
     },
     {
       path: `${routes.category.path}/:categoryName`,
       name: "category",
       component: () => import("@/components/Category.vue"),
+    },
+    {
+      path: `${routes.createCategory.path}`,
+      name: "createCategory",
+      component: () => import("@/components/CreateCategory.vue"),
     },
   ],
 });
