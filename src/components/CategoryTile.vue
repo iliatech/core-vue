@@ -23,6 +23,7 @@ defineProps({
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  @include font-l;
+  font-size: 6vw;
+  overflow: hidden;
 }
 </style>

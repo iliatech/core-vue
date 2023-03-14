@@ -17,6 +17,8 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  overflow: hidden;
+
   &__icon {
     display: block;
     font-size: 10vw;
