@@ -57,23 +57,34 @@
 import Button from "primevue/button";
 
 import { useRoute, useRouter } from "vue-router";
+import { storeToRefs } from "pinia";
 import { routes } from "@/settings/routes";
-import { computed, reactive, ref } from "vue";
+import { computed, onBeforeMount, reactive } from "vue";
 import { categoriesHistoryMock } from "@/mockData/categoriesHistory";
 import type { CategoryHistory } from "@/types/category";
-import { useTotalsStore } from "@/stores/totalsStore";
-import { storeToRefs } from "pinia";
+import { useTotalsStore } from "@/store/totalsStore";
+import { useAppStore } from "@/store/appStore";
+
 const route = useRoute();
 const router = useRouter();
 const categoryName = route.params.categoryName as string;
 const totalsStore = useTotalsStore();
+const appStore = useAppStore();
+
 const { rest } = storeToRefs(totalsStore);
+const { startLoading, stopLoading } = appStore;
 
 const total = reactive({
   currentWeek: 0,
   previousWeek: 0,
   currentMonth: 0,
   previousMonth: 0,
+});
+
+onBeforeMount(() => {
+  // It's a stub;
+  startLoading();
+  stopLoading();
 });
 
 const history = computed((): CategoryHistory => {
