@@ -16,7 +16,7 @@ import { onBeforeMount, ref } from "vue";
 import { apiPaths } from "@/settings/api";
 import Api from "@/api/Api";
 import { getPaletteColor } from "@/settings/colorPalette";
-import type { Category } from "@/types/category";
+import type { ApiCategory } from "@/types/category";
 import CategoryTile from "@/components/CategoryTile.vue";
 import { useAppStore } from "@/store/appStore";
 import PlusTile from "@/components/PlusTile.vue";
@@ -28,14 +28,14 @@ const router = useRouter();
 const appStore = useAppStore();
 const { startLoading, stopLoading } = appStore;
 
-const categories = ref([] as Category[]);
+const categories = ref([] as ApiCategory[]);
 
 onBeforeMount(async () => {
   startLoading();
   const result = await Api.request({
     path: apiPaths.category,
   });
-  categories.value = result?.length ? (result as Category[]) : [];
+  categories.value = result?.length ? (result as ApiCategory[]) : [];
   stopLoading();
 });
 const onClickCategory = (categoryTitle: string): void => {

@@ -9,9 +9,13 @@ export interface CategoryHistoryItem {
 
 export type CategoryHistory = CategoryHistoryItem[];
 
-export interface Category {
+export interface ApiCategory {
   id: number;
   title: string;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface Category {
+  title: string;
 }

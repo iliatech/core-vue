@@ -20,4 +20,7 @@ export default {
   loaderLabel: "Loading",
   createCategory: "Add category",
   create: "Create",
+  categoryName: "Category Name",
+  successCreateCategory: "Category created",
+  errorCreateCategoryTitleDuplicate: "Duplicate category by title",
 };

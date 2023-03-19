@@ -1,4 +1,6 @@
 <template>
+  <Toast />
+
   <div v-if="isLoading" class="app-loader">
     <ProgressSpinner
       stroke-width="2"
@@ -12,7 +14,7 @@
 <script lang="ts" setup>
 import { RouterView } from "vue-router";
 import ProgressSpinner from "primevue/progressspinner";
-
+import Toast from "primevue/toast";
 import { useAppStore } from "@/store/appStore";
 import { storeToRefs } from "pinia";
 const appStore = useAppStore();

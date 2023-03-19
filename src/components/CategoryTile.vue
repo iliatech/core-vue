@@ -6,10 +6,10 @@
 </template>
 <script lang="ts" setup>
 import type { PropType } from "vue";
-import type { Category } from "@/types/category";
+import type { ApiCategory } from "@/types/category";
 
 defineProps({
-  data: { type: Object as PropType<Category>, required: true },
+  data: { type: Object as PropType<ApiCategory>, required: true },
   backgroundColor: String,
 });
 </script>

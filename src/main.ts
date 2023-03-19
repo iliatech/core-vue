@@ -4,6 +4,7 @@ import PrimeVue from "primevue/config";
 import TreeSelect from "primevue/treeselect";
 import App from "./App.vue";
 import router from "./router";
+import ToastService from "primevue/toastservice";
 
 import langPlugin from "@/plugins/langPlugin";
 
@@ -22,5 +23,6 @@ app.use(createPinia());
 app.use(router);
 app.use(PrimeVue);
 app.use(langPlugin);
+app.use(ToastService);
 app.component("TreeSelect", TreeSelect);
 app.mount("#app");

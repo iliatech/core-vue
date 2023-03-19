@@ -2,8 +2,10 @@ import type { RequestConfig } from "@/types/api";
 import { RequestMethods } from "@/types/api";
 import { localStorageTokenField } from "@/settings/auth";
 import axios from "axios";
-import lang from "@/lang";
+import lang from "@/lang/lang";
 import { apiErrors, apiUrl } from "@/settings/api";
+import { showToast } from "@/helpers/toast";
+import { ToastType } from "@/types/toasts";
 
 export default class Api {
   static async request(config: RequestConfig): Promise<any> {
@@ -48,16 +50,37 @@ export default class Api {
           break;
       }
 
+      if (config.successToast) {
+        showToast(config.toast, {
+          type: ToastType.Success,
+          text: config.successToast,
+        });
+
+        config.successCallback();
+      }
+
       return requestResult?.data?.data ?? null;
     } catch (e: any) {
-      const errorTextCode = e.response.data.error;
-      if (errorTextCode === apiErrors.authTokenIsInvalid) {
-        localStorage.removeItem(localStorageTokenField);
-        console.error(lang.authTokenIsInvalid);
-      } else {
-        // TODO: Error processing should be done;
-        console.error(`Axios error text code: ${errorTextCode} :`, e);
+      // TODO: Should refactor it, text is not a code;
+
+      const errorTextCode = e.response.data.errorText;
+
+      switch (errorTextCode) {
+        case apiErrors.authTokenIsInvalid:
+          localStorage.removeItem(localStorageTokenField);
+          console.error(lang.authTokenIsInvalid);
+          break;
+        case apiErrors.duplicateFound:
+          showToast(config.toast, {
+            type: ToastType.Error,
+            text: lang.errorCreateCategoryTitleDuplicate,
+          });
+          break;
+        default:
+          console.error(`Axios error text code: ${errorTextCode} :`, e);
       }
+
+      return false;
     }
   }
 }

@@ -6,8 +6,15 @@ export enum RequestMethods {
   Delete = "delete",
 }
 
+export enum RequestResults {
+  Success = "success",
+}
+
 export interface RequestConfig {
   path: string;
   method?: RequestMethods;
   payload?: unknown;
+  toast?: any;
+  successToast?: string;
+  successCallback?: any;
 }
