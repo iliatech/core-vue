@@ -1,7 +1,12 @@
 <template>
   <div class="category-tile" :style="{ backgroundColor }">
-    <div class="categories__tile"></div>
-    {{ data.title }}
+    <div class="category-tile__title">
+      {{ data.title }}
+    </div>
+    <div class="category-tile__delete">
+      <i @click="emit('onClickDelete')" class="pi pi-trash" />
+    </div>
+    <div @click="emit('onClick')" class="category-tile__clickable" />
   </div>
 </template>
 <script lang="ts" setup>
@@ -12,6 +17,8 @@ defineProps({
   data: { type: Object as PropType<ApiCategory>, required: true },
   backgroundColor: String,
 });
+
+const emit = defineEmits(["onClick", "onClickDelete"]);
 </script>
 <style lang="scss" scoped>
 @import "@/assets/fonts.scss";
@@ -23,8 +30,29 @@ defineProps({
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  font-size: 6vw;
   overflow: hidden;
+
+  &__title {
+    font-size: 6vw;
+  }
+
+  &__delete {
+    position: absolute;
+    right: $space-s;
+    bottom: $space-s;
+
+    i {
+      font-size: 1.7vw;
+      cursor: pointer;
+    }
+  }
+
+  &__clickable {
+    position: absolute;
+    width: 80%;
+    height: 80%;
+    margin: auto;
+    cursor: pointer;
+  }
 }
 </style>

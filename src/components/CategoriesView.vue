@@ -6,7 +6,8 @@
       :key="item.id"
       :data="item"
       :background-color="getPaletteColor(index)"
-      @click="onClickCategory(item.title)"
+      @on-click="onClickCategory(item.title)"
+      @on-click-delete="onClickDelete(item)"
     />
   </div>
 </template>
@@ -44,6 +45,11 @@ const onClickCategory = (categoryTitle: string): void => {
 
 const onClickPlus = (): void => {
   router.push(`${routes.createCategory.path}`);
+};
+
+const onClickDelete = (item: ApiCategory): void => {
+  // TODO: It's a stub;
+  console.log(item);
 };
 </script>
 <style lang="scss" scoped>
