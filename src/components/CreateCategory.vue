@@ -39,10 +39,9 @@ import { useAppStore } from "@/store/appStore";
 import InputText from "primevue/inputtext";
 import Api from "@/api/Api";
 import { apiPaths } from "@/settings/api";
-import { RequestMethods, RequestResults } from "@/types/api";
+import { RequestMethods } from "@/types/api";
 import type { Category } from "@/types/category";
-import { ToastType } from "@/types/toasts";
-import { showToast } from "@/helpers/toast";
+
 import lang from "@/lang/lang";
 import { useToast } from "primevue/usetoast";
 
@@ -56,7 +55,7 @@ const category: Category = reactive({ title: "" });
 const isValidated = ref(false);
 
 onBeforeMount(() => {
-  // It's a stub;
+  // TODO: It's a stub;
   startLoading();
   stopLoading();
 });

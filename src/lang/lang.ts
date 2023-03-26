@@ -23,4 +23,5 @@ export default {
   categoryName: "Category Name",
   successCreateCategory: "Category created",
   errorCreateCategoryTitleDuplicate: "Duplicate category by title",
+  successDeleteCategory: "Category deleted",
 };

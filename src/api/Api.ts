@@ -9,7 +9,7 @@ import { ToastType } from "@/types/toasts";
 
 export default class Api {
   static async request(config: RequestConfig): Promise<any> {
-    const requestMethod = config.method ?? RequestMethods.Get;
+    config.method = config.method ?? RequestMethods.Get;
     let requestResult;
 
     const url = `${apiUrl}/${config.path}`;
@@ -21,13 +21,13 @@ export default class Api {
     }
 
     const preparedConfig = [RequestMethods.Get, RequestMethods.Delete].includes(
-      requestMethod
+      config.method
     )
       ? { params: payload, headers }
       : { headers };
 
     try {
-      switch (requestMethod) {
+      switch (config.method) {
         case RequestMethods.Get:
           requestResult = await axios.get(url, preparedConfig);
           break;
@@ -56,7 +56,8 @@ export default class Api {
           text: config.successToast,
         });
 
-        config.successCallback();
+        if (typeof config.successCallback === "function")
+          config.successCallback();
       }
 
       return requestResult?.data?.data ?? null;

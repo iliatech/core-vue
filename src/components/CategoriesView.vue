@@ -23,6 +23,10 @@ import { useAppStore } from "@/store/appStore";
 import PlusTile from "@/components/PlusTile.vue";
 import { routes } from "@/settings/routes";
 import { useRouter } from "vue-router";
+import { RequestMethods } from "@/types/api";
+import lang from "@/lang/lang";
+import { useToast } from "primevue/usetoast";
+const toast = useToast();
 
 const router = useRouter();
 
@@ -33,12 +37,16 @@ const categories = ref([] as ApiCategory[]);
 
 onBeforeMount(async () => {
   startLoading();
+  await updateCategories();
+  stopLoading();
+});
+
+const updateCategories = async (): Promise<void> => {
   const result = await Api.request({
     path: apiPaths.category,
   });
   categories.value = result?.length ? (result as ApiCategory[]) : [];
-  stopLoading();
-});
+};
 const onClickCategory = (categoryTitle: string): void => {
   router.push(`${routes.category.path}/${categoryTitle}`);
 };
@@ -47,9 +55,20 @@ const onClickPlus = (): void => {
   router.push(`${routes.createCategory.path}`);
 };
 
-const onClickDelete = (item: ApiCategory): void => {
-  // TODO: It's a stub;
-  console.log(item);
+const onClickDelete = async (item: ApiCategory): Promise<void> => {
+  startLoading();
+
+  await Api.request({
+    method: RequestMethods.Delete,
+    path: `${apiPaths.category}/${item.id}`,
+    toast,
+    successToast: lang.successDeleteCategory,
+    successCallback: () => {
+      updateCategories();
+    },
+  });
+
+  stopLoading();
 };
 </script>
 <style lang="scss" scoped>
