@@ -42,7 +42,7 @@ const emit = defineEmits(["onClick", "onClickDelete"]);
     bottom: $space-s;
 
     i {
-      font-size: 1.7vw;
+      font-size: 2vw;
       cursor: pointer;
     }
   }

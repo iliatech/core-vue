@@ -5,6 +5,7 @@ import TreeSelect from "primevue/treeselect";
 import App from "./App.vue";
 import router from "./router";
 import ToastService from "primevue/toastservice";
+import ConfirmationService from "primevue/confirmationservice";
 
 import langPlugin from "@/plugins/langPlugin";
 
@@ -24,5 +25,6 @@ app.use(router);
 app.use(PrimeVue);
 app.use(langPlugin);
 app.use(ToastService);
+app.use(ConfirmationService);
 app.component("TreeSelect", TreeSelect);
 app.mount("#app");

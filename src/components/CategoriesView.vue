@@ -9,16 +9,18 @@
       @on-click="onClickCategory(item.title)"
       @on-click-delete="onClickDelete(item)"
     />
+    <ConfirmDialog />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { onBeforeMount, ref } from "vue";
+import { onBeforeMount, Ref, ref } from "vue";
 import { apiPaths } from "@/settings/api";
 import Api from "@/api/Api";
 import { getPaletteColor } from "@/settings/colorPalette";
 import type { ApiCategory } from "@/types/category";
 import CategoryTile from "@/components/CategoryTile.vue";
+import ConfirmDialog from "primevue/confirmdialog";
 import { useAppStore } from "@/store/appStore";
 import PlusTile from "@/components/PlusTile.vue";
 import { routes } from "@/settings/routes";
@@ -26,12 +28,14 @@ import { useRouter } from "vue-router";
 import { RequestMethods } from "@/types/api";
 import lang from "@/lang/lang";
 import { useToast } from "primevue/usetoast";
+import { useConfirm } from "primevue/useconfirm";
 const toast = useToast();
 
 const router = useRouter();
 
 const appStore = useAppStore();
 const { startLoading, stopLoading } = appStore;
+const confirm = useConfirm();
 
 const categories = ref([] as ApiCategory[]);
 
@@ -56,13 +60,23 @@ const onClickPlus = (): void => {
 };
 
 const onClickDelete = async (item: ApiCategory): Promise<void> => {
+  confirm.require({
+    message: lang.confirmDeleteCategory(item.title),
+    header: lang.deleteTitle,
+    accept: async () => {
+      await onConfirmDelete(item);
+    },
+  });
+};
+
+const onConfirmDelete = async (item: ApiCategory): Promise<void> => {
   startLoading();
 
   await Api.request({
     method: RequestMethods.Delete,
     path: `${apiPaths.category}/${item.id}`,
     toast,
-    successToast: lang.successDeleteCategory,
+    successToast: lang.successDeleteCategory(item.title),
     successCallback: () => {
       updateCategories();
     },

@@ -23,5 +23,8 @@ export default {
   categoryName: "Category Name",
   successCreateCategory: "Category created",
   errorCreateCategoryTitleDuplicate: "Duplicate category by title",
-  successDeleteCategory: "Category deleted",
+  successDeleteCategory: (title: string): string =>
+    `Category '${title}' deleted`,
+  confirmDeleteCategory: (title: string) => `Delete category '${title}'?`,
+  deleteTitle: "Delete",
 };
