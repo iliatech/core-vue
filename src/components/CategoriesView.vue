@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onBeforeMount, Ref, ref } from "vue";
+import { onBeforeMount, ref } from "vue";
 import { apiPaths } from "@/settings/api";
 import Api from "@/api/Api";
 import { getPaletteColor } from "@/settings/colorPalette";
@@ -62,7 +62,7 @@ const onClickPlus = (): void => {
 const onClickDelete = async (item: ApiCategory): Promise<void> => {
   confirm.require({
     message: lang.confirmDeleteCategory(item.title),
-    header: lang.deleteTitle,
+    header: lang.deleteCategoryTitle,
     accept: async () => {
       await onConfirmDelete(item);
     },

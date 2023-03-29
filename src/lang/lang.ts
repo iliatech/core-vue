@@ -26,5 +26,5 @@ export default {
   successDeleteCategory: (title: string): string =>
     `Category '${title}' deleted`,
   confirmDeleteCategory: (title: string) => `Delete category '${title}'?`,
-  deleteTitle: "Delete",
+  deleteCategoryTitle: "Delete category",
 };
