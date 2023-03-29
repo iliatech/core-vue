@@ -5,7 +5,7 @@ export default {
     "In this project given model value narrows down wide set of all available<br/> geographic options to more narrow set<br/> " +
     "limited by lowest level values.",
   back: "Back",
-  category: "Category",
+  category: "Word or phrase",
   categoryContent: {
     rest: "Rest",
     spent: "Spent",
@@ -18,13 +18,13 @@ export default {
   add: "Add",
   authTokenIsInvalid: "Authorization token is invalid",
   loaderLabel: "Loading",
-  createCategory: "Add category",
+  createCategory: "Add word or phrase",
   create: "Create",
-  categoryName: "Category Name",
-  successCreateCategory: "Category created",
-  errorCreateCategoryTitleDuplicate: "Duplicate category by title",
+  categoryName: "Word or phrase",
+  successCreateCategory: "Word or phrase created",
+  errorCreateCategoryTitleDuplicate: "Duplicate word or phrase by title",
   successDeleteCategory: (title: string): string =>
     `Category '${title}' deleted`,
-  confirmDeleteCategory: (title: string) => `Delete category '${title}'?`,
-  deleteCategoryTitle: "Delete category",
+  confirmDeleteCategory: (title: string) => `Delete word or phrase '${title}'?`,
+  deleteCategoryTitle: "Delete word or phrase",
 };
