@@ -102,31 +102,31 @@ const onClickAdd = (): void => {
 
 <style lang="scss" scoped>
 @import "@/assets/variables.scss";
-@import "@/assets/fonts.scss";
+@import "@/assets/fontMixins.scss";
 .category {
-  padding: $space-s;
+  padding: $space-small;
 
   &__title {
-    padding: 0 0 $space-s;
-    @include font-l;
+    padding: 0 0 $space-small;
+    @include font-extra-large;
   }
 
   &__buttons {
     display: flex;
-    gap: $space-s;
+    gap: $space-small;
   }
 
   &__content {
-    padding: $space-m 0;
-    @include font-sl;
+    padding: $space-medium 0;
+    @include font-small-large;
   }
 
   &__section {
-    padding-bottom: $space-s;
+    padding-bottom: $space-small;
   }
 
   &__section-title {
-    @include font-m-b;
+    @include font-medium-bold;
   }
 }
 </style>

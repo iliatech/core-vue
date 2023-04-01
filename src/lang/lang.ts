@@ -25,6 +25,7 @@ export default {
   errorCreateCategoryTitleDuplicate: "Duplicate word or phrase by title",
   successDeleteCategory: (title: string): string =>
     `Category '${title}' deleted`,
-  confirmDeleteCategory: (title: string) => `Delete word or phrase '${title}'?`,
-  deleteCategoryTitle: "Delete word or phrase",
+  confirmDeleteTitle: (title: string) => `Delete "${title}"?`,
+  cancelButton: "Cancel",
+  confirmButton: "Confirm",
 };

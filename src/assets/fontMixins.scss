@@ -1,29 +1,34 @@
-@mixin font-s {
+@mixin font-small {
   font-size: 0.75rem;
   font-weight: 500;
 }
 
-@mixin font-sm {
+@mixin font-small-medium {
   font-size: 0.875rem;
   font-weight: 500;
 }
-@mixin font-sl {
+@mixin font-small-large {
   font-size: 0.9375rem;
   font-weight: 500;
 }
 
 
-@mixin font-m {
+@mixin font-medium {
   font-size: 1rem;
   font-weight: 500;
 }
 
-@mixin font-m-b {
+@mixin font-medium-bold {
   font-size: 1rem;
   font-weight: 600;
 }
 
-@mixin font-l {
+@mixin font-large {
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+
+@mixin font-extra-large {
   font-size: 1.25rem;
   font-weight: 500;
 }

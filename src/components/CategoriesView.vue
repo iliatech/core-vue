@@ -9,18 +9,23 @@
       @on-click="onClickCategory(item.title)"
       @on-click-delete="onClickDelete(item)"
     />
-    <ConfirmDialog />
   </div>
+  <BasicDialog
+    v-model="deleteItem"
+    :type="DialogType.Confirm"
+    :text="lang.confirmDeleteTitle(deleteItem?.title)"
+    @on-cancel="onCancelDelete"
+    @on-confirm="onConfirmDelete"
+  />
 </template>
 
 <script lang="ts" setup>
-import { onBeforeMount, ref } from "vue";
+import { onBeforeMount, Ref, ref } from "vue";
 import { apiPaths } from "@/settings/api";
 import Api from "@/api/Api";
 import { getPaletteColor } from "@/settings/colorPalette";
 import type { ApiCategory } from "@/types/category";
 import CategoryTile from "@/components/CategoryTile.vue";
-import ConfirmDialog from "primevue/confirmdialog";
 import { useAppStore } from "@/store/appStore";
 import PlusTile from "@/components/PlusTile.vue";
 import { routes } from "@/settings/routes";
@@ -28,16 +33,17 @@ import { useRouter } from "vue-router";
 import { RequestMethods } from "@/types/api";
 import lang from "@/lang/lang";
 import { useToast } from "primevue/usetoast";
-import { useConfirm } from "primevue/useconfirm";
+import BasicDialog from "@/components/BasicDialog.vue";
+import { DialogType } from "@/types/dialog";
 const toast = useToast();
 
 const router = useRouter();
 
 const appStore = useAppStore();
 const { startLoading, stopLoading } = appStore;
-const confirm = useConfirm();
 
 const categories = ref([] as ApiCategory[]);
+const deleteItem: Ref<ApiCategory | null> = ref(null);
 
 onBeforeMount(async () => {
   startLoading();
@@ -60,29 +66,33 @@ const onClickPlus = (): void => {
 };
 
 const onClickDelete = async (item: ApiCategory): Promise<void> => {
-  confirm.require({
-    message: lang.confirmDeleteCategory(item.title),
-    header: lang.deleteCategoryTitle,
-    accept: async () => {
-      await onConfirmDelete(item);
-    },
-  });
+  deleteItem.value = item;
 };
 
-const onConfirmDelete = async (item: ApiCategory): Promise<void> => {
+const onCancelDelete = () => {
+  deleteItem.value = null;
+};
+
+const onConfirmDelete = async (): Promise<void> => {
+  if (!deleteItem.value) {
+    return;
+  }
+
   startLoading();
+  const { id, title } = deleteItem.value;
 
   await Api.request({
     method: RequestMethods.Delete,
-    path: `${apiPaths.category}/${item.id}`,
+    path: `${apiPaths.category}/${id}`,
     toast,
-    successToast: lang.successDeleteCategory(item.title),
+    successToast: lang.successDeleteCategory(title),
     successCallback: () => {
       updateCategories();
     },
   });
 
   stopLoading();
+  deleteItem.value = null;
 };
 </script>
 <style lang="scss" scoped>
@@ -91,7 +101,7 @@ const onConfirmDelete = async (item: ApiCategory): Promise<void> => {
 .categories {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: $space-s;
+  gap: $space-small;
   flex-wrap: wrap;
 }
 </style>

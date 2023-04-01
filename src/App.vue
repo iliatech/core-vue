@@ -1,6 +1,5 @@
 <template>
   <Toast />
-
   <div v-if="isLoading" class="app-loader">
     <ProgressSpinner
       stroke-width="2"
@@ -8,7 +7,6 @@
       :aria-label="$lang.loaderLabel"
     />
   </div>
-
   <div class="app-container"><RouterView /></div>
 </template>
 <script lang="ts" setup>
@@ -40,8 +38,8 @@ const { isLoading } = storeToRefs(appStore);
 }
 
 .app-container {
-  max-width: 520px;
+  max-width: $app-container-width;
   margin: 0 auto;
-  padding: $space-s;
+  padding: $space-small;
 }
 </style>

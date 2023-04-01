@@ -21,7 +21,7 @@ defineProps({
 const emit = defineEmits(["onClick", "onClickDelete"]);
 </script>
 <style lang="scss" scoped>
-@import "@/assets/fonts.scss";
+@import "@/assets/fontMixins.scss";
 @import "@/assets/variables.scss";
 
 .category-tile {
@@ -31,7 +31,7 @@ const emit = defineEmits(["onClick", "onClickDelete"]);
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  padding: $space-m;
+  padding: $space-medium;
 
   &__title {
     font-size: 1.5rem;
@@ -45,8 +45,8 @@ const emit = defineEmits(["onClick", "onClickDelete"]);
 
   &__delete {
     position: absolute;
-    right: $space-s;
-    bottom: $space-s;
+    right: $space-small;
+    bottom: $space-small;
 
     i {
       font-size: 1rem;

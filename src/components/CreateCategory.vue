@@ -93,28 +93,28 @@ const checkCategory = (): boolean => {
 
 <style lang="scss" scoped>
 @import "@/assets/variables.scss";
-@import "@/assets/fonts.scss";
+@import "@/assets/fontMixins.scss";
 @import "@/assets/colors.scss";
 
 .create-category {
-  padding: $space-s;
+  padding: $space-small;
 
   &__title {
-    padding: 0 0 $space-s;
-    @include font-l;
+    padding: 0 0 $space-small;
+    @include font-extra-large;
   }
 
   &__top-buttons {
     display: flex;
-    gap: $space-s;
+    gap: $space-small;
   }
 
   &__content {
-    margin-top: $space-m;
+    margin-top: $space-medium;
   }
 
   &__bottom-buttons {
-    margin-top: $space-m;
+    margin-top: $space-medium;
     .p-button.p-button-outlined {
       color: $color-dark-blue;
     }
