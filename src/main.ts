@@ -14,7 +14,9 @@ import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
 
 import "./assets/main.scss";
+import "./assets/generic.scss";
 import "./assets/prime.scss";
+import "./assets/buttons.scss";
 
 import "@fontsource/roboto";
 

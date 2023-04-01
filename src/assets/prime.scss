@@ -1,4 +1,6 @@
-// This file needed to redefine PrimeVue library rules;
+// The purpose of the file is to redefine PrimeVue library rules;
+@import "colors.scss";
+
 .p-treenode-content.p-highlight {
   background: none !important;
 }

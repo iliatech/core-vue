@@ -3,14 +3,14 @@
     <div class="category__title">{{ categoryName }}</div>
     <div class="category__buttons">
       <Button
-        @click="onClickBack"
-        :label="$lang.back"
-        class="p-button-outlined p-button-rounded"
+        @click="onClickAdd"
+        :label="$lang.explain"
+        class="p-button-outlined p-button-rounded p-button-danger"
       />
       <Button
-        @click="onClickAdd"
-        :label="$lang.add"
-        class="p-button-outlined p-button-rounded p-button-danger"
+        @click="onClickBack"
+        :label="$lang.back"
+        class="p-button-outlined p-button-rounded button-grey-tough"
       />
     </div>
     <div class="category__content">

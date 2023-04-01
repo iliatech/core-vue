@@ -8,10 +8,11 @@
 
 <style lang="scss" scoped>
 @import "@/assets/variables.scss";
+@import "@/assets/colors.scss";
 
 .plus-tile {
   position: relative;
-  background: $plus-tile-background;
+  background: $color-ash-burgundy;
   aspect-ratio: $tile-aspect-ratio;
   display: flex;
   justify-content: center;

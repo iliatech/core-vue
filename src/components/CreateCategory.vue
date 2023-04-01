@@ -5,9 +5,14 @@
     </div>
     <div class="create-category__top-buttons">
       <Button
+        @click="onClickCreate"
+        :label="$lang.create"
+        class="p-button-outlined p-button-rounded button-red-crimson"
+      />
+      <Button
         @click="onClickBack"
         :label="$lang.back"
-        class="p-button-outlined p-button-rounded"
+        class="p-button-outlined p-button-rounded button-grey-tough"
       />
     </div>
     <div class="create-category__content">
@@ -19,13 +24,7 @@
         @update:model-value="clearValidation"
       />
     </div>
-    <div class="create-category__bottom-buttons">
-      <Button
-        @click="onClickCreate"
-        :label="$lang.create"
-        class="p-button-outlined p-button-rounded"
-      />
-    </div>
+    <div class="create-category__bottom-buttons"></div>
   </div>
 </template>
 
@@ -95,6 +94,7 @@ const checkCategory = (): boolean => {
 <style lang="scss" scoped>
 @import "@/assets/variables.scss";
 @import "@/assets/fonts.scss";
+@import "@/assets/colors.scss";
 
 .create-category {
   padding: $space-s;
@@ -116,7 +116,7 @@ const checkCategory = (): boolean => {
   &__bottom-buttons {
     margin-top: $space-m;
     .p-button.p-button-outlined {
-      color: $palette-lost-songs-1;
+      color: $color-dark-blue;
     }
   }
 }
