@@ -36,7 +36,7 @@ import { computed } from "vue";
 import { DialogType } from "@/types/dialog";
 
 const props = defineProps({
-  modelValue: Object,
+  modelValue: Object as PropType<unknown | null>,
   title: String,
   text: String,
   type: Object as PropType<DialogType>,

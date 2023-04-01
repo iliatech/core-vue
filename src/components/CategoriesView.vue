@@ -13,14 +13,15 @@
   <BasicDialog
     v-model="deleteItem"
     :type="DialogType.Confirm"
-    :text="lang.confirmDeleteTitle(deleteItem?.title)"
+    :text="lang.confirmDeleteTitle(deleteItem?.title ?? '')"
     @on-cancel="onCancelDelete"
     @on-confirm="onConfirmDelete"
   />
 </template>
 
 <script lang="ts" setup>
-import { onBeforeMount, Ref, ref } from "vue";
+import type { Ref } from "vue";
+import { onBeforeMount, ref } from "vue";
 import { apiPaths } from "@/settings/api";
 import Api from "@/api/Api";
 import { getPaletteColor } from "@/settings/colorPalette";
