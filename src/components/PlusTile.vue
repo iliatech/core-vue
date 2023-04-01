@@ -21,7 +21,7 @@
 
   &__icon {
     display: block;
-    font-size: 10vw;
+    font-size: 4rem;
     color: $color-white;
   }
 }

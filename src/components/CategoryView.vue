@@ -1,6 +1,6 @@
 <template>
   <div class="category">
-    <div class="category__title">{{ $lang.category }}: {{ categoryName }}</div>
+    <div class="category__title">{{ categoryName }}</div>
     <div class="category__buttons">
       <Button
         @click="onClickBack"

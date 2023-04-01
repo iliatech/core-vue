@@ -31,9 +31,16 @@ const emit = defineEmits(["onClick", "onClickDelete"]);
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  padding: $space-m;
 
   &__title {
-    font-size: 6vw;
+    font-size: 1.5rem;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    white-space: normal;
   }
 
   &__delete {
@@ -42,7 +49,7 @@ const emit = defineEmits(["onClick", "onClickDelete"]);
     bottom: $space-s;
 
     i {
-      font-size: 2vw;
+      font-size: 1rem;
       cursor: pointer;
     }
   }

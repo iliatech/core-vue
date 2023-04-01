@@ -9,7 +9,7 @@
     />
   </div>
 
-  <RouterView />
+  <div class="app-container"><RouterView /></div>
 </template>
 <script lang="ts" setup>
 import { RouterView } from "vue-router";
@@ -22,6 +22,8 @@ const { isLoading } = storeToRefs(appStore);
 </script>
 
 <style lang="scss" scoped>
+@import "@/assets/variables.scss";
+
 .app-loader {
   position: fixed;
   z-index: 1;
@@ -35,5 +37,11 @@ const { isLoading } = storeToRefs(appStore);
     width: 70px;
     height: 70px;
   }
+}
+
+.app-container {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: $space-s;
 }
 </style>
