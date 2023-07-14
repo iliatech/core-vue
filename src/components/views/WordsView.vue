@@ -1,5 +1,5 @@
 <template>
-  <div class="categories">
+  <div class="words">
     <PlusTile @click="onClickPlus" />
     <CategoryTile
       v-for="(item, index) in categories"
@@ -34,7 +34,7 @@ import { useRouter } from "vue-router";
 import { RequestMethods } from "@/types/api";
 import lang from "@/lang/lang";
 import { useToast } from "primevue/usetoast";
-import BasicDialog from "@/components/BasicDialog.vue";
+import BasicDialog from "@/components/dialogs/BasicDialog.vue";
 import { DialogType } from "@/types/dialog";
 const toast = useToast();
 
@@ -99,10 +99,31 @@ const onConfirmDelete = async (): Promise<void> => {
 <style lang="scss" scoped>
 @import "@/assets/variables.scss";
 
-.categories {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: $space-small;
+@mixin flex-wrap-fix($flex-basis, $max-viewport-width: 2000px) {
+  flex-grow: 1;
+  flex-basis: $flex-basis;
+  max-width: 100%;
+
+  $multiplier: 1;
+  $current-width: 0px;
+
+  @while $current-width < $max-viewport-width {
+    $current-width: $current-width + $flex-basis;
+    $multiplier: $multiplier + 1;
+
+    @media (min-width: $flex-basis * $multiplier) {
+      max-width: percentage(1 / $multiplier);
+    }
+  }
+}
+
+.words {
+  display: flex;
   flex-wrap: wrap;
+  gap: 10px;
+  div {
+    min-width: 350px;
+    @include flex-wrap-fix(250px);
+  }
 }
 </style>

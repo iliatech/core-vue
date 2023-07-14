@@ -59,7 +59,6 @@ const showButtons = computed((): boolean => {
   background: $color-white;
   padding: $space-medium;
   border-radius: $border-radius;
-  max-width: $app-container-width;
   box-shadow: $basic-dialog-shadow;
 
   &__wrapper {

@@ -38,7 +38,6 @@ const { isLoading } = storeToRefs(appStore);
 }
 
 .app-container {
-  max-width: $app-container-width;
   margin: 0 auto;
   padding: $space-small;
 }

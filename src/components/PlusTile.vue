@@ -12,7 +12,7 @@
 
 .plus-tile {
   position: relative;
-  background: $color-ash-burgundy;
+  background: $thistle;
   aspect-ratio: $tile-aspect-ratio;
   display: flex;
   justify-content: center;

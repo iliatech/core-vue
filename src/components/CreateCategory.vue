@@ -6,7 +6,7 @@
     <div class="create-category__top-buttons">
       <Button
         @click="onClickCreate"
-        :label="$lang.create"
+        :label="$lang.save"
         class="p-button-outlined p-button-rounded button-red-crimson"
       />
       <Button

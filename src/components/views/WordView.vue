@@ -4,7 +4,7 @@
     <div class="category__buttons">
       <Button
         @click="onClickAdd"
-        :label="$lang.explain"
+        :label="$lang.addTranslation"
         class="p-button-outlined p-button-rounded p-button-danger"
       />
       <Button
@@ -13,43 +13,7 @@
         class="p-button-outlined p-button-rounded button-grey-tough"
       />
     </div>
-    <div class="category__content">
-      <div class="category__section">
-        <div class="category__section-title">
-          {{ $lang.categoryContent.rest }}
-        </div>
-        USD: {{ rest.usd }}<br />
-        GEL: {{ rest.gel }}
-      </div>
-      <div class="category__section">
-        <div class="category__section-title">
-          {{ $lang.categoryContent.spent }}
-        </div>
-        {{ $lang.categoryContent.currentWeek }}: {{ total.currentWeek }}<br />
-        {{ $lang.categoryContent.previousWeek }}: {{ total.previousWeek }}<br />
-        {{ $lang.categoryContent.currentMonth }}: {{ total.currentMonth }}<br />
-        {{ $lang.categoryContent.previousMonth }}: {{ total.previousMonth }}
-      </div>
-      <div class="category__section">
-        <div class="category__section-title">History:</div>
-        <div
-          v-for="historyItem in history"
-          :key="
-            historyItem.name +
-            historyItem.currency +
-            historyItem.name +
-            historyItem.amount
-          "
-        >
-          {{ historyItem.date }} / {{ historyItem.name }} /
-          {{ historyItem.amount }}
-          {{ historyItem.currency }}
-        </div>
-        <div v-if="!history.length">
-          {{ $lang.emptyCategoryHistory }}
-        </div>
-      </div>
-    </div>
+    <div class="category__content">Translations:</div>
   </div>
 </template>
 
