@@ -6,5 +6,5 @@ export const apiErrors = {
 export const apiUrl = import.meta.env.VITE_API_URL;
 
 export const apiPaths = {
-  category: "category",
+  word: "category",
 };

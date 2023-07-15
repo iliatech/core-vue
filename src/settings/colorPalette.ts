@@ -1,10 +1,19 @@
 const paletteColors = [
-  "#6497b1",
-  "#f4b6c2",
-  "#b3cde0",
-  "#dec3c3",
-  "#adcbe3",
-  "#2a4d69",
+  "#7DE2D1",
+  "#F4F0BB",
+  "#DFE2CF",
+  "#FF595E",
+  "#FFFBDB",
+  "#EFBDEB",
+
+  "#FBFAF8",
+  "#DD614A",
+  "#BFD8BD",
+  "#F1A66A",
+  "#EFF1F3",
+  "#F4E04D",
+  "#DDE2C6",
+  "#81B29A",
 ];
 export const getPaletteColor = (index: number): string => {
   return paletteColors[index % paletteColors.length];

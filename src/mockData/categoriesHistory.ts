@@ -1,4 +1,4 @@
-import type { CategoryHistory } from "@/types/category";
+import type { CategoryHistory } from "@/types/wordType";
 import { Currency } from "@/types/currency";
 
 export const categoriesHistoryMock: Record<string, CategoryHistory> = {

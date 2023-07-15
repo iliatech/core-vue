@@ -1,30 +1,30 @@
 <template>
-  <div class="create-category">
-    <div class="create-category__title">
+  <div class="create-word">
+    <div class="create-word__title">
       {{ $lang.createCategory }}
     </div>
-    <div class="create-category__top-buttons">
+    <div class="create-word__top-buttons">
       <Button
         @click="onClickCreate"
         :label="$lang.save"
-        class="p-button-outlined p-button-rounded button-red-crimson"
+        class="p-button-outlined p-button-rounded button-tomato"
       />
       <Button
         @click="onClickBack"
         :label="$lang.back"
-        class="p-button-outlined p-button-rounded button-grey-tough"
+        class="p-button-outlined p-button-rounded button-baby-powder"
       />
     </div>
-    <div class="create-category__content">
+    <div class="create-word__content">
       <InputText
         type="text"
-        v-model.trim="category.title"
+        v-model.trim="word.title"
         :placeholder="$lang.categoryName"
-        :class="{ 'p-invalid': !category.title && isValidated }"
+        :class="{ 'p-invalid': !word.title && isValidated }"
         @update:model-value="clearValidation"
       />
     </div>
-    <div class="create-category__bottom-buttons"></div>
+    <div class="create-word__bottom-buttons"></div>
   </div>
 </template>
 
@@ -39,7 +39,7 @@ import InputText from "primevue/inputtext";
 import Api from "@/api/Api";
 import { apiPaths } from "@/settings/api";
 import { RequestMethods } from "@/types/api";
-import type { Category } from "@/types/category";
+import type { Word } from "@/types/wordType";
 
 import lang from "@/lang/lang";
 import { useToast } from "primevue/usetoast";
@@ -50,7 +50,7 @@ const toast = useToast();
 
 const { startLoading, stopLoading } = appStore;
 
-const category: Category = reactive({ title: "" });
+const word: Word = reactive({ title: "" });
 const isValidated = ref(false);
 
 onBeforeMount(() => {
@@ -71,9 +71,9 @@ const onClickCreate = async (): Promise<void> => {
   }
 
   await Api.request({
-    path: apiPaths.category,
+    path: apiPaths.word,
     method: RequestMethods.Post,
-    payload: category,
+    payload: word,
     toast,
     successToast: lang.successCreateCategory,
     successCallback: async () => {
@@ -87,7 +87,7 @@ const clearValidation = (): void => {
 };
 
 const checkCategory = (): boolean => {
-  return !!category.title;
+  return !!word.title;
 };
 </script>
 
@@ -96,7 +96,7 @@ const checkCategory = (): boolean => {
 @import "@/assets/fontMixins.scss";
 @import "@/assets/colors.scss";
 
-.create-category {
+.create-word {
   padding: $space-small;
 
   &__title {

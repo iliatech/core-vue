@@ -12,7 +12,7 @@
 
 .plus-tile {
   position: relative;
-  background: $thistle;
+  background: $tomato;
   aspect-ratio: $tile-aspect-ratio;
   display: flex;
   justify-content: center;

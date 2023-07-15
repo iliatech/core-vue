@@ -1,20 +1,20 @@
 <template>
-  <div class="category-tile" :style="{ backgroundColor }">
-    <div class="category-tile__title">
+  <div class="word-tile" :style="{ backgroundColor }">
+    <div class="word-tile__title">
       {{ data.title }}
     </div>
-    <div class="category-tile__delete">
+    <div class="word-tile__delete">
       <i @click="emit('onClickDelete')" class="pi pi-trash" />
     </div>
-    <div @click="emit('onClick')" class="category-tile__clickable" />
+    <div @click="emit('onClick')" class="word-tile__clickable" />
   </div>
 </template>
 <script lang="ts" setup>
 import type { PropType } from "vue";
-import type { ApiCategory } from "@/types/category";
+import type { ApiWord } from "@/types/wordType";
 
 defineProps({
-  data: { type: Object as PropType<ApiCategory>, required: true },
+  data: { type: Object as PropType<ApiWord>, required: true },
   backgroundColor: String,
 });
 
@@ -24,7 +24,7 @@ const emit = defineEmits(["onClick", "onClickDelete"]);
 @import "@/assets/fontMixins.scss";
 @import "@/assets/variables.scss";
 
-.category-tile {
+.word-tile {
   position: relative;
   aspect-ratio: $tile-aspect-ratio;
   display: flex;

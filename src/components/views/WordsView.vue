@@ -25,7 +25,7 @@ import { onBeforeMount, ref } from "vue";
 import { apiPaths } from "@/settings/api";
 import Api from "@/api/Api";
 import { getPaletteColor } from "@/settings/colorPalette";
-import type { ApiCategory } from "@/types/category";
+import type { ApiWord } from "@/types/wordType";
 import CategoryTile from "@/components/CategoryTile.vue";
 import { useAppStore } from "@/store/appStore";
 import PlusTile from "@/components/PlusTile.vue";
@@ -43,8 +43,8 @@ const router = useRouter();
 const appStore = useAppStore();
 const { startLoading, stopLoading } = appStore;
 
-const categories = ref([] as ApiCategory[]);
-const deleteItem: Ref<ApiCategory | null> = ref(null);
+const categories = ref([] as ApiWord[]);
+const deleteItem: Ref<ApiWord | null> = ref(null);
 
 onBeforeMount(async () => {
   startLoading();
@@ -54,19 +54,19 @@ onBeforeMount(async () => {
 
 const updateCategories = async (): Promise<void> => {
   const result = await Api.request({
-    path: apiPaths.category,
+    path: apiPaths.word,
   });
-  categories.value = result?.length ? (result as ApiCategory[]) : [];
+  categories.value = result?.length ? (result as ApiWord[]) : [];
 };
 const onClickCategory = (categoryTitle: string): void => {
-  router.push(`${routes.category.path}/${categoryTitle}`);
+  router.push(`${routes.word.path}/${categoryTitle}`);
 };
 
 const onClickPlus = (): void => {
-  router.push(`${routes.createCategory.path}`);
+  router.push(`${routes.createWord.path}`);
 };
 
-const onClickDelete = async (item: ApiCategory): Promise<void> => {
+const onClickDelete = async (item: ApiWord): Promise<void> => {
   deleteItem.value = item;
 };
 
@@ -112,7 +112,7 @@ const onConfirmDelete = async (): Promise<void> => {
     $multiplier: $multiplier + 1;
 
     @media (min-width: $flex-basis * $multiplier) {
-      max-width: percentage(1 / $multiplier);
+      max-width: calc(1 / $multiplier);
     }
   }
 }

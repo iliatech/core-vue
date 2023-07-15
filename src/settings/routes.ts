@@ -2,10 +2,10 @@ export const routes = {
   home: {
     path: "/",
   },
-  category: {
-    path: "/category",
+  word: {
+    path: "/word",
   },
-  createCategory: {
-    path: "/add-category",
+  createWord: {
+    path: "/create-word",
   },
 };

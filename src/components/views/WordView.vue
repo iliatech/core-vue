@@ -25,7 +25,7 @@ import { storeToRefs } from "pinia";
 import { routes } from "@/settings/routes";
 import { computed, onBeforeMount, reactive } from "vue";
 import { categoriesHistoryMock } from "@/mockData/categoriesHistory";
-import type { CategoryHistory } from "@/types/category";
+import type { CategoryHistory } from "@/types/wordType";
 import { useTotalsStore } from "@/store/totalsStore";
 import { useAppStore } from "@/store/appStore";
 

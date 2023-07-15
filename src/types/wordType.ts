@@ -9,13 +9,13 @@ export interface CategoryHistoryItem {
 
 export type CategoryHistory = CategoryHistoryItem[];
 
-export interface ApiCategory {
+export interface ApiWord {
   id: number;
   title: string;
   createdAt: string;
   updatedAt: string;
 }
 
-export interface Category {
+export interface Word {
   title: string;
 }
