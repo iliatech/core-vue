@@ -13,7 +13,7 @@
   <BasicDialog
     v-model="deleteItem"
     :type="DialogType.Confirm"
-    :text="lang.confirmDeleteTitle(deleteItem?.title ?? '')"
+    :text="lang.confirmDeleteWordTitle(deleteItem?.title ?? '')"
     @on-cancel="onCancelDelete"
     @on-confirm="onConfirmDelete"
   />
@@ -26,7 +26,7 @@ import { apiPaths } from "@/settings/api";
 import Api from "@/api/Api";
 import { getPaletteColor } from "@/settings/colorPalette";
 import type { ApiWord } from "@/types/wordType";
-import CategoryTile from "@/components/CategoryTile.vue";
+import CategoryTile from "@/components/WordTile.vue";
 import { useAppStore } from "@/store/appStore";
 import PlusTile from "@/components/PlusTile.vue";
 import { routes } from "@/settings/routes";
@@ -84,9 +84,9 @@ const onConfirmDelete = async (): Promise<void> => {
 
   await Api.request({
     method: RequestMethods.Delete,
-    path: `${apiPaths.category}/${id}`,
+    path: `${apiPaths.word}/${id}`,
     toast,
-    successToast: lang.successDeleteCategory(title),
+    successToast: lang.successDeleteWord(title),
     successCallback: () => {
       updateCategories();
     },
@@ -120,7 +120,7 @@ const onConfirmDelete = async (): Promise<void> => {
 .words {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: $space-large;
   div {
     min-width: 350px;
     @include flex-wrap-fix(250px);

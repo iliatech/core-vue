@@ -1,7 +1,7 @@
 <template>
-  <div class="category">
-    <div class="category__title">{{ categoryName }}</div>
-    <div class="category__buttons">
+  <div class="word-view">
+    <div class="word-view__title">{{ categoryName }}</div>
+    <div class="word-view__buttons">
       <Button
         @click="onClickAdd"
         :label="$lang.addTranslation"
@@ -13,7 +13,17 @@
         class="p-button-outlined p-button-rounded button-grey-tough"
       />
     </div>
-    <div class="category__content">Translations:</div>
+    <div class="word-view__input-container">
+      <InputText
+        type="text"
+        width="500px"
+        :model-value="translation"
+        :placeholder="$lang.translation"
+        :class="{ 'p-invalid': !translation && isValidated }"
+        @update:model-value="onUpdateTranslation"
+      />
+    </div>
+    <div class="word-view__translations-title">{{ $lang.translations }}:</div>
   </div>
 </template>
 
@@ -21,29 +31,26 @@
 import Button from "primevue/button";
 
 import { useRoute, useRouter } from "vue-router";
-import { storeToRefs } from "pinia";
 import { routes } from "@/settings/routes";
-import { computed, onBeforeMount, reactive } from "vue";
-import { categoriesHistoryMock } from "@/mockData/categoriesHistory";
-import type { CategoryHistory } from "@/types/wordType";
-import { useTotalsStore } from "@/store/totalsStore";
+import { onBeforeMount, ref } from "vue";
 import { useAppStore } from "@/store/appStore";
+import Api from "@/api/Api";
+import { apiPaths } from "@/settings/api";
+import { RequestMethods } from "@/types/api";
+import lang from "@/lang/lang";
+import { useToast } from "primevue/usetoast";
+import InputText from "primevue/inputtext";
 
 const route = useRoute();
 const router = useRouter();
-const categoryName = route.params.categoryName as string;
-const totalsStore = useTotalsStore();
+const categoryName = route.params.word as string;
 const appStore = useAppStore();
+const toast = useToast();
 
-const { rest } = storeToRefs(totalsStore);
 const { startLoading, stopLoading } = appStore;
 
-const total = reactive({
-  currentWeek: 0,
-  previousWeek: 0,
-  currentMonth: 0,
-  previousMonth: 0,
-});
+const translation = ref<string | null>(null);
+const isValidated = ref(false);
 
 onBeforeMount(() => {
   // It's a stub;
@@ -51,23 +58,43 @@ onBeforeMount(() => {
   stopLoading();
 });
 
-const history = computed((): CategoryHistory => {
-  return categoriesHistoryMock[categoryName] ?? [];
-});
-
 const onClickBack = (): void => {
   router.push(routes.home.path);
 };
 
-const onClickAdd = (): void => {
-  console.log("add item");
+const onClickAdd = async (): Promise<void> => {
+  isValidated.value = true;
+
+  if (!checkTranslation()) {
+    return;
+  }
+
+  await Api.request({
+    path: apiPaths.translation,
+    method: RequestMethods.Post,
+    payload: { word_id: null, translation }, // TODO: Add correct word id;
+    toast,
+    successToast: lang.successCreateWord,
+    successCallback: async () => {
+      await router.push(routes.home.path);
+    },
+  });
+};
+
+const checkTranslation = (): boolean => {
+  return !!translation.value;
+};
+
+const onUpdateTranslation = (value: string): void => {
+  translation.value = value;
+  isValidated.value = false;
 };
 </script>
 
 <style lang="scss" scoped>
 @import "@/assets/variables.scss";
 @import "@/assets/fontMixins.scss";
-.category {
+.word-view {
   padding: $space-small;
 
   &__title {
@@ -92,5 +119,17 @@ const onClickAdd = (): void => {
   &__section-title {
     @include font-medium-bold;
   }
+
+  &__input-container {
+    margin-top: $space-medium;
+  }
+
+  &__translations-title {
+    margin: $space-medium 0;
+  }
+}
+
+:deep(.p-inputtext) {
+  width: 320px;
 }
 </style>

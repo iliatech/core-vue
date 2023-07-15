@@ -19,9 +19,9 @@
       <InputText
         type="text"
         v-model.trim="word.title"
-        :placeholder="$lang.categoryName"
+        :placeholder="$lang.wordOrPhrase"
         :class="{ 'p-invalid': !word.title && isValidated }"
-        @update:model-value="clearValidation"
+        @update:model-value="refreshValidation"
       />
     </div>
     <div class="create-word__bottom-buttons"></div>
@@ -50,7 +50,7 @@ const toast = useToast();
 
 const { startLoading, stopLoading } = appStore;
 
-const word: Word = reactive({ title: "" });
+const word = reactive<Word>({ title: "" });
 const isValidated = ref(false);
 
 onBeforeMount(() => {
@@ -75,14 +75,14 @@ const onClickCreate = async (): Promise<void> => {
     method: RequestMethods.Post,
     payload: word,
     toast,
-    successToast: lang.successCreateCategory,
+    successToast: lang.successCreateWord,
     successCallback: async () => {
       await router.push(routes.home.path);
     },
   });
 };
 
-const clearValidation = (): void => {
+const refreshValidation = (): void => {
   isValidated.value = false;
 };
 
@@ -119,5 +119,9 @@ const checkCategory = (): boolean => {
       color: $color-dark-blue;
     }
   }
+}
+
+:deep(.p-inputtext) {
+  width: 250px;
 }
 </style>

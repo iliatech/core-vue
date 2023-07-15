@@ -10,7 +10,7 @@ const router = createRouter({
       component: () => import("@/components/views/WordsView.vue"),
     },
     {
-      path: `${routes.word.path}/:categoryName`,
+      path: `${routes.word.path}/:word`,
       name: "category",
       component: () => import("@/components/views/WordView.vue"),
     },

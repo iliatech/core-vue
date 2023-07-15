@@ -32,6 +32,7 @@ const emit = defineEmits(["onClick", "onClickDelete"]);
   justify-content: center;
   overflow: hidden;
   padding: $space-medium;
+  border-radius: $border-radius;
 
   &__title {
     font-size: 1.5rem;
