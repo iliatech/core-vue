@@ -6,7 +6,7 @@
       :key="item.id"
       :data="item"
       :background-color="getPaletteColor(index)"
-      @on-click="onClickCategory(item.title)"
+      @on-click="onClickWord(item.id)"
       @on-click-delete="onClickDelete(item)"
     />
   </div>
@@ -58,8 +58,8 @@ const updateCategories = async (): Promise<void> => {
   });
   categories.value = result?.length ? (result as ApiWord[]) : [];
 };
-const onClickCategory = (categoryTitle: string): void => {
-  router.push(`${routes.word.path}/${categoryTitle}`);
+const onClickWord = (wordId: number): void => {
+  router.push(`${routes.word.path}/${wordId}`);
 };
 
 const onClickPlus = (): void => {

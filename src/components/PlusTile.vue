@@ -19,6 +19,7 @@
   align-items: center;
   cursor: pointer;
   overflow: hidden;
+  border-radius: $border-radius;
 
   &__icon {
     display: block;

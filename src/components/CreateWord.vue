@@ -1,8 +1,6 @@
 <template>
   <div class="create-word">
-    <div class="create-word__title">
-      {{ $lang.createCategory }}
-    </div>
+    <div class="create-word__title">{{ $lang.createWord }}</div>
     <div class="create-word__top-buttons">
       <Button
         @click="onClickCreate"

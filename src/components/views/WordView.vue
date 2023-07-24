@@ -1,9 +1,9 @@
 <template>
   <div class="word-view">
-    <div class="word-view__title">{{ categoryName }}</div>
+    <div class="word-view__title">{{ word }}</div>
     <div class="word-view__buttons">
       <Button
-        @click="onClickAdd"
+        @click="onClickAddTranslation"
         :label="$lang.addTranslation"
         class="p-button-outlined p-button-rounded p-button-danger"
       />
@@ -23,7 +23,14 @@
         @update:model-value="onUpdateTranslation"
       />
     </div>
-    <div class="word-view__translations-title">{{ $lang.translations }}:</div>
+    <template v-if="translations.length">
+      <div class="word-view__translations-title">{{ $lang.translations }}:</div>
+      <ul>
+        <li v-for="item in translations" :key="item.id">
+          {{ item.text }}
+        </li>
+      </ul>
+    </template>
   </div>
 </template>
 
@@ -32,7 +39,7 @@ import Button from "primevue/button";
 
 import { useRoute, useRouter } from "vue-router";
 import { routes } from "@/settings/routes";
-import { onBeforeMount, ref } from "vue";
+import { onBeforeMount, reactive, ref } from "vue";
 import { useAppStore } from "@/store/appStore";
 import Api from "@/api/Api";
 import { apiPaths } from "@/settings/api";
@@ -40,10 +47,11 @@ import { RequestMethods } from "@/types/api";
 import lang from "@/lang/lang";
 import { useToast } from "primevue/usetoast";
 import InputText from "primevue/inputtext";
+import { ApiWord } from "@/types/wordType";
 
 const route = useRoute();
 const router = useRouter();
-const categoryName = route.params.word as string;
+const wordId = parseInt(route.params.wordId as string);
 const appStore = useAppStore();
 const toast = useToast();
 
@@ -51,18 +59,36 @@ const { startLoading, stopLoading } = appStore;
 
 const translation = ref<string | null>(null);
 const isValidated = ref(false);
+const word = ref("");
+const translations = ref([]);
 
-onBeforeMount(() => {
-  // It's a stub;
+onBeforeMount(async () => {
   startLoading();
+  await loadData();
   stopLoading();
 });
+
+const loadData = async (): Promise<void> => {
+  const data = await Api.request({
+    path: `${apiPaths.word}/${wordId}`,
+  });
+
+  word.value = data.title;
+
+  const dataTranslations = await Api.request({
+    path: `${apiPaths.translation}?wordId=${wordId}`,
+  });
+
+  translations.value = dataTranslations;
+
+  console.log(dataTranslations);
+};
 
 const onClickBack = (): void => {
   router.push(routes.home.path);
 };
 
-const onClickAdd = async (): Promise<void> => {
+const onClickAddTranslation = async (): Promise<void> => {
   isValidated.value = true;
 
   if (!checkTranslation()) {
@@ -70,14 +96,11 @@ const onClickAdd = async (): Promise<void> => {
   }
 
   await Api.request({
-    path: apiPaths.translation,
+    path: `${apiPaths.translation}/?wordId=${wordId}`,
     method: RequestMethods.Post,
-    payload: { word_id: null, translation }, // TODO: Add correct word id;
+    payload: { text: translation.value },
     toast,
-    successToast: lang.successCreateWord,
-    successCallback: async () => {
-      await router.push(routes.home.path);
-    },
+    successToast: lang.successCreateTranslation,
   });
 };
 
