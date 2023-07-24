@@ -74,7 +74,7 @@ export default class Api {
         case apiErrors.duplicateFound:
           showToast(config.toast, {
             type: ToastType.Error,
-            text: lang.errorWordDuplicate,
+            text: lang.errorDuplicate,
           });
           break;
         default:

@@ -47,7 +47,6 @@ import { RequestMethods } from "@/types/api";
 import lang from "@/lang/lang";
 import { useToast } from "primevue/usetoast";
 import InputText from "primevue/inputtext";
-import { ApiWord } from "@/types/wordType";
 
 const route = useRoute();
 const router = useRouter();
@@ -95,6 +94,8 @@ const onClickAddTranslation = async (): Promise<void> => {
     return;
   }
 
+  startLoading();
+
   await Api.request({
     path: `${apiPaths.translation}/?wordId=${wordId}`,
     method: RequestMethods.Post,
@@ -102,6 +103,12 @@ const onClickAddTranslation = async (): Promise<void> => {
     toast,
     successToast: lang.successCreateTranslation,
   });
+
+  await loadData();
+
+  translation.value = "";
+
+  stopLoading();
 };
 
 const checkTranslation = (): boolean => {
