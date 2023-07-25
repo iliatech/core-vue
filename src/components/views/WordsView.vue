@@ -1,8 +1,8 @@
 <template>
   <div class="words">
     <PlusTile @click="onClickPlus" />
-    <CategoryTile
-      v-for="(item, index) in categories"
+    <WordTile
+      v-for="(item, index) in words"
       :key="item.id"
       :data="item"
       :background-color="getPaletteColor(index)"
@@ -26,7 +26,7 @@ import { apiPaths } from "@/settings/api";
 import Api from "@/api/Api";
 import { getPaletteColor } from "@/settings/colorPalette";
 import type { ApiWord } from "@/types/wordType";
-import CategoryTile from "@/components/WordTile.vue";
+import WordTile from "@/components/WordTile.vue";
 import { useAppStore } from "@/store/appStore";
 import PlusTile from "@/components/PlusTile.vue";
 import { routes } from "@/settings/routes";
@@ -43,20 +43,20 @@ const router = useRouter();
 const appStore = useAppStore();
 const { startLoading, stopLoading } = appStore;
 
-const categories = ref([] as ApiWord[]);
+const words = ref([] as ApiWord[]);
 const deleteItem: Ref<ApiWord | null> = ref(null);
 
 onBeforeMount(async () => {
   startLoading();
-  await updateCategories();
+  await updateWords();
   stopLoading();
 });
 
-const updateCategories = async (): Promise<void> => {
+const updateWords = async (): Promise<void> => {
   const result = await Api.request({
     path: apiPaths.word,
   });
-  categories.value = result?.length ? (result as ApiWord[]) : [];
+  words.value = result?.length ? (result as ApiWord[]) : [];
 };
 const onClickWord = (wordId: number): void => {
   router.push(`${routes.word.path}/${wordId}`);
@@ -88,7 +88,7 @@ const onConfirmDelete = async (): Promise<void> => {
     toast,
     successToast: lang.successDeleteWord(title),
     successCallback: () => {
-      updateCategories();
+      updateWords();
     },
   });
 

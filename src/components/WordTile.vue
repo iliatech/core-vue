@@ -1,5 +1,6 @@
 <template>
   <div class="word-tile" :style="{ backgroundColor }">
+    <div class="word-tile__number">{{ data.translations.length }}</div>
     <div class="word-tile__title">
       {{ data.title }}
     </div>
@@ -33,6 +34,14 @@ const emit = defineEmits(["onClick", "onClickDelete"]);
   overflow: hidden;
   padding: $space-medium;
   border-radius: $border-radius;
+
+  &__number {
+    position: absolute;
+    color: #333;
+    top: 20px;
+    left: 20px;
+    font-size: 0.875rem;
+  }
 
   &__title {
     font-size: 1.5rem;

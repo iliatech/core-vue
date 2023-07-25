@@ -13,6 +13,8 @@ export default {
   confirmDeleteWordTitle: (title: string) => `Delete "${title}"?`,
   cancelButton: "Cancel",
   confirmButton: "Confirm",
-  translations: "Translations",
+  previousTranslations: "Previous translations",
   translation: "First idea that comes to mind :)",
+  hasBeenTranslatedNTimes: (value: number) =>
+    `Has been translated ${value} times.`,
 };

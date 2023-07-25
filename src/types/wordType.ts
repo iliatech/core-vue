@@ -1,4 +1,5 @@
 import type { Currency } from "@/types/currency";
+import type { Translation } from "@/types/translationType";
 
 export interface CategoryHistoryItem {
   date: string;
@@ -14,6 +15,7 @@ export interface ApiWord {
   title: string;
   createdAt: string;
   updatedAt: string;
+  translations: Translation[];
 }
 
 export interface Word {

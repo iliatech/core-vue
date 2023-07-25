@@ -23,14 +23,21 @@
         @update:model-value="onUpdateTranslation"
       />
     </div>
-    <template v-if="translations.length">
-      <div class="word-view__translations-title">{{ $lang.translations }}:</div>
+    <template v-if="translations.length && isTranslationAdded">
+      <div class="word-view__translations-title">
+        {{ $lang.previousTranslations }}:
+      </div>
       <ul>
-        <li v-for="item in translations" :key="item.id">
-          {{ item.text }}
+        <li v-for="(item, index) in translations" :key="item.id">
+          <span :class="{ 'word-view__item-bold': !index }">{{
+            item.text
+          }}</span>
         </li>
       </ul>
     </template>
+    <div v-else class="word-view__has-been-translated">
+      {{ $lang.hasBeenTranslatedNTimes(translations.length) }}
+    </div>
   </div>
 </template>
 
@@ -39,7 +46,7 @@ import Button from "primevue/button";
 
 import { useRoute, useRouter } from "vue-router";
 import { routes } from "@/settings/routes";
-import { onBeforeMount, reactive, ref } from "vue";
+import { computed, onBeforeMount, ref } from "vue";
 import { useAppStore } from "@/store/appStore";
 import Api from "@/api/Api";
 import { apiPaths } from "@/settings/api";
@@ -47,19 +54,22 @@ import { RequestMethods } from "@/types/api";
 import lang from "@/lang/lang";
 import { useToast } from "primevue/usetoast";
 import InputText from "primevue/inputtext";
+import type { Translation } from "@/types/translationType";
+import { orderBy } from "lodash";
 
 const route = useRoute();
 const router = useRouter();
 const wordId = parseInt(route.params.wordId as string);
 const appStore = useAppStore();
 const toast = useToast();
+const isTranslationAdded = ref(false);
 
 const { startLoading, stopLoading } = appStore;
 
 const translation = ref<string | null>(null);
 const isValidated = ref(false);
 const word = ref("");
-const translations = ref([]);
+const translations = ref<Translation[]>([]);
 
 onBeforeMount(async () => {
   startLoading();
@@ -78,9 +88,7 @@ const loadData = async (): Promise<void> => {
     path: `${apiPaths.translation}?wordId=${wordId}`,
   });
 
-  translations.value = dataTranslations;
-
-  console.log(dataTranslations);
+  translations.value = orderBy(dataTranslations, "createdAt", "desc");
 };
 
 const onClickBack = (): void => {
@@ -107,6 +115,7 @@ const onClickAddTranslation = async (): Promise<void> => {
   await loadData();
 
   translation.value = "";
+  isTranslationAdded.value = true;
 
   stopLoading();
 };
@@ -118,6 +127,7 @@ const checkTranslation = (): boolean => {
 const onUpdateTranslation = (value: string): void => {
   translation.value = value;
   isValidated.value = false;
+  isTranslationAdded.value = false;
 };
 </script>
 
@@ -156,6 +166,16 @@ const onUpdateTranslation = (value: string): void => {
 
   &__translations-title {
     margin: $space-medium 0;
+  }
+
+  &__has-been-translated {
+    margin-top: $space-medium;
+    color: #666;
+  }
+
+  &__item-bold {
+    font-weight: bold;
+    font-size: 1.25em;
   }
 }
 
