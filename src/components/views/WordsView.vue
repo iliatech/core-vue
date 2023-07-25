@@ -2,7 +2,7 @@
   <div class="words">
     <PlusTile @click="onClickPlus" />
     <WordTile
-      v-for="(item, index) in words"
+      v-for="(item, index) in wordsSorted"
       :key="item.id"
       :data="item"
       :background-color="getPaletteColor(index)"
@@ -21,7 +21,7 @@
 
 <script lang="ts" setup>
 import type { Ref } from "vue";
-import { onBeforeMount, ref } from "vue";
+import { computed, onBeforeMount, ref } from "vue";
 import { apiPaths } from "@/settings/api";
 import Api from "@/api/Api";
 import { getPaletteColor } from "@/settings/colorPalette";
@@ -36,6 +36,7 @@ import lang from "@/lang/lang";
 import { useToast } from "primevue/usetoast";
 import BasicDialog from "@/components/dialogs/BasicDialog.vue";
 import { DialogType } from "@/types/dialog";
+import { orderBy } from "lodash";
 const toast = useToast();
 
 const router = useRouter();
@@ -50,6 +51,10 @@ onBeforeMount(async () => {
   startLoading();
   await updateWords();
   stopLoading();
+});
+
+const wordsSorted = computed<ApiWord[]>(() => {
+  return orderBy(words.value, (item) => item.translations.length, "asc");
 });
 
 const updateWords = async (): Promise<void> => {
