@@ -1,1 +1,1 @@
-export const localStorageTokenField = "bearer_token";
+export const jwtTokenField = "jwt";

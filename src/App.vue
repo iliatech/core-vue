@@ -1,5 +1,5 @@
 <template>
-  <Toast />
+  <Toast ref="toast" />
   <div v-if="isLoading" class="app-loader">
     <ProgressSpinner
       stroke-width="2"
@@ -15,8 +15,16 @@ import ProgressSpinner from "primevue/progressspinner";
 import Toast from "primevue/toast";
 import { useAppStore } from "@/store/appStore";
 import { storeToRefs } from "pinia";
+import { onMounted, ref } from "vue";
+import { setGlobalToastObject } from "@/helpers/toast";
 const appStore = useAppStore();
 const { isLoading } = storeToRefs(appStore);
+
+const toast = ref();
+
+onMounted(() => {
+  setGlobalToastObject(toast.value);
+});
 </script>
 
 <style lang="scss" scoped>

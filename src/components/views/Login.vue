@@ -1,13 +1,17 @@
 <template>
   <div className="login-page">
-    <div className="login-page__form">
+    <form className="login-page__form">
       <div className="login-page__title">{{ lang.login }}</div>
       <label className="login-page__field-label">{{ lang.email }}</label>
       <InputText v-model="email" />
       <label className="login-page__field-label">{{ lang.password }}</label>
 
       <!-- TODO: Should we write false? -->
-      <Password v-model="password" :feedback="false" />
+      <Password
+        v-model="password"
+        :feedback="false"
+        autocomplete="current-password"
+      />
 
       <div className="login-page__button-container">
         <Button
@@ -16,7 +20,7 @@
           :disabled="!email || !password"
         />
       </div>
-    </div>
+    </form>
   </div>
 </template>
 <script lang="ts" setup>
@@ -25,14 +29,40 @@ import Password from "primevue/password";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 import lang from "@/lang/lang";
+import type { ApiLoginRequest, ApiLoginResponse } from "@/types/api";
+import { showToast } from "@/helpers/toast";
+import { ToastType } from "@/types/toasts";
+import Api from "@/api/Api";
+import { RequestMethods } from "@/types/api";
+import { apiPaths } from "@/settings/api";
+import { resetAuthToken, saveAuthToken } from "@/helpers/auth";
 
 const email = ref("");
 const password = ref("");
 
 const onClickLogin = async () => {
-  console.log("click login");
-  // TODO
-  //await useLogin(navigate, email, password);
+  const result = await Api.request({
+    method: RequestMethods.Post,
+    path: apiPaths.login,
+    payload: {
+      user: email.value,
+      password: password.value,
+    },
+  });
+
+  if (result) {
+    saveAuthToken(result.jwt);
+    // TODO
+    // saveAuthUser(result.user);
+    showToast({ type: ToastType.Success, text: lang.loginSuccess });
+    // TODO
+    // navigate(localRoutes.home);
+  } else {
+    resetAuthToken();
+    // TODO
+    // resetAuthUser();
+    showToast({ type: ToastType.Error, text: lang.loginFailed });
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -59,7 +89,7 @@ const onClickLogin = async () => {
   }
 
   &__title {
-    @include font-extra-large;
+    @include header-medium;
     margin-bottom: $space-large;
   }
 }

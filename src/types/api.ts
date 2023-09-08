@@ -6,10 +6,6 @@ export enum RequestMethods {
   Delete = "delete",
 }
 
-export enum RequestResults {
-  Success = "success",
-}
-
 export interface RequestConfig {
   path: string;
   method?: RequestMethods;
@@ -17,4 +13,22 @@ export interface RequestConfig {
   toast?: any;
   successToast?: string;
   successCallback?: any;
+}
+
+export interface ApiLoginResponse {
+  jwt: string;
+}
+
+export interface ApiLoginRequest {
+  password: string;
+  email: string;
+}
+
+export interface ApiUserResponse {
+  created_at: string;
+  email: string;
+  email_verified_at: string | null;
+  id: number;
+  name: string;
+  updated_at: string;
 }

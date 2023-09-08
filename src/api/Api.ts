@@ -1,11 +1,11 @@
 import type { RequestConfig } from "@/types/api";
 import { RequestMethods } from "@/types/api";
-import { localStorageTokenField } from "@/settings/auth";
 import axios from "axios";
 import lang from "@/lang/lang";
 import { apiErrors, apiUrl } from "@/settings/api";
 import { showToast } from "@/helpers/toast";
 import { ToastType } from "@/types/toasts";
+import { getAuthToken, resetAuthToken } from "@/helpers/auth";
 
 export default class Api {
   static async request(config: RequestConfig): Promise<any> {
@@ -15,7 +15,8 @@ export default class Api {
     const url = `${apiUrl}/${config.path}`;
     const payload = config.payload || {};
     let headers = {};
-    const bearerToken = localStorage.getItem(localStorageTokenField);
+    const bearerToken = getAuthToken();
+
     if (bearerToken) {
       headers = { Authorization: `Bearer ${bearerToken}` };
     }
@@ -51,7 +52,7 @@ export default class Api {
       }
 
       if (config.successToast) {
-        showToast(config.toast, {
+        showToast({
           type: ToastType.Success,
           text: config.successToast,
         });
@@ -60,19 +61,18 @@ export default class Api {
           config.successCallback();
       }
 
-      return requestResult?.data?.data ?? null;
+      return requestResult?.data ?? null;
     } catch (e: any) {
       // TODO: Should refactor it, text is not a code;
-
       const errorTextCode = e.response.data.errorText;
 
       switch (errorTextCode) {
         case apiErrors.authTokenIsInvalid:
-          localStorage.removeItem(localStorageTokenField);
+          resetAuthToken();
           console.error(lang.authTokenIsInvalid);
           break;
         case apiErrors.duplicateFound:
-          showToast(config.toast, {
+          showToast({
             type: ToastType.Error,
             text: lang.errorDuplicate,
           });

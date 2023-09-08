@@ -12,6 +12,8 @@ export default {
     `Has been translated ${value} times.`,
   loaderLabel: "Loading",
   login: "Login",
+  loginFailed: "Login failed",
+  loginSuccess: "Login success",
   password: "Password",
   previousTranslations: "Previous translations",
   save: "Save",
