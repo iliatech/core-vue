@@ -35,13 +35,27 @@ import { ToastType } from "@/types/toasts";
 import Api from "@/api/Api";
 import { RequestMethods } from "@/types/api";
 import { apiPaths } from "@/settings/api";
-import { resetAuthToken, saveAuthToken } from "@/helpers/auth";
+import {
+  getAuthToken,
+  resetAuthToken,
+  resetAuthUser,
+  saveAuthToken,
+  saveAuthUser,
+} from "@/helpers/auth";
+import router from "@/router";
+import { routes } from "@/settings/routes";
 
 const email = ref("");
 const password = ref("");
 
 const onClickLogin = async () => {
-  const result = await Api.request({
+  const failedAuthorization = () => {
+    resetAuthToken();
+    resetAuthUser();
+    showToast({ type: ToastType.Error, text: lang.loginFailed });
+  };
+
+  const loginResult = await Api.request({
     method: RequestMethods.Post,
     path: apiPaths.login,
     payload: {
@@ -50,18 +64,25 @@ const onClickLogin = async () => {
     },
   });
 
-  if (result) {
-    saveAuthToken(result.jwt);
-    // TODO
-    // saveAuthUser(result.user);
-    showToast({ type: ToastType.Success, text: lang.loginSuccess });
-    // TODO
-    // navigate(localRoutes.home);
+  if (loginResult) {
+    const authorizationResult = await Api.request({
+      method: RequestMethods.Post,
+      path: apiPaths.authorization,
+      payload: {
+        token: loginResult.jwt,
+      },
+    });
+
+    if (authorizationResult.authorized) {
+      saveAuthUser(authorizationResult.user);
+      saveAuthToken(loginResult.jwt);
+      showToast({ type: ToastType.Success, text: lang.loginSuccess });
+      await router.push(routes.home.path);
+    } else {
+      failedAuthorization();
+    }
   } else {
-    resetAuthToken();
-    // TODO
-    // resetAuthUser();
-    showToast({ type: ToastType.Error, text: lang.loginFailed });
+    failedAuthorization();
   }
 };
 </script>
