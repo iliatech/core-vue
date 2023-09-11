@@ -46,7 +46,6 @@ onMounted(() => {
 }
 
 .app-container {
-  margin: 0 auto;
-  padding: $space-small;
+  margin: 0 auto !important;
 }
 </style>

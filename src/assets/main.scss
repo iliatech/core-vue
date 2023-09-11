@@ -1,9 +1,19 @@
+@import "@/assets/variables.scss";
+
 html {
   // TODO: Add something here when it's needed;
 }
 
 body {
   font-family: Roboto;
+
+  .p-toast-message-icon {
+    display: none;
+  }
+
+  .p-toast-message-text {
+    margin-left: $space-tiny !important;
+  }
 }
 
 #app {

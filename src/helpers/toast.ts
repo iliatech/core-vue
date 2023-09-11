@@ -5,9 +5,8 @@ export const showToast = (configType: ToastConfig): void => {
   const { type, text } = configType;
   (document as ExtendedDocument).$toast.add({
     severity: type,
-    summary: "",
     detail: text,
-    life: 3000,
+    life: 2000,
   });
 };
 
