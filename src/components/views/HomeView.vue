@@ -20,7 +20,7 @@ const onClickLogout = () => {
   router.push(routes.login.path);
   resetAuthUser();
   resetAuthToken();
-  showToast({ type: ToastType.Error, text: lang.logoutSuccess });
+  showToast({ type: ToastType.Warning, text: lang.logoutSuccess });
 };
 </script>
 <style lang="scss" scoped>

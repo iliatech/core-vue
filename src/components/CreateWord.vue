@@ -58,7 +58,7 @@ onBeforeMount(() => {
 });
 
 const onClickBack = (): void => {
-  router.push(routes.home.path);
+  router.push({ name: routes.home.name });
 };
 
 const onClickCreate = async (): Promise<void> => {

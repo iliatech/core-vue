@@ -39,7 +39,7 @@ const props = defineProps({
   modelValue: Object as PropType<unknown | null>,
   title: String,
   text: String,
-  type: Object as PropType<DialogType>,
+  type: String as PropType<DialogType>,
 });
 
 const emit = defineEmits(["onConfirm", "onCancel"]);

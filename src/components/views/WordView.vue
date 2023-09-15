@@ -92,7 +92,7 @@ const loadData = async (): Promise<void> => {
 };
 
 const onClickBack = (): void => {
-  router.push(routes.home.path);
+  router.push({ name: routes.home.name });
 };
 
 const onClickAddTranslation = async (): Promise<void> => {

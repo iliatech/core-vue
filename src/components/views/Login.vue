@@ -29,14 +29,12 @@ import Password from "primevue/password";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 import lang from "@/lang/lang";
-import type { ApiLoginRequest, ApiLoginResponse } from "@/types/api";
 import { showToast } from "@/helpers/toast";
 import { ToastType } from "@/types/toasts";
 import Api from "@/api/Api";
 import { RequestMethods } from "@/types/api";
 import { apiPaths } from "@/settings/api";
 import {
-  getAuthToken,
   resetAuthToken,
   resetAuthUser,
   saveAuthToken,
@@ -77,7 +75,7 @@ const onClickLogin = async () => {
       saveAuthUser(authorizationResult.user);
       saveAuthToken(loginResult.jwt);
       showToast({ type: ToastType.Success, text: lang.loginSuccess });
-      await router.push(`${routes.root.path}${routes.home.path}`);
+      await router.push({ name: routes.home.name });
     } else {
       failedAuthorization();
     }
