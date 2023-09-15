@@ -77,7 +77,7 @@ const onClickLogin = async () => {
       saveAuthUser(authorizationResult.user);
       saveAuthToken(loginResult.jwt);
       showToast({ type: ToastType.Success, text: lang.loginSuccess });
-      await router.push(routes.words.path);
+      await router.push(`${routes.root.path}${routes.home.path}`);
     } else {
       failedAuthorization();
     }

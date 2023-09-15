@@ -4,18 +4,28 @@ export const routes = {
     name: "login",
   },
 
+  root: {
+    path: "/",
+    name: "root",
+  },
+
+  home: {
+    path: "",
+    name: "home",
+  },
+
   words: {
-    path: "/words",
+    path: "words",
     name: "words",
   },
 
   word: {
-    path: "/word",
+    path: "word",
     name: "word",
   },
 
   createWord: {
-    path: "/create-word",
+    path: "create-word",
     name: "createWord",
   },
 };
