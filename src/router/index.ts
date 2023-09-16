@@ -8,17 +8,17 @@ const router = createRouter({
     {
       path: routes.root.path,
       name: routes.root.name,
-      component: () => import("@/components/views/HomeView.vue"),
+      component: () => import("@/views/HomeView.vue"),
       children: [
         {
           path: "",
           name: routes.home.name,
-          component: () => import("@/components/views/WordsView.vue"),
+          component: () => import("@/views/WordsView.vue"),
         },
         {
           path: `${routes.word.path}/:wordId`,
           name: routes.word.name,
-          component: () => import("@/components/views/WordView.vue"),
+          component: () => import("@/views/WordView.vue"),
         },
         {
           path: `${routes.createWord.path}`,
@@ -30,7 +30,7 @@ const router = createRouter({
     {
       path: routes.login.path,
       name: "login",
-      component: () => import("@/components/views/Login.vue"),
+      component: () => import("@/views/Login.vue"),
     },
   ],
 });

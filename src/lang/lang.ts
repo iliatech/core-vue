@@ -24,4 +24,5 @@ export default {
   successDeleteWord: (title: string): string => `Word '${title}' deleted.`,
   translation: "First idea that comes to mind :)",
   wordOrPhrase: "Think of a word or phrase...",
+  numberOfTranslations: "Number of translations",
 };

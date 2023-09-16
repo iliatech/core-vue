@@ -1,6 +1,8 @@
 <template>
   <div class="word-tile" :style="{ backgroundColor }">
-    <div class="word-tile__number">{{ data.translations.length }}</div>
+    <div class="word-tile__number">
+      {{ $lang.numberOfTranslations }}: {{ data.translations.length }}
+    </div>
     <div class="word-tile__title">
       {{ data.title }}
     </div>

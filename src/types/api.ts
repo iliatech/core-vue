@@ -13,6 +13,7 @@ export interface RequestConfig {
   toast?: any;
   successToast?: string;
   successCallback?: any;
+  isDataResult?: boolean;
 }
 
 export interface ApiLoginResponse {

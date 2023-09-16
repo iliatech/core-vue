@@ -61,7 +61,11 @@ export default class Api {
           config.successCallback();
       }
 
-      return requestResult?.data ?? null;
+      return (
+        (config.isDataResult
+          ? requestResult?.data?.data
+          : requestResult?.data) ?? null
+      );
     } catch (e: any) {
       // TODO: Should refactor it, text is not a code;
       const errorTextCode = e.response.data.errorText;

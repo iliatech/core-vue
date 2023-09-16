@@ -78,17 +78,19 @@ onBeforeMount(async () => {
 });
 
 const loadData = async (): Promise<void> => {
-  const data = await Api.request({
+  const wordData = await Api.request({
     path: `${apiPaths.word}/${wordId}`,
+    isDataResult: true,
   });
 
-  word.value = data.title;
+  word.value = wordData.title;
 
-  const dataTranslations = await Api.request({
+  const translationsData = await Api.request({
     path: `${apiPaths.translation}?wordId=${wordId}`,
+    isDataResult: true,
   });
 
-  translations.value = orderBy(dataTranslations, "createdAt", "desc");
+  translations.value = orderBy(translationsData, "createdAt", "desc");
 };
 
 const onClickBack = (): void => {

@@ -58,10 +58,11 @@ const wordsSorted = computed<ApiWord[]>(() => {
 });
 
 const updateWords = async (): Promise<void> => {
-  const result = await Api.request({
+  const data = await Api.request({
     path: apiPaths.word,
+    isDataResult: true,
   });
-  words.value = result?.length ? (result as ApiWord[]) : [];
+  words.value = data?.length ? (data as ApiWord[]) : [];
 };
 const onClickWord = (wordId: number): void => {
   router.push(`${routes.word.path}/${wordId}`);
