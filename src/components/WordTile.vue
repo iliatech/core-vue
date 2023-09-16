@@ -1,15 +1,17 @@
 <template>
   <div class="word-tile" :style="{ backgroundColor }">
-    <div class="word-tile__number">
-      {{ $lang.numberOfTranslations }}: {{ data.translations.length }}
+    <div class="word-tile__top" @click="emit('onClick')">
+      <i class="pi pi-arrow-up-left word-tile__top-icon" />
     </div>
-    <div class="word-tile__title">
-      {{ data.title }}
+    <div class="word-tile__content">
+      <div class="word-tile__text">{{ data.title }}</div>
     </div>
-    <div class="word-tile__delete">
+    <div class="word-tile__bottom">
+      <div class="word-tile__number">
+        {{ $lang.numberOfTranslations }}: {{ data.translations.length }}
+      </div>
       <i @click="emit('onClickDelete')" class="pi pi-trash" />
     </div>
-    <div @click="emit('onClick')" class="word-tile__clickable" />
   </div>
 </template>
 <script lang="ts" setup>
@@ -28,50 +30,56 @@ const emit = defineEmits(["onClick", "onClickDelete"]);
 @import "@/assets/variables.scss";
 
 .word-tile {
-  position: relative;
   aspect-ratio: $tile-aspect-ratio;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
   overflow: hidden;
   padding: $space-medium;
   border-radius: $border-radius;
 
+  &__top {
+    flex-grow: 0;
+  }
+
+  &__top-icon {
+    cursor: pointer;
+  }
+
   &__number {
-    position: absolute;
     color: #333;
-    top: 20px;
-    left: 20px;
     font-size: 0.875rem;
   }
 
-  &__title {
+  &__content {
     font-size: 1.5rem;
     text-overflow: ellipsis;
     overflow: hidden;
-    display: -webkit-box !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     white-space: normal;
+    flex-grow: 1;
   }
 
-  &__delete {
-    position: absolute;
+  &__text {
+    position: relative;
+    display: block;
+    z-index: 100;
+  }
+
+  &__bottom {
+    display: flex;
+    justify-content: space-between;
     right: $space-small;
     bottom: $space-small;
+    flex-grow: 0;
 
     i {
       font-size: 1rem;
       cursor: pointer;
     }
-  }
-
-  &__clickable {
-    position: absolute;
-    width: 80%;
-    height: 80%;
-    margin: auto;
-    cursor: pointer;
   }
 }
 </style>

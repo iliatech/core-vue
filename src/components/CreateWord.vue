@@ -75,7 +75,7 @@ const onClickCreate = async (): Promise<void> => {
     toast,
     successToast: lang.successCreateWord,
     successCallback: async () => {
-      await router.push(routes.home.path);
+      await router.push({ name: routes.home.name });
     },
   });
 };
