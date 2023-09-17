@@ -1,10 +1,10 @@
 <template>
   <div class="main-toolbar">
     <Button
-      severity="danger"
       icon="pi pi-bars"
       @click="toggleUserMenu"
-      text
+      severity="warning"
+      outlined
       rounded
     />
     <Menu ref="userMenu" id="user_menu" :model="menuItems" popup />
