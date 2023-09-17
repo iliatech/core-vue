@@ -57,7 +57,7 @@ const showButtons = computed((): boolean => {
 .basic-dialog {
   width: 400px;
   background: $color-white;
-  padding: $space-medium;
+  padding: $space-twenty;
   border-radius: $border-radius;
   box-shadow: $basic-dialog-shadow;
 
@@ -82,10 +82,10 @@ const showButtons = computed((): boolean => {
 
   &__buttons {
     display: flex;
-    gap: $space-small;
+    gap: $space-ten;
 
     &-wrapper {
-      margin-top: $space-medium;
+      margin-top: $space-twenty;
       display: flex;
       justify-content: flex-end;
     }

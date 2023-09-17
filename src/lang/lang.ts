@@ -5,7 +5,7 @@ export default {
   cancelButton: "Cancel",
   confirmButton: "Confirm",
   confirmDeleteWordTitle: (title: string) => `Delete "${title}"?`,
-  createWord: "Create...",
+  createWord: "Word or phrase creator",
   email: "Email",
   errorDuplicate: "Duplicate found",
   hasBeenTranslatedNTimes: (value: number) =>
@@ -22,7 +22,7 @@ export default {
   successCreateWord: "Word created.",
   successCreateTranslation: "Translation added.",
   successDeleteWord: (title: string): string => `Word '${title}' deleted.`,
-  translation: "First idea that comes to mind :)",
-  wordOrPhrase: "Think of a word or phrase...",
+  offerYourVariant: "Offer your variant...",
+  wordOrPhrase: "Write something...",
   numberOfTranslations: "Number of translations",
 };

@@ -1,12 +1,6 @@
 <template>
   <div class="main-toolbar">
-    <Button
-      icon="pi pi-bars"
-      @click="toggleUserMenu"
-      severity="warning"
-      outlined
-      rounded
-    />
+    <Button icon="pi pi-bars" @click="toggleUserMenu" outlined rounded />
     <Menu ref="userMenu" id="user_menu" :model="menuItems" popup />
   </div>
   <RouterView />
@@ -50,6 +44,10 @@ const onClickLogout = () => {
 .main-toolbar {
   display: flex;
   justify-content: flex-end;
-  margin-bottom: $space-small;
+  margin-bottom: $space-ten;
+
+  :deep(.p-button) {
+    color: #888;
+  }
 }
 </style>

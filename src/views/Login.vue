@@ -99,17 +99,17 @@ const onClickLogin = async () => {
 
   &__field-label {
     display: block;
-    margin-bottom: $space-small;
-    margin-top: $space-medium;
+    margin-bottom: $space-ten;
+    margin-top: $space-twenty;
   }
 
   &__button-container {
-    margin-top: $space-medium;
+    margin-top: $space-twenty;
   }
 
   &__title {
     @include header-medium;
-    margin-bottom: $space-large;
+    margin-bottom: $space-thirty;
   }
 }
 </style>

@@ -1,18 +1,6 @@
 <template>
   <div class="create-word">
     <div class="create-word__title">{{ $lang.createWord }}</div>
-    <div class="create-word__top-buttons">
-      <Button
-        @click="onClickCreate"
-        :label="$lang.save"
-        class="p-button-outlined p-button-rounded button-tomato"
-      />
-      <Button
-        @click="onClickBack"
-        :label="$lang.back"
-        class="p-button-outlined p-button-rounded button-baby-powder"
-      />
-    </div>
     <div class="create-word__content">
       <InputText
         type="text"
@@ -22,6 +10,11 @@
         @update:model-value="refreshValidation"
       />
     </div>
+    <div class="create-word__top-buttons">
+      <Button @click="onClickCreate" :label="$lang.save" class="save-button" />
+      <Button @click="onClickBack" :label="$lang.back" class="back-button" />
+    </div>
+
     <div class="create-word__bottom-buttons"></div>
   </div>
 </template>
@@ -95,24 +88,24 @@ const checkCategory = (): boolean => {
 @import "@/assets/colors.scss";
 
 .create-word {
-  padding: $space-small;
+  padding: $space-ten;
 
   &__title {
-    padding: 0 0 $space-small;
+    padding: 0 0 $space-after-title;
     @include font-extra-large;
   }
 
   &__top-buttons {
     display: flex;
-    gap: $space-small;
+    gap: $space-ten;
   }
 
   &__content {
-    margin-top: $space-medium;
+    margin-bottom: $space-fifteen;
   }
 
   &__bottom-buttons {
-    margin-top: $space-medium;
+    margin-top: $space-twenty;
     .p-button.p-button-outlined {
       color: $color-dark-blue;
     }

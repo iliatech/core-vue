@@ -1,7 +1,7 @@
 <template>
   <div class="word-tile" :style="{ backgroundColor }">
     <div class="word-tile__top" @click="emit('onClick')">
-      <i class="pi pi-arrow-up-left word-tile__top-icon" />
+      <i class="pi pi-eye word-tile__top-icon" />
     </div>
     <div class="word-tile__content">
       <div class="word-tile__text">{{ data.title }}</div>
@@ -34,7 +34,7 @@ const emit = defineEmits(["onClick", "onClickDelete"]);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  padding: $space-medium;
+  padding: $space-twenty;
   border-radius: $border-radius;
 
   &__top {
@@ -72,8 +72,8 @@ const emit = defineEmits(["onClick", "onClickDelete"]);
   &__bottom {
     display: flex;
     justify-content: space-between;
-    right: $space-small;
-    bottom: $space-small;
+    right: $space-ten;
+    bottom: $space-ten;
     flex-grow: 0;
 
     i {

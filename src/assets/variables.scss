@@ -1,16 +1,26 @@
+// App.
 $app-container-width: 520px;
 
-$space-tiny: 5px;
-$space-small: 10px;
-$space-medium: 20px;
-$space-large: 30px;
+// Spaces.
+$space-five: 5px;
+$space-ten: 10px;
+$space-fifteen: 15px;
+$space-twenty: 20px;
+$space-thirty: 30px;
 
+// Space aliases.
+$space-after-title: $space-thirty;
+
+// Border radii.
 $border-radius: 7px;
 
+// Dialogs.
+$basic-dialog-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+
+// TODO ??
 $tile-width: 200px;
 $tile-height: 100px;
 $tile-aspect-ratio: 1.8;
 
-$basic-dialog-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 
 

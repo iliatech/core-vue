@@ -5,20 +5,16 @@
       <Button
         @click="onClickAddTranslation"
         :label="$lang.addTranslation"
-        class="p-button-outlined p-button-rounded p-button-danger"
+        class="add-button"
       />
-      <Button
-        @click="onClickBack"
-        :label="$lang.back"
-        class="p-button-outlined p-button-rounded button-grey-tough"
-      />
+      <Button @click="onClickBack" :label="$lang.back" class="back-button" />
     </div>
     <div class="word-view__input-container">
       <InputText
         type="text"
         width="500px"
         :model-value="translation"
-        :placeholder="$lang.translation"
+        :placeholder="$lang.offerYourVariant"
         :class="{ 'p-invalid': !translation && isValidated }"
         @update:model-value="onUpdateTranslation"
       />
@@ -137,25 +133,25 @@ const onUpdateTranslation = (value: string): void => {
 @import "@/assets/variables.scss";
 @import "@/assets/fontMixins.scss";
 .word-view {
-  padding: $space-small;
+  padding: $space-ten;
 
   &__title {
-    padding: 0 0 $space-small;
+    padding: 0 0 $space-ten;
     @include font-extra-large;
   }
 
   &__buttons {
     display: flex;
-    gap: $space-small;
+    gap: $space-ten;
   }
 
   &__content {
-    padding: $space-medium 0;
+    padding: $space-twenty 0;
     @include font-small-large;
   }
 
   &__section {
-    padding-bottom: $space-small;
+    padding-bottom: $space-ten;
   }
 
   &__section-title {
@@ -163,15 +159,15 @@ const onUpdateTranslation = (value: string): void => {
   }
 
   &__input-container {
-    margin-top: $space-medium;
+    margin-top: $space-twenty;
   }
 
   &__translations-title {
-    margin: $space-medium 0;
+    margin: $space-twenty 0;
   }
 
   &__has-been-translated {
-    margin-top: $space-medium;
+    margin-top: $space-twenty;
     color: #666;
   }
 

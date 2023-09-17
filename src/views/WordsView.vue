@@ -54,7 +54,10 @@ onBeforeMount(async () => {
 });
 
 const wordsSorted = computed<ApiWord[]>(() => {
-  return orderBy(words.value, (item) => item.translations.length, "asc");
+  // TODO Realize sorting variant choice.
+  // orderBy(words.value, (item) => item.translations.length, "asc");
+
+  return orderBy(words.value, "id");
 });
 
 const updateWords = async (): Promise<void> => {
@@ -126,7 +129,7 @@ const onConfirmDelete = async (): Promise<void> => {
 .words {
   display: flex;
   flex-wrap: wrap;
-  gap: $space-large;
+  gap: $space-thirty;
   div {
     min-width: 350px;
     @include flex-wrap-fix(250px);
