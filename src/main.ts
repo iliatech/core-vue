@@ -24,7 +24,7 @@ const app = createApp(App);
 
 app.use(createPinia());
 app.use(router);
-app.use(PrimeVue);
+app.use(PrimeVue, { unstyled: true });
 app.use(langPlugin);
 app.use(ToastService);
 app.use(ConfirmationService);
