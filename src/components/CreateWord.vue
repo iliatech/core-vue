@@ -11,7 +11,11 @@
       />
     </div>
     <div class="create-word__top-buttons">
-      <Button @click="onClickCreate" :label="$lang.save" class="save-button" />
+      <Button
+        @click="onClickCreate"
+        :label="$lang.create"
+        class="save-button"
+      />
       <Button @click="onClickBack" :label="$lang.back" class="back-button" />
     </div>
 

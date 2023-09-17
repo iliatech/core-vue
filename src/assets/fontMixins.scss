@@ -37,3 +37,9 @@
   font-size: 1.25rem;
   font-weight: 600;
 }
+
+@mixin header-large {
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #ddd;
+}

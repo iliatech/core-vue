@@ -1,5 +1,8 @@
 <template>
   <div class="main-toolbar">
+    <div class="main-toolbar__title">
+      {{ $lang.wordsAppTitle }}
+    </div>
     <Button icon="pi pi-bars" @click="toggleUserMenu" outlined rounded />
     <Menu ref="userMenu" id="user_menu" :model="menuItems" popup />
   </div>
@@ -41,13 +44,18 @@ const onClickLogout = () => {
 </script>
 <style lang="scss" scoped>
 @import "@/assets/variables.scss";
+@import "@/assets/fontMixins.scss";
 .main-toolbar {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   margin-bottom: $space-ten;
 
+  &__title {
+    @include header-large;
+  }
+
   :deep(.p-button) {
-    color: #888;
+    color: #ddd;
   }
 }
 </style>
