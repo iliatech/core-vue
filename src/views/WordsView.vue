@@ -1,14 +1,37 @@
 <template>
-  <div class="words">
-    <PlusTile @click="onClickPlus" />
-    <WordTile
-      v-for="(item, index) in wordsSorted"
-      :key="item.id"
-      :data="item"
-      :background-color="getPaletteColor(index)"
-      @on-click="onClickWord(item.id)"
-      @on-click-delete="onClickDelete(item)"
-    />
+  <div class="words-view">
+    <div class="words-view__top">
+      <div>
+        {{ $lang.selectSorting }}:
+        <Dropdown
+          v-model="selectedSorting"
+          :options="sortingOptions"
+          :placeholder="$lang.selectSorting"
+          option-label="label"
+          option-value="value"
+        />
+      </div>
+      <div>
+        <Dropdown
+          v-model="selectedSortingDirection"
+          :options="sortingDirectionOptions"
+          :placeholder="$lang.selectSortingDirection"
+          option-label="label"
+          option-value="value"
+        />
+      </div>
+    </div>
+    <div class="words">
+      <PlusTile @click="onClickPlus" />
+      <WordTile
+        v-for="(item, index) in wordsSorted"
+        :key="item.id"
+        :data="item"
+        :background-color="getPaletteColor(index)"
+        @on-click="onClickWord(item.id)"
+        @on-click-delete="onClickDelete(item)"
+      />
+    </div>
   </div>
   <BasicDialog
     v-model="deleteItem"
@@ -35,6 +58,7 @@ import { RequestMethods } from "@/types/api";
 import lang from "@/lang/lang";
 import { useToast } from "primevue/usetoast";
 import BasicDialog from "@/components/dialogs/BasicDialog.vue";
+import Dropdown from "primevue/dropdown";
 import { DialogType } from "@/types/dialog";
 import { orderBy } from "lodash";
 import { SortingOptions, useWordsAppStore } from "@/store/wordsAppStore";
@@ -45,11 +69,14 @@ const toast = useToast();
 const router = useRouter();
 
 const appStore = useAppStore();
+const wordsAppStore = useWordsAppStore();
+
 const { startLoading, stopLoading } = appStore;
 
-const wordsAppStore = useWordsAppStore();
 const { selectedSorting, selectedSortingDirection } =
   storeToRefs(wordsAppStore);
+
+const { sortingOptions, sortingDirectionOptions } = wordsAppStore;
 
 const words = ref([] as ApiWord[]);
 const deleteItem: Ref<ApiWord | null> = ref(null);
@@ -137,6 +164,16 @@ const onConfirmDelete = async (): Promise<void> => {
     @media (min-width: $flex-basis * $multiplier) {
       max-width: calc(1 / $multiplier);
     }
+  }
+}
+
+.words-view {
+  &__top {
+    display: flex;
+    flex-grow: 1;
+    gap: $space-ten;
+    align-items: center;
+    margin-bottom: $space-fifteen;
   }
 }
 

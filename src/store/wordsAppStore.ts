@@ -14,8 +14,8 @@ export enum SortingDirectionOptions {
 
 export const useWordsAppStore = defineStore("wordsAppStore", () => {
   const sortingOptions = [
-    { label: "By ID", value: SortingOptions.ById },
-    { label: "By Translated Times", value: SortingOptions.ByTranslatedTimes },
+    { label: "ID", value: SortingOptions.ById },
+    { label: "Translated Times", value: SortingOptions.ByTranslatedTimes },
   ];
 
   const sortingDirectionOptions = [
