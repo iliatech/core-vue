@@ -1,11 +1,11 @@
 <template>
   <div class="create-word">
-    <div class="create-word__title">{{ $lang.createWord }}</div>
+    <div class="create-word__title">{{ $lang.title.createWord }}</div>
     <div class="create-word__content">
       <InputText
         type="text"
         v-model.trim="word.title"
-        :placeholder="$lang.wordOrPhrase"
+        :placeholder="$lang.placeholder.wordOrPhrase"
         :class="{ 'p-invalid': !word.title && isValidated }"
         @update:model-value="refreshValidation"
       />
@@ -13,10 +13,14 @@
     <div class="create-word__top-buttons">
       <Button
         @click="onClickCreate"
-        :label="$lang.create"
+        :label="$lang.button.create"
         class="save-button"
       />
-      <Button @click="onClickBack" :label="$lang.back" class="back-button" />
+      <Button
+        @click="onClickBack"
+        :label="$lang.button.back"
+        class="back-button"
+      />
     </div>
 
     <div class="create-word__bottom-buttons"></div>
@@ -36,7 +40,7 @@ import { apiPaths } from "@/settings/api";
 import { RequestMethods } from "@/types/api";
 import type { Word } from "@/types/wordType";
 
-import lang from "@/lang/lang";
+import { lang } from "@/lang";
 import { useToast } from "primevue/usetoast";
 
 const router = useRouter();
@@ -70,7 +74,7 @@ const onClickCreate = async (): Promise<void> => {
     method: RequestMethods.Post,
     payload: word,
     toast,
-    successToast: lang.successCreateWord,
+    successToast: lang.success.wordCreated,
     successCallback: async () => {
       await router.push({ name: routes.home.name });
     },

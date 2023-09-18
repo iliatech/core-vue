@@ -4,7 +4,7 @@
     <ProgressSpinner
       stroke-width="2"
       class="app-loader__content"
-      :aria-label="$lang.loaderLabel"
+      :aria-label="$lang.label.loader"
     />
   </div>
   <div class="app-container"><RouterView /></div>

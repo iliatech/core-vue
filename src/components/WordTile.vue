@@ -8,7 +8,7 @@
     </div>
     <div class="word-tile__bottom">
       <div class="word-tile__number">
-        {{ $lang.numberOfTranslations }}: {{ data.translations.length }}
+        {{ $lang.phrase.numberOfTranslations }}: {{ data.translations.length }}
       </div>
       <i @click="emit('onClickDelete')" class="pi pi-trash" />
     </div>

@@ -13,13 +13,13 @@
             <template v-if="type === DialogType.Confirm">
               <Button
                 @click="emit('onConfirm')"
-                :label="$lang.confirmButton"
-                class="p-button-outlined p-button-rounded button-red-crimson"
+                :label="confirmButtonText"
+                class="confirm-button"
               />
               <Button
                 @click="emit('onCancel')"
-                :label="$lang.cancelButton"
-                class="p-button-outlined p-button-rounded button-grey-tough"
+                :label="$lang.button.cancel"
+                class="cancel-button"
               />
             </template>
           </div>
@@ -34,12 +34,17 @@ import Button from "primevue/button";
 import type { PropType } from "vue";
 import { computed } from "vue";
 import { DialogType } from "@/types/dialog";
+import { lang } from "@/lang";
 
 const props = defineProps({
   modelValue: Object as PropType<unknown | null>,
   title: String,
   text: String,
   type: String as PropType<DialogType>,
+  confirmButtonText: {
+    type: String,
+    default: lang.button.confirm,
+  },
 });
 
 const emit = defineEmits(["onConfirm", "onCancel"]);
@@ -70,6 +75,7 @@ const showButtons = computed((): boolean => {
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 1000;
   }
 
   &__title {

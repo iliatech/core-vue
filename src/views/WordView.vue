@@ -6,7 +6,7 @@
         type="text"
         width="500px"
         :model-value="translation"
-        :placeholder="$lang.offerYourVariant"
+        :placeholder="$lang.placeholder.offerYourVariant"
         :class="{ 'p-invalid': !translation && isValidated }"
         @update:model-value="onUpdateTranslation"
       />
@@ -14,14 +14,18 @@
     <div class="word-view__buttons">
       <Button
         @click="onClickAddTranslation"
-        :label="$lang.addTranslation"
+        :label="$lang.button.addTranslation"
         class="add-button"
       />
-      <Button @click="onClickBack" :label="$lang.back" class="back-button" />
+      <Button
+        @click="onClickBack"
+        :label="$lang.button.back"
+        class="back-button"
+      />
     </div>
     <template v-if="translations.length && isTranslationAdded">
       <div class="word-view__translations-title">
-        {{ $lang.previousTranslations }}:
+        {{ $lang.phrase.previousTranslations }}:
       </div>
       <ul>
         <li v-for="(item, index) in translations" :key="item.id">
@@ -32,7 +36,7 @@
       </ul>
     </template>
     <div v-else class="word-view__has-been-translated">
-      {{ $lang.hasBeenTranslatedNTimes(translations.length) }}
+      {{ $lang.phrase.hasBeenTranslatedNTimes(translations.length) }}
     </div>
   </div>
 </template>
@@ -47,7 +51,7 @@ import { useAppStore } from "@/store/appStore";
 import Api from "@/api/Api";
 import { apiPaths } from "@/settings/api";
 import { RequestMethods } from "@/types/api";
-import lang from "@/lang/lang";
+import { lang } from "@/lang";
 import { useToast } from "primevue/usetoast";
 import InputText from "primevue/inputtext";
 import type { Translation } from "@/types/translationType";
@@ -107,7 +111,7 @@ const onClickAddTranslation = async (): Promise<void> => {
     method: RequestMethods.Post,
     payload: { text: translation.value },
     toast,
-    successToast: lang.successCreateTranslation,
+    successToast: lang.success.translationCreated,
   });
 
   await loadData();

@@ -1,7 +1,7 @@
 <template>
   <div class="main-toolbar">
     <div class="main-toolbar__left">
-      {{ $lang.wordsAppTitle }}
+      {{ $lang.title.wordsApp }}
     </div>
 
     <div class="main-toolbar__right">
@@ -19,14 +19,14 @@ import { routes } from "@/settings/routes";
 import router from "@/router";
 import { showToast } from "@/helpers/toast";
 import { ToastType } from "@/types/toasts";
-import lang from "@/lang/lang";
+import { lang } from "@/lang";
 import { ref } from "vue";
 
 const userMenu = ref();
 
 const menuItems = [
   {
-    label: lang.logout,
+    label: lang.menu.logout,
     icon: "pi pi-sign-out",
     command: () => {
       onClickLogout();
@@ -42,7 +42,7 @@ const onClickLogout = () => {
   router.push(routes.login.path);
   resetAuthUser();
   resetAuthToken();
-  showToast({ type: ToastType.Warning, text: lang.logoutSuccess });
+  showToast({ type: ToastType.Warning, text: lang.success.logout });
 };
 </script>
 <style lang="scss" scoped>

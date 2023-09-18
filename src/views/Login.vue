@@ -1,10 +1,12 @@
 <template>
   <div className="login-page">
     <form className="login-page__form">
-      <div className="login-page__title">{{ lang.login }}</div>
-      <label className="login-page__field-label">{{ lang.email }}</label>
+      <div className="login-page__title">{{ lang.title.login }}</div>
+      <label className="login-page__field-label">{{ lang.label.email }}</label>
       <InputText v-model="email" />
-      <label className="login-page__field-label">{{ lang.password }}</label>
+      <label className="login-page__field-label">{{
+        lang.label.password
+      }}</label>
 
       <!-- TODO: Should we write false? -->
       <Password
@@ -15,7 +17,7 @@
 
       <div className="login-page__button-container">
         <Button
-          :label="lang.login"
+          :label="lang.button.login"
           @click="onClickLogin"
           :disabled="!email || !password"
         />
@@ -28,7 +30,7 @@ import { ref } from "vue";
 import Password from "primevue/password";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
-import lang from "@/lang/lang";
+import { lang } from "@/lang";
 import { showToast } from "@/helpers/toast";
 import { ToastType } from "@/types/toasts";
 import Api from "@/api/Api";
@@ -50,7 +52,7 @@ const onClickLogin = async () => {
   const failedAuthorization = () => {
     resetAuthToken();
     resetAuthUser();
-    showToast({ type: ToastType.Error, text: lang.loginFailed });
+    showToast({ type: ToastType.Error, text: lang.error.loginFailed });
   };
 
   const loginResult = await Api.request({
@@ -74,7 +76,7 @@ const onClickLogin = async () => {
     if (authorizationResult.authorized) {
       saveAuthUser(authorizationResult.user);
       saveAuthToken(loginResult.jwt);
-      showToast({ type: ToastType.Success, text: lang.loginSuccess });
+      showToast({ type: ToastType.Success, text: lang.success.login });
       await router.push({ name: routes.home.name });
     } else {
       failedAuthorization();

@@ -2,11 +2,10 @@
   <div class="words-view">
     <div class="words-view__top">
       <div>
-        {{ $lang.selectSorting }}:
+        {{ $lang.label.selectSorting }}:
         <Dropdown
           v-model="selectedSorting"
           :options="sortingOptions"
-          :placeholder="$lang.selectSorting"
           option-label="label"
           option-value="value"
         />
@@ -15,7 +14,6 @@
         <Dropdown
           v-model="selectedSortingDirection"
           :options="sortingDirectionOptions"
-          :placeholder="$lang.selectSortingDirection"
           option-label="label"
           option-value="value"
         />
@@ -36,7 +34,8 @@
   <BasicDialog
     v-model="deleteItem"
     :type="DialogType.Confirm"
-    :text="lang.confirmDeleteWordTitle(deleteItem?.title ?? '')"
+    :text="lang.title.confirmDeleteWord(deleteItem?.title ?? '')"
+    :confirm-button-text="$lang.button.delete"
     @on-cancel="onCancelDelete"
     @on-confirm="onConfirmDelete"
   />
@@ -55,7 +54,7 @@ import PlusTile from "@/components/PlusTile.vue";
 import { routes } from "@/settings/routes";
 import { useRouter } from "vue-router";
 import { RequestMethods } from "@/types/api";
-import lang from "@/lang/lang";
+import { lang } from "@/lang";
 import { useToast } from "primevue/usetoast";
 import BasicDialog from "@/components/dialogs/BasicDialog.vue";
 import Dropdown from "primevue/dropdown";
@@ -136,7 +135,7 @@ const onConfirmDelete = async (): Promise<void> => {
     method: RequestMethods.Delete,
     path: `${apiPaths.word}/${id}`,
     toast,
-    successToast: lang.successDeleteWord(title),
+    successToast: lang.success.wordDeleted(title),
     successCallback: () => {
       updateWords();
     },

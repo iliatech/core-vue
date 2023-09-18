@@ -1,7 +1,7 @@
 import type { RequestConfig } from "@/types/api";
 import { RequestMethods } from "@/types/api";
 import axios from "axios";
-import lang from "@/lang/lang";
+import { lang } from "@/lang";
 import { apiErrors, apiUrl } from "@/settings/api";
 import { showToast } from "@/helpers/toast";
 import { ToastType } from "@/types/toasts";
@@ -73,12 +73,12 @@ export default class Api {
       switch (errorTextCode) {
         case apiErrors.authTokenIsInvalid:
           resetAuthToken();
-          console.error(lang.authTokenIsInvalid);
+          console.error(lang.error.authTokenIsInvalid);
           break;
         case apiErrors.duplicateFound:
           showToast({
             type: ToastType.Error,
-            text: lang.errorDuplicate,
+            text: lang.error.duplicateFound,
           });
           break;
         default:
