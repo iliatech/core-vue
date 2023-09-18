@@ -1,14 +1,6 @@
 <template>
   <div class="word-view">
     <div class="word-view__title">{{ word }}</div>
-    <div class="word-view__buttons">
-      <Button
-        @click="onClickAddTranslation"
-        :label="$lang.addTranslation"
-        class="add-button"
-      />
-      <Button @click="onClickBack" :label="$lang.back" class="back-button" />
-    </div>
     <div class="word-view__input-container">
       <InputText
         type="text"
@@ -18,6 +10,14 @@
         :class="{ 'p-invalid': !translation && isValidated }"
         @update:model-value="onUpdateTranslation"
       />
+    </div>
+    <div class="word-view__buttons">
+      <Button
+        @click="onClickAddTranslation"
+        :label="$lang.addTranslation"
+        class="add-button"
+      />
+      <Button @click="onClickBack" :label="$lang.back" class="back-button" />
     </div>
     <template v-if="translations.length && isTranslationAdded">
       <div class="word-view__translations-title">
@@ -159,7 +159,7 @@ const onUpdateTranslation = (value: string): void => {
   }
 
   &__input-container {
-    margin-top: $space-twenty;
+    margin-bottom: $space-fifteen;
   }
 
   &__translations-title {

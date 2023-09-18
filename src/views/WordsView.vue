@@ -37,12 +37,19 @@ import { useToast } from "primevue/usetoast";
 import BasicDialog from "@/components/dialogs/BasicDialog.vue";
 import { DialogType } from "@/types/dialog";
 import { orderBy } from "lodash";
+import { SortingOptions, useWordsAppStore } from "@/store/wordsAppStore";
+import { storeToRefs } from "pinia";
+
 const toast = useToast();
 
 const router = useRouter();
 
 const appStore = useAppStore();
 const { startLoading, stopLoading } = appStore;
+
+const wordsAppStore = useWordsAppStore();
+const { selectedSorting, selectedSortingDirection } =
+  storeToRefs(wordsAppStore);
 
 const words = ref([] as ApiWord[]);
 const deleteItem: Ref<ApiWord | null> = ref(null);
@@ -54,10 +61,17 @@ onBeforeMount(async () => {
 });
 
 const wordsSorted = computed<ApiWord[]>(() => {
-  // TODO Realize sorting variant choice.
-  // orderBy(words.value, (item) => item.translations.length, "asc");
-
-  return orderBy(words.value, "id");
+  switch (selectedSorting.value) {
+    case SortingOptions.ByTranslatedTimes:
+      return orderBy(
+        words.value,
+        (item) => item.translations.length,
+        selectedSortingDirection.value
+      );
+    case SortingOptions.ById:
+    default:
+      return orderBy(words.value, "id", selectedSortingDirection.value);
+  }
 });
 
 const updateWords = async (): Promise<void> => {
