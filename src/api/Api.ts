@@ -63,7 +63,7 @@ export default class Api {
 
       return (
         (config.isDataResult
-          ? requestResult?.data?.data
+          ? requestResult?.data?.data ?? []
           : requestResult?.data) ?? null
       );
     } catch (e: any) {

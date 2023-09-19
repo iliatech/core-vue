@@ -12,7 +12,6 @@
   font-weight: 500;
 }
 
-
 @mixin font-medium {
   font-size: 1rem;
   font-weight: 500;
@@ -36,6 +35,22 @@
 @mixin header-medium {
   font-size: 1.25rem;
   font-weight: 600;
+}
+
+@mixin zero-seven-hundred-fifty {
+  font-size: 0.875rem;
+}
+
+@mixin zero-eight-hundred-seventy-five {
+  font-size: 0.875rem;
+}
+
+@mixin zero-nine-hundred {
+  font-size: 0.9rem;
+}
+
+@mixin header-one-and-quarter {
+  font-size: 1.25rem;
 }
 
 @mixin header-large {

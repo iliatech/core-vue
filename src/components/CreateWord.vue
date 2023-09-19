@@ -38,7 +38,7 @@ import InputText from "primevue/inputtext";
 import Api from "@/api/Api";
 import { apiPaths } from "@/settings/api";
 import { RequestMethods } from "@/types/api";
-import type { Word } from "@/types/wordType";
+import type { Word } from "@/types/word";
 
 import { lang } from "@/lang";
 import { useToast } from "primevue/usetoast";
@@ -73,7 +73,6 @@ const onClickCreate = async (): Promise<void> => {
     path: apiPaths.word,
     method: RequestMethods.Post,
     payload: word,
-    toast,
     successToast: lang.success.wordCreated,
     successCallback: async () => {
       await router.push({ name: routes.home.name });
@@ -92,7 +91,7 @@ const checkCategory = (): boolean => {
 
 <style lang="scss" scoped>
 @import "@/assets/variables.scss";
-@import "@/assets/fontMixins.scss";
+@import "@/assets/fonts.scss";
 @import "@/assets/colors.scss";
 
 .create-word {

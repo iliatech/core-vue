@@ -1,21 +1,12 @@
 <template>
   <div class="words-view">
     <div class="words-view__top">
-      <div>
-        {{ $lang.label.selectSorting }}:
-        <Dropdown
-          v-model="selectedSorting"
-          :options="sortingOptions"
-          option-label="label"
-          option-value="value"
-        />
-      </div>
-      <div>
-        <Dropdown
-          v-model="selectedSortingDirection"
-          :options="sortingDirectionOptions"
-          option-label="label"
-          option-value="value"
+      <WordSorting />
+      <div class="words-view__top-button">
+        <Button
+          :label="$lang.button.manageTags"
+          @click="openManageTagsSidebar"
+          text
         />
       </div>
     </div>
@@ -39,6 +30,7 @@
     @on-cancel="onCancelDelete"
     @on-confirm="onConfirmDelete"
   />
+  <ManageTagsSidebar ref="manageTagsSidebar" />
 </template>
 
 <script lang="ts" setup>
@@ -47,21 +39,23 @@ import { computed, onBeforeMount, ref } from "vue";
 import { apiPaths } from "@/settings/api";
 import Api from "@/api/Api";
 import { getPaletteColor } from "@/settings/colorPalette";
-import type { ApiWord } from "@/types/wordType";
+import type { ApiWordResponse } from "@/types/word";
 import WordTile from "@/components/WordTile.vue";
+import Button from "primevue/button";
 import { useAppStore } from "@/store/appStore";
 import PlusTile from "@/components/PlusTile.vue";
+import WordSorting from "@/components/WordSorting.vue";
 import { routes } from "@/settings/routes";
 import { useRouter } from "vue-router";
 import { RequestMethods } from "@/types/api";
 import { lang } from "@/lang";
 import { useToast } from "primevue/usetoast";
 import BasicDialog from "@/components/dialogs/BasicDialog.vue";
-import Dropdown from "primevue/dropdown";
 import { DialogType } from "@/types/dialog";
 import { orderBy } from "lodash";
 import { SortingOptions, useWordsAppStore } from "@/store/wordsAppStore";
 import { storeToRefs } from "pinia";
+import ManageTagsSidebar from "@/components/sidebars/ManageTagsSidebar.vue";
 
 const toast = useToast();
 
@@ -75,10 +69,9 @@ const { startLoading, stopLoading } = appStore;
 const { selectedSorting, selectedSortingDirection } =
   storeToRefs(wordsAppStore);
 
-const { sortingOptions, sortingDirectionOptions } = wordsAppStore;
-
-const words = ref([] as ApiWord[]);
-const deleteItem: Ref<ApiWord | null> = ref(null);
+const manageTagsSidebar = ref();
+const words = ref([] as ApiWordResponse[]);
+const deleteItem: Ref<ApiWordResponse | null> = ref(null);
 
 onBeforeMount(async () => {
   startLoading();
@@ -86,7 +79,7 @@ onBeforeMount(async () => {
   stopLoading();
 });
 
-const wordsSorted = computed<ApiWord[]>(() => {
+const wordsSorted = computed<ApiWordResponse[]>(() => {
   switch (selectedSorting.value) {
     case SortingOptions.ByTranslatedTimes:
       return orderBy(
@@ -105,7 +98,7 @@ const updateWords = async (): Promise<void> => {
     path: apiPaths.word,
     isDataResult: true,
   });
-  words.value = data?.length ? (data as ApiWord[]) : [];
+  words.value = data?.length ? (data as ApiWordResponse[]) : [];
 };
 const onClickWord = (wordId: number): void => {
   router.push(`${routes.word.path}/${wordId}`);
@@ -115,7 +108,7 @@ const onClickPlus = (): void => {
   router.push(`${routes.createWord.path}`);
 };
 
-const onClickDelete = async (item: ApiWord): Promise<void> => {
+const onClickDelete = async (item: ApiWordResponse): Promise<void> => {
   deleteItem.value = item;
 };
 
@@ -134,7 +127,6 @@ const onConfirmDelete = async (): Promise<void> => {
   await Api.request({
     method: RequestMethods.Delete,
     path: `${apiPaths.word}/${id}`,
-    toast,
     successToast: lang.success.wordDeleted(title),
     successCallback: () => {
       updateWords();
@@ -143,6 +135,10 @@ const onConfirmDelete = async (): Promise<void> => {
 
   stopLoading();
   deleteItem.value = null;
+};
+
+const openManageTagsSidebar = () => {
+  manageTagsSidebar.value.open();
 };
 </script>
 <style lang="scss" scoped>
@@ -169,10 +165,16 @@ const onConfirmDelete = async (): Promise<void> => {
 .words-view {
   &__top {
     display: flex;
-    flex-grow: 1;
-    gap: $space-ten;
+    justify-content: space-between;
     align-items: center;
     margin-bottom: $space-fifteen;
+  }
+
+  &__top-button {
+    :deep(.p-button) {
+      font-size: 0.9em;
+      padding: 0;
+    }
   }
 }
 

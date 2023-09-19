@@ -1,6 +1,15 @@
 // The purpose of the file is to redefine PrimeVue library rules;
 @import "colors.scss";
+@import "fonts";
 
 .p-treenode-content.p-highlight {
   background: none !important;
+}
+
+.p-datatable thead {
+  @include zero-eight-hundred-seventy-five;
+}
+
+.p-datatable tbody {
+  @include zero-nine-hundred;
 }

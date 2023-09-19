@@ -1,4 +1,4 @@
 export default {
-  offerYourVariant: "Offer your variant...",
+  offerYourVariant: "Offer your translation...",
   wordOrPhrase: "Write something...",
 };

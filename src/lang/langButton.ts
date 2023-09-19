@@ -1,4 +1,5 @@
 export default {
+  add: "Add",
   addTranslation: "Add translation",
   back: "Back",
   cancel: "Cancel",
@@ -6,4 +7,5 @@ export default {
   create: "Create",
   delete: "Delete",
   login: "Login",
+  manageTags: "Manage tags",
 };

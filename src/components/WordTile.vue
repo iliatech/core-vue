@@ -16,17 +16,17 @@
 </template>
 <script lang="ts" setup>
 import type { PropType } from "vue";
-import type { ApiWord } from "@/types/wordType";
+import type { ApiWordResponse } from "@/types/word";
 
 defineProps({
-  data: { type: Object as PropType<ApiWord>, required: true },
+  data: { type: Object as PropType<ApiWordResponse>, required: true },
   backgroundColor: String,
 });
 
 const emit = defineEmits(["onClick", "onClickDelete"]);
 </script>
 <style lang="scss" scoped>
-@import "@/assets/fontMixins.scss";
+@import "@/assets/fonts.scss";
 @import "@/assets/variables.scss";
 
 .word-tile {

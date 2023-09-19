@@ -10,7 +10,7 @@ export interface CategoryHistoryItem {
 
 export type CategoryHistory = CategoryHistoryItem[];
 
-export interface ApiWord {
+export interface ApiWordResponse {
   id: number;
   title: string;
   createdAt: string;

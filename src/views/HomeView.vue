@@ -47,7 +47,7 @@ const onClickLogout = () => {
 </script>
 <style lang="scss" scoped>
 @import "@/assets/variables.scss";
-@import "@/assets/fontMixins.scss";
+@import "@/assets/fonts.scss";
 .main-toolbar {
   display: flex;
   justify-content: space-between;

@@ -110,7 +110,6 @@ const onClickAddTranslation = async (): Promise<void> => {
     path: `${apiPaths.translation}/?wordId=${wordId}`,
     method: RequestMethods.Post,
     payload: { text: translation.value },
-    toast,
     successToast: lang.success.translationCreated,
   });
 
@@ -135,7 +134,7 @@ const onUpdateTranslation = (value: string): void => {
 
 <style lang="scss" scoped>
 @import "@/assets/variables.scss";
-@import "@/assets/fontMixins.scss";
+@import "@/assets/fonts.scss";
 .word-view {
   padding: $space-ten;
 

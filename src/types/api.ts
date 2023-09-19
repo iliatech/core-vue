@@ -1,3 +1,5 @@
+import type { Word } from "@/types/word";
+
 export enum RequestMethods {
   Get = "Get",
   Post = "post",
@@ -10,7 +12,6 @@ export interface RequestConfig {
   path: string;
   method?: RequestMethods;
   payload?: unknown;
-  toast?: any;
   successToast?: string;
   successCallback?: any;
   isDataResult?: boolean;

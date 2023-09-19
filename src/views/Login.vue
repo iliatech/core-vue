@@ -88,7 +88,7 @@ const onClickLogin = async () => {
 </script>
 <style lang="scss" scoped>
 @import "@/assets/variables.scss";
-@import "@/assets/fontMixins.scss";
+@import "@/assets/fonts.scss";
 
 .login-page {
   display: flex;

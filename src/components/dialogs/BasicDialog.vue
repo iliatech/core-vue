@@ -55,7 +55,7 @@ const showButtons = computed((): boolean => {
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/fontMixins.scss";
+@import "@/assets/fonts.scss";
 @import "@/assets/colors.scss";
 @import "@/assets/variables.scss";
 
