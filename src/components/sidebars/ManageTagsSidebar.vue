@@ -17,6 +17,7 @@
       />
     </DataTable>
   </Sidebar>
+  <ManageTagDialog ref="manageTagDialog" @change="loadTags" />
 </template>
 <script lang="ts" setup>
 import { onBeforeMount, ref } from "vue";
@@ -32,7 +33,10 @@ import {
   tagsTableColumns,
   TagsTableColumns,
 } from "@/settings/tables/tagsTable";
+import ManageTagDialog from "@/components/dialogs/ManageTagDialog.vue";
+import { sortCollator } from "@/settings/collators";
 
+const manageTagDialog = ref();
 const show = ref(false);
 const tags = ref<ApiTagResponse[]>([]);
 
@@ -44,6 +48,8 @@ const loadTags = async () => {
     path: apiPaths.tag,
     isDataResult: true,
   });
+
+  tags.value.sort((a, b) => sortCollator.compare(a.name, b.name));
 };
 
 const open = () => {
@@ -55,7 +61,7 @@ onBeforeMount(async () => {
 });
 
 const onClickAddTag = () => {
-  //
+  manageTagDialog.value.open();
 };
 
 defineExpose({ open });
@@ -76,8 +82,8 @@ defineExpose({ open });
 }
 </style>
 <style lang="scss">
-.p-sidebar-right .p-sidebar {
-  width: 40% !important;
-  min-width: 30rem;
+.manage-tags-sidebar.p-sidebar {
+  width: 25% !important;
+  min-width: 25rem;
 }
 </style>

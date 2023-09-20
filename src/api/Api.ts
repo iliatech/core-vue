@@ -56,9 +56,10 @@ export default class Api {
           type: ToastType.Success,
           text: config.successToast,
         });
+      }
 
-        if (typeof config.successCallback === "function")
-          config.successCallback();
+      if (typeof config.successCallback === "function") {
+        config.successCallback();
       }
 
       return (
@@ -69,6 +70,13 @@ export default class Api {
     } catch (e: any) {
       // TODO: Should refactor it, text is not a code;
       const errorTextCode = e.response.data.errorText;
+
+      if (config.errorToast) {
+        showToast({
+          type: ToastType.Error,
+          text: config.errorToast,
+        });
+      }
 
       switch (errorTextCode) {
         case apiErrors.authTokenIsInvalid:
@@ -83,6 +91,10 @@ export default class Api {
           break;
         default:
           console.error(`Axios error text code: ${errorTextCode} :`, e);
+          showToast({
+            type: ToastType.Error,
+            text: lang.error.unknownError,
+          });
       }
 
       return false;
