@@ -46,13 +46,12 @@ import Button from "primevue/button";
 
 import { useRoute, useRouter } from "vue-router";
 import { routes } from "@/settings/routes";
-import { computed, onBeforeMount, ref } from "vue";
+import { onBeforeMount, ref } from "vue";
 import { useAppStore } from "@/store/appStore";
 import Api from "@/api/Api";
 import { apiPaths } from "@/settings/api";
 import { RequestMethods } from "@/types/api";
 import { lang } from "@/lang";
-import { useToast } from "primevue/usetoast";
 import InputText from "primevue/inputtext";
 import type { Translation } from "@/types/translationType";
 import { orderBy } from "lodash";
@@ -61,7 +60,6 @@ const route = useRoute();
 const router = useRouter();
 const wordId = parseInt(route.params.wordId as string);
 const appStore = useAppStore();
-const toast = useToast();
 const isTranslationAdded = ref(false);
 
 const { startLoading, stopLoading } = appStore;

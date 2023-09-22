@@ -26,11 +26,20 @@
     </DataTable>
   </Sidebar>
   <ManageTagDialog ref="manageTagDialog" @change="loadTags" />
+  <BasicDialog
+    v-model="selectedTag"
+    :type="DialogType.Confirm"
+    :text="lang.title.confirmDeleteWord(selectedTag?.name)"
+    :confirm-button-text="$lang.button.delete"
+    @on-cancel="cancelDeleteTag"
+    @on-confirm="confirmDeleteTag"
+  />
 </template>
 <script lang="ts" setup>
 import { onBeforeMount, ref } from "vue";
 
 import Sidebar from "primevue/sidebar";
+import BasicDialog from "@/components/dialogs/BasicDialog.vue";
 import Api from "@/api/Api";
 import { apiPaths } from "@/settings/api";
 import type { ApiTagResponse } from "@/types/tag";
@@ -45,10 +54,12 @@ import ManageTagDialog from "@/components/dialogs/ManageTagDialog.vue";
 import { sortCollator } from "@/settings/collators";
 import { RequestMethods } from "@/types/api";
 import { lang } from "@/lang";
+import { DialogType } from "@/types/dialog";
 
 const manageTagDialog = ref();
 const show = ref(false);
 const tags = ref<ApiTagResponse[]>([]);
+const selectedTag = ref<ApiTagResponse>();
 
 const loadTags = async () => {
   // TODO In all the places remove passing the toast object to API method.
@@ -71,14 +82,28 @@ const onClickAddTag = () => {
 };
 
 const deleteTag = async (tag: ApiTagResponse) => {
+  selectedTag.value = tag;
+};
+
+const cancelDeleteTag = () => {
+  selectedTag.value = undefined;
+};
+
+const confirmDeleteTag = async () => {
+  if (!selectedTag.value) {
+    return;
+  }
+
   await Api.request({
     method: RequestMethods.Delete,
-    path: `${apiPaths.tag}/${tag.id}`,
-    successToast: lang.success.tagDeleted(tag.name),
+    path: `${apiPaths.tag}/${selectedTag.value.id}`,
+    successToast: lang.success.tagDeleted(selectedTag.value.name),
     successCallback: async () => {
       await loadTags();
     },
   });
+
+  selectedTag.value = undefined;
 };
 
 onBeforeMount(async () => {

@@ -49,15 +49,12 @@ import { routes } from "@/settings/routes";
 import { useRouter } from "vue-router";
 import { RequestMethods } from "@/types/api";
 import { lang } from "@/lang";
-import { useToast } from "primevue/usetoast";
 import BasicDialog from "@/components/dialogs/BasicDialog.vue";
 import { DialogType } from "@/types/dialog";
 import { orderBy } from "lodash";
 import { SortingOptions, useWordsAppStore } from "@/store/wordsAppStore";
 import { storeToRefs } from "pinia";
 import ManageTagsSidebar from "@/components/sidebars/ManageTagsSidebar.vue";
-
-const toast = useToast();
 
 const router = useRouter();
 
