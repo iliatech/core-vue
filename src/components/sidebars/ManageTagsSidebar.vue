@@ -15,6 +15,14 @@
         :field="TagsTableColumns.Name"
         :header="tagsTableColumns[TagsTableColumns.Name].title"
       />
+      <Column
+        :field="TagsTableColumns.Action"
+        :header="tagsTableColumns[TagsTableColumns.Action].title"
+      >
+        <template #body="{ data }">
+          <Button icon="pi pi-trash" @click="deleteTag(data)" text />
+        </template>
+      </Column>
     </DataTable>
   </Sidebar>
   <ManageTagDialog ref="manageTagDialog" @change="loadTags" />
@@ -35,6 +43,8 @@ import {
 } from "@/settings/tables/tagsTable";
 import ManageTagDialog from "@/components/dialogs/ManageTagDialog.vue";
 import { sortCollator } from "@/settings/collators";
+import { RequestMethods } from "@/types/api";
+import { lang } from "@/lang";
 
 const manageTagDialog = ref();
 const show = ref(false);
@@ -56,13 +66,24 @@ const open = () => {
   show.value = true;
 };
 
-onBeforeMount(async () => {
-  await loadTags();
-});
-
 const onClickAddTag = () => {
   manageTagDialog.value.open();
 };
+
+const deleteTag = async (tag: ApiTagResponse) => {
+  await Api.request({
+    method: RequestMethods.Delete,
+    path: `${apiPaths.tag}/${tag.id}`,
+    successToast: lang.success.tagDeleted(tag.name),
+    successCallback: async () => {
+      await loadTags();
+    },
+  });
+};
+
+onBeforeMount(async () => {
+  await loadTags();
+});
 
 defineExpose({ open });
 </script>
