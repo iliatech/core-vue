@@ -1,5 +1,6 @@
 import type { Currency } from "@/types/currency";
 import type { Translation } from "@/types/translationType";
+import type { ApiTagResponse } from "@/types/tag";
 
 export interface CategoryHistoryItem {
   date: string;
@@ -11,11 +12,12 @@ export interface CategoryHistoryItem {
 export type CategoryHistory = CategoryHistoryItem[];
 
 export interface ApiWordResponse {
-  id: number;
-  title: string;
   createdAt: string;
-  updatedAt: string;
+  id: number;
+  tags: ApiTagResponse[];
+  title: string;
   translations: Translation[];
+  updatedAt: string;
 }
 
 export interface Word {

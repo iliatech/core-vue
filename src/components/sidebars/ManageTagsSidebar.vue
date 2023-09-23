@@ -68,9 +68,7 @@ const tags = ref<ApiTagResponse[]>([]);
 const selectedTag = ref<ApiTagResponse>();
 
 const loadTags = async () => {
-  // TODO In all the places remove passing the toast object to API method.
-
-  // TODO
+  // TODO Store tags list in the store and unite with WordTile tags.
   tags.value = await Api.request({
     path: apiPaths.tag,
     isDataResult: true,
