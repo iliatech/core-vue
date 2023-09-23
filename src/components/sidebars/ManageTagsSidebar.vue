@@ -1,5 +1,10 @@
 <template>
-  <Sidebar v-model:visible="show" class="manage-tags-sidebar" position="right">
+  <Sidebar
+    v-model:visible="show"
+    class="manage-tags-sidebar"
+    position="right"
+    :dismissable="false"
+  >
     <div class="manage-tags-sidebar__title">
       {{ $lang.title.manageTags }}
     </div>
@@ -23,6 +28,7 @@
           <Button icon="pi pi-trash" @click="deleteTag(data)" text />
         </template>
       </Column>
+      <template #empty> {{ $lang.phrase.noTagsFound }} </template>
     </DataTable>
   </Sidebar>
   <ManageTagDialog ref="manageTagDialog" @change="loadTags" />

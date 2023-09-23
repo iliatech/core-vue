@@ -18,6 +18,14 @@
       class="add-button"
       @click="addTag"
     />
+    <template #closeicon>
+      <Button
+        icon="pi pi-times"
+        severity="secondary"
+        text
+        @click.stop="cancel"
+      />
+    </template>
   </Dialog>
 </template>
 <script lang="ts" setup>
@@ -35,10 +43,6 @@ const name = ref();
 
 const emit = defineEmits(["change"]);
 
-const open = () => {
-  show.value = true;
-};
-
 const addTag = async () => {
   const payload = {
     name: name.value.trim(),
@@ -55,6 +59,14 @@ const addTag = async () => {
       name.value = undefined;
     },
   });
+};
+const cancel = () => {
+  name.value = undefined;
+  show.value = false;
+};
+
+const open = () => {
+  show.value = true;
 };
 
 defineExpose({ open });

@@ -58,7 +58,7 @@ import { orderBy } from "lodash";
 
 const route = useRoute();
 const router = useRouter();
-const wordId = parseInt(route.params.wordId as string);
+const wordId = route.params.wordId;
 const appStore = useAppStore();
 const isTranslationAdded = ref(false);
 
