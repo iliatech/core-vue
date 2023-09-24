@@ -57,25 +57,19 @@ import {
   TagsTableColumns,
 } from "@/settings/tables/tagsTable";
 import ManageTagDialog from "@/components/dialogs/ManageTagDialog.vue";
-import { sortCollator } from "@/settings/collators";
 import { RequestMethods } from "@/types/api";
 import { lang } from "@/lang";
 import { DialogType } from "@/types/dialog";
+import { useTagsStore } from "@/store/tagsStore";
+import { storeToRefs } from "pinia";
+
+const tagsStore = useTagsStore();
+const { tags } = storeToRefs(tagsStore);
+const { loadTags } = tagsStore;
 
 const manageTagDialog = ref();
 const show = ref(false);
-const tags = ref<ApiTagResponse[]>([]);
 const selectedTag = ref<ApiTagResponse>();
-
-const loadTags = async () => {
-  // TODO Store tags list in the store and unite with WordTile tags.
-  tags.value = await Api.request({
-    path: apiPaths.tag,
-    isDataResult: true,
-  });
-
-  tags.value.sort((a, b) => sortCollator.compare(a.name, b.name));
-};
 
 const open = () => {
   show.value = true;

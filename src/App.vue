@@ -17,13 +17,18 @@ import { useAppStore } from "@/store/appStore";
 import { storeToRefs } from "pinia";
 import { onMounted, ref } from "vue";
 import { setGlobalToastObject } from "@/helpers/toast";
+import { useTagsStore } from "@/store/tagsStore";
 const appStore = useAppStore();
+const tagsStore = useTagsStore();
+
 const { isLoading } = storeToRefs(appStore);
+const { loadTags } = tagsStore;
 
 const toast = ref();
 
-onMounted(() => {
+onMounted(async () => {
   setGlobalToastObject(toast.value);
+  await loadTags();
 });
 </script>
 

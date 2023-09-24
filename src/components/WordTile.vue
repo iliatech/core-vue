@@ -4,7 +4,7 @@
       <MultiSelect
         :model-value="selectedTags"
         display="chip"
-        :options="tagOptions"
+        :options="tags"
         option-label="name"
         option-value="id"
         :placeholder="$lang.placeholder.selectTags"
@@ -30,20 +30,22 @@
 import type { PropType } from "vue";
 import type { ApiWordResponse } from "@/types/word";
 import MultiSelect from "primevue/multiselect";
-import type { ApiTagResponse } from "@/types/tag";
 import { onBeforeMount, ref } from "vue";
 import Api from "@/api/Api";
 import { apiPaths } from "@/settings/api";
-import { sortCollator } from "@/settings/collators";
 import { RequestMethods } from "@/types/api";
 import { lang } from "@/lang";
+import { useTagsStore } from "@/store/tagsStore";
+import { storeToRefs } from "pinia";
+
+const tagsStore = useTagsStore();
+const { tags } = storeToRefs(tagsStore);
 
 const props = defineProps({
   data: { type: Object as PropType<ApiWordResponse>, required: true },
   backgroundColor: String,
 });
 
-const tagOptions = ref<ApiTagResponse[]>([]);
 const selectedTags = ref<string[]>([]);
 
 const changeSelectedTags = async (event: { value: string[] }) => {
@@ -58,19 +60,8 @@ const changeSelectedTags = async (event: { value: string[] }) => {
     successToast: lang.success.tagsUpdated,
   });
 };
-const loadTags = async () => {
-  tagOptions.value = await Api.request({
-    path: apiPaths.tag,
-    isDataResult: true,
-  });
-
-  tagOptions.value.sort((a, b) => sortCollator.compare(a.name, b.name));
-};
 
 onBeforeMount(async () => {
-  // TODO Fetch tags once for the app, but not every tile.
-  await loadTags();
-
   selectedTags.value = props.data?.tags.map((item) => item.id) ?? [];
 });
 
@@ -146,6 +137,26 @@ const emit = defineEmits(["onClick", "onClickDelete"]);
       font-size: 1rem;
       cursor: pointer;
     }
+  }
+
+  :deep(.p-multiselect) {
+    background: none;
+    border: 0;
+    color: #fff;
+  }
+
+  :deep(.p-multiselect-token) {
+    padding: 5px 12px;
+    background: #fff;
+  }
+
+  :deep(.p-multiselect-label.p-placeholder) {
+    color: #444;
+  }
+
+  :deep(.p-multiselect-trigger) {
+    width: auto;
+    color: #222;
   }
 }
 </style>
