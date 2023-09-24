@@ -142,7 +142,6 @@ const emit = defineEmits(["onClick", "onClickDelete"]);
   :deep(.p-multiselect) {
     background: none;
     border: 0;
-    color: #fff;
   }
 
   :deep(.p-multiselect-label) {

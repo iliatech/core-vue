@@ -1,7 +1,10 @@
 <template>
   <div class="words-view">
     <div class="words-view__top">
-      <WordSorting />
+      <div class="words-view__top-left">
+        <WordSorting />
+        <WordFiltering />
+      </div>
       <div class="words-view__top-button">
         <Button
           :label="$lang.button.manageTags"
@@ -55,6 +58,7 @@ import { orderBy } from "lodash";
 import { SortingOptions, useWordsAppStore } from "@/store/wordsAppStore";
 import { storeToRefs } from "pinia";
 import ManageTagsSidebar from "@/components/sidebars/ManageTagsSidebar.vue";
+import WordFiltering from "@/components/WordFiltering.vue";
 
 const router = useRouter();
 
@@ -165,6 +169,11 @@ const openManageTagsSidebar = () => {
     justify-content: space-between;
     align-items: center;
     margin-bottom: $space-fifteen;
+  }
+
+  &__top-left {
+    display: flex;
+    gap: $space-twenty;
   }
 
   &__top-button {
