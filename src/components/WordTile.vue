@@ -145,6 +145,10 @@ const emit = defineEmits(["onClick", "onClickDelete"]);
     color: #fff;
   }
 
+  :deep(.p-multiselect-label) {
+    padding: 0 !important;
+  }
+
   :deep(.p-multiselect-token) {
     padding: 5px 12px;
     background: #fff;
@@ -152,6 +156,7 @@ const emit = defineEmits(["onClick", "onClickDelete"]);
 
   :deep(.p-multiselect-label.p-placeholder) {
     color: #444;
+    margin-right: $space-five;
   }
 
   :deep(.p-multiselect-trigger) {
