@@ -2,7 +2,7 @@
   <div class="word-filtering">
     {{ $lang.label.selectFiltering }}:
     <MultiSelect
-      :model-value="selectedTags"
+      :model-value="filterTags"
       display="chip"
       :options="tags"
       option-label="name"
@@ -25,7 +25,7 @@ const tagsFilteringStore = useTagsFilteringStore();
 
 const { tags } = tagsStore;
 
-const { selectedTags } = storeToRefs(tagsFilteringStore);
+const { filterTags } = storeToRefs(tagsFilteringStore);
 const { changeSelectedTags } = tagsFilteringStore;
 </script>
 

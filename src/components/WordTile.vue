@@ -59,13 +59,15 @@ const changeSelectedTags = async (event: { value: string[] }) => {
     },
     successToast: lang.success.tagsUpdated,
   });
+
+  emit("changeTags");
 };
 
 onBeforeMount(async () => {
   selectedTags.value = props.data?.tags.map((item) => item.id) ?? [];
 });
 
-const emit = defineEmits(["onClick", "onClickDelete"]);
+const emit = defineEmits(["onClick", "onClickDelete", "changeTags"]);
 </script>
 <style lang="scss" scoped>
 @import "@/assets/fonts.scss";

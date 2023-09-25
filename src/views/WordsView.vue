@@ -16,12 +16,13 @@
     <div class="words">
       <PlusTile @click="onClickPlus" />
       <WordTile
-        v-for="(item, index) in wordsSorted"
+        v-for="(item, index) in wordsSortedAndFiltered"
         :key="item.id"
         :data="item"
         :background-color="getPaletteColor(index)"
         @on-click="onClickWord(item.id)"
         @on-click-delete="onClickDelete(item)"
+        @change-tags="loadWords"
       />
     </div>
   </div>
@@ -59,16 +60,20 @@ import { SortingOptions, useWordsAppStore } from "@/store/wordsAppStore";
 import { storeToRefs } from "pinia";
 import ManageTagsSidebar from "@/components/sidebars/ManageTagsSidebar.vue";
 import WordFiltering from "@/components/WordFiltering.vue";
+import { useTagsFilteringStore } from "@/store/tagsFilteringStore";
 
 const router = useRouter();
 
 const appStore = useAppStore();
 const wordsAppStore = useWordsAppStore();
+const tagsFilteringStore = useTagsFilteringStore();
 
 const { startLoading, stopLoading } = appStore;
 
 const { selectedSorting, selectedSortingDirection } =
   storeToRefs(wordsAppStore);
+
+const { filterTags } = storeToRefs(tagsFilteringStore);
 
 const manageTagsSidebar = ref();
 const words = ref([] as ApiWordResponse[]);
@@ -76,29 +81,36 @@ const deleteItem: Ref<ApiWordResponse | null> = ref(null);
 
 onBeforeMount(async () => {
   startLoading();
-  await updateWords();
+  await loadWords();
   stopLoading();
 });
 
-const wordsSorted = computed<ApiWordResponse[]>(() => {
+const wordsSortedAndFiltered = computed<ApiWordResponse[]>(() => {
+  const wordsFiltered = filterTags.value.length
+    ? words.value.filter((item) =>
+        item.tags.some((el) => filterTags.value.includes(el.id))
+      )
+    : words.value;
+
   switch (selectedSorting.value) {
     case SortingOptions.ByTranslatedTimes:
       return orderBy(
-        words.value,
+        wordsFiltered,
         (item) => item.translations.length,
         selectedSortingDirection.value
       );
     case SortingOptions.ById:
     default:
-      return orderBy(words.value, "id", selectedSortingDirection.value);
+      return orderBy(wordsFiltered, "id", selectedSortingDirection.value);
   }
 });
 
-const updateWords = async (): Promise<void> => {
+const loadWords = async (): Promise<void> => {
   const data = await Api.request({
     path: apiPaths.word,
     isDataResult: true,
   });
+
   words.value = data?.length ? (data as ApiWordResponse[]) : [];
 };
 const onClickWord = (wordId: number): void => {
@@ -130,7 +142,7 @@ const onConfirmDelete = async (): Promise<void> => {
     path: `${apiPaths.word}/${id}`,
     successToast: lang.success.wordDeleted(title),
     successCallback: () => {
-      updateWords();
+      loadWords();
     },
   });
 
