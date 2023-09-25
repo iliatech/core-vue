@@ -87,8 +87,10 @@ onBeforeMount(async () => {
 
 const wordsSortedAndFiltered = computed<ApiWordResponse[]>(() => {
   const wordsFiltered = filterTags.value.length
-    ? words.value.filter((item) =>
-        item.tags.some((el) => filterTags.value.includes(el.id))
+    ? words.value.filter(
+        (item) =>
+          !item.tags.length ||
+          item.tags.some((el) => filterTags.value.includes(el.id))
       )
     : words.value;
 
