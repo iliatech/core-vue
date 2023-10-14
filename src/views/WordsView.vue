@@ -110,7 +110,6 @@ const wordsSortedAndFiltered = computed<ApiWordResponse[]>(() => {
 const loadWords = async (): Promise<void> => {
   const data = await Api.request({
     path: apiPaths.word,
-    isDataResult: true,
   });
 
   words.value = data?.length ? (data as ApiWordResponse[]) : [];

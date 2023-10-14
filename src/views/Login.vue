@@ -49,13 +49,7 @@ const email = ref("");
 const password = ref("");
 
 const onClickLogin = async () => {
-  const failedAuthorization = () => {
-    resetAuthToken();
-    resetAuthUser();
-    showToast({ type: ToastType.Error, text: lang.error.loginFailed });
-  };
-
-  const loginResult = await Api.request({
+  const { jwt, user } = await Api.request({
     method: RequestMethods.Post,
     path: apiPaths.login,
     payload: {
@@ -64,25 +58,15 @@ const onClickLogin = async () => {
     },
   });
 
-  if (loginResult) {
-    const authorizationResult = await Api.request({
-      method: RequestMethods.Post,
-      path: apiPaths.authorization,
-      payload: {
-        token: loginResult.jwt,
-      },
-    });
-
-    if (authorizationResult.authorized) {
-      saveAuthUser(authorizationResult.user);
-      saveAuthToken(loginResult.jwt);
-      showToast({ type: ToastType.Success, text: lang.success.login });
-      await router.push({ name: routes.home.name });
-    } else {
-      failedAuthorization();
-    }
+  if (jwt && user) {
+    saveAuthUser(user);
+    saveAuthToken(jwt);
+    showToast({ type: ToastType.Success, text: lang.success.login });
+    await router.push({ name: routes.home.name });
   } else {
-    failedAuthorization();
+    resetAuthToken();
+    resetAuthUser();
+    showToast({ type: ToastType.Error, text: lang.error.loginFailed });
   }
 };
 </script>

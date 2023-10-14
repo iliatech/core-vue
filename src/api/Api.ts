@@ -2,10 +2,12 @@ import type { RequestConfig } from "@/types/api";
 import { RequestMethods } from "@/types/api";
 import axios from "axios";
 import { lang } from "@/lang";
-import { apiErrors, apiUrl } from "@/settings/api";
+import { apiUrl } from "@/settings/api";
 import { showToast } from "@/helpers/toast";
 import { ToastType } from "@/types/toasts";
 import { getAuthToken, resetAuthToken } from "@/helpers/auth";
+import router from "@/router";
+import { routes } from "@/settings/routes";
 
 export default class Api {
   static async request(config: RequestConfig): Promise<any> {
@@ -68,33 +70,32 @@ export default class Api {
           : requestResult?.data) ?? null
       );
     } catch (e: any) {
-      // TODO: Should refactor it, text is not a code;
-      const errorTextCode = e.response.data.errorText;
+      const { status } = e.response;
 
-      if (config.errorToast) {
-        showToast({
-          type: ToastType.Error,
-          text: config.errorToast,
-        });
-      }
-
-      switch (errorTextCode) {
-        case apiErrors.authTokenIsInvalid:
+      switch (status) {
+        case 401:
           resetAuthToken();
-          console.error(lang.error.authTokenIsInvalid);
+          await router.push(routes.login.path);
           break;
-        case apiErrors.duplicateFound:
+        case 409:
           showToast({
             type: ToastType.Error,
             text: lang.error.duplicateFound,
           });
           break;
         default:
-          console.error(`Axios error text code: ${errorTextCode} :`, e);
+          console.error(`HTTP error status ${status}:`, e);
           showToast({
             type: ToastType.Error,
             text: lang.error.unknownError,
           });
+      }
+
+      if (config.errorToast) {
+        showToast({
+          type: ToastType.Error,
+          text: config.errorToast,
+        });
       }
 
       return false;
