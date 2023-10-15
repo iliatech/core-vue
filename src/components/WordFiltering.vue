@@ -23,7 +23,7 @@ import { useTagsStore } from "@/store/tagsStore";
 const tagsStore = useTagsStore();
 const tagsFilteringStore = useTagsFilteringStore();
 
-const { tags } = tagsStore;
+const { tags } = storeToRefs(tagsStore);
 
 const { filterTags } = storeToRefs(tagsFilteringStore);
 const { changeSelectedTags } = tagsFilteringStore;

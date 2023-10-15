@@ -37,6 +37,10 @@ import Api from "@/api/Api";
 import { apiPaths } from "@/settings/api";
 import { RequestMethods } from "@/types/api";
 import { lang } from "@/lang";
+import { useTagsStore } from "@/store/tagsStore";
+
+const tagsStore = useTagsStore();
+const { loadTags } = tagsStore;
 
 const show = ref(false);
 const name = ref();
@@ -55,6 +59,7 @@ const addTag = async () => {
     successToast: lang.success.tagAdded,
     successCallback: async () => {
       emit("change");
+      await loadTags();
       show.value = false;
       name.value = undefined;
     },
