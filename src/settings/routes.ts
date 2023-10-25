@@ -29,3 +29,5 @@ export const routes = {
     name: "createWord",
   },
 };
+
+export const publicRouteNames = [routes.login.name, routes.root.name];

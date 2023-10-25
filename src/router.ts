@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import { routes } from "@/settings/routes";
+import { publicRouteNames, routes } from "@/settings/routes";
 import { getAuthToken, getAuthUser } from "@/helpers/auth";
 
 const router = createRouter({
@@ -9,23 +9,23 @@ const router = createRouter({
       path: routes.root.path,
       name: routes.root.name,
       component: () => import("@/views/HomeView.vue"),
-      children: [
-        {
-          path: "",
-          name: routes.home.name,
-          component: () => import("@/views/WordsView.vue"),
-        },
-        {
-          path: `${routes.word.path}/:wordId`,
-          name: routes.word.name,
-          component: () => import("@/views/WordView.vue"),
-        },
-        {
-          path: `${routes.createWord.path}`,
-          name: routes.createWord.name,
-          component: () => import("@/components/CreateWord.vue"),
-        },
-      ],
+      // children: [
+      //   {
+      //     path: "",
+      //     name: routes.home.name,
+      //     component: () => import("@/views/WordsView.vue"),
+      //   },
+      //   {
+      //     path: `${routes.word.path}/:wordId`,
+      //     name: routes.word.name,
+      //     component: () => import("@/views/WordView.vue"),
+      //   },
+      //   {
+      //     path: `${routes.createWord.path}`,
+      //     name: routes.createWord.name,
+      //     component: () => import("@/components/CreateWord.vue"),
+      //   },
+      // ],
     },
     {
       path: routes.login.path,
@@ -36,7 +36,12 @@ const router = createRouter({
 });
 
 router.beforeEach((to) => {
-  if ((!getAuthToken() || !getAuthUser()) && to.name !== routes.login.name) {
+  console.log("A1", to.name);
+  if (
+    (!getAuthToken() || !getAuthUser()) &&
+    !publicRouteNames.includes((to.name as string) ?? "")
+  ) {
+    console.log("F1");
     return { name: routes.login.name };
   }
 });

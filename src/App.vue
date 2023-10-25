@@ -22,13 +22,13 @@ const appStore = useAppStore();
 const tagsStore = useTagsStore();
 
 const { isLoading } = storeToRefs(appStore);
-const { loadTags } = tagsStore;
+//const { loadTags } = tagsStore; // TODO
 
 const toast = ref();
 
 onMounted(async () => {
   setGlobalToastObject(toast.value);
-  await loadTags();
+  //await loadTags(); // TODO
 });
 </script>
 
