@@ -1,6 +1,6 @@
 export default {
   privateFeatures: "Private Features",
-  siteTitle: "Ilia's home",
+  siteTitle: "Ilia's Home",
   confirmDeleteTag: (name: string) => `Delete tag "${name}"?`,
   confirmDeleteWord: (title: string) => `Delete "${title}"?`,
   addTag: "Add tag",

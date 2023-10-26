@@ -3,6 +3,7 @@ export default {
   addTranslation: "Add translation",
   back: "Back",
   cancel: "Cancel",
+  close: "Close",
   confirm: "Confirm",
   create: "Create",
   delete: "Delete",

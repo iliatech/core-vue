@@ -36,6 +36,13 @@ const appStore = useAppStore();
 const { updateIsAuthorized } = appStore;
 const { isAuthorized } = storeToRefs(appStore);
 
+const goHomeMenuItem = {
+  label: lang.menu.home,
+  command: () => {
+    router.push(routes.root.path);
+  },
+};
+
 const props = defineProps({
   title: String,
   mainPageStyle: Boolean,
@@ -51,6 +58,7 @@ const menuAuthorized = computed(() => {
       label: `${user?.firstName} ${user?.lastName}`,
       icon: "pi pi-user",
     },
+    goHomeMenuItem,
     {
       label: lang.menu.logout,
       icon: "pi pi-sign-out",
@@ -70,6 +78,7 @@ const menuPublic = computed(() => {
         onClickLogin();
       },
     },
+    goHomeMenuItem,
   ];
 });
 

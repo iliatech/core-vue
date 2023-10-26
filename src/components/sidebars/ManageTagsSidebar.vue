@@ -5,9 +5,11 @@
     position="right"
     :dismissable="false"
   >
-    <div class="manage-tags-sidebar__title">
-      {{ $lang.title.manageTags }}
-    </div>
+    <template #header>
+      <div class="manage-tags-sidebar__title">
+        {{ $lang.title.manageTags }}
+      </div>
+    </template>
     <Button
       :label="$lang.button.add"
       icon="pi pi-plus"

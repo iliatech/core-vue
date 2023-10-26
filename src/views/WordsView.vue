@@ -36,6 +36,7 @@
     @on-confirm="onConfirmDelete"
   />
   <ManageTagsSidebar ref="manageTagsSidebar" />
+  <WordSidebar ref="wordSidebar" />
 </template>
 
 <script lang="ts" setup>
@@ -63,6 +64,7 @@ import ManageTagsSidebar from "@/components/sidebars/ManageTagsSidebar.vue";
 import WordFiltering from "@/components/WordFiltering.vue";
 import { useTagsFilteringStore } from "@/store/tagsFilteringStore";
 import TopToolbar from "@/components/toolbars/TopToolbar.vue";
+import WordSidebar from "@/components/sidebars/WordSidebar.vue";
 
 const router = useRouter();
 
@@ -80,6 +82,7 @@ const { filterTags } = storeToRefs(tagsFilteringStore);
 const manageTagsSidebar = ref();
 const words = ref([] as ApiWordResponse[]);
 const deleteItem: Ref<ApiWordResponse | null> = ref(null);
+const wordSidebar = ref();
 
 onBeforeMount(async () => {
   startLoading();
@@ -116,8 +119,8 @@ const loadWords = async (): Promise<void> => {
 
   words.value = data?.length ? (data as ApiWordResponse[]) : [];
 };
-const onClickWord = (wordId: number): void => {
-  router.push(`${routes.word.path}/${wordId}`);
+const onClickWord = (wordId: string): void => {
+  wordSidebar.value.open(wordId);
 };
 
 const onClickPlus = (): void => {

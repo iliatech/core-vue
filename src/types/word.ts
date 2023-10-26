@@ -13,7 +13,7 @@ export type CategoryHistory = CategoryHistoryItem[];
 
 export interface ApiWordResponse {
   createdAt: string;
-  id: number;
+  id: string;
   tags: ApiTagResponse[];
   title: string;
   translations: Translation[];
