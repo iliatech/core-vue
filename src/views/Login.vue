@@ -44,6 +44,10 @@ import {
 } from "@/helpers/auth";
 import router from "@/router";
 import { routes } from "@/settings/routes";
+import { useAppStore } from "@/store/appStore";
+
+const appStore = useAppStore();
+const { updateIsAuthorized } = appStore;
 
 const email = ref("");
 const password = ref("");
@@ -61,8 +65,9 @@ const onClickLogin = async () => {
   if (jwt && user) {
     saveAuthUser(user);
     saveAuthToken(jwt);
+    updateIsAuthorized(true);
     showToast({ type: ToastType.Success, text: lang.success.login });
-    await router.push({ name: routes.home.name });
+    await router.push({ name: routes.root.name });
   } else {
     resetAuthToken();
     resetAuthUser();

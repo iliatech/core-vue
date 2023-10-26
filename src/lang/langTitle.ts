@@ -1,4 +1,6 @@
 export default {
+  privateFeatures: "Private Features",
+  siteTitle: "Ilia's home",
   confirmDeleteTag: (name: string) => `Delete tag "${name}"?`,
   confirmDeleteWord: (title: string) => `Delete "${title}"?`,
   addTag: "Add tag",
@@ -6,5 +8,5 @@ export default {
   error: "Error",
   login: "Login",
   manageTags: "Manage tags",
-  wordsApp: "Words: learn foreign words and phrases by heart",
+  wordsApp: "WordsApp. Learn foreign words and phrases.",
 };

@@ -15,7 +15,7 @@ export const routes = {
   },
 
   words: {
-    path: "words",
+    path: "/words",
     name: "words",
   },
 

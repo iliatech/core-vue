@@ -13,7 +13,7 @@ export default defineConfig({
     createHtmlPlugin({
       inject: {
         data: {
-          title: "Ilia Core",
+          title: "Ilia's home",
           version: `${packageJson?.version}/${new Date().toISOString()}`,
         },
       },

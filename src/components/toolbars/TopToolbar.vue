@@ -1,12 +1,21 @@
 <template>
-  <div class="top-toolbar">
-    <div class="top-toolbar__left">
-      {{ $lang.title.wordsApp }}
-    </div>
+  <div
+    class="top-toolbar"
+    :class="{
+      'top-toolbar__inner-page-style': !mainPageStyle,
+      'top-toolbar__main-page-style': mainPageStyle,
+    }"
+  >
+    <div class="top-toolbar__left">{{ props.title }}</div>
 
     <div class="top-toolbar__right">
       <Button icon="pi pi-bars" @click="toggleUserMenu" outlined rounded />
-      <Menu ref="userMenu" id="user_menu" :model="menuItems" popup />
+      <Menu
+        ref="userMenu"
+        id="user_menu"
+        :model="isAuthorized ? menuAuthorized : menuPublic"
+        popup
+      />
     </div>
   </div>
 </template>
@@ -20,31 +29,48 @@ import Menu from "primevue/menu";
 import { showToast } from "@/helpers/toast";
 import { ToastType } from "@/types/toasts";
 import { computed, ref } from "vue";
+import { useAppStore } from "@/store/appStore";
+import { storeToRefs } from "pinia";
+
+const appStore = useAppStore();
+const { updateIsAuthorized } = appStore;
+const { isAuthorized } = storeToRefs(appStore);
+
+const props = defineProps({
+  title: String,
+  mainPageStyle: Boolean,
+});
 
 const userMenu = ref();
 
-const menuItems = computed(() => {
-  const items = [];
+const menuAuthorized = computed(() => {
+  const user = getAuthUser();
 
-  if (getAuthUser()) {
-    items.push({
+  return [
+    {
+      label: `${user?.firstName} ${user?.lastName}`,
+      icon: "pi pi-user",
+    },
+    {
       label: lang.menu.logout,
       icon: "pi pi-sign-out",
       command: () => {
         onClickLogout();
       },
-    });
-  } else {
-    items.push({
+    },
+  ];
+});
+
+const menuPublic = computed(() => {
+  return [
+    {
       label: lang.menu.login,
       icon: "pi pi-sign-out",
       command: () => {
         onClickLogin();
       },
-    });
-  }
-
-  return items;
+    },
+  ];
 });
 
 const toggleUserMenu = (event: Event) => {
@@ -56,9 +82,10 @@ const onClickLogin = () => {
 };
 
 const onClickLogout = () => {
-  router.push(routes.login.path);
+  router.push(routes.root.path);
   resetAuthUser();
   resetAuthToken();
+  updateIsAuthorized(false);
   showToast({ type: ToastType.Warning, text: lang.success.logout });
 };
 </script>
@@ -70,7 +97,6 @@ const onClickLogout = () => {
   justify-content: space-between;
 
   &__left {
-    @include header-large;
     flex-grow: 1;
   }
 
@@ -81,7 +107,17 @@ const onClickLogout = () => {
   }
 
   :deep(.p-button) {
-    color: #ddd;
+    color: #999;
+  }
+
+  &__inner-page-style {
+    @include header-large;
+    color: #333;
+  }
+
+  &__main-page-style {
+    @include header-extra-large;
+    color: darkorange;
   }
 }
 </style>

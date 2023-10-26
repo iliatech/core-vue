@@ -1,5 +1,6 @@
 <template>
   <div class="words-view">
+    <TopToolbar :title="$lang.title.wordsApp" />
     <div class="words-view__top">
       <div class="words-view__top-left">
         <WordSorting />
@@ -61,6 +62,7 @@ import { storeToRefs } from "pinia";
 import ManageTagsSidebar from "@/components/sidebars/ManageTagsSidebar.vue";
 import WordFiltering from "@/components/WordFiltering.vue";
 import { useTagsFilteringStore } from "@/store/tagsFilteringStore";
+import TopToolbar from "@/components/toolbars/TopToolbar.vue";
 
 const router = useRouter();
 

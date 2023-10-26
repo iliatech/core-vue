@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { publicRouteNames, routes } from "@/settings/routes";
 import { getAuthToken, getAuthUser } from "@/helpers/auth";
+import { useAppStore } from "@/store/appStore";
+import { storeToRefs } from "pinia";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,6 +30,11 @@ const router = createRouter({
       // ],
     },
     {
+      path: routes.words.path,
+      name: routes.words.name,
+      component: () => import("@/views/WordsView.vue"),
+    },
+    {
       path: routes.login.path,
       name: "login",
       component: () => import("@/views/Login.vue"),
@@ -36,12 +43,16 @@ const router = createRouter({
 });
 
 router.beforeEach((to) => {
-  console.log("A1", to.name);
+  const appStore = useAppStore();
+  const { updateIsAuthorized } = appStore;
+  if (getAuthToken() && getAuthUser()) {
+    updateIsAuthorized(true);
+  }
+
   if (
     (!getAuthToken() || !getAuthUser()) &&
     !publicRouteNames.includes((to.name as string) ?? "")
   ) {
-    console.log("F1");
     return { name: routes.login.name };
   }
 });

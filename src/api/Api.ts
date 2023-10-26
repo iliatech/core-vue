@@ -5,12 +5,16 @@ import { lang } from "@/lang";
 import { apiUrl } from "@/settings/api";
 import { showToast } from "@/helpers/toast";
 import { ToastType } from "@/types/toasts";
-import { getAuthToken, resetAuthToken } from "@/helpers/auth";
+import { getAuthToken, resetAuthToken, resetAuthUser } from "@/helpers/auth";
 import router from "@/router";
 import { routes } from "@/settings/routes";
+import { useAppStore } from "@/store/appStore";
 
 export default class Api {
   static async request(config: RequestConfig): Promise<any> {
+    const appStore = useAppStore();
+    const { updateIsAuthorized } = appStore;
+
     config.method = config.method ?? RequestMethods.Get;
     let requestResult;
 
@@ -75,6 +79,8 @@ export default class Api {
       switch (status) {
         case 401:
           resetAuthToken();
+          resetAuthUser();
+          updateIsAuthorized(false);
           await router.push(routes.login.path);
           break;
         case 409:
