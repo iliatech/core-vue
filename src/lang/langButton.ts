@@ -1,6 +1,5 @@
 export default {
   add: "Add",
-  addTranslation: "Add translation",
   back: "Back",
   cancel: "Cancel",
   close: "Close",

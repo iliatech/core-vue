@@ -1,5 +1,5 @@
 export default {
-  offerYourVariant: "Offer your translation...",
+  translationName: "Translation variant",
   selectTags: "No tags",
   tagName: "Tag name",
   wordOrPhrase: "Write something...",

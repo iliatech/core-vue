@@ -65,6 +65,7 @@ import WordFiltering from "@/components/WordFiltering.vue";
 import { useTagsFilteringStore } from "@/store/tagsFilteringStore";
 import TopToolbar from "@/components/toolbars/TopToolbar.vue";
 import WordSidebar from "@/components/sidebars/WordSidebar.vue";
+import CustomSidebar from "@/components/sidebars/CustomSidebar.vue";
 
 const router = useRouter();
 
