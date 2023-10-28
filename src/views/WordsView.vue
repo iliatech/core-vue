@@ -10,7 +10,8 @@
         <Button
           :label="$lang.button.manageTags"
           @click="openManageTagsSidebar"
-          text
+          outlined
+          size="small"
         />
       </div>
     </div>
@@ -65,7 +66,6 @@ import WordFiltering from "@/components/WordFiltering.vue";
 import { useTagsFilteringStore } from "@/store/tagsFilteringStore";
 import TopToolbar from "@/components/toolbars/TopToolbar.vue";
 import WordSidebar from "@/components/sidebars/WordSidebar.vue";
-import CustomSidebar from "@/components/sidebars/CustomSidebar.vue";
 
 const router = useRouter();
 
@@ -188,6 +188,7 @@ const openManageTagsSidebar = () => {
     justify-content: space-between;
     align-items: center;
     margin-bottom: $space-fifteen;
+    margin-top: $space-ten;
   }
 
   &__top-left {
@@ -196,10 +197,10 @@ const openManageTagsSidebar = () => {
   }
 
   &__top-button {
-    :deep(.p-button) {
-      font-size: 0.9em;
-      padding: 0;
-    }
+    //:deep(.p-button) {
+    //  font-size: 0.9em;
+    //  padding: 0;
+    //}
   }
 }
 

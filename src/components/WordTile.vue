@@ -1,5 +1,5 @@
 <template>
-  <div class="word-tile" :style="{ backgroundColor }">
+  <div class="word-tile" :style="{ borderColor: backgroundColor }">
     <div class="word-tile__top">
       <MultiSelect
         :model-value="selectedTags"
@@ -79,7 +79,8 @@ const emit = defineEmits(["onClick", "onClickDelete", "changeTags"]);
   flex-direction: column;
   overflow: hidden;
   padding: $space-twenty;
-  border-radius: $border-radius;
+  border-radius: $border-radius-ten;
+  border: 2px solid;
 
   &__top {
     overflow: hidden;

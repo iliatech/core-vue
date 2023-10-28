@@ -1,25 +1,26 @@
 <template>
-  <Sidebar
+  <Dialog
     v-model:visible="show"
-    class="custom-sidebar"
-    position="right"
+    class="custom-dialog"
     :dismissable="false"
+    :style="{ minWidth }"
+    :draggable="false"
   >
     <template #header>
-      <div class="custom-sidebar__header">
-        <div class="custom-sidebar__header-title">
+      <div class="custom-dialog__header">
+        <div class="custom-dialog__header-title">
           {{ title }}
         </div>
-        <div class="custom-sidebar__header-icon">
+        <div class="custom-dialog__header-icon">
           <i class="pi pi-times" @click="close" />
         </div>
       </div>
     </template>
-    <div class="custom-sidebar__container">
-      <div class="custom-sidebar__content">
+    <div class="custom-dialog__container">
+      <div class="custom-dialog__content">
         <slot />
       </div>
-      <div class="custom-sidebar__buttons">
+      <div class="custom-dialog__buttons">
         <slot name="buttons-before" />
         <Button
           v-if="closeButton"
@@ -28,23 +29,35 @@
           class="close-button"
           outlined
         />
+        <Button
+          v-if="cancelButton"
+          @click="cancel"
+          :label="$lang.button.cancel"
+          class="close-button"
+          outlined
+        />
         <slot name="buttons-after" />
       </div>
     </div>
-  </Sidebar>
+  </Dialog>
 </template>
 <script lang="ts" setup>
-import Sidebar from "primevue/sidebar";
 import { ref } from "vue";
 import Button from "primevue/button";
+import Dialog from "primevue/dialog";
 
 const show = ref(false);
 
-const emit = defineEmits(["click:close"]);
+const emit = defineEmits(["click:close", "click:cancel"]);
 
 defineProps({
   title: String,
   closeButton: Boolean,
+  cancelButton: Boolean,
+  minWidth: {
+    type: String,
+    default: "400px",
+  },
 });
 
 const close = () => {
@@ -52,21 +65,27 @@ const close = () => {
   show.value = false;
 };
 
+const cancel = () => {
+  emit("click:cancel");
+  show.value = false;
+};
+
 const open = () => {
   show.value = true;
 };
 
-defineExpose({ open });
+defineExpose({ open, close });
 </script>
 <style lang="scss" scoped>
 @import "@/assets/fonts";
 @import "@/assets/variables";
 
-.custom-sidebar {
+.custom-dialog {
   &__header {
     @include header-medium;
     display: flex;
     justify-content: space-between;
+    width: 100%;
   }
 
   &__header-icon i {
@@ -78,11 +97,11 @@ defineExpose({ open });
     flex-direction: column;
     justify-content: space-between;
     height: 100%;
-    padding: $space-ten;
   }
 
   &__content {
     @include font-medium;
+    margin: $space-twenty 0 $space-ten;
   }
 
   &__buttons {
@@ -92,13 +111,13 @@ defineExpose({ open });
 }
 </style>
 <style lang="scss">
-.custom-sidebar {
-  width: 400px !important;
+.custom-dialog {
+  //min-width: 450px !important;
 
-  .p-sidebar-header-content {
+  .p-dialog-header {
     width: 100%;
   }
-  .p-sidebar-close {
+  .p-dialog-header-icons {
     display: none !important;
   }
 }

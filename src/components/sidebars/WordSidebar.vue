@@ -78,8 +78,6 @@ const loadData = async (): Promise<void> => {
 
   word.value = wordData.title;
 
-  console.log("D1", wordData);
-
   const translationsData = await Api.request({
     path: `${apiPaths.translation}?wordId=${wordId.value}`,
     isDataResult: true,
@@ -125,7 +123,6 @@ const onUpdateTranslation = (value: string): void => {
 
 const open = async (id: string) => {
   wordId.value = id;
-  console.log("A1");
 
   sidebar.value.open();
 

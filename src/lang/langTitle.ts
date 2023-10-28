@@ -3,7 +3,7 @@ export default {
   siteTitle: "Ilia's Home",
   confirmDeleteTag: (name: string) => `Delete tag "${name}"?`,
   confirmDeleteWord: (title: string) => `Delete "${title}"?`,
-  addTag: "Add tag",
+  createTag: "Create tag",
   createWord: "Word or phrase creator",
   error: "Error",
   login: "Login",

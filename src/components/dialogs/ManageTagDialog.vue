@@ -1,36 +1,30 @@
 <template>
-  <Dialog
-    v-model:visible="show"
-    :header="$lang.title.addTag"
+  <CustomDialog
+    ref="dialog"
+    :title="$lang.title.createTag"
     class="manage-tag-dialog"
-    :style="{ width: '30vw' }"
+    @click:cancel="onCancel"
   >
     <div class="manage-tag-dialog__content">
       <InputText
         type="text"
         v-model.trim="name"
-        :placeholder="$lang.placeholder.tagName"
+        :placeholder="$lang.placeholder.inputTagName"
+        :class="{ 'p-invalid': !validate() && isValidated }"
       />
     </div>
-    <Button
-      :label="$lang.button.add"
-      :disabled="!name"
-      class="add-button"
-      @click="addTag"
-    />
-    <template #closeicon>
+    <template #buttons-before>
       <Button
-        icon="pi pi-times"
-        severity="secondary"
-        text
-        @click.stop="cancel"
+        :label="$lang.button.create"
+        class="add-button"
+        outlined
+        @click="addTag"
       />
     </template>
-  </Dialog>
+  </CustomDialog>
 </template>
 <script lang="ts" setup>
 import { ref } from "vue";
-import Dialog from "primevue/dialog";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 import Api from "@/api/Api";
@@ -38,16 +32,23 @@ import { apiPaths } from "@/settings/api";
 import { RequestMethods } from "@/types/api";
 import { lang } from "@/lang";
 import { useTagsStore } from "@/store/tagsStore";
+import CustomDialog from "@/components/dialogs/CustomDialog.vue";
 
 const tagsStore = useTagsStore();
 const { loadTags } = tagsStore;
 
-const show = ref(false);
 const name = ref();
+const dialog = ref();
+const isValidated = ref(false);
 
 const emit = defineEmits(["change"]);
 
 const addTag = async () => {
+  isValidated.value = true;
+  if (!validate()) {
+    return;
+  }
+
   const payload = {
     name: name.value.trim(),
   };
@@ -60,18 +61,22 @@ const addTag = async () => {
     successCallback: async () => {
       emit("change");
       await loadTags();
-      show.value = false;
       name.value = undefined;
+      isValidated.value = false;
+      dialog.value.close();
     },
   });
 };
-const cancel = () => {
+
+const validate = (): boolean => {
+  return !!name.value;
+};
+const onCancel = () => {
   name.value = undefined;
-  show.value = false;
 };
 
 const open = () => {
-  show.value = true;
+  dialog.value.open();
 };
 
 defineExpose({ open });
@@ -82,7 +87,7 @@ defineExpose({ open });
 
 .manage-tag-dialog {
   &__content {
-    margin-bottom: $space-ten;
+    margin-bottom: $space-twenty;
   }
 }
 </style>

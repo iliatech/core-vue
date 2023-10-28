@@ -1,6 +1,6 @@
 export default {
   translationName: "Translation variant",
   selectTags: "No tags",
-  tagName: "Tag name",
+  inputTagName: "Input tag name",
   wordOrPhrase: "Write something...",
 };

@@ -1,26 +1,24 @@
 <template>
-  <Sidebar
-    v-model:visible="show"
+  <CustomSidebar
+    ref="sidebar"
     class="manage-tags-sidebar"
-    position="right"
-    :dismissable="false"
+    :title="$lang.title.manageTags"
+    close-button
   >
-    <template #header>
-      <div class="manage-tags-sidebar__title">
-        {{ $lang.title.manageTags }}
-      </div>
-    </template>
     <Button
       :label="$lang.button.add"
       icon="pi pi-plus"
       size="small"
       class="add-button"
       @click="onClickAddTag"
+      iconPos="right"
+      outlined
     />
     <DataTable :value="tags" class="manage-tags-sidebar__table">
       <Column
         :field="TagsTableColumns.Name"
         :header="tagsTableColumns[TagsTableColumns.Name].title"
+        :sortable="true"
       />
       <Column
         :field="TagsTableColumns.Action"
@@ -32,7 +30,7 @@
       </Column>
       <template #empty> {{ $lang.phrase.noTagsFound }} </template>
     </DataTable>
-  </Sidebar>
+  </CustomSidebar>
   <ManageTagDialog ref="manageTagDialog" @change="loadTags" />
   <BasicDialog
     v-model="selectedTag"
@@ -46,7 +44,6 @@
 <script lang="ts" setup>
 import { onBeforeMount, ref } from "vue";
 
-import Sidebar from "primevue/sidebar";
 import BasicDialog from "@/components/dialogs/BasicDialog.vue";
 import Api from "@/api/Api";
 import { apiPaths } from "@/settings/api";
@@ -64,17 +61,18 @@ import { lang } from "@/lang";
 import { DialogType } from "@/types/dialog";
 import { useTagsStore } from "@/store/tagsStore";
 import { storeToRefs } from "pinia";
+import CustomSidebar from "@/components/sidebars/CustomSidebar.vue";
 
 const tagsStore = useTagsStore();
 const { tags } = storeToRefs(tagsStore);
 const { loadTags } = tagsStore;
 
 const manageTagDialog = ref();
-const show = ref(false);
 const selectedTag = ref<ApiTagResponse>();
+const sidebar = ref();
 
 const open = () => {
-  show.value = true;
+  sidebar.value.open();
 };
 
 const onClickAddTag = () => {
