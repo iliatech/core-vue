@@ -32,10 +32,11 @@
     </DataTable>
   </CustomSidebar>
   <ManageTagDialog ref="manageTagDialog" @change="loadTags" />
+  <!--TODO Fix ?? '' -->
   <BasicDialog
     v-model="selectedTag"
     :type="DialogType.Confirm"
-    :text="lang.title.confirmDeleteWord(selectedTag?.name)"
+    :text="lang.title.confirmDeleteWord(selectedTag?.name ?? '')"
     :confirm-button-text="$lang.button.delete"
     @on-cancel="cancelDeleteTag"
     @on-confirm="confirmDeleteTag"
