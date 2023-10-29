@@ -1,12 +1,9 @@
 <template>
-  <div className="login-page">
-    <form className="login-page__form">
-      <div className="login-page__title">{{ lang.title.login }}</div>
-      <label className="login-page__field-label">{{ lang.label.email }}</label>
+  <div class="login-page">
+    <form class="login-page__form">
+      <label class="login-page__field-label">{{ lang.label.email }}</label>
       <InputText v-model="email" />
-      <label className="login-page__field-label">{{
-        lang.label.password
-      }}</label>
+      <label class="login-page__field-label">{{ lang.label.password }}</label>
 
       <!-- TODO: Should we write false? -->
       <Password
@@ -15,7 +12,7 @@
         autocomplete="current-password"
       />
 
-      <div className="login-page__button-container">
+      <div class="login-page__button-container">
         <Button
           :label="lang.button.login"
           @click="onClickLogin"
@@ -44,6 +41,10 @@ import {
 } from "@/helpers/auth";
 import router from "@/router";
 import { routes } from "@/settings/routes";
+import { useAppStore } from "@/store/appStore";
+
+const appStore = useAppStore();
+const { updateIsAuthorized } = appStore;
 
 const email = ref("");
 const password = ref("");
@@ -61,8 +62,9 @@ const onClickLogin = async () => {
   if (jwt && user) {
     saveAuthUser(user);
     saveAuthToken(jwt);
+    updateIsAuthorized(true);
     showToast({ type: ToastType.Success, text: lang.success.login });
-    await router.push({ name: routes.home.name });
+    await router.push({ name: routes.root.name });
   } else {
     resetAuthToken();
     resetAuthUser();
@@ -78,24 +80,24 @@ const onClickLogin = async () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: calc(100vh - $header-height);
 
   &__form {
   }
 
   &__field-label {
     display: block;
-    margin-bottom: $space-ten;
-    margin-top: $space-twenty;
+    margin-bottom: $px-10;
+    margin-top: $px-20;
   }
 
   &__button-container {
-    margin-top: $space-twenty;
+    margin-top: $px-20;
   }
 
   &__title {
     @include header-medium;
-    margin-bottom: $space-thirty;
+    margin-bottom: $px-30;
   }
 }
 </style>

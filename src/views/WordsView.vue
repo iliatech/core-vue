@@ -9,7 +9,8 @@
         <Button
           :label="$lang.button.manageTags"
           @click="openManageTagsSidebar"
-          text
+          outlined
+          size="small"
         />
       </div>
     </div>
@@ -35,6 +36,7 @@
     @on-confirm="onConfirmDelete"
   />
   <ManageTagsSidebar ref="manageTagsSidebar" />
+  <WordSidebar ref="wordSidebar" />
 </template>
 
 <script lang="ts" setup>
@@ -61,6 +63,7 @@ import { storeToRefs } from "pinia";
 import ManageTagsSidebar from "@/components/sidebars/ManageTagsSidebar.vue";
 import WordFiltering from "@/components/WordFiltering.vue";
 import { useTagsFilteringStore } from "@/store/tagsFilteringStore";
+import WordSidebar from "@/components/sidebars/WordSidebar.vue";
 
 const router = useRouter();
 
@@ -78,6 +81,7 @@ const { filterTags } = storeToRefs(tagsFilteringStore);
 const manageTagsSidebar = ref();
 const words = ref([] as ApiWordResponse[]);
 const deleteItem: Ref<ApiWordResponse | null> = ref(null);
+const wordSidebar = ref();
 
 onBeforeMount(async () => {
   startLoading();
@@ -114,8 +118,8 @@ const loadWords = async (): Promise<void> => {
 
   words.value = data?.length ? (data as ApiWordResponse[]) : [];
 };
-const onClickWord = (wordId: number): void => {
-  router.push(`${routes.word.path}/${wordId}`);
+const onClickWord = (wordId: string): void => {
+  wordSidebar.value.open(wordId);
 };
 
 const onClickPlus = (): void => {
@@ -181,26 +185,27 @@ const openManageTagsSidebar = () => {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: $space-fifteen;
+    margin-bottom: $px-15;
+    margin-top: $px-10;
   }
 
   &__top-left {
     display: flex;
-    gap: $space-twenty;
+    gap: $px-20;
   }
 
   &__top-button {
-    :deep(.p-button) {
-      font-size: 0.9em;
-      padding: 0;
-    }
+    //:deep(.p-button) {
+    //  font-size: 0.9em;
+    //  padding: 0;
+    //}
   }
 }
 
 .words {
   display: flex;
   flex-wrap: wrap;
-  gap: $space-thirty;
+  gap: $px-30;
   div {
     min-width: 350px;
     @include flex-wrap-fix(250px);

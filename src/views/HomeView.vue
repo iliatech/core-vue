@@ -1,70 +1,19 @@
 <template>
-  <div class="main-toolbar">
-    <div class="main-toolbar__left">
-      {{ $lang.title.wordsApp }}
-    </div>
-
-    <div class="main-toolbar__right">
-      <Button icon="pi pi-bars" @click="toggleUserMenu" outlined rounded />
-      <Menu ref="userMenu" id="user_menu" :model="menuItems" popup />
-    </div>
+  <div class="home-page">
+    <PrivateFeatures />
   </div>
-  <RouterView />
 </template>
 <script lang="ts" setup>
-import Button from "primevue/button";
-import Menu from "primevue/menu";
-import { resetAuthToken, resetAuthUser } from "@/helpers/auth";
-import { routes } from "@/settings/routes";
-import router from "@/router";
-import { showToast } from "@/helpers/toast";
-import { ToastType } from "@/types/toasts";
-import { lang } from "@/lang";
-import { ref } from "vue";
+import PrivateFeatures from "@/components/homePage/PrivateFeatures.vue";
+import { useAppStore } from "@/store/appStore";
+import { storeToRefs } from "pinia";
 
-const userMenu = ref();
-
-const menuItems = [
-  {
-    label: lang.menu.logout,
-    icon: "pi pi-sign-out",
-    command: () => {
-      onClickLogout();
-    },
-  },
-];
-
-const toggleUserMenu = (event: Event) => {
-  userMenu.value.toggle(event);
-};
-
-const onClickLogout = () => {
-  router.push(routes.login.path);
-  resetAuthUser();
-  resetAuthToken();
-  showToast({ type: ToastType.Warning, text: lang.success.logout });
-};
+const appStore = useAppStore();
+const { isAuthorized } = storeToRefs(appStore);
 </script>
 <style lang="scss" scoped>
-@import "@/assets/variables.scss";
-@import "@/assets/fonts.scss";
-.main-toolbar {
-  display: flex;
-  justify-content: space-between;
-
-  &__left {
-    @include header-large;
-    flex-grow: 1;
-  }
-
-  &__right {
-    display: flex;
-    flex-grow: 1;
-    justify-content: flex-end;
-  }
-
-  :deep(.p-button) {
-    color: #ddd;
-  }
+@import "@/assets/variables";
+.home-page {
+  margin-top: $px-15;
 }
 </style>

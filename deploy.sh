@@ -1,2 +1,2 @@
 npm run build
-scp -r ./dist/* iliatech@secret.iliatech.ru:/var/www/words.iliatech.ru
+scp -r ./dist/* iliatech@iliatech.ru:/var/www/iliatech.ru

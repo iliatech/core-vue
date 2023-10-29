@@ -41,11 +41,9 @@ import { RequestMethods } from "@/types/api";
 import type { Word } from "@/types/word";
 
 import { lang } from "@/lang";
-import { useToast } from "primevue/usetoast";
 
 const router = useRouter();
 const appStore = useAppStore();
-const toast = useToast();
 
 const { startLoading, stopLoading } = appStore;
 
@@ -95,7 +93,7 @@ const checkCategory = (): boolean => {
 @import "@/assets/colors.scss";
 
 .create-word {
-  padding: $space-ten;
+  padding: $px-10;
 
   &__title {
     padding: 0 0 $space-after-title;
@@ -104,15 +102,15 @@ const checkCategory = (): boolean => {
 
   &__top-buttons {
     display: flex;
-    gap: $space-ten;
+    gap: $px-10;
   }
 
   &__content {
-    margin-bottom: $space-fifteen;
+    margin-bottom: $px-15;
   }
 
   &__bottom-buttons {
-    margin-top: $space-twenty;
+    margin-top: $px-20;
     .p-button.p-button-outlined {
       color: $color-dark-blue;
     }

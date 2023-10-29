@@ -1,18 +1,7 @@
-  @import "colors.scss";
+@import "colors.scss";
 
 .add-button {
-  background: darkseagreen;
-  border: darkseagreen;
-}
-
-.back-button {
-  background: #ccc;
-  border: #ccc;
-}
-
-.save-button {
-  background: forestgreen;
-  border: forestgreen;
+  color: forestgreen !important;
 }
 
 .cancel-button {
@@ -20,9 +9,22 @@
   border: #ccc;
 }
 
+.close-button {
+  color: #666 !important;
+}
+
 .confirm-button {
   background: #dc3c3c;
   border: #dc3c3c;
 }
+
+.save-button {
+  background: forestgreen;
+  border: forestgreen;
+}
+
+
+
+
 
 

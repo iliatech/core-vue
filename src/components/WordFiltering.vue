@@ -34,7 +34,7 @@ const { changeSelectedTags } = tagsFilteringStore;
 
 .word-filtering {
   display: flex;
-  gap: $space-ten;
+  gap: $px-10;
   align-items: center;
   overflow: hidden;
 
@@ -54,7 +54,7 @@ const { changeSelectedTags } = tagsFilteringStore;
 
   :deep(.p-multiselect-label.p-placeholder) {
     color: #444;
-    margin-right: $space-five;
+    margin-right: $px-5;
   }
 
   :deep(.p-multiselect-trigger) {

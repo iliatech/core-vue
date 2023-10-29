@@ -1,51 +1,53 @@
 <template>
-  <div class="word-view">
-    <div class="word-view__title">{{ word }}</div>
-    <div class="word-view__input-container">
+  <CustomSidebar
+    ref="sidebar"
+    position="right"
+    :dismissable="false"
+    :title="word"
+    close-button
+    class="word-sidebar"
+  >
+    <div class="word-sidebar__create-translation">
+      {{ $lang.label.createTranslation }}
       <InputText
         type="text"
         width="500px"
         :model-value="translation"
-        :placeholder="$lang.placeholder.offerYourVariant"
+        :placeholder="$lang.placeholder.translationName"
         :class="{ 'p-invalid': !translation && isValidated }"
         @update:model-value="onUpdateTranslation"
       />
     </div>
-    <div class="word-view__buttons">
+    <div class="word-sidebar__buttons">
       <Button
         @click="onClickAddTranslation"
-        :label="$lang.button.addTranslation"
+        :label="$lang.button.create"
         class="add-button"
-      />
-      <Button
-        @click="onClickBack"
-        :label="$lang.button.back"
-        class="back-button"
+        outlined
       />
     </div>
-    <template v-if="translations.length && isTranslationAdded">
-      <div class="word-view__translations-title">
-        {{ $lang.phrase.previousTranslations }}:
+    <div class="translations-section">
+      {{ $lang.label.translations }}
+
+      <template v-if="translations.length && isTranslationAdded">
+        <ul>
+          <li v-for="(item, index) in translations" :key="item.id">
+            <span :class="{ 'word-sidebar__item-bold': !index }">{{
+              item.text
+            }}</span>
+          </li>
+        </ul>
+      </template>
+      <div v-else class="word-sidebar__has-been-translated">
+        {{ $lang.phrase.hasBeenTranslatedNTimes(translations.length) }}
       </div>
-      <ul>
-        <li v-for="(item, index) in translations" :key="item.id">
-          <span :class="{ 'word-view__item-bold': !index }">{{
-            item.text
-          }}</span>
-        </li>
-      </ul>
-    </template>
-    <div v-else class="word-view__has-been-translated">
-      {{ $lang.phrase.hasBeenTranslatedNTimes(translations.length) }}
     </div>
-  </div>
+  </CustomSidebar>
 </template>
 
 <script lang="ts" setup>
 import Button from "primevue/button";
 
-import { useRoute, useRouter } from "vue-router";
-import { routes } from "@/settings/routes";
 import { onBeforeMount, ref } from "vue";
 import { useAppStore } from "@/store/appStore";
 import Api from "@/api/Api";
@@ -55,12 +57,12 @@ import { lang } from "@/lang";
 import InputText from "primevue/inputtext";
 import type { Translation } from "@/types/translationType";
 import { orderBy } from "lodash";
+import CustomSidebar from "@/components/sidebars/CustomSidebar.vue";
 
-const route = useRoute();
-const router = useRouter();
-const wordId = route.params.wordId;
+const wordId = ref<string | null>(null);
 const appStore = useAppStore();
 const isTranslationAdded = ref(false);
+const sidebar = ref();
 
 const { startLoading, stopLoading } = appStore;
 
@@ -69,30 +71,19 @@ const isValidated = ref(false);
 const word = ref("");
 const translations = ref<Translation[]>([]);
 
-onBeforeMount(async () => {
-  startLoading();
-  await loadData();
-  stopLoading();
-});
-
 const loadData = async (): Promise<void> => {
   const wordData = await Api.request({
-    path: `${apiPaths.word}/${wordId}`,
-    isDataResult: true,
+    path: `${apiPaths.word}/${wordId.value}`,
   });
 
   word.value = wordData.title;
 
   const translationsData = await Api.request({
-    path: `${apiPaths.translation}?wordId=${wordId}`,
+    path: `${apiPaths.translation}?wordId=${wordId.value}`,
     isDataResult: true,
   });
 
   translations.value = orderBy(translationsData, "createdAt", "desc");
-};
-
-const onClickBack = (): void => {
-  router.push({ name: routes.home.name });
 };
 
 const onClickAddTranslation = async (): Promise<void> => {
@@ -105,7 +96,7 @@ const onClickAddTranslation = async (): Promise<void> => {
   startLoading();
 
   await Api.request({
-    path: `${apiPaths.translation}/?wordId=${wordId}`,
+    path: `${apiPaths.translation}/?wordId=${wordId.value}`,
     method: RequestMethods.Post,
     payload: { text: translation.value },
     successToast: lang.success.translationCreated,
@@ -115,6 +106,7 @@ const onClickAddTranslation = async (): Promise<void> => {
 
   translation.value = "";
   isTranslationAdded.value = true;
+  isValidated.value = false;
 
   stopLoading();
 };
@@ -128,57 +120,90 @@ const onUpdateTranslation = (value: string): void => {
   isValidated.value = false;
   isTranslationAdded.value = false;
 };
+
+const open = async (id: string) => {
+  wordId.value = id;
+
+  sidebar.value.open();
+
+  startLoading();
+  await loadData();
+  stopLoading();
+};
+
+defineExpose({ open });
 </script>
 
 <style lang="scss" scoped>
 @import "@/assets/variables.scss";
 @import "@/assets/fonts.scss";
-.word-view {
-  padding: $space-ten;
-
+.word-sidebar {
   &__title {
-    padding: 0 0 $space-ten;
+    padding: 0 0 $px-10;
     @include font-extra-large;
   }
 
   &__buttons {
     display: flex;
-    gap: $space-ten;
+    gap: $px-10;
   }
 
   &__content {
-    padding: $space-twenty 0;
+    padding: $px-20 0;
     @include font-small-large;
   }
 
   &__section {
-    padding-bottom: $space-ten;
+    padding-bottom: $px-10;
   }
 
   &__section-title {
     @include font-medium-bold;
   }
 
-  &__input-container {
-    margin-bottom: $space-fifteen;
-  }
-
-  &__translations-title {
-    margin: $space-twenty 0;
+  &__create-translation {
+    margin-bottom: $px-15;
+    display: flex;
+    flex-direction: column;
+    gap: $px-10;
   }
 
   &__has-been-translated {
-    margin-top: $space-twenty;
     color: #666;
   }
 
   &__item-bold {
     font-weight: bold;
-    font-size: 1.25em;
   }
 }
 
 :deep(.p-inputtext) {
   width: 320px;
+}
+
+.custom-sidebar__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.translations-section {
+  margin-top: $px-20;
+  display: flex;
+  flex-direction: column;
+  gap: $px-10;
+
+  ul {
+    margin: 0 0 0 $px-20;
+    padding: 0;
+    @include font-medium;
+  }
+}
+</style>
+<style lang="scss">
+.p-sidebar-header {
+  justify-content: space-between !important;
+  padding-left: 1.5rem !important;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="word-tile" :style="{ backgroundColor }">
+  <div class="word-tile" :style="{ borderColor: backgroundColor }">
     <div class="word-tile__top">
       <MultiSelect
         :model-value="selectedTags"
@@ -78,8 +78,9 @@ const emit = defineEmits(["onClick", "onClickDelete", "changeTags"]);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  padding: $space-twenty;
-  border-radius: $border-radius;
+  padding: $px-20;
+  border-radius: $border-radius-ten;
+  border: 2px solid;
 
   &__top {
     overflow: hidden;
@@ -131,8 +132,8 @@ const emit = defineEmits(["onClick", "onClickDelete", "changeTags"]);
   &__bottom {
     display: flex;
     justify-content: space-between;
-    right: $space-ten;
-    bottom: $space-ten;
+    right: $px-10;
+    bottom: $px-10;
     flex-grow: 0;
 
     i {
@@ -157,7 +158,7 @@ const emit = defineEmits(["onClick", "onClickDelete", "changeTags"]);
 
   :deep(.p-multiselect-label.p-placeholder) {
     color: #444;
-    margin-right: $space-five;
+    margin-right: $px-5;
   }
 
   :deep(.p-multiselect-trigger) {

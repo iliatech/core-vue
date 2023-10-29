@@ -15,7 +15,7 @@ export const routes = {
   },
 
   words: {
-    path: "words",
+    path: "/words",
     name: "words",
   },
 
@@ -29,3 +29,5 @@ export const routes = {
     name: "createWord",
   },
 };
+
+export const publicRouteNames = [routes.login.name, routes.root.name];

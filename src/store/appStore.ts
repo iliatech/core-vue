@@ -4,6 +4,7 @@ import type { Ref } from "vue";
 
 export const useAppStore = defineStore("appStore", () => {
   const isLoading: Ref<boolean> = ref(false);
+  const isAuthorized: Ref<boolean> = ref(false);
 
   const startLoading = (): void => {
     isLoading.value = true;
@@ -13,5 +14,15 @@ export const useAppStore = defineStore("appStore", () => {
     isLoading.value = false;
   };
 
-  return { isLoading, startLoading, stopLoading };
+  const updateIsAuthorized = (value: boolean) => {
+    isAuthorized.value = value;
+  };
+
+  return {
+    isAuthorized,
+    isLoading,
+    startLoading,
+    stopLoading,
+    updateIsAuthorized,
+  };
 });
