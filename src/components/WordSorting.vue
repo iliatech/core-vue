@@ -37,6 +37,6 @@ const { selectedSorting, selectedSortingDirection } =
 
 .word-sorting {
   display: flex;
-  gap: $space-ten;
+  gap: $px-10;
 }
 </style>

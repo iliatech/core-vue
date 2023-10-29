@@ -2,14 +2,15 @@
 $app-container-width: 520px;
 
 // Spaces.
-$space-five: 5px;
-$space-ten: 10px;
-$space-fifteen: 15px;
-$space-twenty: 20px;
-$space-thirty: 30px;
+$px-5: 5px;
+$px-10: 10px;
+$px-15: 15px;
+$px-20: 20px;
+$px-30: 30px;
+$px-40: 40px;
 
 // Space aliases.
-$space-after-title: $space-thirty;
+$space-after-title: $px-30;
 
 // Border radii.
 $border-radius: 4px;
@@ -25,6 +26,8 @@ $z-index-basic-dialog: 10000;
 $tile-width: 200px;
 $tile-height: 100px;
 $tile-aspect-ratio: 1.8;
+
+$header-height: 80px;
 
 
 

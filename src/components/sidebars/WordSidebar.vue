@@ -139,22 +139,22 @@ defineExpose({ open });
 @import "@/assets/fonts.scss";
 .word-sidebar {
   &__title {
-    padding: 0 0 $space-ten;
+    padding: 0 0 $px-10;
     @include font-extra-large;
   }
 
   &__buttons {
     display: flex;
-    gap: $space-ten;
+    gap: $px-10;
   }
 
   &__content {
-    padding: $space-twenty 0;
+    padding: $px-20 0;
     @include font-small-large;
   }
 
   &__section {
-    padding-bottom: $space-ten;
+    padding-bottom: $px-10;
   }
 
   &__section-title {
@@ -162,10 +162,10 @@ defineExpose({ open });
   }
 
   &__create-translation {
-    margin-bottom: $space-fifteen;
+    margin-bottom: $px-15;
     display: flex;
     flex-direction: column;
-    gap: $space-ten;
+    gap: $px-10;
   }
 
   &__has-been-translated {
@@ -189,13 +189,13 @@ defineExpose({ open });
 }
 
 .translations-section {
-  margin-top: $space-twenty;
+  margin-top: $px-20;
   display: flex;
   flex-direction: column;
-  gap: $space-ten;
+  gap: $px-10;
 
   ul {
-    margin: 0 0 0 $space-twenty;
+    margin: 0 0 0 $px-20;
     padding: 0;
     @include font-medium;
   }

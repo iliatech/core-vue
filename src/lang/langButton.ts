@@ -8,5 +8,5 @@ export default {
   delete: "Delete",
   login: "Login",
   manageTags: "Manage tags",
-  wordsApp: "Words App",
+  wordsApp: "Word Cards",
 };

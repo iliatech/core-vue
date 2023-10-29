@@ -1,22 +1,23 @@
 @import "@/assets/variables.scss";
 
 html {
-  // TODO: Add something here when it's needed;
+  font-family: "Roboto", sans-serif;
 }
 
 body {
-  font-family: Roboto;
+  margin: 0;
+  padding: 0;
 
   .p-toast-message-icon {
     display: none;
   }
 
   .p-toast-message-text {
-    margin-left: $space-five !important;
+    margin-left: $px-5 !important;
   }
 }
 
 #app {
-  // TODO: Add something here when it's needed;
+  // Add something here when it's needed.
 }
 

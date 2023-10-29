@@ -117,11 +117,11 @@ defineExpose({ open });
 .manage-tags-sidebar {
   &__title {
     @include header-one-and-quarter;
-    margin-bottom: $space-ten;
+    margin-bottom: $px-10;
   }
 
   &__table {
-    margin-top: $space-fifteen;
+    margin-top: $px-15;
   }
 }
 </style>

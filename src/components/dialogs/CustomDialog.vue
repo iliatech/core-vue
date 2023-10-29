@@ -101,7 +101,7 @@ defineExpose({ open, close });
 
   &__content {
     @include font-medium;
-    margin: $space-twenty 0 $space-ten;
+    margin: $px-20 0 $px-10;
   }
 
   &__buttons {

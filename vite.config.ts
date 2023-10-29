@@ -13,7 +13,8 @@ export default defineConfig({
     createHtmlPlugin({
       inject: {
         data: {
-          title: "Ilia's Home",
+          title:
+            "Ilia Domyshev | JS Programmer | Specialist degree in Mathematics and programming",
           version: `${packageJson?.version}/${new Date().toISOString()}`,
         },
       },

@@ -2,11 +2,22 @@
   <div
     class="top-toolbar"
     :class="{
-      'top-toolbar__inner-page-style': !mainPageStyle,
-      'top-toolbar__main-page-style': mainPageStyle,
+      'top-toolbar__inner-page-style': !isMainPageStyle,
+      'top-toolbar__main-page-style': isMainPageStyle,
     }"
   >
-    <div class="top-toolbar__left">{{ props.title }}</div>
+    <div class="top-toolbar__left">
+      <div class="top-toolbar__left-title">
+        {{ title }}
+      </div>
+      <Dropdown
+        :model-value="navigation"
+        :options="navigationOptions"
+        option-label="label"
+        option-value="path"
+        @update:model-value="onChangeNavigation"
+      />
+    </div>
 
     <div class="top-toolbar__right">
       <Button icon="pi pi-bars" @click="toggleUserMenu" outlined rounded />
@@ -21,34 +32,61 @@
 </template>
 <script lang="ts" setup>
 import { lang } from "@/lang";
+import Dropdown from "primevue/dropdown";
 import router from "@/router";
-import { routes } from "@/settings/routes";
+import { publicRouteNames, routes } from "@/settings/routes";
 import { getAuthUser, resetAuthToken, resetAuthUser } from "@/helpers/auth";
 import Button from "primevue/button";
 import Menu from "primevue/menu";
 import { showToast } from "@/helpers/toast";
 import { ToastType } from "@/types/toasts";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useAppStore } from "@/store/appStore";
 import { storeToRefs } from "pinia";
+import type { NavigationItem } from "@/types/common";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
 
 const appStore = useAppStore();
 const { updateIsAuthorized } = appStore;
 const { isAuthorized } = storeToRefs(appStore);
 
-const goHomeMenuItem = {
-  label: lang.menu.home,
-  command: () => {
-    router.push(routes.root.path);
-  },
-};
+const userMenu = ref();
+const navigation = ref();
 
-const props = defineProps({
-  title: String,
-  mainPageStyle: Boolean,
+const title = computed(() => {
+  return route.meta.title;
 });
 
-const userMenu = ref();
+const isMainPageStyle = computed(() => {
+  return publicRouteNames.includes(route.name as string);
+});
+
+const navigationOptions = computed(() => {
+  const items: NavigationItem[] = [
+    {
+      label: "Home Page",
+      path: routes.root.path,
+    },
+  ];
+
+  if (!isAuthorized.value) {
+    items.push({
+      label: "Login Page",
+      path: routes.login.path,
+    });
+  }
+
+  if (isAuthorized.value) {
+    items.push({
+      label: "Word Cards",
+      path: routes.words.path,
+    });
+  }
+
+  return items;
+});
 
 const menuAuthorized = computed(() => {
   const user = getAuthUser();
@@ -58,7 +96,6 @@ const menuAuthorized = computed(() => {
       label: `${user?.firstName} ${user?.lastName}`,
       icon: "pi pi-user",
     },
-    goHomeMenuItem,
     {
       label: lang.menu.logout,
       icon: "pi pi-sign-out",
@@ -78,9 +115,16 @@ const menuPublic = computed(() => {
         onClickLogin();
       },
     },
-    goHomeMenuItem,
   ];
 });
+
+watch(
+  () => route.path,
+  (value) => {
+    navigation.value = value;
+  },
+  { immediate: true }
+);
 
 const toggleUserMenu = (event: Event) => {
   userMenu.value.toggle(event);
@@ -97,6 +141,10 @@ const onClickLogout = () => {
   updateIsAuthorized(false);
   showToast({ type: ToastType.Warning, text: lang.success.logout });
 };
+
+const onChangeNavigation = (path: string) => {
+  router.push(path);
+};
 </script>
 <style lang="scss" scoped>
 @import "@/assets/variables.scss";
@@ -104,15 +152,28 @@ const onClickLogout = () => {
 .top-toolbar {
   display: flex;
   justify-content: space-between;
+  padding: $px-20;
+  margin-bottom: $px-20;
+  border-bottom: 1px solid #aaa;
+  background: #f1eceb;
 
   &__left {
     flex-grow: 1;
+    display: flex;
+    gap: $px-40;
+    align-items: center;
+  }
+
+  &__left-title {
+    width: 350px;
+    border-right: 1px dotted #aaa;
   }
 
   &__right {
     display: flex;
     flex-grow: 1;
     justify-content: flex-end;
+    gap: 50px;
   }
 
   :deep(.p-button) {
@@ -125,7 +186,7 @@ const onClickLogout = () => {
   }
 
   &__main-page-style {
-    @include header-extra-large;
+    @include header-large;
     color: darkorange;
   }
 }

@@ -1,6 +1,5 @@
 <template>
   <div class="words-view">
-    <TopToolbar :title="$lang.title.wordsApp" />
     <div class="words-view__top">
       <div class="words-view__top-left">
         <WordSorting />
@@ -64,7 +63,6 @@ import { storeToRefs } from "pinia";
 import ManageTagsSidebar from "@/components/sidebars/ManageTagsSidebar.vue";
 import WordFiltering from "@/components/WordFiltering.vue";
 import { useTagsFilteringStore } from "@/store/tagsFilteringStore";
-import TopToolbar from "@/components/toolbars/TopToolbar.vue";
 import WordSidebar from "@/components/sidebars/WordSidebar.vue";
 
 const router = useRouter();
@@ -187,13 +185,13 @@ const openManageTagsSidebar = () => {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: $space-fifteen;
-    margin-top: $space-ten;
+    margin-bottom: $px-15;
+    margin-top: $px-10;
   }
 
   &__top-left {
     display: flex;
-    gap: $space-twenty;
+    gap: $px-20;
   }
 
   &__top-button {
@@ -207,7 +205,7 @@ const openManageTagsSidebar = () => {
 .words {
   display: flex;
   flex-wrap: wrap;
-  gap: $space-thirty;
+  gap: $px-30;
   div {
     min-width: 350px;
     @include flex-wrap-fix(250px);

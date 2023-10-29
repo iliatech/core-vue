@@ -7,7 +7,12 @@
       :aria-label="$lang.label.loader"
     />
   </div>
-  <div class="app-container"><RouterView /></div>
+  <div class="app-container">
+    <TopToolbar />
+    <div class="app-content">
+      <RouterView />
+    </div>
+  </div>
 </template>
 <script lang="ts" setup>
 import { RouterView } from "vue-router";
@@ -20,6 +25,7 @@ import { setGlobalToastObject } from "@/helpers/toast";
 import { useTagsStore } from "@/store/tagsStore";
 const appStore = useAppStore();
 const tagsStore = useTagsStore();
+import TopToolbar from "@/components/toolbars/TopToolbar.vue";
 
 const { isLoading } = storeToRefs(appStore);
 //const { loadTags } = tagsStore; // TODO
@@ -52,5 +58,9 @@ onMounted(async () => {
 
 .app-container {
   margin: 0 auto !important;
+}
+
+.app-content {
+  padding: 0 $px-20;
 }
 </style>

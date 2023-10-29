@@ -1,6 +1,6 @@
 export default {
-  privateFeatures: "Private Features",
-  siteTitle: "Ilia's Home",
+  privateFeatures: "Private Applications",
+  siteTitle: "Ilia Domyshev | JS Programmer",
   confirmDeleteTag: (name: string) => `Delete tag "${name}"?`,
   confirmDeleteWord: (title: string) => `Delete "${title}"?`,
   createTag: "Create tag",
@@ -8,5 +8,5 @@ export default {
   error: "Error",
   login: "Login",
   manageTags: "Manage tags",
-  wordsApp: "WordsApp. Learn foreign words and phrases.",
+  wordsApp: "Application: Word Cards",
 };

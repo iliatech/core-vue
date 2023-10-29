@@ -87,7 +87,7 @@ defineExpose({ open });
 
 .manage-tag-dialog {
   &__content {
-    margin-bottom: $space-twenty;
+    margin-bottom: $px-20;
   }
 }
 </style>
@@ -95,6 +95,6 @@ defineExpose({ open });
 <style lang="scss">
 @import "@/assets/variables.scss";
 .manage-tag-dialog .p-dialog-header {
-  padding-bottom: $space-ten !important;
+  padding-bottom: $px-10 !important;
 }
 </style>
