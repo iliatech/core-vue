@@ -1,22 +1,32 @@
 <template>
-  <div
-    class="top-toolbar"
-    :class="{
-      'top-toolbar__inner-page-style': !isMainPageStyle,
-      'top-toolbar__main-page-style': isMainPageStyle,
-    }"
-  >
+  <div class="top-toolbar">
     <div class="top-toolbar__left">
-      <div class="top-toolbar__left-title">
-        {{ title }}
+      <div
+        class="top-toolbar__title"
+        :class="{
+          'top-toolbar__inner-page-style': !isMainPageStyle,
+          'top-toolbar__main-page-style': isMainPageStyle,
+        }"
+      >
+        <RouterLink v-if="url" :to="url">
+          {{ title }}
+        </RouterLink>
+        <template v-else>
+          {{ title }}
+        </template>
       </div>
-      <Dropdown
-        :model-value="navigation"
-        :options="navigationOptions"
-        option-label="label"
-        option-value="path"
-        @update:model-value="onChangeNavigation"
-      />
+      <div>
+        <span class="top-toolbar__navigation-label"
+          >{{ $lang.label.navigation }}:</span
+        >
+        <Dropdown
+          :model-value="navigation"
+          :options="navigationOptions"
+          option-label="label"
+          option-value="path"
+          @update:model-value="onChangeNavigation"
+        />
+      </div>
     </div>
 
     <div class="top-toolbar__right">
@@ -45,6 +55,7 @@ import { useAppStore } from "@/store/appStore";
 import { storeToRefs } from "pinia";
 import type { NavigationItem } from "@/types/common";
 import { useRoute } from "vue-router";
+import { fullUserName } from "@/helpers/common";
 
 const route = useRoute();
 
@@ -57,6 +68,10 @@ const navigation = ref();
 
 const title = computed(() => {
   return route.meta.title;
+});
+
+const url = computed(() => {
+  return route.meta.url;
 });
 
 const isMainPageStyle = computed(() => {
@@ -93,7 +108,7 @@ const menuAuthorized = computed(() => {
 
   return [
     {
-      label: `${user?.firstName} ${user?.lastName}`,
+      label: fullUserName(user),
       icon: "pi pi-user",
     },
     {
@@ -135,7 +150,7 @@ const onClickLogin = () => {
 };
 
 const onClickLogout = () => {
-  router.push(routes.root.path);
+  router.push(routes.login.path);
   resetAuthUser();
   resetAuthToken();
   updateIsAuthorized(false);
@@ -157,6 +172,10 @@ const onChangeNavigation = (path: string) => {
   border-bottom: 1px solid #aaa;
   background: #f1eceb;
 
+  &__navigation-label {
+    padding-right: $px-10;
+  }
+
   &__left {
     flex-grow: 1;
     display: flex;
@@ -164,7 +183,7 @@ const onChangeNavigation = (path: string) => {
     align-items: center;
   }
 
-  &__left-title {
+  &__title {
     width: 350px;
     border-right: 1px dotted #aaa;
   }
@@ -180,12 +199,14 @@ const onChangeNavigation = (path: string) => {
     color: #999;
   }
 
-  &__inner-page-style {
+  &__inner-page-style,
+  &__inner-page-style a {
     @include header-large;
     color: #333;
   }
 
-  &__main-page-style {
+  &__main-page-style,
+  &__main-page-style a {
     @include header-large;
     color: darkorange;
   }

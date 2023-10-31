@@ -31,3 +31,5 @@ export const routes = {
 };
 
 export const publicRouteNames = [routes.login.name, routes.root.name];
+
+export const mainPrivatePage = routes.words;

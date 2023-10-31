@@ -40,7 +40,7 @@ import {
   saveAuthUser,
 } from "@/helpers/auth";
 import router from "@/router";
-import { routes } from "@/settings/routes";
+import { mainPrivatePage, routes } from "@/settings/routes";
 import { useAppStore } from "@/store/appStore";
 
 const appStore = useAppStore();
@@ -64,7 +64,7 @@ const onClickLogin = async () => {
     saveAuthToken(jwt);
     updateIsAuthorized(true);
     showToast({ type: ToastType.Success, text: lang.success.login });
-    await router.push({ name: routes.root.name });
+    await router.push({ name: mainPrivatePage.name });
   } else {
     resetAuthToken();
     resetAuthUser();

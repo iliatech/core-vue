@@ -12,9 +12,6 @@ const router = createRouter({
       path: routes.root.path,
       name: routes.root.name,
       component: () => import("@/views/HomeView.vue"),
-      meta: {
-        title: lang.title.siteTitle,
-      },
     },
     {
       path: routes.words.path,
@@ -28,14 +25,19 @@ const router = createRouter({
       path: routes.login.path,
       name: "login",
       component: () => import("@/views/Login.vue"),
-      meta: {
-        title: lang.title.siteTitle,
-      },
     },
   ],
 });
 
 router.beforeEach((to) => {
+  if (!to.meta.title) {
+    to.meta.title = lang.title.siteTitle;
+  }
+
+  if (!to.meta.url) {
+    to.meta.url = routes.root.path;
+  }
+
   const appStore = useAppStore();
   const { updateIsAuthorized } = appStore;
   if (getAuthToken() && getAuthUser()) {

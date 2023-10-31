@@ -1,5 +1,5 @@
 export default {
-  privateFeatures: "Private Applications",
+  privateFeatures: "Applications that require registration and login",
   siteTitle: "Ilia Domyshev | JS Programmer",
   confirmDeleteTag: (name: string) => `Delete tag "${name}"?`,
   confirmDeleteWord: (title: string) => `Delete "${title}"?`,
