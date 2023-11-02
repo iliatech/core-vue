@@ -22,6 +22,13 @@
       <div class="custom-sidebar__buttons">
         <slot name="buttons-before" />
         <Button
+          v-if="cancelButton"
+          @click="close"
+          :label="$lang.button.cancel"
+          class="cancel-button"
+          outlined
+        />
+        <Button
           v-if="closeButton"
           @click="close"
           :label="$lang.button.close"
@@ -45,6 +52,7 @@ const emit = defineEmits(["click:close"]);
 defineProps({
   title: String,
   closeButton: Boolean,
+  cancelButton: Boolean,
 });
 
 const close = () => {
@@ -56,7 +64,7 @@ const open = () => {
   show.value = true;
 };
 
-defineExpose({ open });
+defineExpose({ open, close });
 </script>
 <style lang="scss" scoped>
 @import "@/assets/fonts";
@@ -88,6 +96,7 @@ defineExpose({ open });
   &__buttons {
     display: flex;
     justify-content: flex-end;
+    gap: $px-15;
   }
 }
 </style>

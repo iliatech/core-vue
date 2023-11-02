@@ -1,9 +1,9 @@
 <template>
-  <div class="private-features">
-    <h3>{{ $lang.title.privateFeatures }}</h3>
+  <div class="public-features">
+    <h3>{{ $lang.title.publicFeatures }}</h3>
     <Button
-      :label="$lang.button.wordsApp"
-      @click="openWordsApp"
+      :label="$lang.button.usefulLinks"
+      @click="router.push(routes.usefulLinks.path)"
       text
       raised
       plain
@@ -14,12 +14,8 @@
 import Button from "primevue/button";
 import router from "@/router";
 import { routes } from "@/settings/routes";
-
-const openWordsApp = () => {
-  router.push(routes.words.path);
-};
 </script>
 <style lang="scss" scoped>
-.private-features {
+.public-features {
 }
 </style>

@@ -1,19 +1,19 @@
 <template>
   <div class="home-page">
-    <PrivateFeatures />
+    <PublicApplications />
+    <PrivateApplications />
   </div>
 </template>
 <script lang="ts" setup>
-import PrivateFeatures from "@/components/homePage/PrivateFeatures.vue";
-import { useAppStore } from "@/store/appStore";
-import { storeToRefs } from "pinia";
-
-const appStore = useAppStore();
-const { isAuthorized } = storeToRefs(appStore);
+import PrivateApplications from "@/components/homePage/PrivateApplications.vue";
+import PublicApplications from "@/components/homePage/PublicApplications.vue";
 </script>
 <style lang="scss" scoped>
 @import "@/assets/variables";
 .home-page {
   margin-top: $px-15;
+  display: flex;
+  flex-direction: column;
+  gap: $px-30;
 }
 </style>

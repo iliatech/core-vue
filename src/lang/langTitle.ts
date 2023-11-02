@@ -1,12 +1,13 @@
 export default {
-  privateFeatures: "Applications that require registration and login",
-  siteTitle: "Ilia Domyshev | JS Programmer",
   confirmDeleteTag: (name: string) => `Delete tag "${name}"?`,
-  confirmDeleteWord: (title: string) => `Delete "${title}"?`,
+  confirmDeleteWord: (title: string) => `Delete word "${title}"?`,
   createTag: "Create tag",
-  createWord: "Word or phrase creator",
+  createWord: "Create word",
   error: "Error",
   login: "Login",
   manageTags: "Manage tags",
-  wordsApp: "Application: Word Cards",
+  publicFeatures: "Useful Resources",
+  privateFeatures: "Private applications",
+  siteTitle: "Ilia Domyshev | Home",
+  wordsApp: "Ilia Domyshev | Words Cards",
 };

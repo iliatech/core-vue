@@ -3,7 +3,7 @@ export default {
   logout: "You are logged out",
   tagAdded: "Tag added",
   tagDeleted: (name: string): string => `Tag '${name}' deleted`,
-  tagsUpdated: "Tags list updated",
+  tagsUpdated: "Tags updated",
   translationCreated: "Translation added.",
   wordCreated: "Word created",
   wordDeleted: (title: string): string => `Word '${title}' deleted`,

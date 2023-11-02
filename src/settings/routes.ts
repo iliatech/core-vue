@@ -18,18 +18,16 @@ export const routes = {
     path: "/words",
     name: "words",
   },
-
-  word: {
-    path: "word",
-    name: "word",
-  },
-
-  createWord: {
-    path: "create-word",
-    name: "createWord",
+  usefulLinks: {
+    path: "/useful-links",
+    name: "usefulLinks",
   },
 };
 
-export const publicRouteNames = [routes.login.name, routes.root.name];
+export const publicRouteNames = [
+  routes.login.name,
+  routes.root.name,
+  routes.usefulLinks,
+];
 
 export const mainPrivatePage = routes.words;

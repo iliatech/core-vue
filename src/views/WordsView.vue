@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="words">
-      <PlusTile @click="onClickPlus" />
+      <PlusTile @click="onClickAddWord" />
       <WordTile
         v-for="(item, index) in wordsSortedAndFiltered"
         :key="item.id"
@@ -27,7 +27,7 @@
       />
     </div>
   </div>
-  <BasicDialog
+  <CustomConfirmDialog
     v-model="deleteItem"
     :type="DialogType.Confirm"
     :text="lang.title.confirmDeleteWord(deleteItem?.title ?? '')"
@@ -37,6 +37,7 @@
   />
   <ManageTagsSidebar ref="manageTagsSidebar" />
   <WordSidebar ref="wordSidebar" />
+  <CreateWordSidebar ref="addWordSidebar" @create:word="loadWords" />
 </template>
 
 <script lang="ts" setup>
@@ -48,14 +49,11 @@ import { getPaletteColor } from "@/settings/colorPalette";
 import type { ApiWordResponse } from "@/types/word";
 import WordTile from "@/components/WordTile.vue";
 import Button from "primevue/button";
-import { useAppStore } from "@/store/appStore";
 import PlusTile from "@/components/PlusTile.vue";
 import WordSorting from "@/components/WordSorting.vue";
-import { routes } from "@/settings/routes";
-import { useRouter } from "vue-router";
 import { RequestMethods } from "@/types/api";
 import { lang } from "@/lang";
-import BasicDialog from "@/components/dialogs/BasicDialog.vue";
+import CustomConfirmDialog from "@/components/dialogs/CustomConfirmDialog.vue";
 import { DialogType } from "@/types/dialog";
 import { orderBy } from "lodash";
 import { SortingOptions, useWordsAppStore } from "@/store/wordsAppStore";
@@ -64,14 +62,10 @@ import ManageTagsSidebar from "@/components/sidebars/ManageTagsSidebar.vue";
 import WordFiltering from "@/components/WordFiltering.vue";
 import { useTagsFilteringStore } from "@/store/tagsFilteringStore";
 import WordSidebar from "@/components/sidebars/WordSidebar.vue";
+import CreateWordSidebar from "@/components/sidebars/CreateWordSidebar.vue";
 
-const router = useRouter();
-
-const appStore = useAppStore();
 const wordsAppStore = useWordsAppStore();
 const tagsFilteringStore = useTagsFilteringStore();
-
-const { startLoading, stopLoading } = appStore;
 
 const { selectedSorting, selectedSortingDirection } =
   storeToRefs(wordsAppStore);
@@ -82,11 +76,10 @@ const manageTagsSidebar = ref();
 const words = ref([] as ApiWordResponse[]);
 const deleteItem: Ref<ApiWordResponse | null> = ref(null);
 const wordSidebar = ref();
+const addWordSidebar = ref();
 
 onBeforeMount(async () => {
-  startLoading();
   await loadWords();
-  stopLoading();
 });
 
 const wordsSortedAndFiltered = computed<ApiWordResponse[]>(() => {
@@ -114,6 +107,7 @@ const wordsSortedAndFiltered = computed<ApiWordResponse[]>(() => {
 const loadWords = async (): Promise<void> => {
   const data = await Api.request({
     path: apiPaths.word,
+    loader: true,
   });
 
   words.value = data?.length ? (data as ApiWordResponse[]) : [];
@@ -122,8 +116,8 @@ const onClickWord = (wordId: string): void => {
   wordSidebar.value.open(wordId);
 };
 
-const onClickPlus = (): void => {
-  router.push(`${routes.createWord.path}`);
+const onClickAddWord = (): void => {
+  addWordSidebar.value.open();
 };
 
 const onClickDelete = async (item: ApiWordResponse): Promise<void> => {
@@ -139,19 +133,18 @@ const onConfirmDelete = async (): Promise<void> => {
     return;
   }
 
-  startLoading();
   const { id, title } = deleteItem.value;
 
   await Api.request({
     method: RequestMethods.Delete,
     path: `${apiPaths.word}/${id}`,
     successToast: lang.success.wordDeleted(title),
+    loader: true,
     successCallback: () => {
       loadWords();
     },
   });
 
-  stopLoading();
   deleteItem.value = null;
 };
 

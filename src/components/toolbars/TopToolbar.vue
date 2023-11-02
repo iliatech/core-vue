@@ -84,6 +84,10 @@ const navigationOptions = computed(() => {
       label: "Home Page",
       path: routes.root.path,
     },
+    {
+      label: "Useful Links",
+      path: routes.usefulLinks.path,
+    },
   ];
 
   if (!isAuthorized.value) {
@@ -95,7 +99,7 @@ const navigationOptions = computed(() => {
 
   if (isAuthorized.value) {
     items.push({
-      label: "Word Cards",
+      label: "Words Cards",
       path: routes.words.path,
     });
   }
@@ -203,12 +207,14 @@ const onChangeNavigation = (path: string) => {
   &__inner-page-style a {
     @include header-large;
     color: #333;
+    text-decoration: none;
   }
 
   &__main-page-style,
   &__main-page-style a {
     @include header-large;
-    color: darkorange;
+    color: #333;
+    text-decoration: none;
   }
 }
 </style>

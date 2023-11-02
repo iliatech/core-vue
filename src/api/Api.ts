@@ -13,7 +13,11 @@ import { useAppStore } from "@/store/appStore";
 export default class Api {
   static async request(config: RequestConfig): Promise<any> {
     const appStore = useAppStore();
-    const { updateIsAuthorized } = appStore;
+    const { updateIsAuthorized, startLoading, stopLoading } = appStore;
+
+    if (config.loader) {
+      startLoading();
+    }
 
     config.method = config.method ?? RequestMethods.Get;
     let requestResult;
@@ -105,6 +109,10 @@ export default class Api {
       }
 
       return false;
+    } finally {
+      if (config.loader) {
+        stopLoading();
+      }
     }
   }
 }

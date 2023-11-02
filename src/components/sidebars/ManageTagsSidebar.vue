@@ -33,10 +33,10 @@
   </CustomSidebar>
   <ManageTagDialog ref="manageTagDialog" @change="loadTags" />
   <!--TODO Fix ?? '' -->
-  <BasicDialog
+  <CustomConfirmDialog
     v-model="selectedTag"
     :type="DialogType.Confirm"
-    :text="lang.title.confirmDeleteWord(selectedTag?.name ?? '')"
+    :text="lang.title.confirmDeleteTag(selectedTag?.name ?? '')"
     :confirm-button-text="$lang.button.delete"
     @on-cancel="cancelDeleteTag"
     @on-confirm="confirmDeleteTag"
@@ -45,7 +45,7 @@
 <script lang="ts" setup>
 import { onBeforeMount, ref } from "vue";
 
-import BasicDialog from "@/components/dialogs/BasicDialog.vue";
+import CustomConfirmDialog from "@/components/dialogs/CustomConfirmDialog.vue";
 import Api from "@/api/Api";
 import { apiPaths } from "@/settings/api";
 import type { ApiTagResponse } from "@/types/tag";

@@ -80,7 +80,7 @@ const emit = defineEmits(["onClick", "onClickDelete", "changeTags"]);
   overflow: hidden;
   padding: $px-20;
   border-radius: $border-radius-ten;
-  border: 2px solid;
+  border: 2px dashed;
 
   &__top {
     overflow: hidden;
