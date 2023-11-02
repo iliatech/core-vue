@@ -8,7 +8,7 @@
           'top-toolbar__main-page-style': isMainPageStyle,
         }"
       >
-        <RouterLink v-if="url" :to="url">
+        <RouterLink v-if="url" :to="url as any">
           {{ title }}
         </RouterLink>
         <template v-else>
@@ -48,6 +48,7 @@ import { publicRouteNames, routes } from "@/settings/routes";
 import { getAuthUser, resetAuthToken, resetAuthUser } from "@/helpers/auth";
 import Button from "primevue/button";
 import Menu from "primevue/menu";
+import { RouterLink } from "vue-router";
 import { showToast } from "@/helpers/toast";
 import { ToastType } from "@/types/toasts";
 import { computed, ref, watch } from "vue";
