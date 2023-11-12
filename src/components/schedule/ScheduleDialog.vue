@@ -1,24 +1,18 @@
 <template>
   <Teleport v-if="show" to="body">
-    <div class="schedule-confirm-dialog">
-      <div class="schedule-confirm-dialog__container">
-        <div class="schedule-confirm-dialog__title">
+    <div class="schedule-dialog">
+      <div class="schedule-dialog__container">
+        <div class="schedule-dialog__title">
           {{ title }}
         </div>
-        <div class="schedule-confirm-dialog__message">
-          {{ message }}
+        <div class="schedule-dialog__content">
+          <slot />
         </div>
-        <div class="schedule-confirm-dialog__buttons">
-          <div
-            @click="handleCancel"
-            class="schedule-confirm-dialog__cancel-button"
-          >
+        <div class="schedule-dialog__buttons">
+          <div @click="handleCancel" class="schedule-dialog__cancel-button">
             {{ $lang.button.cancel }}
           </div>
-          <div
-            @click="handleConfirm"
-            class="schedule-confirm-dialog__confirm-button"
-          >
+          <div @click="handleConfirm" class="schedule-dialog__confirm-button">
             {{ $lang.button.ok }}
           </div>
         </div>
@@ -32,7 +26,6 @@ import { ref } from "vue";
 
 defineProps({
   title: { type: String, required: true },
-  message: { type: String, required: true },
 });
 
 const emit = defineEmits(["confirm", "cancel"]);
@@ -65,7 +58,7 @@ defineExpose({ open });
 @import "@/assets/colors.scss";
 @import "@/assets/variables.scss";
 
-.schedule-confirm-dialog {
+.schedule-dialog {
   position: fixed;
   top: 0;
   left: 0;
@@ -75,7 +68,7 @@ defineExpose({ open });
   align-items: center;
   justify-content: center;
   background-color: rgba(255, 255, 255, 0.8);
-  z-index: 10000;
+  z-index: 500;
 
   &__container {
     width: 400px;
@@ -89,7 +82,7 @@ defineExpose({ open });
     @include font-extra-large;
   }
 
-  &__message {
+  &__content {
     margin-top: $px-10;
     @include font-medium;
   }

@@ -21,23 +21,30 @@
           {{ slot.time }}<br />
           {{ schedule.getClientNameById(slot.clientId) }}
         </div>
-        <div class="schedule__slot-add" @click="handleClickSlot">+</div>
+        <div class="schedule__slot-add" @click="handleClickAddSlot(day.date)">
+          +
+        </div>
       </div>
     </div>
   </div>
-  <ScheduleConfirmDialog
+  <ScheduleDialog
     :title="$lang.title.confirmDeleteSlot"
-    :message="`${deleteSlotConfig?.date} ${deleteSlotConfig?.time} ${deleteSlotConfig?.clientId}`"
     ref="deleteSlotDialog"
     @cancel="cancelDeleteSlot"
     @confirm="deleteSlot"
-  />
+  >
+    {{
+      `${deleteSlotConfig?.date} ${deleteSlotConfig?.time} ${deleteSlotConfig?.clientId}`
+    }}
+  </ScheduleDialog>
+  <ScheduleSlotDialog ref="addSlotDialog" />
 </template>
 <script lang="ts" setup>
 import { ref } from "vue";
 import type { ScheduleDay } from "@/types/schedule";
 import { Schedule } from "@/classes/Schedule";
-import ScheduleConfirmDialog from "@/components/schedule/ScheduleConfirmDialog.vue";
+import ScheduleDialog from "@/components/schedule/ScheduleDialog.vue";
+import ScheduleSlotDialog from "@/components/schedule/ScheduleSlotDialog.vue";
 
 interface DeleteSlotConfig {
   date: string;
@@ -47,9 +54,11 @@ interface DeleteSlotConfig {
 
 const schedule = new Schedule();
 const MOUSEDOWN_DELAY_TO_REMOVE_SLOT = 1_000;
+const initialAddSlotConfig = { date: null, time: null, clientId: null };
 let deleteSlotConfig = ref<DeleteSlotConfig | null>(null);
 
 const deleteSlotDialog = ref();
+const addSlotDialog = ref();
 
 const days = ref<ScheduleDay[]>([
   {
@@ -80,8 +89,8 @@ const handleMouseUpSlot = () => {
   clearTimeout(pressTimer);
 };
 
-const handleClickSlot = () => {
-  console.log("handle click slot");
+const handleClickAddSlot = (date: string) => {
+  addSlotDialog.value.open(date);
 };
 
 const deleteSlot = () => {
