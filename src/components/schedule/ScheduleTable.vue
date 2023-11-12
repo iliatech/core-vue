@@ -6,7 +6,7 @@
       </div>
       <div class="schedule__slots">
         <div
-          v-for="slot in day.slots"
+          v-for="slot in schedule.sortSlots(day.slots)"
           :key="slot.clientId + slot.time"
           class="schedule__slot"
         >

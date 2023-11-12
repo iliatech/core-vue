@@ -1,4 +1,5 @@
-import type { Client } from "@/types/schedule";
+import type { Client, ScheduleSlot } from "@/types/schedule";
+import { sortWithCollator } from "@/helpers/sort";
 
 export class Schedule {
   clients: Client[] = [
@@ -19,5 +20,10 @@ export class Schedule {
   getClientNameById(id: string): string | undefined {
     const client = this.clients.find((item) => item.id === id);
     return client?.name ?? undefined;
+  }
+
+  sortSlots(slots: ScheduleSlot[]) {
+    sortWithCollator(slots, "time");
+    return slots;
   }
 }
