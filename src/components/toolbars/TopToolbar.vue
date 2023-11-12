@@ -1,25 +1,12 @@
 <template>
   <div class="top-toolbar">
     <div class="top-toolbar__left">
-      <div
-        class="top-toolbar__title"
-        :class="{
-          'top-toolbar__inner-page-style': !isMainPageStyle,
-          'top-toolbar__main-page-style': isMainPageStyle,
-        }"
-      >
-        <RouterLink v-if="url" :to="url as any">
-          {{ title }}
-        </RouterLink>
-        <template v-else>
-          {{ title }}
-        </template>
-      </div>
       <div>
-        <span class="top-toolbar__navigation-label"
-          >{{ $lang.label.navigation }}:</span
-        >
+        <span class="top-toolbar__navigation-label">
+          {{ $lang.label.navigation }}:
+        </span>
         <Dropdown
+          class="top-toolbar__navigation-dropdown"
           :model-value="navigation"
           :options="navigationOptions"
           option-label="label"
@@ -28,7 +15,20 @@
         />
       </div>
     </div>
-
+    <div
+      class="top-toolbar__center"
+      :class="{
+        'top-toolbar__inner-page-style': !isMainPageStyle,
+        'top-toolbar__main-page-style': isMainPageStyle,
+      }"
+    >
+      <RouterLink v-if="url" :to="url as any">
+        {{ title }}
+      </RouterLink>
+      <template v-else>
+        {{ title }}
+      </template>
+    </div>
     <div class="top-toolbar__right">
       <Button icon="pi pi-bars" @click="toggleUserMenu" outlined rounded />
       <Menu
@@ -84,6 +84,10 @@ const navigationOptions = computed(() => {
     {
       label: "Home Page",
       path: routes.root.path,
+    },
+    {
+      label: "Clients Schedule",
+      path: routes.schedule.path,
     },
     {
       label: "Useful Links",
@@ -170,32 +174,30 @@ const onChangeNavigation = (path: string) => {
 @import "@/assets/variables.scss";
 @import "@/assets/fonts.scss";
 .top-toolbar {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   padding: $px-20;
   margin-bottom: $px-20;
   border-bottom: 1px solid #aaa;
   background: #f1eceb;
 
-  &__navigation-label {
-    padding-right: $px-10;
-  }
-
   &__left {
-    flex-grow: 1;
     display: flex;
     gap: $px-40;
     align-items: center;
   }
 
-  &__title {
-    width: 350px;
-    border-right: 1px dotted #aaa;
+  &__center {
+    text-align: center;
+  }
+
+  &__navigation-dropdown {
+    width: 200px;
   }
 
   &__right {
     display: flex;
-    flex-grow: 1;
+
     justify-content: flex-end;
     gap: 50px;
   }

@@ -7,7 +7,8 @@ export default {
   login: "Login",
   manageTags: "Manage tags",
   publicFeatures: "Useful Resources",
-  privateFeatures: "Private applications",
-  siteTitle: "Ilia Domyshev | Home",
-  wordsApp: "Ilia Domyshev | Words Cards",
+  privateFeatures: "Private Applications",
+  siteTitle: "Home page",
+  usefulLinks: "Useful Links",
+  wordsApp: "Words Cards",
 };
