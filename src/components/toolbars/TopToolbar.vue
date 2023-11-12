@@ -1,19 +1,17 @@
 <template>
   <div class="top-toolbar">
     <div class="top-toolbar__left">
-      <div>
-        <span class="top-toolbar__navigation-label">
-          {{ $lang.label.navigation }}:
-        </span>
-        <Dropdown
-          class="top-toolbar__navigation-dropdown"
-          :model-value="navigation"
-          :options="navigationOptions"
-          option-label="label"
-          option-value="path"
-          @update:model-value="onChangeNavigation"
-        />
-      </div>
+      <span class="top-toolbar__navigation-label">
+        {{ $lang.label.navigation }}:
+      </span>
+      <Dropdown
+        class="top-toolbar__navigation-dropdown"
+        :model-value="navigation"
+        :options="navigationOptions"
+        option-label="label"
+        option-value="path"
+        @update:model-value="onChangeNavigation"
+      />
     </div>
     <div
       class="top-toolbar__center"
@@ -178,7 +176,7 @@ const onChangeNavigation = (path: string) => {
 
   &__left {
     display: flex;
-    gap: $px-40;
+    gap: $px-10;
     align-items: center;
   }
 

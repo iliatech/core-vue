@@ -1,4 +1,5 @@
 export default {
+  client: "Client",
   createTranslation: "Create translation",
   email: "Email",
   hour: "Hour",
@@ -8,5 +9,6 @@ export default {
   password: "Password",
   selectFiltering: "Filter by tags",
   selectSorting: "Sort by",
+  timezone: "Timezone",
   translations: "Translations",
 };

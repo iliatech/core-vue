@@ -11,3 +11,9 @@ export interface Client {
   id: string;
   name: string;
 }
+
+export interface DeleteSlotConfig {
+  date: string;
+  time: string;
+  clientId: string;
+}

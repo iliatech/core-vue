@@ -1,12 +1,12 @@
 <template>
   <div class="schedule">
-    <div v-for="day in days" :key="day.date" class="schedule__day">
+    <div v-for="day in schedule" :key="day.date" class="schedule__day">
       <div class="schedule__day-title">
-        {{ schedule.prepareDate(day.date) }}
+        {{ prepareDate(day.date) }}
       </div>
       <div class="schedule__slots">
         <div
-          v-for="slot in schedule.sortSlots(day.slots)"
+          v-for="slot in sortSlots(day.slots)"
           :key="slot.clientId + slot.time"
           class="schedule__slot"
           @mousedown="
@@ -19,7 +19,7 @@
           @mouseup="handleMouseUpSlot"
         >
           {{ slot.time }}<br />
-          {{ schedule.getClientNameById(slot.clientId) }}
+          {{ getClientNameById(slot.clientId) }}
         </div>
         <div class="schedule__slot-add" @click="handleClickAddSlot(day.date)">
           +
@@ -41,40 +41,22 @@
 </template>
 <script lang="ts" setup>
 import { ref } from "vue";
-import type { ScheduleDay } from "@/types/schedule";
-import { Schedule } from "@/classes/Schedule";
 import ScheduleDialog from "@/components/schedule/ScheduleDialog.vue";
 import ScheduleSlotDialog from "@/components/schedule/ScheduleSlotDialog.vue";
+import type { DeleteSlotConfig } from "@/types/schedule";
+import { useScheduleStore } from "@/store/scheduleStore";
+import { storeToRefs } from "pinia";
+import { ScheduleSlot } from "@/types/schedule";
+import { sortWithCollator } from "@/helpers/sort";
 
-interface DeleteSlotConfig {
-  date: string;
-  time: string;
-  clientId: string;
-}
+const scheduleStore = useScheduleStore();
+const { clients, schedule } = storeToRefs(scheduleStore);
 
-const schedule = new Schedule();
 const MOUSEDOWN_DELAY_TO_REMOVE_SLOT = 1_000;
-const initialAddSlotConfig = { date: null, time: null, clientId: null };
 let deleteSlotConfig = ref<DeleteSlotConfig | null>(null);
 
 const deleteSlotDialog = ref();
 const addSlotDialog = ref();
-
-const days = ref<ScheduleDay[]>([
-  {
-    date: "12/Nov/2023",
-    slots: [
-      {
-        clientId: "uuid1",
-        time: "17:00",
-      },
-      {
-        clientId: "uuid2",
-        time: "16:00",
-      },
-    ],
-  },
-]);
 
 let pressTimer: number | undefined = undefined;
 
@@ -99,13 +81,15 @@ const deleteSlot = () => {
     return;
   }
 
-  const dayIndex = days.value.findIndex((item) => item.date === config.date);
+  const dayIndex = schedule.value.findIndex(
+    (item) => item.date === config.date
+  );
 
   if (dayIndex === -1) {
     return;
   }
 
-  let slotIndex = days.value[dayIndex]?.slots.findIndex(
+  let slotIndex = schedule.value[dayIndex]?.slots.findIndex(
     (item) => item.time === config.time && item.clientId === config.clientId
   );
 
@@ -113,7 +97,7 @@ const deleteSlot = () => {
     return;
   }
 
-  days.value[dayIndex].slots.splice(slotIndex, 1);
+  schedule.value[dayIndex].slots.splice(slotIndex, 1);
 };
 
 const openConfirmDeleteDialog = () => {
@@ -122,6 +106,20 @@ const openConfirmDeleteDialog = () => {
 
 const cancelDeleteSlot = () => {
   deleteSlotConfig.value = null;
+};
+
+const prepareDate = (date: string) => {
+  return date.substring(0, 6);
+};
+
+const getClientNameById = (id: string): string | undefined => {
+  const client = clients.value.find((item) => item.id === id);
+  return client?.name ?? undefined;
+};
+
+const sortSlots = (slots: ScheduleSlot[]) => {
+  sortWithCollator(slots, "time");
+  return slots;
 };
 </script>
 <style lang="scss" scoped>

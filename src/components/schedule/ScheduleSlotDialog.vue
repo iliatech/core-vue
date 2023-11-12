@@ -4,19 +4,38 @@
     ref="dialog"
     @cancel="handleCancel"
     @confirm="handleConfirm"
-    class="schedule-slot-dialog"
+    not-close-on-confirm
   >
-    <div class="schedule-slot-dialog__date-time">
-      <Dropdown
-        v-model="hour"
-        :options="generateHourOptions()"
-        :label="$lang.label.hour"
-      />
-      <Dropdown
-        v-model="minute"
-        :options="generateMinuteOptions()"
-        :label="$lang.label.minute"
-      />
+    <div class="schedule-slot-dialog">
+      <div class="schedule-slot-dialog__date-time">
+        <Dropdown
+          v-model="hour"
+          :options="generateHourOptions()"
+          :placeholder="$lang.label.hour"
+          :class="{ 'p-invalid': validated && !hour }"
+        />
+        <Dropdown
+          v-model="minute"
+          :options="generateMinuteOptions()"
+          :placeholder="$lang.label.minute"
+          :class="{ 'p-invalid': validated && !minute }"
+        />
+        <Dropdown
+          v-model="timezone"
+          :options="timezoneOptions"
+          :placeholder="$lang.label.timezone"
+          :class="{ 'p-invalid': validated && !timezone }"
+        />
+      </div>
+      <div class="schedule-slot-dialog__client">
+        <Dropdown
+          v-model="client"
+          :options="clients"
+          :placeholder="$lang.label.client"
+          :class="{ 'p-invalid': validated && !client }"
+          option-label="name"
+        />
+      </div>
     </div>
   </ScheduleDialog>
 </template>
@@ -25,19 +44,28 @@
 import ScheduleDialog from "@/components/schedule/ScheduleDialog.vue";
 import { ref } from "vue";
 import Dropdown from "primevue/dropdown";
+import { useScheduleStore } from "@/store/scheduleStore";
+import { storeToRefs } from "pinia";
+import type { Client } from "@/types/schedule";
 
-let day: string | null = null;
+const scheduleStore = useScheduleStore();
+const { clients } = storeToRefs(scheduleStore);
+const { addSlot } = scheduleStore;
+
+let selectedDate: string | null = null;
+const timezoneOptions = ["ESP", "MSK"];
 
 const dialog = ref();
 const hour = ref<string | null>(null);
 const minute = ref<string | null>(null);
 const timezone = ref<string | null>(null);
-const clientId = ref<string | null>(null);
+const client = ref<Client | null>(null);
+const validated = ref<boolean>(false);
 
 const generateHourOptions = (): string[] => {
   const options = [];
 
-  for (let hour = 7; hour <= 22; hour++) {
+  for (let hour = 8; hour <= 22; hour++) {
     const hourString = `${hour}`.length < 2 ? `0${hour}` : `${hour}`;
     options.push(hourString);
   }
@@ -60,15 +88,31 @@ const handleCancel = () => {
   hour.value = null;
   minute.value = null;
   timezone.value = null;
-  clientId.value = null;
+  client.value = null;
+  validated.value = false;
 };
 
 const handleConfirm = () => {
-  // TODO
+  if (!selectedDate) {
+    return;
+  }
+
+  if (!hour.value || !minute.value || !timezone.value || !client.value) {
+    validated.value = true;
+    return;
+  }
+
+  addSlot(selectedDate, {
+    clientId: client.value.id,
+    time: `${hour.value}:${minute.value} ${timezone.value}`,
+  });
+
+  dialog.value.close();
+  handleCancel();
 };
 
 const open = (date: string) => {
-  day = date;
+  selectedDate = date;
   dialog.value.open();
 };
 
@@ -76,9 +120,22 @@ defineExpose({ open });
 </script>
 
 <style scoped lang="scss">
+@import "@/assets/variables";
 .schedule-slot-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: $px-10;
+
   &__date-time {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: $px-10;
+  }
+
+  &__client {
+    :deep(.p-dropdown) {
+      width: 100%;
+    }
   }
 }
 </style>

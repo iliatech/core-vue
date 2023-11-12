@@ -24,8 +24,9 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 
-defineProps({
+const props = defineProps({
   title: { type: String, required: true },
+  notCloseOnConfirm: Boolean,
 });
 
 const emit = defineEmits(["confirm", "cancel"]);
@@ -42,7 +43,9 @@ const close = () => {
 
 const handleConfirm = () => {
   emit("confirm");
-  close();
+  if (!props.notCloseOnConfirm) {
+    close();
+  }
 };
 
 const handleCancel = () => {
@@ -50,7 +53,7 @@ const handleCancel = () => {
   close();
 };
 
-defineExpose({ open });
+defineExpose({ open, close });
 </script>
 
 <style lang="scss" scoped>
@@ -74,7 +77,7 @@ defineExpose({ open });
     width: 400px;
     background: #fff;
     padding: $px-20;
-    border: 2px solid pink;
+    border: 2px solid mediumpurple;
     margin: $px-40;
   }
 
