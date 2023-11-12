@@ -1,10 +1,10 @@
 <template>
   <div class="schedule-view">
-    <ScheduleTable />
+    <ScheduleDashboard />
   </div>
 </template>
 <script lang="ts" setup>
-import ScheduleTable from "@/components/schedule/ScheduleTable.vue";
+import ScheduleDashboard from "@/components/schedule/ScheduleDashboard.vue";
 </script>
 <style lang="scss" scoped>
 @import "@/assets/fonts";

@@ -8,6 +8,7 @@ export default {
   delete: "Delete",
   login: "Login",
   manageTags: "Manage tags",
+  ok: "OK",
   clientsSchedule: "Clients Schedule",
   usefulLinks: "Useful Links",
   wordsApp: "Words Cards",
