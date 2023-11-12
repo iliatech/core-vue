@@ -8,7 +8,7 @@ export default {
   delete: "Delete",
   login: "Login",
   manageTags: "Manage tags",
-  psysredaSchedule: "Psysreda Schedule",
+  clientsSchedule: "Clients Schedule",
   usefulLinks: "Useful Links",
   wordsApp: "Words Cards",
 };

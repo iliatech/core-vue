@@ -10,7 +10,7 @@
         plain
       />
       <Button
-        :label="$lang.button.psysredaSchedule"
+        :label="$lang.button.clientsSchedule"
         @click="router.push(routes.schedule.path)"
         text
         raised

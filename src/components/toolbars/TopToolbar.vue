@@ -176,6 +176,7 @@ const onChangeNavigation = (path: string) => {
 .top-toolbar {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
   padding: $px-20;
   margin-bottom: $px-20;
   border-bottom: 1px solid #aaa;
