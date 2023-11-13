@@ -1,6 +1,10 @@
 export interface ScheduleSlot {
-  clientId: string;
   time: string;
+  clientId: string;
+}
+
+export interface ScheduleSlotExtended extends ScheduleSlot {
+  date: string;
 }
 
 export interface ScheduleDay {
@@ -11,10 +15,4 @@ export interface ScheduleDay {
 export interface Client {
   id: string;
   name: string;
-}
-
-export interface DeleteSlotConfig {
-  date: string;
-  time: string;
-  clientId: string;
 }

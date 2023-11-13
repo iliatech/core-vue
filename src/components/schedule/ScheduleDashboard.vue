@@ -18,6 +18,16 @@
           "
           @mouseup="handleMouseUpSlot"
         >
+          <div
+            class="schedule__slot-delete-button"
+            @click="
+              handleDeleteSlot({
+                date: day.date,
+                time: slot.time,
+                clientId: slot.clientId,
+              })
+            "
+          ></div>
           {{ slot.time }}<br />
           {{ getClientNameById(slot.clientId) }}
         </div>
@@ -31,11 +41,16 @@
     :title="$lang.title.confirmDeleteSlot"
     ref="deleteSlotDialog"
     @cancel="cancelDeleteSlot"
-    @confirm="deleteSlot"
+    @confirm="deleteSlot(deleteSlotConfig)"
   >
-    {{
-      `${deleteSlotConfig?.date} ${deleteSlotConfig?.time} ${deleteSlotConfig?.clientId}`
-    }}
+    {{ $lang.label.client }}:
+    {{ getClientNameById(deleteSlotConfig?.clientId) }}
+    <br />
+    {{ $lang.label.date }}:
+    {{ deleteSlotConfig?.date }}
+    <br />
+    {{ $lang.label.time }}:
+    {{ deleteSlotConfig?.time }}
   </ScheduleDialog>
   <ScheduleSlotDialog ref="slotDialog" />
 </template>
@@ -43,29 +58,32 @@
 import { ref } from "vue";
 import ScheduleDialog from "@/components/schedule/ScheduleDialog.vue";
 import ScheduleSlotDialog from "@/components/schedule/ScheduleSlotDialog.vue";
-import type { DeleteSlotConfig } from "@/types/schedule";
+import type { ScheduleSlotExtended } from "@/types/schedule";
 import { useScheduleStore } from "@/store/scheduleStore";
 import { storeToRefs } from "pinia";
 import { ScheduleSlot } from "@/types/schedule";
 import { sortWithCollator } from "@/helpers/sort";
 
 const scheduleStore = useScheduleStore();
-const { clients, schedule } = storeToRefs(scheduleStore);
+const { schedule } = storeToRefs(scheduleStore);
+const { deleteSlot, getClientNameById } = scheduleStore;
 
 const MOUSEDOWN_DELAY_TO_REMOVE_SLOT = 1_000;
-let deleteSlotConfig = ref<DeleteSlotConfig | null>(null);
+let deleteSlotConfig = ref<ScheduleSlotExtended | null>(null);
 
 const deleteSlotDialog = ref();
 const slotDialog = ref();
 
 let pressTimer: number | undefined = undefined;
 
-const handleMouseDownSlot = (config: DeleteSlotConfig) => {
-  pressTimer = window.setTimeout(() => {
-    // TODO
-    //deleteSlotConfig.value = config;
-    //openConfirmDeleteDialog();
+const handleDeleteSlot = (config: ScheduleSlotExtended) => {
+  console.log("D", config);
+  deleteSlotConfig.value = config;
+  openConfirmDeleteDialog();
+};
 
+const handleMouseDownSlot = (config: ScheduleSlotExtended) => {
+  pressTimer = window.setTimeout(() => {
     slotDialog.value.open(config.date, {
       time: config.time,
       clientId: config.clientId,
@@ -81,31 +99,6 @@ const handleClickAddSlot = (date: string) => {
   slotDialog.value.open(date);
 };
 
-const deleteSlot = () => {
-  const config = deleteSlotConfig.value;
-  if (!config) {
-    return;
-  }
-
-  const dayIndex = schedule.value.findIndex(
-    (item) => item.date === config.date
-  );
-
-  if (dayIndex === -1) {
-    return;
-  }
-
-  let slotIndex = schedule.value[dayIndex]?.slots.findIndex(
-    (item) => item.time === config.time && item.clientId === config.clientId
-  );
-
-  if (slotIndex === -1) {
-    return;
-  }
-
-  schedule.value[dayIndex].slots.splice(slotIndex, 1);
-};
-
 const openConfirmDeleteDialog = () => {
   deleteSlotDialog.value.open();
 };
@@ -116,11 +109,6 @@ const cancelDeleteSlot = () => {
 
 const prepareDate = (date: string) => {
   return date.substring(0, 6);
-};
-
-const getClientNameById = (id: string): string | undefined => {
-  const client = clients.value.find((item) => item.id === id);
-  return client?.name ?? undefined;
 };
 
 const sortSlots = (slots: ScheduleSlot[]) => {
@@ -155,6 +143,17 @@ const sortSlots = (slots: ScheduleSlot[]) => {
   &__slot {
     background: $slot-background;
     padding: $px-5 $px-10;
+    position: relative;
+  }
+
+  &__slot-delete-button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 7px;
+    height: 7px;
+    background: red;
+    cursor: pointer;
   }
 
   &__slot-add {

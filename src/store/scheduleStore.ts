@@ -3,6 +3,7 @@ import { ref } from "vue";
 import type { Ref } from "vue";
 import type { Client, ScheduleSlot } from "@/types/schedule";
 import type { ScheduleDay } from "@/types/schedule";
+import type { ScheduleSlotExtended } from "@/types/schedule";
 
 export const useScheduleStore = defineStore("scheduleStore", () => {
   // TODO Remove mock data.
@@ -44,9 +45,40 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
     day.slots.push(slot);
   };
 
+  const deleteSlot = (config: ScheduleSlotExtended | undefined | null) => {
+    if (!config) {
+      return;
+    }
+
+    const dayIndex = schedule.value.findIndex(
+      (item) => item.date === config.date
+    );
+
+    if (dayIndex === -1) {
+      return;
+    }
+
+    const slotIndex = schedule.value[dayIndex]?.slots.findIndex(
+      (item) => item.time === config.time && item.clientId === config.clientId
+    );
+
+    if (slotIndex === -1) {
+      return;
+    }
+
+    schedule.value[dayIndex].slots.splice(slotIndex, 1);
+  };
+
+  const getClientNameById = (id: string): string | undefined => {
+    const client = clients.value.find((item) => item.id === id);
+    return client?.name ?? undefined;
+  };
+
   return {
     clients,
     schedule,
     addSlot,
+    deleteSlot,
+    getClientNameById,
   };
 });

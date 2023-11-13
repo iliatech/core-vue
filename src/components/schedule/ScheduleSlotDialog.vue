@@ -46,14 +46,19 @@ import { ref } from "vue";
 import Dropdown from "primevue/dropdown";
 import { useScheduleStore } from "@/store/scheduleStore";
 import { storeToRefs } from "pinia";
-import type { Client, ScheduleSlot } from "@/types/schedule";
-import { parseSlotTime } from "@/helpers/schedule";
+import type {
+  Client,
+  ScheduleSlot,
+  ScheduleSlotExtended,
+} from "@/types/schedule";
+import { parseSlotTime, stringifySlotTime } from "@/helpers/schedule";
 
 const scheduleStore = useScheduleStore();
 const { clients } = storeToRefs(scheduleStore);
-const { addSlot } = scheduleStore;
+const { addSlot, deleteSlot } = scheduleStore;
 
 let selectedDate: string | null = null;
+let editSlotConfig: ScheduleSlotExtended | null = null;
 const timezoneOptions = ["ESP", "MSK"];
 
 const dialog = ref();
@@ -103,9 +108,13 @@ const handleConfirm = () => {
     return;
   }
 
+  if (editSlotConfig) {
+    deleteSlot(editSlotConfig);
+  }
+
   addSlot(selectedDate, {
     clientId: client.value.id,
-    time: `${hour.value}:${minute.value}${timezone.value}`,
+    time: stringifySlotTime(hour.value, minute.value, timezone.value),
   });
 
   dialog.value.close();
@@ -123,6 +132,10 @@ const open = (date: string, slot?: ScheduleSlot) => {
     if (foundClient) {
       client.value = foundClient;
     }
+
+    editSlotConfig = { date, ...slot };
+  } else {
+    editSlotConfig = null;
   }
 
   dialog.value.open();
