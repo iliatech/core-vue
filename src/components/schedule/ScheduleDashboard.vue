@@ -37,7 +37,7 @@
       `${deleteSlotConfig?.date} ${deleteSlotConfig?.time} ${deleteSlotConfig?.clientId}`
     }}
   </ScheduleDialog>
-  <ScheduleSlotDialog ref="addSlotDialog" />
+  <ScheduleSlotDialog ref="slotDialog" />
 </template>
 <script lang="ts" setup>
 import { ref } from "vue";
@@ -56,14 +56,20 @@ const MOUSEDOWN_DELAY_TO_REMOVE_SLOT = 1_000;
 let deleteSlotConfig = ref<DeleteSlotConfig | null>(null);
 
 const deleteSlotDialog = ref();
-const addSlotDialog = ref();
+const slotDialog = ref();
 
 let pressTimer: number | undefined = undefined;
 
 const handleMouseDownSlot = (config: DeleteSlotConfig) => {
   pressTimer = window.setTimeout(() => {
-    deleteSlotConfig.value = config;
-    openConfirmDeleteDialog();
+    // TODO
+    //deleteSlotConfig.value = config;
+    //openConfirmDeleteDialog();
+
+    slotDialog.value.open(config.date, {
+      time: config.time,
+      clientId: config.clientId,
+    });
   }, MOUSEDOWN_DELAY_TO_REMOVE_SLOT);
 };
 
@@ -72,7 +78,7 @@ const handleMouseUpSlot = () => {
 };
 
 const handleClickAddSlot = (date: string) => {
-  addSlotDialog.value.open(date);
+  slotDialog.value.open(date);
 };
 
 const deleteSlot = () => {

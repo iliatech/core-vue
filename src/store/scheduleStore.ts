@@ -23,11 +23,11 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
       slots: [
         {
           clientId: "uuid1",
-          time: "17:00",
+          time: "17:00MSK",
         },
         {
           clientId: "uuid2",
-          time: "16:00",
+          time: "16:00ESP",
         },
       ],
     },

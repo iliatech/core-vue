@@ -46,7 +46,8 @@ import { ref } from "vue";
 import Dropdown from "primevue/dropdown";
 import { useScheduleStore } from "@/store/scheduleStore";
 import { storeToRefs } from "pinia";
-import type { Client } from "@/types/schedule";
+import type { Client, ScheduleSlot } from "@/types/schedule";
+import { parseSlotTime } from "@/helpers/schedule";
 
 const scheduleStore = useScheduleStore();
 const { clients } = storeToRefs(scheduleStore);
@@ -104,15 +105,26 @@ const handleConfirm = () => {
 
   addSlot(selectedDate, {
     clientId: client.value.id,
-    time: `${hour.value}:${minute.value} ${timezone.value}`,
+    time: `${hour.value}:${minute.value}${timezone.value}`,
   });
 
   dialog.value.close();
   handleCancel();
 };
 
-const open = (date: string) => {
+const open = (date: string, slot?: ScheduleSlot) => {
   selectedDate = date;
+
+  if (slot) {
+    [hour.value, minute.value, timezone.value] = parseSlotTime(slot.time);
+
+    const foundClient = clients.value.find((item) => item.id === slot.clientId);
+
+    if (foundClient) {
+      client.value = foundClient;
+    }
+  }
+
   dialog.value.open();
 };
 
