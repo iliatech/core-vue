@@ -1,38 +1,68 @@
 <template>
   <div class="schedule">
-    <div v-for="day in schedule" :key="day.date" class="schedule__day">
-      <div class="schedule__day-title">
-        {{ prepareDate(day.date) }}
-      </div>
-      <div class="schedule__slots">
+    <div class="schedule__week-selector">
+      <ScheduleButton
+        @click="goPreviousWeek"
+        :label="$lang.label.previousWeek"
+        color="lightBlue"
+      />
+      <ScheduleButton
+        @click="goNextWeek"
+        :label="$lang.label.nextWeek"
+        color="lightBlue"
+      />
+    </div>
+    <div class="schedule__container">
+      <div
+        v-for="day in weekDays"
+        :key="day.full"
+        class="schedule__day"
+        :class="{
+          'schedule__day--weekend': [6, 7].includes(day.dayOfWeekNumber),
+        }"
+      >
         <div
-          v-for="slot in sortSlots(day.slots)"
-          :key="slot.clientId + slot.time"
-          class="schedule__slot"
-          @mousedown="
-            handleMouseDownSlot({
-              date: day.date,
-              time: slot.time,
-              clientId: slot.clientId,
-            })
-          "
-          @mouseup="handleMouseUpSlot"
+          class="schedule__day-title"
+          :class="{
+            'schedule__day-title--weekend': [6, 7].includes(
+              day.dayOfWeekNumber
+            ),
+          }"
         >
+          {{ day.short }}
+        </div>
+        <div class="schedule__slots">
+          <div class="schedule__slot-add" @click="handleClickAddSlot(day.full)">
+            +
+          </div>
           <div
-            class="schedule__slot-delete-button"
-            @click="
-              handleDeleteSlot({
-                date: day.date,
+            v-for="slot in sortSlots(getDaySlots(day.full))"
+            :key="slot.clientId + slot.time"
+            class="schedule__slot"
+            @mousedown="
+              handleMouseDownSlot({
+                date: day.full,
                 time: slot.time,
                 clientId: slot.clientId,
               })
             "
-          ></div>
-          {{ slot.time }}<br />
-          {{ getClientNameById(slot.clientId) }}
-        </div>
-        <div class="schedule__slot-add" @click="handleClickAddSlot(day.date)">
-          +
+            @mouseup="handleMouseUpSlot"
+          >
+            <div
+              class="schedule__slot-delete-button"
+              @click="
+                handleDeleteSlot({
+                  date: day.full,
+                  time: slot.time,
+                  clientId: slot.clientId,
+                })
+              "
+            >
+              -
+            </div>
+            {{ slot.time }}<br />
+            {{ getClientNameById(slot.clientId) }}
+          </div>
         </div>
       </div>
     </div>
@@ -55,14 +85,17 @@
   <ScheduleSlotDialog ref="slotDialog" />
 </template>
 <script lang="ts" setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import ScheduleDialog from "@/components/schedule/ScheduleDialog.vue";
 import ScheduleSlotDialog from "@/components/schedule/ScheduleSlotDialog.vue";
-import type { ScheduleSlotExtended } from "@/types/schedule";
+import Button from "primevue/button";
+import type { ScheduleDay, ScheduleSlotExtended } from "@/types/schedule";
 import { useScheduleStore } from "@/store/scheduleStore";
 import { storeToRefs } from "pinia";
 import { ScheduleSlot } from "@/types/schedule";
 import { sortWithCollator } from "@/helpers/sort";
+import { addDays, format } from "date-fns";
+import ScheduleButton from "@/components/schedule/ScheduleButton.vue";
 
 const scheduleStore = useScheduleStore();
 const { schedule } = storeToRefs(scheduleStore);
@@ -75,9 +108,46 @@ const deleteSlotDialog = ref();
 const slotDialog = ref();
 
 let pressTimer: number | undefined = undefined;
+const currentMonday = ref<Date>(
+  addDays(new Date(), 1 - Number(format(new Date(), "i")))
+);
+
+const weekDays = computed<ScheduleDay[]>(() => {
+  const days: ScheduleDay[] = [];
+
+  for (let i = 0; i < 7; i++) {
+    const date = addDays(currentMonday.value, i);
+    days.push({
+      date,
+      short: format(date, "E, d MMM"),
+      full: format(date, "d/MMM/yyyy"),
+      dayOfWeekNumber: Number(format(date, "i")),
+    });
+  }
+
+  return days;
+});
+
+const goPreviousWeek = () => {
+  currentMonday.value = addDays(currentMonday.value, -7);
+};
+
+const goNextWeek = () => {
+  currentMonday.value = addDays(currentMonday.value, 7);
+};
+
+const getDaySlots = (date: string) => {
+  console.log("X", date);
+  const dayIndex = schedule.value.findIndex((item) => item.date === date);
+
+  if (dayIndex === -1) {
+    return [];
+  }
+
+  return schedule.value[dayIndex].slots;
+};
 
 const handleDeleteSlot = (config: ScheduleSlotExtended) => {
-  console.log("D", config);
   deleteSlotConfig.value = config;
   openConfirmDeleteDialog();
 };
@@ -107,10 +177,6 @@ const cancelDeleteSlot = () => {
   deleteSlotConfig.value = null;
 };
 
-const prepareDate = (date: string) => {
-  return date.substring(0, 6);
-};
-
 const sortSlots = (slots: ScheduleSlot[]) => {
   sortWithCollator(slots, "time");
   return slots;
@@ -121,17 +187,41 @@ const sortSlots = (slots: ScheduleSlot[]) => {
 @import "@/assets/fonts";
 @import "@/assets/colors";
 .schedule {
-  max-width: 600px;
+  &__container {
+    max-width: 600px;
+    display: flex;
+    gap: $px-20;
+  }
+
+  &__week-selector {
+    margin-bottom: $px-30;
+    display: flex;
+    gap: $px-30;
+    align-items: center;
+    font-size: 0.85rem;
+  }
 
   &__day {
     @include zero-eight-hundred-seventy-five;
-    width: 110px;
-    background: #dbcbd8;
-    padding: $px-10 $px-10 $px-15;
+    min-width: 130px;
+    border: 1px solid #d28fc5;
+    border-radius: 2px;
+    padding: $px-10 0 $px-15;
+  }
+
+  &__day--weekend {
+    border-color: #aaa;
   }
 
   &__day-title {
-    margin-bottom: $px-10;
+    border-bottom: 1px solid #666;
+    padding-bottom: $px-10;
+    margin-bottom: $px-5;
+    text-align: center;
+  }
+
+  &__day-title--weekend {
+    color: #888;
   }
 
   &__slots {
@@ -141,7 +231,8 @@ const sortSlots = (slots: ScheduleSlot[]) => {
   }
 
   &__slot {
-    background: $slot-background;
+    margin: 0 $px-10;
+    border: 1px solid $slot-background;
     padding: $px-5 $px-10;
     position: relative;
   }
@@ -150,18 +241,24 @@ const sortSlots = (slots: ScheduleSlot[]) => {
     position: absolute;
     right: 0;
     top: 0;
-    width: 7px;
-    height: 7px;
-    background: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 14px;
+    height: 14px;
+    font-size: 28px;
+    color: red;
     cursor: pointer;
   }
 
   &__slot-add {
-    background: #999;
+    margin: 0 $px-30;
+    border-radius: 2px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 30px;
+    font-size: 24px;
+    color: #34e31b;
     cursor: pointer;
   }
 }

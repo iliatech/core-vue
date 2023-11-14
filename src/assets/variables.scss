@@ -15,7 +15,9 @@ $px-60: 60px;
 $space-after-title: $px-30;
 
 // Border radii.
-$border-radius: 4px;
+$border-radius-px-2: 2px;
+$border-radius-px-4: 4px;
+$border-radius: $border-radius-px-4; // TODO Get rid.
 $border-radius-ten: 10px;
 
 // Dialogs.

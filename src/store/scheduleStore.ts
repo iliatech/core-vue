@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import type { Ref } from "vue";
 import type { Client, ScheduleSlot } from "@/types/schedule";
-import type { ScheduleDay } from "@/types/schedule";
+import type { ScheduleDayItem } from "@/types/schedule";
 import type { ScheduleSlotExtended } from "@/types/schedule";
 
 export const useScheduleStore = defineStore("scheduleStore", () => {
@@ -18,9 +18,9 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
     },
   ]);
 
-  const schedule = ref<ScheduleDay[]>([
+  const schedule = ref<ScheduleDayItem[]>([
     {
-      date: "12/Nov/2023",
+      date: "15/Nov/2023",
       slots: [
         {
           clientId: "uuid1",

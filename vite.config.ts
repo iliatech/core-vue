@@ -14,7 +14,7 @@ export default defineConfig({
       inject: {
         data: {
           title:
-            "Ilia Domyshev | JS Programmer | Specialist degree in Mathematics and programming",
+            "Self Platform | JS Programmer | Specialist degree in Mathematics and programming",
           version: `${packageJson?.version}/${new Date().toISOString()}`,
         },
       },

@@ -7,7 +7,7 @@ export interface ScheduleSlotExtended extends ScheduleSlot {
   date: string;
 }
 
-export interface ScheduleDay {
+export interface ScheduleDayItem {
   date: string;
   slots: ScheduleSlot[];
 }
@@ -15,4 +15,11 @@ export interface ScheduleDay {
 export interface Client {
   id: string;
   name: string;
+}
+
+export interface ScheduleDay {
+  date: Date;
+  short: string;
+  full: string;
+  dayOfWeekNumber: number;
 }
