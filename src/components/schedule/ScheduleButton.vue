@@ -6,7 +6,9 @@
       borderColor: scheduleColors[color],
     }"
   >
+    <i v-if="iconPre" class="pi" :class="{ [`pi-${iconPre}`]: !!iconPre }" />
     {{ label }}
+    <i v-if="iconPost" class="pi" :class="{ [`pi-${iconPost}`]: !!iconPost }" />
   </div>
 </template>
 
@@ -19,6 +21,8 @@ defineProps({
     default: scheduleColors.grey,
   },
   label: String,
+  iconPre: String,
+  iconPost: String,
 });
 </script>
 
@@ -32,6 +36,8 @@ defineProps({
   border-radius: $border-radius-px-4;
   border: 1px solid;
   padding: $px-5 $px-10;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

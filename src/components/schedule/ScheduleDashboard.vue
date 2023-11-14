@@ -5,11 +5,13 @@
         @click="goPreviousWeek"
         :label="$lang.label.previousWeek"
         color="lightBlue"
+        icon-pre="chevron-left"
       />
       <ScheduleButton
         @click="goNextWeek"
         :label="$lang.label.nextWeek"
         color="lightBlue"
+        icon-post="chevron-right"
       />
     </div>
     <div class="schedule__container">
@@ -32,12 +34,12 @@
           {{ day.short }}
         </div>
         <div class="schedule__slots">
-          <div class="schedule__slot-add" @click="handleClickAddSlot(day.full)">
-            +
+          <div class="schedule__slot-add">
+            <i class="pi pi-plus" @click="handleClickAddSlot(day.full)" />
           </div>
           <div
             v-for="slot in sortSlots(getDaySlots(day.full))"
-            :key="slot.clientId + slot.time"
+            :key="`${slot.clientId}_${slot.time}`"
             class="schedule__slot"
             @mousedown="
               handleMouseDownSlot({
@@ -88,7 +90,6 @@
 import { computed, ref } from "vue";
 import ScheduleDialog from "@/components/schedule/ScheduleDialog.vue";
 import ScheduleSlotDialog from "@/components/schedule/ScheduleSlotDialog.vue";
-import Button from "primevue/button";
 import type { ScheduleDay, ScheduleSlotExtended } from "@/types/schedule";
 import { useScheduleStore } from "@/store/scheduleStore";
 import { storeToRefs } from "pinia";
@@ -206,7 +207,7 @@ const sortSlots = (slots: ScheduleSlot[]) => {
     min-width: 130px;
     border: 1px solid #d28fc5;
     border-radius: 2px;
-    padding: $px-10 0 $px-15;
+    padding: $px-10 0;
   }
 
   &__day--weekend {
@@ -214,27 +215,32 @@ const sortSlots = (slots: ScheduleSlot[]) => {
   }
 
   &__day-title {
-    border-bottom: 1px solid #666;
+    border-bottom: 1px solid #d28fc5;
     padding-bottom: $px-10;
-    margin-bottom: $px-5;
     text-align: center;
   }
 
   &__day-title--weekend {
     color: #888;
+    border-bottom-color: #888;
   }
 
   &__slots {
     display: flex;
     flex-direction: column;
-    gap: $px-10;
+    gap: $px-15;
+    padding-top: $px-10;
+    padding-bottom: $px-10;
   }
 
   &__slot {
     margin: 0 $px-10;
-    border: 1px solid $slot-background;
-    padding: $px-5 $px-10;
+    border: 1px solid $slot-border-color;
+    padding: $px-15 $px-10 $px-10;
     position: relative;
+    display: flex;
+    justify-content: center;
+    line-height: 22px;
   }
 
   &__slot-delete-button {
@@ -244,9 +250,9 @@ const sortSlots = (slots: ScheduleSlot[]) => {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 14px;
-    height: 14px;
-    font-size: 28px;
+    width: 20px;
+    height: 18px;
+    font-size: 32px;
     color: red;
     cursor: pointer;
   }
@@ -257,9 +263,12 @@ const sortSlots = (slots: ScheduleSlot[]) => {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
-    color: #34e31b;
+    font-size: 18px;
+    color: #333;
     cursor: pointer;
+    :deep(.p-button-icon) {
+      color: #333;
+    }
   }
 }
 </style>
