@@ -4,13 +4,13 @@
       <ScheduleButton
         @click="goPreviousWeek"
         :label="$lang.label.previousWeek"
-        color="lightBlue"
+        color="pink"
         icon-pre="chevron-left"
       />
       <ScheduleButton
         @click="goNextWeek"
         :label="$lang.label.nextWeek"
-        color="lightBlue"
+        color="pink"
         icon-post="chevron-right"
       />
     </div>
@@ -21,6 +21,7 @@
         class="schedule__day"
         :class="{
           'schedule__day--weekend': [6, 7].includes(day.dayOfWeekNumber),
+          'schedule__day--today': today === day.full,
         }"
       >
         <div
@@ -109,6 +110,8 @@ const deleteSlotDialog = ref();
 const slotDialog = ref();
 
 let pressTimer: number | undefined = undefined;
+
+const today = format(new Date(), "d/MMM/yyyy");
 const currentMonday = ref<Date>(
   addDays(new Date(), 1 - Number(format(new Date(), "i")))
 );
@@ -138,7 +141,6 @@ const goNextWeek = () => {
 };
 
 const getDaySlots = (date: string) => {
-  console.log("X", date);
   const dayIndex = schedule.value.findIndex((item) => item.date === date);
 
   if (dayIndex === -1) {
@@ -189,9 +191,9 @@ const sortSlots = (slots: ScheduleSlot[]) => {
 @import "@/assets/colors";
 .schedule {
   &__container {
-    max-width: 600px;
     display: flex;
     gap: $px-20;
+    flex-wrap: wrap;
   }
 
   &__week-selector {
@@ -199,24 +201,31 @@ const sortSlots = (slots: ScheduleSlot[]) => {
     display: flex;
     gap: $px-30;
     align-items: center;
+    justify-content: center;
     font-size: 0.85rem;
   }
 
   &__day {
     @include zero-eight-hundred-seventy-five;
-    min-width: 130px;
-    border: 1px solid #d28fc5;
+    min-width: 150px;
+    border: 2px solid #d28fc5;
     border-radius: 2px;
-    padding: $px-10 0;
+    padding-bottom: $px-10;
   }
 
   &__day--weekend {
     border-color: #aaa;
   }
 
+  &__day--today .schedule__day-title {
+    background: #cedecd;
+    font-weight: 600;
+    font-size: 1.05em;
+  }
+
   &__day-title {
     border-bottom: 1px solid #d28fc5;
-    padding-bottom: $px-10;
+    padding: $px-10 0;
     text-align: center;
   }
 

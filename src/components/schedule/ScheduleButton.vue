@@ -4,11 +4,21 @@
     :style="{
       color: scheduleColors[color],
       borderColor: scheduleColors[color],
+      width,
+      height,
     }"
   >
-    <i v-if="iconPre" class="pi" :class="{ [`pi-${iconPre}`]: !!iconPre }" />
-    {{ label }}
-    <i v-if="iconPost" class="pi" :class="{ [`pi-${iconPost}`]: !!iconPost }" />
+    <i
+      v-if="iconPre"
+      class="pi schedule-button__pre-icon"
+      :class="{ [`pi-${iconPre}`]: !!iconPre }"
+    />
+    <span>{{ label }}</span>
+    <i
+      v-if="iconPost"
+      class="pi schedule-button__post-icon"
+      :class="{ [`pi-${iconPost}`]: !!iconPost }"
+    />
   </div>
 </template>
 
@@ -23,6 +33,8 @@ defineProps({
   label: String,
   iconPre: String,
   iconPost: String,
+  width: String,
+  height: String,
 });
 </script>
 
@@ -39,5 +51,21 @@ defineProps({
   display: flex;
   align-items: center;
   justify-content: center;
+
+  i {
+    font-size: 0.8em;
+  }
+
+  &__icon {
+    padding-right: $px-2;
+  }
+
+  &__pre-icon {
+    padding-right: $px-2;
+  }
+
+  &__post-icon {
+    padding-left: $px-2;
+  }
 }
 </style>

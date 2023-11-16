@@ -1,18 +1,6 @@
 <template>
   <div class="top-toolbar">
-    <div class="top-toolbar__left">
-      <span class="top-toolbar__navigation-label">
-        {{ $lang.label.navigation }}:
-      </span>
-      <Dropdown
-        class="top-toolbar__navigation-dropdown"
-        :model-value="navigation"
-        :options="navigationOptions"
-        option-label="label"
-        option-value="path"
-        @update:model-value="onChangeNavigation"
-      />
-    </div>
+    <div class="top-toolbar__left"></div>
     <div
       class="top-toolbar__center"
       :class="{
@@ -21,12 +9,27 @@
       }"
     >
       {{ title }}
+      <ScheduleButton
+        icon-pre="angle-down"
+        width="14px"
+        height="20px"
+        @click="openNavMenu"
+      />
+      <Menu ref="navMenu" :model="navigationOptions" popup>
+        <template #item="{ item }">
+          <div class="top-toolbar__navigation-menu-item">
+            <RouterLink v-if="item.path" :to="item.path">{{
+              item.label
+            }}</RouterLink>
+            <template v-else>{{ item.label }}</template>
+          </div>
+        </template>
+      </Menu>
     </div>
     <div class="top-toolbar__right">
       <Button icon="pi pi-bars" @click="toggleUserMenu" outlined rounded />
       <Menu
         ref="userMenu"
-        id="user_menu"
         :model="isAuthorized ? menuAuthorized : menuPublic"
         popup
       />
@@ -35,7 +38,6 @@
 </template>
 <script lang="ts" setup>
 import { lang } from "@/lang";
-import Dropdown from "primevue/dropdown";
 import router from "@/router";
 import { publicRouteNames, routes } from "@/settings/routes";
 import { getAuthUser, resetAuthToken, resetAuthUser } from "@/helpers/auth";
@@ -49,6 +51,7 @@ import { storeToRefs } from "pinia";
 import type { NavigationItem } from "@/types/common";
 import { useRoute } from "vue-router";
 import { fullUserName } from "@/helpers/common";
+import ScheduleButton from "@/components/schedule/ScheduleButton.vue";
 
 const route = useRoute();
 
@@ -57,14 +60,11 @@ const { updateIsAuthorized } = appStore;
 const { isAuthorized } = storeToRefs(appStore);
 
 const userMenu = ref();
+const navMenu = ref();
 const navigation = ref();
 
 const title = computed(() => {
   return route.meta.title;
-});
-
-const url = computed(() => {
-  return route.meta.url;
 });
 
 const isMainPageStyle = computed(() => {
@@ -109,15 +109,25 @@ const menuAuthorized = computed(() => {
 
   return [
     {
-      label: fullUserName(user),
-      icon: "pi pi-user",
+      label: lang.label.profile,
+      items: [
+        {
+          label: fullUserName(user),
+          icon: "pi pi-user",
+        },
+      ],
     },
     {
-      label: lang.menu.logout,
-      icon: "pi pi-sign-out",
-      command: () => {
-        onClickLogout();
-      },
+      label: lang.label.logout,
+      items: [
+        {
+          label: lang.menu.logout,
+          icon: "pi pi-sign-out",
+          command: () => {
+            onClickLogout();
+          },
+        },
+      ],
     },
   ];
 });
@@ -146,6 +156,10 @@ const toggleUserMenu = (event: Event) => {
   userMenu.value.toggle(event);
 };
 
+const openNavMenu = (event: Event) => {
+  navMenu.value.toggle(event);
+};
+
 const onClickLogin = () => {
   router.push(routes.login.path);
 };
@@ -156,10 +170,6 @@ const onClickLogout = () => {
   resetAuthToken();
   updateIsAuthorized(false);
   showToast({ type: ToastType.Warning, text: lang.success.logout });
-};
-
-const onChangeNavigation = (path: string) => {
-  router.push(path);
 };
 </script>
 <style lang="scss" scoped>
@@ -176,12 +186,34 @@ const onChangeNavigation = (path: string) => {
 
   &__left {
     display: flex;
+    flex-direction: column;
     gap: $px-10;
-    align-items: center;
+    align-items: flex-start;
   }
 
   &__center {
-    text-align: center;
+    margin-top: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-end;
+    gap: $px-10;
+  }
+
+  &__navigation-menu-item {
+    padding: $px-10 $px-20;
+
+    a {
+      @include font-small-medium;
+      color: black;
+      text-decoration: none;
+    }
+  }
+
+  :deep(.schedule-button) {
+    padding-left: 10px;
+    padding-right: 8px;
+    margin-bottom: 2px;
   }
 
   &__navigation-dropdown {
