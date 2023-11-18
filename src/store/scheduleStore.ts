@@ -4,6 +4,10 @@ import type { Ref } from "vue";
 import type { Client, ScheduleSlot } from "@/types/schedule";
 import type { ScheduleDayItem } from "@/types/schedule";
 import type { ScheduleSlotExtended } from "@/types/schedule";
+import Api from "@/api/Api";
+import { apiPaths } from "@/settings/api";
+import { RequestMethods } from "@/types/api";
+import { lang } from "@/lang";
 
 export const useScheduleStore = defineStore("scheduleStore", () => {
   // TODO Remove mock data.
@@ -45,7 +49,9 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
     day.slots.push(slot);
   };
 
-  const deleteSlot = (config: ScheduleSlotExtended | undefined | null) => {
+  const deleteSlot = async (
+    config: ScheduleSlotExtended | undefined | null
+  ) => {
     if (!config) {
       return;
     }
@@ -67,11 +73,33 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
     }
 
     schedule.value[dayIndex].slots.splice(slotIndex, 1);
+
+    await saveDataToApi();
   };
 
   const getClientNameById = (id: string): string | undefined => {
     const client = clients.value.find((item) => item.id === id);
     return client?.name ?? undefined;
+  };
+
+  const loadDataFromApi = async () => {
+    const data = await Api.request({
+      path: apiPaths.schedule,
+    });
+
+    schedule.value = data.schedule;
+  };
+
+  const saveDataToApi = async () => {
+    const payload = {
+      schedule: schedule.value,
+    };
+
+    await Api.request({
+      path: apiPaths.schedule,
+      method: RequestMethods.Post,
+      payload,
+    });
   };
 
   return {
@@ -80,5 +108,7 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
     addSlot,
     deleteSlot,
     getClientNameById,
+    loadDataFromApi,
+    saveDataToApi,
   };
 });

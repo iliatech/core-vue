@@ -88,7 +88,7 @@
   <ScheduleSlotDialog ref="slotDialog" />
 </template>
 <script lang="ts" setup>
-import { computed, ref } from "vue";
+import { computed, onBeforeMount, ref } from "vue";
 import ScheduleDialog from "@/components/schedule/ScheduleDialog.vue";
 import ScheduleSlotDialog from "@/components/schedule/ScheduleSlotDialog.vue";
 import type { ScheduleDay, ScheduleSlotExtended } from "@/types/schedule";
@@ -101,7 +101,7 @@ import ScheduleButton from "@/components/schedule/ScheduleButton.vue";
 
 const scheduleStore = useScheduleStore();
 const { schedule } = storeToRefs(scheduleStore);
-const { deleteSlot, getClientNameById } = scheduleStore;
+const { deleteSlot, getClientNameById, loadDataFromApi } = scheduleStore;
 
 const MOUSEDOWN_DELAY_TO_REMOVE_SLOT = 1_000;
 let deleteSlotConfig = ref<ScheduleSlotExtended | null>(null);
@@ -115,6 +115,10 @@ const today = format(new Date(), "d/MMM/yyyy");
 const currentMonday = ref<Date>(
   addDays(new Date(), 1 - Number(format(new Date(), "i")))
 );
+
+onBeforeMount(async () => {
+  await loadDataFromApi();
+});
 
 const weekDays = computed<ScheduleDay[]>(() => {
   const days: ScheduleDay[] = [];

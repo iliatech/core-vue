@@ -55,7 +55,7 @@ import { parseSlotTime, stringifySlotTime } from "@/helpers/schedule";
 
 const scheduleStore = useScheduleStore();
 const { clients } = storeToRefs(scheduleStore);
-const { addSlot, deleteSlot } = scheduleStore;
+const { addSlot, deleteSlot, saveDataToApi } = scheduleStore;
 
 let selectedDate: string | null = null;
 let editSlotConfig: ScheduleSlotExtended | null = null;
@@ -98,7 +98,7 @@ const handleCancel = () => {
   validated.value = false;
 };
 
-const handleConfirm = () => {
+const handleConfirm = async () => {
   if (!selectedDate) {
     return;
   }
@@ -109,13 +109,15 @@ const handleConfirm = () => {
   }
 
   if (editSlotConfig) {
-    deleteSlot(editSlotConfig);
+    await deleteSlot(editSlotConfig);
   }
 
   addSlot(selectedDate, {
     clientId: client.value.id,
     time: stringifySlotTime(hour.value, minute.value, timezone.value),
   });
+
+  await saveDataToApi();
 
   dialog.value.close();
   handleCancel();

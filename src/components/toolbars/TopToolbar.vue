@@ -205,7 +205,9 @@ const onClickLogout = () => {
 
     a {
       @include font-small-medium;
-      color: black;
+      font-family: Roboto, sans-serif;
+      font-size: 15px;
+      color: #333;
       text-decoration: none;
     }
   }
