@@ -1,15 +1,15 @@
-export interface ScheduleSlot {
+export interface TimeSlotShort {
   time: string;
   clientId: string;
 }
 
-export interface ScheduleSlotExtended extends ScheduleSlot {
+export interface TimeSlot extends TimeSlotShort {
   date: string;
 }
 
 export interface ScheduleDayItem {
   date: string;
-  slots: ScheduleSlot[];
+  slots: TimeSlotShort[];
 }
 
 export interface Client {

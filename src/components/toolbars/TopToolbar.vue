@@ -1,13 +1,7 @@
 <template>
   <div class="top-toolbar">
     <div class="top-toolbar__left"></div>
-    <div
-      class="top-toolbar__center"
-      :class="{
-        'top-toolbar__inner-page-style': !isMainPageStyle,
-        'top-toolbar__main-page-style': isMainPageStyle,
-      }"
-    >
+    <div class="top-toolbar__center">
       {{ title }}
       <ScheduleButton
         icon-pre="angle-down"
@@ -28,7 +22,12 @@
       </Menu>
     </div>
     <div class="top-toolbar__right">
-      <Button icon="pi pi-bars" @click="toggleUserMenu" outlined rounded />
+      <ScheduleButton
+        icon-post="ellipsis-h"
+        @click="handleClickUserMenu"
+        margin-top="8px"
+        no-border
+      />
       <Menu
         ref="userMenu"
         :model="isAuthorized ? menuAuthorized : menuPublic"
@@ -42,7 +41,6 @@ import { lang } from "@/lang";
 import router from "@/router";
 import { publicRouteNames, routes } from "@/settings/routes";
 import { getAuthUser, resetAuthToken, resetAuthUser } from "@/helpers/auth";
-import Button from "primevue/button";
 import Menu from "primevue/menu";
 import { showToast } from "@/helpers/toast";
 import { ToastType } from "@/types/toasts";
@@ -153,7 +151,7 @@ watch(
   { immediate: true }
 );
 
-const toggleUserMenu = (event: Event) => {
+const handleClickUserMenu = (event: Event) => {
   userMenu.value.toggle(event);
 };
 
@@ -170,7 +168,6 @@ const onClickLogout = () => {
   resetAuthUser();
   resetAuthToken();
   updateIsAuthorized(false);
-  showToast({ type: ToastType.Warning, text: lang.success.logout });
 };
 </script>
 <style lang="scss" scoped>
@@ -193,12 +190,16 @@ const onClickLogout = () => {
   }
 
   &__center {
+    @include header-large;
     margin-top: 5px;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: flex-end;
     gap: $px-10;
+    color: #333;
+    text-decoration: none;
+    white-space: nowrap;
   }
 
   &__navigation-menu-item {
@@ -225,20 +226,6 @@ const onClickLogout = () => {
 
   :deep(.p-button) {
     color: #999;
-  }
-
-  &__inner-page-style,
-  &__inner-page-style a {
-    @include header-large;
-    color: #333;
-    text-decoration: none;
-  }
-
-  &__main-page-style,
-  &__main-page-style a {
-    @include header-large;
-    color: #333;
-    text-decoration: none;
   }
 }
 </style>

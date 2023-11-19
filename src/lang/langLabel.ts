@@ -10,7 +10,7 @@ export default {
   navigation: "Navigation",
   nextWeek: "Next Week",
   password: "Password",
-  previousWeek: "Previous Week",
+  previousWeek: "Prev Week",
   profile: "Profile",
   selectFiltering: "Filter by tags",
   selectSorting: "Sort by",

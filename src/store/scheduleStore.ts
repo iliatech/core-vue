@@ -4,8 +4,8 @@ import { ref } from "vue";
 import type {
   Client,
   ScheduleDayItem,
-  ScheduleSlot,
-  ScheduleSlotExtended,
+  TimeSlotShort,
+  TimeSlot,
 } from "@/types/schedule";
 import Api from "@/api/Api";
 import { apiPaths } from "@/settings/api";
@@ -18,7 +18,7 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
 
   const schedule = ref<ScheduleDayItem[]>([]);
 
-  const addSlot = (date: string, slot: ScheduleSlot) => {
+  const addSlot = (date: string, slot: TimeSlotShort) => {
     const day = schedule.value.find((item) => item.date === date);
 
     if (!day) {
@@ -29,9 +29,7 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
     day.slots.push(slot);
   };
 
-  const deleteSlot = async (
-    config: ScheduleSlotExtended | undefined | null
-  ) => {
+  const deleteSlot = async (config: TimeSlot | undefined | null) => {
     if (!config) {
       return;
     }
@@ -63,7 +61,13 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
     await saveSchedule();
   };
 
-  const getClientNameById = (id: string): string | undefined => {
+  const getClientNameById = (
+    id: string | undefined | null
+  ): string | undefined => {
+    if (!id) {
+      return undefined;
+    }
+
     const client = clients.value.find((item) => item.id === id);
     return client?.name ?? undefined;
   };

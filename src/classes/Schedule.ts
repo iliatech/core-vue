@@ -1,4 +1,4 @@
-import type { Client, ScheduleSlot } from "@/types/schedule";
+import type { Client, TimeSlotShort } from "@/types/schedule";
 import { sortWithCollator } from "@/helpers/sort";
 
 export class Schedule {

@@ -7,6 +7,7 @@
       borderColor: scheduleColors[color],
       width,
       height,
+      marginTop,
     }"
   >
     <i
@@ -40,6 +41,7 @@ defineProps({
   height: String,
   noBorder: Boolean,
   iconSize: { type: String, default: "0.8rem" },
+  marginTop: String,
 });
 </script>
 

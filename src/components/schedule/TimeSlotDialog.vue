@@ -1,6 +1,6 @@
 <template>
   <ScheduleDialog
-    :title="$lang.title.addSlot"
+    :title="editMode ? $lang.title.editSlot : $lang.title.addSlot"
     ref="dialog"
     @cancel="handleCancel"
     @confirm="handleConfirm"
@@ -46,11 +46,7 @@ import { ref } from "vue";
 import Dropdown from "primevue/dropdown";
 import { useScheduleStore } from "@/store/scheduleStore";
 import { storeToRefs } from "pinia";
-import type {
-  Client,
-  ScheduleSlot,
-  ScheduleSlotExtended,
-} from "@/types/schedule";
+import type { Client, TimeSlotShort, TimeSlot } from "@/types/schedule";
 import { parseSlotTime, stringifySlotTime } from "@/helpers/schedule";
 
 const scheduleStore = useScheduleStore();
@@ -58,15 +54,16 @@ const { clients } = storeToRefs(scheduleStore);
 const { addSlot, deleteSlot, saveSchedule } = scheduleStore;
 
 let selectedDate: string | null = null;
-let editSlotConfig: ScheduleSlotExtended | null = null;
-const timezoneOptions = ["ESP", "MSK"];
+let editSlotConfig: TimeSlot | null = null;
+const timezoneOptions = ["ESP"];
 
 const dialog = ref();
 const hour = ref<string | null>(null);
 const minute = ref<string | null>(null);
-const timezone = ref<string | null>(null);
+const timezone = ref<string | null>("ESP");
 const client = ref<Client | null>(null);
 const validated = ref<boolean>(false);
+const editMode = ref<boolean>(false);
 
 const generateHourOptions = (): string[] => {
   const options = [];
@@ -123,8 +120,10 @@ const handleConfirm = async () => {
   handleCancel();
 };
 
-const open = (date: string, slot?: ScheduleSlot) => {
+const open = (date: string, slot?: TimeSlotShort) => {
   selectedDate = date;
+
+  editMode.value = !!slot;
 
   if (slot) {
     [hour.value, minute.value, timezone.value] = parseSlotTime(slot.time);

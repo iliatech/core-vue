@@ -8,6 +8,7 @@ export default {
   createClient: "Create client",
   createTag: "Create tag",
   createWord: "Create word",
+  editSlot: "Edit slot",
   error: "Error",
   login: "Login",
   manageTags: "Manage tags",
