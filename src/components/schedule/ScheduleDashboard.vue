@@ -96,7 +96,7 @@ import ScheduleClientsSidebar from "@/components/schedule/ScheduleClientsSidebar
 import ScheduleSlot from "@/components/schedule/ScheduleSlot.vue";
 import TimeSlotDialog from "@/components/schedule/TimeSlotDialog.vue";
 import ScheduleDialog from "@/components/schedule/ScheduleDialog.vue";
-import { TimeSlot } from "@/types/schedule";
+import type { TimeSlot } from "@/types/schedule";
 
 const scheduleStore = useScheduleStore();
 const { schedule } = storeToRefs(scheduleStore);

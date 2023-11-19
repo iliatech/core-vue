@@ -77,7 +77,7 @@ defineExpose({ open, close });
     width: 400px;
     background: #fff;
     padding: $px-20;
-    border: 2px solid mediumpurple;
+    border: 1px solid mediumpurple;
     margin: $px-40;
   }
 
