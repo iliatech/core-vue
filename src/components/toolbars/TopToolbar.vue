@@ -14,14 +14,15 @@
         width="14px"
         height="20px"
         @click="openNavMenu"
+        no-border
+        icon-size="1rem"
       />
       <Menu ref="navMenu" :model="navigationOptions" popup>
         <template #item="{ item }">
-          <div class="top-toolbar__navigation-menu-item">
-            <RouterLink v-if="item.path" :to="item.path">{{
-              item.label
-            }}</RouterLink>
-            <template v-else>{{ item.label }}</template>
+          <div @click="router.push(item.path)">
+            <div class="top-toolbar__navigation-menu-item">
+              {{ item.label }}
+            </div>
           </div>
         </template>
       </Menu>
@@ -202,14 +203,7 @@ const onClickLogout = () => {
 
   &__navigation-menu-item {
     padding: $px-10 $px-20;
-
-    a {
-      @include font-small-medium;
-      font-family: Roboto, sans-serif;
-      font-size: 15px;
-      color: #333;
-      text-decoration: none;
-    }
+    cursor: pointer;
   }
 
   :deep(.schedule-button) {

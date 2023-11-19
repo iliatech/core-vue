@@ -1,42 +1,22 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
 import type { Ref } from "vue";
-import type { Client, ScheduleSlot } from "@/types/schedule";
-import type { ScheduleDayItem } from "@/types/schedule";
-import type { ScheduleSlotExtended } from "@/types/schedule";
+import { ref } from "vue";
+import type {
+  Client,
+  ScheduleDayItem,
+  ScheduleSlot,
+  ScheduleSlotExtended,
+} from "@/types/schedule";
 import Api from "@/api/Api";
 import { apiPaths } from "@/settings/api";
 import { RequestMethods } from "@/types/api";
-import { lang } from "@/lang";
+import { v4 as uuidv4 } from "uuid";
+import { sortWithCollator } from "@/helpers/sort";
 
 export const useScheduleStore = defineStore("scheduleStore", () => {
-  // TODO Remove mock data.
-  const clients: Ref<Client[]> = ref([
-    {
-      id: "uuid1",
-      name: "Ivan Ivanov",
-    },
-    {
-      id: "uuid2",
-      name: "Petr Petrov",
-    },
-  ]);
+  const clients: Ref<Client[]> = ref([]);
 
-  const schedule = ref<ScheduleDayItem[]>([
-    {
-      date: "15/Nov/2023",
-      slots: [
-        {
-          clientId: "uuid1",
-          time: "17:00MSK",
-        },
-        {
-          clientId: "uuid2",
-          time: "16:00ESP",
-        },
-      ],
-    },
-  ]);
+  const schedule = ref<ScheduleDayItem[]>([]);
 
   const addSlot = (date: string, slot: ScheduleSlot) => {
     const day = schedule.value.find((item) => item.date === date);
@@ -74,7 +54,13 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
 
     schedule.value[dayIndex].slots.splice(slotIndex, 1);
 
-    await saveDataToApi();
+    await saveSchedule();
+  };
+
+  const createClient = async (name: string) => {
+    clients.value.push({ name, id: uuidv4() });
+
+    await saveSchedule();
   };
 
   const getClientNameById = (id: string): string | undefined => {
@@ -82,16 +68,20 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
     return client?.name ?? undefined;
   };
 
-  const loadDataFromApi = async () => {
+  const loadSchedule = async () => {
     const data = await Api.request({
       path: apiPaths.schedule,
     });
 
+    clients.value = data.clients;
     schedule.value = data.schedule;
+
+    sortWithCollator(clients.value, "name");
   };
 
-  const saveDataToApi = async () => {
+  const saveSchedule = async () => {
     const payload = {
+      clients: clients.value,
       schedule: schedule.value,
     };
 
@@ -105,10 +95,12 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
   return {
     clients,
     schedule,
+
+    createClient,
     addSlot,
     deleteSlot,
     getClientNameById,
-    loadDataFromApi,
-    saveDataToApi,
+    loadSchedule,
+    saveSchedule,
   };
 });

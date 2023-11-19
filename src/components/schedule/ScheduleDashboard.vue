@@ -1,5 +1,13 @@
 <template>
   <div class="schedule">
+    <div class="schedule__top-bar">
+      <ScheduleButton
+        @click="openClientsSidebar"
+        :label="$lang.button.clients"
+        color="lightBlue"
+        icon-pre="cog"
+      />
+    </div>
     <div class="schedule__week-selector">
       <ScheduleButton
         @click="goPreviousWeek"
@@ -77,7 +85,7 @@
     @confirm="deleteSlot(deleteSlotConfig)"
   >
     {{ $lang.label.client }}:
-    {{ getClientNameById(deleteSlotConfig?.clientId) }}
+    {{ getClientNameById(deleteSlotConfig?.clientId ?? "") }}
     <br />
     {{ $lang.label.date }}:
     {{ deleteSlotConfig?.date }}
@@ -86,6 +94,7 @@
     {{ deleteSlotConfig?.time }}
   </ScheduleDialog>
   <ScheduleSlotDialog ref="slotDialog" />
+  <ScheduleClientsSidebar ref="clientsSidebar" />
 </template>
 <script lang="ts" setup>
 import { computed, onBeforeMount, ref } from "vue";
@@ -94,20 +103,22 @@ import ScheduleSlotDialog from "@/components/schedule/ScheduleSlotDialog.vue";
 import type { ScheduleDay, ScheduleSlotExtended } from "@/types/schedule";
 import { useScheduleStore } from "@/store/scheduleStore";
 import { storeToRefs } from "pinia";
-import { ScheduleSlot } from "@/types/schedule";
+import type { ScheduleSlot } from "@/types/schedule";
 import { sortWithCollator } from "@/helpers/sort";
 import { addDays, format } from "date-fns";
 import ScheduleButton from "@/components/schedule/ScheduleButton.vue";
+import ScheduleClientsSidebar from "@/components/schedule/ScheduleClientsSidebar.vue";
 
 const scheduleStore = useScheduleStore();
 const { schedule } = storeToRefs(scheduleStore);
-const { deleteSlot, getClientNameById, loadDataFromApi } = scheduleStore;
+const { deleteSlot, getClientNameById, loadSchedule } = scheduleStore;
 
 const MOUSEDOWN_DELAY_TO_REMOVE_SLOT = 1_000;
 let deleteSlotConfig = ref<ScheduleSlotExtended | null>(null);
 
 const deleteSlotDialog = ref();
 const slotDialog = ref();
+const clientsSidebar = ref();
 
 let pressTimer: number | undefined = undefined;
 
@@ -117,7 +128,7 @@ const currentMonday = ref<Date>(
 );
 
 onBeforeMount(async () => {
-  await loadDataFromApi();
+  await loadSchedule();
 });
 
 const weekDays = computed<ScheduleDay[]>(() => {
@@ -135,6 +146,10 @@ const weekDays = computed<ScheduleDay[]>(() => {
 
   return days;
 });
+
+const openClientsSidebar = () => {
+  clientsSidebar.value.open();
+};
 
 const goPreviousWeek = () => {
   currentMonday.value = addDays(currentMonday.value, -7);
@@ -200,6 +215,12 @@ const sortSlots = (slots: ScheduleSlot[]) => {
     flex-wrap: wrap;
   }
 
+  &__top-bar {
+    display: flex;
+    justify-content: flex-end;
+    margin: $px-10 0;
+  }
+
   &__week-selector {
     margin-bottom: $px-30;
     display: flex;
@@ -222,9 +243,8 @@ const sortSlots = (slots: ScheduleSlot[]) => {
   }
 
   &__day--today .schedule__day-title {
-    background: #cedecd;
     font-weight: 600;
-    font-size: 1.05em;
+    font-size: 1.2rem;
   }
 
   &__day-title {

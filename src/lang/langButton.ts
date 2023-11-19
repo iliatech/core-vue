@@ -2,6 +2,7 @@ export default {
   add: "Add",
   back: "Back",
   cancel: "Cancel",
+  clients: "Clients",
   close: "Close",
   confirm: "Confirm",
   create: "Create",

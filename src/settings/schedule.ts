@@ -1,7 +1,8 @@
-export const scheduleColors = {
+export const scheduleColors: Record<string, string> = {
+  forestGreen: "forestgreen",
   grey: "#666",
-
   lightBlue: "#549ed3",
+  lightGreen: "#67d540",
   lightMagenta: "#ce7bd7",
   magenta: "#c02dd0",
   pink: "#f593a4",
