@@ -61,6 +61,15 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
     await saveSchedule();
   };
 
+  const getClientById = (id: string | undefined | null): Client | undefined => {
+    if (!id) {
+      return undefined;
+    }
+
+    const client = clients.value.find((item) => item.id === id);
+    return client ?? undefined;
+  };
+
   const getClientNameById = (
     id: string | undefined | null
   ): string | undefined => {
@@ -72,13 +81,23 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
     return client?.name ?? undefined;
   };
 
+  const archiveClient = async (id: string) => {
+    const client = clients.value.find((item) => item.id === id);
+
+    if (client) {
+      client.archived = true;
+    }
+
+    await saveSchedule();
+  };
+
   const loadSchedule = async () => {
     const data = await Api.request({
       path: apiPaths.schedule,
     });
 
-    clients.value = data.clients;
-    schedule.value = data.schedule;
+    clients.value = data.clients ?? [];
+    schedule.value = data.schedule ?? [];
 
     sortWithCollator(clients.value, "name");
   };
@@ -102,7 +121,9 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
 
     createClient,
     addSlot,
+    archiveClient,
     deleteSlot,
+    getClientById,
     getClientNameById,
     loadSchedule,
     saveSchedule,

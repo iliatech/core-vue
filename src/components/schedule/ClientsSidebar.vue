@@ -5,14 +5,14 @@
     :title="$lang.title.clients"
     close-button
   >
-    <ScheduleButton
+    <MyButton
       :label="$lang.button.add"
       icon-post="plus"
       @click="handleClickAddClient"
       color="forestGreen"
     />
     <DataTable
-      :value="clients"
+      :value="clientsFiltered"
       class="clients-sidebar__table"
       :sort-field="ClientsTableColumns.Name"
       :sort-order="1"
@@ -29,9 +29,9 @@
       >
         <template #body="{ data }">
           <div class="clients-sidebar__action-column">
-            <ScheduleButton
-              icon-pre="trash"
-              @click="deleteTag(data)"
+            <MyButton
+              icon-pre="download"
+              @click="handleClickDeleteClient(data)"
               icon-size="1rem"
               no-border
             />
@@ -42,45 +42,46 @@
     </DataTable>
   </CustomSidebar>
   <ScheduleClientDialog ref="clientDialog" />
-  <!--TODO Fix ?? '' -->
-  <CustomConfirmDialog
-    v-model="selectedTag"
-    :type="DialogType.Confirm"
-    :text="lang.title.confirmDeleteTag(selectedTag?.name ?? '')"
-    :confirm-button-text="$lang.button.delete"
-    @on-cancel="cancelDeleteTag"
-    @on-confirm="confirmDeleteTag"
-  />
+  <MyDialog
+    ref="deleteClientDialog"
+    :title="$lang.title.confirmDeleteClient"
+    @cancel="cancelDeleteClient"
+    @confirm="confirmDeleteClient"
+    :z-index="1200"
+  >
+    {{ $lang.label.clientName }}: {{ clientToDelete?.name }}
+  </MyDialog>
 </template>
 <script lang="ts" setup>
-import { onBeforeMount, ref } from "vue";
+import { computed, onBeforeMount, ref } from "vue";
 
-import CustomConfirmDialog from "@/components/dialogs/CustomConfirmDialog.vue";
-import Api from "@/api/Api";
-import { apiPaths } from "@/settings/api";
 import type { ApiTagResponse } from "@/types/tag";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
-import { RequestMethods } from "@/types/api";
-import { lang } from "@/lang";
-import { DialogType } from "@/types/dialog";
 import { storeToRefs } from "pinia";
 import CustomSidebar from "@/components/sidebars/CustomSidebar.vue";
-import ScheduleButton from "@/components/schedule/ScheduleButton.vue";
+import MyButton from "@/components/schedule/MyButton.vue";
 import {
   clientsTableColumns,
   ClientsTableColumns,
 } from "@/settings/tables/clientsTable";
 import { useScheduleStore } from "@/store/scheduleStore";
 import ScheduleClientDialog from "@/components/schedule/ScheduleClientDialog.vue";
+import type { Client } from "@/types/schedule";
+import MyDialog from "@/components/dialogs/MyDialog.vue";
 
 const scheduleStore = useScheduleStore();
 const { clients } = storeToRefs(scheduleStore);
-const { loadSchedule } = scheduleStore;
+const { loadSchedule, archiveClient } = scheduleStore;
 
 const clientDialog = ref();
-const selectedTag = ref<ApiTagResponse>();
+const clientToDelete = ref<Client>();
 const sidebar = ref();
+const deleteClientDialog = ref();
+
+const clientsFiltered = computed(() => {
+  return clients.value.filter((item) => !item.archived);
+});
 
 const open = () => {
   sidebar.value.open();
@@ -90,26 +91,23 @@ const handleClickAddClient = () => {
   clientDialog.value.open();
 };
 
-const deleteTag = async (tag: ApiTagResponse) => {
-  selectedTag.value = tag;
+const handleClickDeleteClient = async (tag: ApiTagResponse) => {
+  clientToDelete.value = tag;
+  deleteClientDialog.value.open();
 };
 
-const cancelDeleteTag = () => {
-  selectedTag.value = undefined;
+const cancelDeleteClient = () => {
+  clientToDelete.value = undefined;
 };
 
-const confirmDeleteTag = async () => {
-  if (!selectedTag.value) {
+const confirmDeleteClient = async () => {
+  if (!clientToDelete.value) {
     return;
   }
 
-  await Api.request({
-    method: RequestMethods.Delete,
-    path: `${apiPaths.tag}/${selectedTag.value.id}`,
-    successToast: lang.success.tagDeleted(selectedTag.value.name),
-  });
+  archiveClient(clientToDelete.value.id);
 
-  selectedTag.value = undefined;
+  clientToDelete.value = undefined;
 };
 
 onBeforeMount(async () => {

@@ -1,5 +1,5 @@
 <template>
-  <ScheduleDialog
+  <MyDialog
     :title="editMode ? $lang.title.editSlot : $lang.title.addSlot"
     ref="dialog"
     @cancel="handleCancel"
@@ -30,18 +30,18 @@
       <div class="schedule-slot-dialog__client">
         <Dropdown
           v-model="client"
-          :options="clients"
+          :options="clients.filter((item) => !item.archived)"
           :placeholder="$lang.label.client"
           :class="{ 'p-invalid': validated && !client }"
           option-label="name"
         />
       </div>
     </div>
-  </ScheduleDialog>
+  </MyDialog>
 </template>
 
 <script setup lang="ts">
-import ScheduleDialog from "@/components/schedule/ScheduleDialog.vue";
+import MyDialog from "@/components/dialogs/MyDialog.vue";
 import { ref } from "vue";
 import Dropdown from "primevue/dropdown";
 import { useScheduleStore } from "@/store/scheduleStore";
@@ -55,12 +55,12 @@ const { addSlot, deleteSlot, saveSchedule } = scheduleStore;
 
 let selectedDate: string | null = null;
 let editSlotConfig: TimeSlot | null = null;
-const timezoneOptions = ["ESP"];
+const timezoneOptions = ["MSK"];
 
 const dialog = ref();
 const hour = ref<string | null>(null);
 const minute = ref<string | null>(null);
-const timezone = ref<string | null>("ESP");
+const timezone = ref<string | null>("MSK");
 const client = ref<Client | null>(null);
 const validated = ref<boolean>(false);
 const editMode = ref<boolean>(false);

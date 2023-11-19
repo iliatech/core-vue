@@ -2,15 +2,16 @@
   <div class="top-toolbar">
     <div class="top-toolbar__left"></div>
     <div class="top-toolbar__center">
-      {{ title }}
-      <ScheduleButton
-        icon-pre="angle-down"
-        width="14px"
-        height="20px"
-        @click="openNavMenu"
-        no-border
-        icon-size="1rem"
-      />
+      <div @click="openNavMenu" class="top-toolbar__title">
+        {{ title }}
+        <MyButton
+          icon-pre="angle-down"
+          width="14px"
+          height="20px"
+          no-border
+          icon-size="1rem"
+        />
+      </div>
       <Menu ref="navMenu" :model="navigationOptions" popup>
         <template #item="{ item }">
           <div @click="router.push(item.path)">
@@ -22,7 +23,7 @@
       </Menu>
     </div>
     <div class="top-toolbar__right">
-      <ScheduleButton
+      <MyButton
         icon-post="ellipsis-h"
         @click="handleClickUserMenu"
         margin-top="8px"
@@ -50,7 +51,7 @@ import { storeToRefs } from "pinia";
 import type { NavigationItem } from "@/types/common";
 import { useRoute } from "vue-router";
 import { fullUserName } from "@/helpers/common";
-import ScheduleButton from "@/components/schedule/ScheduleButton.vue";
+import MyButton from "@/components/schedule/MyButton.vue";
 
 const route = useRoute();
 
@@ -200,6 +201,10 @@ const onClickLogout = () => {
     color: #333;
     text-decoration: none;
     white-space: nowrap;
+  }
+
+  &__title {
+    cursor: pointer;
   }
 
   &__navigation-menu-item {

@@ -4,6 +4,7 @@ export default {
   clientsSchedule: "Clients Schedule",
   confirmDeleteTag: (name: string) => `Delete tag "${name}"?`,
   confirmDeleteWord: (title: string) => `Delete word "${title}"?`,
+  confirmDeleteClient: "Confirm archive client?",
   confirmDeleteSlot: "Confirm delete slot?",
   createClient: "Create client",
   createTag: "Create tag",

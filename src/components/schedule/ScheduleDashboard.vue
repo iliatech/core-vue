@@ -2,20 +2,20 @@
   <div class="schedule">
     <div class="schedule__top-bar">
       <div class="schedule__week-selector">
-        <ScheduleButton
+        <MyButton
           @click="goPreviousWeek"
           :label="$lang.label.previousWeek"
           color="lightMagenta"
           icon-pre="caret-left"
         />
-        <ScheduleButton
+        <MyButton
           @click="goNextWeek"
           :label="$lang.label.nextWeek"
           color="lightMagenta"
           icon-post="caret-right"
         />
       </div>
-      <ScheduleButton
+      <MyButton
         @click="openClientsSidebar"
         :label="$lang.button.clients"
         color="lightBlue"
@@ -45,14 +45,14 @@
         </div>
         <div class="schedule__slots">
           <div class="schedule__slot-add">
-            <ScheduleButton
+            <MyButton
               icon-pre="plus"
               @click="handleClickAddSlot(day.full)"
               no-border
             />
           </div>
-          <ScheduleSlot
-            v-for="slot in sortSlots(getDaySlots(day.full))"
+          <TimeSlotComponent
+            v-for="slot in getDaySlots(day.full)"
             :key="`${slot.clientId}_${slot.time}`"
             :model-value="{ ...slot, date: day.full }"
             @click:delete="handleClickDeleteSlot"
@@ -63,13 +63,14 @@
     </div>
   </div>
 
-  <ScheduleClientsSidebar ref="clientsSidebar" />
+  <ClientsSidebar ref="clientsSidebar" />
 
-  <ScheduleDialog
-    :title="$lang.title.confirmDeleteSlot"
+  <MyDialog
     ref="deleteSlotDialog"
+    :title="$lang.title.confirmDeleteSlot"
     @cancel="cancelDeleteSlot"
     @confirm="deleteSlot(deleteSlotConfig)"
+    :z-index="1200"
   >
     {{ $lang.label.client }}:
     {{ getClientNameById(deleteSlotConfig?.clientId) }}
@@ -79,7 +80,7 @@
     <br />
     {{ $lang.label.time }}:
     {{ deleteSlotConfig?.time }}
-  </ScheduleDialog>
+  </MyDialog>
 
   <TimeSlotDialog ref="slotDialog" />
 </template>
@@ -91,16 +92,17 @@ import { storeToRefs } from "pinia";
 import type { TimeSlotShort } from "@/types/schedule";
 import { sortWithCollator } from "@/helpers/sort";
 import { addDays, format } from "date-fns";
-import ScheduleButton from "@/components/schedule/ScheduleButton.vue";
-import ScheduleClientsSidebar from "@/components/schedule/ScheduleClientsSidebar.vue";
-import ScheduleSlot from "@/components/schedule/ScheduleSlot.vue";
+import MyButton from "@/components/schedule/MyButton.vue";
+import ClientsSidebar from "@/components/schedule/ClientsSidebar.vue";
+import TimeSlotComponent from "@/components/schedule/TimeSlotComponent.vue";
 import TimeSlotDialog from "@/components/schedule/TimeSlotDialog.vue";
-import ScheduleDialog from "@/components/schedule/ScheduleDialog.vue";
+import MyDialog from "@/components/dialogs/MyDialog.vue";
 import type { TimeSlot } from "@/types/schedule";
 
 const scheduleStore = useScheduleStore();
 const { schedule } = storeToRefs(scheduleStore);
-const { loadSchedule, deleteSlot, getClientNameById } = scheduleStore;
+const { loadSchedule, deleteSlot, getClientNameById, getClientById } =
+  scheduleStore;
 
 const slotDialog = ref();
 const clientsSidebar = ref();
@@ -151,11 +153,13 @@ const getDaySlots = (date: string) => {
     return [];
   }
 
-  return schedule.value[dayIndex].slots;
-};
+  const slots = schedule.value[dayIndex].slots.filter((item) => {
+    const client = getClientById(item.clientId);
+    return !client?.archived;
+  });
 
-const sortSlots = (slots: TimeSlotShort[]) => {
   sortWithCollator(slots, "time");
+
   return slots;
 };
 

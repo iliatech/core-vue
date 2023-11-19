@@ -15,6 +15,7 @@ export interface ScheduleDayItem {
 export interface Client {
   id: string;
   name: string;
+  archived?: boolean;
 }
 
 export interface ScheduleDay {

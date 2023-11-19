@@ -14,7 +14,7 @@
       />
     </div>
     <template #buttons-before>
-      <ScheduleButton
+      <MyButton
         :label="$lang.button.create"
         color="forestGreen"
         outlined
@@ -27,7 +27,7 @@
 import { ref } from "vue";
 import InputText from "primevue/inputtext";
 import CustomDialog from "@/components/dialogs/CustomDialog.vue";
-import ScheduleButton from "@/components/schedule/ScheduleButton.vue";
+import MyButton from "@/components/schedule/MyButton.vue";
 import { useScheduleStore } from "@/store/scheduleStore";
 import { showToast } from "@/helpers/toast";
 import { ToastType } from "@/types/toasts";

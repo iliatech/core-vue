@@ -1,17 +1,17 @@
 <template>
   <div class="schedule-timeslot">
     <div class="schedule-timeslot__data">
-      {{ modelValue.time }}<br />
+      {{ prepareTime(modelValue.time) }}<br />
       {{ getClientNameById(modelValue.clientId) }}
     </div>
     <div class="schedule-timeslot__actions">
-      <ScheduleButton
+      <MyButton
         icon-pre="trash"
         color="pink"
         no-border
         @click="handleClickDeleteSlot(modelValue)"
       />
-      <ScheduleButton
+      <MyButton
         icon-post="pencil"
         color="paleOrange"
         no-border
@@ -25,7 +25,9 @@
 import type { TimeSlot } from "@/types/schedule";
 import type { PropType } from "vue";
 import { useScheduleStore } from "@/store/scheduleStore";
-import ScheduleButton from "@/components/schedule/ScheduleButton.vue";
+import MyButton from "@/components/schedule/MyButton.vue";
+import { parseSlotTime } from "@/helpers/schedule";
+import { TIMEZONE_DIFFERENCE } from "@/settings/schedule";
 
 const scheduleStore = useScheduleStore();
 const { getClientNameById } = scheduleStore;
@@ -45,6 +47,13 @@ const handleClickDeleteSlot = (slot: TimeSlot) => {
 
 const handleClickEditSlot = (slot: TimeSlot) => {
   emit("click:edit", slot);
+};
+
+const prepareTime = (time: string) => {
+  const [hours, minutes] = parseSlotTime(time);
+
+  // TODO It's a little bit hardcoded here ;)
+  return `${Number(hours) - TIMEZONE_DIFFERENCE}:${minutes} ESP`;
 };
 </script>
 

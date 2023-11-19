@@ -10,3 +10,5 @@ export const scheduleColors: Record<string, string> = {
   pink: "#f593a4",
   superLightMagenta: "#cd8dd3",
 };
+
+export const TIMEZONE_DIFFERENCE = 2;

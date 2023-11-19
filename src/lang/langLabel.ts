@@ -1,5 +1,6 @@
 export default {
   client: "Client",
+  clientName: "Client name",
   createTranslation: "Create translation",
   date: "Date",
   email: "Email",
