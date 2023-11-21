@@ -48,6 +48,7 @@ import { useScheduleStore } from "@/store/scheduleStore";
 import { storeToRefs } from "pinia";
 import type { Client, TimeSlotShort, TimeSlot } from "@/types/schedule";
 import { parseSlotTime, stringifySlotTime } from "@/helpers/schedule";
+import { TimeZoneName } from "@/settings/schedule";
 
 const scheduleStore = useScheduleStore();
 const { clients, config } = storeToRefs(scheduleStore);
@@ -55,13 +56,7 @@ const { addSlot, deleteSlot, saveSchedule } = scheduleStore;
 
 let selectedDate: string | null = null;
 let editSlotConfig: TimeSlot | null = null;
-const timezoneOptions =
-  config.value.defaultInputTimezoneName === config.value.dashboardTimezoneName
-    ? [config.value.defaultInputTimezoneName]
-    : [
-        config.value.defaultInputTimezoneName,
-        config.value.dashboardTimezoneName,
-      ];
+const timezoneOptions = [TimeZoneName.Esp, TimeZoneName.Msk];
 
 const dialog = ref();
 const hour = ref<string | null>(null);

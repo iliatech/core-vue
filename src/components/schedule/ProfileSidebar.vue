@@ -1,7 +1,12 @@
 <template>
   <CustomSidebar ref="sidebar" :title="$lang.title.profile" close-button>
     <div class="profile-sidebar">
-      <div>{{}}</div>
+      <div>
+        <label>
+          {{ $lang.label.userId }}
+        </label>
+        {{ user?.id }}
+      </div>
       <div>
         <label>
           {{ $lang.label.defaultInputTimezoneName }}
@@ -47,6 +52,7 @@ import Button from "primevue/button";
 import { useAppStore } from "@/store/appStore";
 
 const appStore = useAppStore();
+const { user } = storeToRefs(appStore);
 
 const scheduleStore = useScheduleStore();
 const { config } = storeToRefs(scheduleStore);

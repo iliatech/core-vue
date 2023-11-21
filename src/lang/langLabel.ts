@@ -20,4 +20,5 @@ export default {
   defaultInputTimezoneName: "Default Input Timezone Name",
   dashboardTimezoneName: "Dashboard Timezone Name",
   translations: "Translations",
+  userId: "User ID",
 };

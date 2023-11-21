@@ -206,6 +206,7 @@ const openConfirmDeleteDialog = () => {
     display: flex;
     gap: $px-20;
     flex-wrap: wrap;
+    margin-bottom: $px-30;
   }
 
   &__day {
