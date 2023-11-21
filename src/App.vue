@@ -57,7 +57,10 @@ onMounted(async () => {
 }
 
 .app-container {
+  height: 100vh;
   margin: 0 auto !important;
+  display: flex;
+  flex-direction: column;
 }
 
 .app-content {

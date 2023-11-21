@@ -14,10 +14,16 @@ export const routes = {
     name: "home",
   },
 
+  schedule: {
+    path: "/schedule",
+    name: "schedule",
+  },
+
   words: {
     path: "/words",
     name: "words",
   },
+
   usefulLinks: {
     path: "/useful-links",
     name: "usefulLinks",

@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import Api from "@/api/Api";
 import { apiPaths } from "@/settings/api";
-import { sortCollator } from "@/settings/collators";
+import { sortCollator } from "@/helpers/sort";
 import type { ApiTagResponse } from "@/types/tag";
 
 export const useTagsStore = defineStore("tagsStore", () => {

@@ -30,6 +30,17 @@ const router = createRouter({
       path: routes.usefulLinks.path,
       name: routes.usefulLinks.name,
       component: () => import("@/views/UsefulLinks.vue"),
+      meta: {
+        title: lang.title.usefulLinks,
+      },
+    },
+    {
+      path: routes.schedule.path,
+      name: routes.schedule.name,
+      component: () => import("@/views/ScheduleView.vue"),
+      meta: {
+        title: lang.title.clientsSchedule,
+      },
     },
   ],
 });

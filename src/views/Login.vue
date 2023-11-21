@@ -63,7 +63,6 @@ const onClickLogin = async () => {
     saveAuthUser(user);
     saveAuthToken(jwt);
     updateIsAuthorized(true);
-    showToast({ type: ToastType.Success, text: lang.success.login });
     await router.push({ name: mainPrivatePage.name });
   } else {
     resetAuthToken();
