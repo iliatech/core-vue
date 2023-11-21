@@ -27,9 +27,11 @@ import type { PropType } from "vue";
 import { useScheduleStore } from "@/store/scheduleStore";
 import MyButton from "@/components/schedule/MyButton.vue";
 import { parseSlotTime } from "@/helpers/schedule";
-import { TIMEZONE_DIFFERENCE } from "@/settings/schedule";
+import { storeToRefs } from "pinia";
+import { convertTime } from "@/helpers/timezone";
 
 const scheduleStore = useScheduleStore();
+const { config } = storeToRefs(scheduleStore);
 const { getClientNameById } = scheduleStore;
 
 const emit = defineEmits(["click:delete", "click:edit"]);
@@ -50,10 +52,13 @@ const handleClickEditSlot = (slot: TimeSlot) => {
 };
 
 const prepareTime = (time: string) => {
-  const [hours, minutes] = parseSlotTime(time);
+  const [hours, minutes, timezone] = parseSlotTime(time);
 
-  // TODO It's a little bit hardcoded here ;)
-  return `${Number(hours) - TIMEZONE_DIFFERENCE}:${minutes} ESP`;
+  return `${convertTime(
+    Number(hours),
+    timezone,
+    config.value.dashboardTimezoneName
+  )}:${minutes} ${config.value.dashboardTimezoneName}`;
 };
 </script>
 

@@ -17,5 +17,7 @@ export default {
   selectSorting: "Sort by",
   time: "Time",
   timezone: "Timezone",
+  defaultInputTimezoneName: "Default Input Timezone Name",
+  dashboardTimezoneName: "Dashboard Timezone Name",
   translations: "Translations",
 };

@@ -24,3 +24,20 @@ export interface ScheduleDay {
   full: string;
   dayOfWeekNumber: number;
 }
+
+export interface ScheduleConfig {
+  defaultInputTimezoneName: string;
+  dashboardTimezoneName: string;
+}
+
+export interface SchedulePayload {
+  clients: Client[];
+  schedule: ScheduleDayItem[];
+  config: ScheduleConfig;
+}
+
+export interface TimeZone {
+  name: string;
+  value: number;
+  summerTime: boolean;
+}

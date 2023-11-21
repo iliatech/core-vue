@@ -3,6 +3,7 @@ export default {
   back: "Back",
   cancel: "Cancel",
   clients: "Clients",
+  clientsSchedule: "Clients Schedule",
   close: "Close",
   confirm: "Confirm",
   create: "Create",
@@ -10,7 +11,7 @@ export default {
   login: "Login",
   manageTags: "Manage tags",
   ok: "OK",
-  clientsSchedule: "Clients Schedule",
+  save: "Save",
   usefulLinks: "Useful Links",
   wordsApp: "Words Cards",
 };

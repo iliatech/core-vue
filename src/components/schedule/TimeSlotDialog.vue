@@ -50,17 +50,23 @@ import type { Client, TimeSlotShort, TimeSlot } from "@/types/schedule";
 import { parseSlotTime, stringifySlotTime } from "@/helpers/schedule";
 
 const scheduleStore = useScheduleStore();
-const { clients } = storeToRefs(scheduleStore);
+const { clients, config } = storeToRefs(scheduleStore);
 const { addSlot, deleteSlot, saveSchedule } = scheduleStore;
 
 let selectedDate: string | null = null;
 let editSlotConfig: TimeSlot | null = null;
-const timezoneOptions = ["MSK"];
+const timezoneOptions =
+  config.value.defaultInputTimezoneName === config.value.dashboardTimezoneName
+    ? [config.value.defaultInputTimezoneName]
+    : [
+        config.value.defaultInputTimezoneName,
+        config.value.dashboardTimezoneName,
+      ];
 
 const dialog = ref();
 const hour = ref<string | null>(null);
 const minute = ref<string | null>(null);
-const timezone = ref<string | null>("MSK");
+const timezone = ref<string | null>(config.value.defaultInputTimezoneName);
 const client = ref<Client | null>(null);
 const validated = ref<boolean>(false);
 const editMode = ref<boolean>(false);
@@ -88,11 +94,7 @@ const generateMinuteOptions = (): string[] => {
 };
 
 const handleCancel = () => {
-  hour.value = null;
-  minute.value = null;
-  timezone.value = null;
-  client.value = null;
-  validated.value = false;
+  // TODO
 };
 
 const handleConfirm = async () => {
@@ -121,6 +123,12 @@ const handleConfirm = async () => {
 };
 
 const open = (date: string, slot?: TimeSlotShort) => {
+  hour.value = null;
+  minute.value = null;
+  timezone.value = config.value.defaultInputTimezoneName;
+  client.value = null;
+  validated.value = false;
+
   selectedDate = date;
 
   editMode.value = !!slot;

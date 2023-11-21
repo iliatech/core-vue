@@ -15,6 +15,7 @@ export default {
   manageTags: "Manage tags",
   publicFeatures: "Useful Resources",
   privateFeatures: "Private Applications",
+  profile: "Profile",
   siteTitle: "Home page",
   usefulLinks: "Useful Links",
   wordsApp: "Words Cards",

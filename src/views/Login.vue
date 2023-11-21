@@ -40,11 +40,11 @@ import {
   saveAuthUser,
 } from "@/helpers/auth";
 import router from "@/router";
-import { mainPrivatePage, routes } from "@/settings/routes";
+import { mainPrivatePage } from "@/settings/routes";
 import { useAppStore } from "@/store/appStore";
 
 const appStore = useAppStore();
-const { updateIsAuthorized } = appStore;
+const { updateIsAuthorized, updateUser } = appStore;
 
 const email = ref("");
 const password = ref("");
@@ -63,10 +63,12 @@ const onClickLogin = async () => {
     saveAuthUser(user);
     saveAuthToken(jwt);
     updateIsAuthorized(true);
+    updateUser(user);
     await router.push({ name: mainPrivatePage.name });
   } else {
     resetAuthToken();
     resetAuthUser();
+    updateUser(null);
     showToast({ type: ToastType.Error, text: lang.error.loginFailed });
   }
 };

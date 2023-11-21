@@ -89,7 +89,6 @@ import { computed, onBeforeMount, ref } from "vue";
 import type { ScheduleDay } from "@/types/schedule";
 import { useScheduleStore } from "@/store/scheduleStore";
 import { storeToRefs } from "pinia";
-import type { TimeSlotShort } from "@/types/schedule";
 import { sortWithCollator } from "@/helpers/sort";
 import { addDays, format } from "date-fns";
 import MyButton from "@/components/schedule/MyButton.vue";
@@ -98,7 +97,6 @@ import TimeSlotComponent from "@/components/schedule/TimeSlotComponent.vue";
 import TimeSlotDialog from "@/components/schedule/TimeSlotDialog.vue";
 import MyDialog from "@/components/dialogs/MyDialog.vue";
 import type { TimeSlot } from "@/types/schedule";
-
 const scheduleStore = useScheduleStore();
 const { schedule } = storeToRefs(scheduleStore);
 const { loadSchedule, deleteSlot, getClientNameById, getClientById } =

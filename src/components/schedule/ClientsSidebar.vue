@@ -105,7 +105,7 @@ const confirmDeleteClient = async () => {
     return;
   }
 
-  archiveClient(clientToDelete.value.id);
+  await archiveClient(clientToDelete.value.id);
 
   clientToDelete.value = undefined;
 };

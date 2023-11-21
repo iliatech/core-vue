@@ -1,22 +1,29 @@
 import { defineStore } from "pinia";
-import type { Ref } from "vue";
 import { ref } from "vue";
 import type {
   Client,
   ScheduleDayItem,
   TimeSlotShort,
   TimeSlot,
+  SchedulePayload,
+  ScheduleConfig,
 } from "@/types/schedule";
 import Api from "@/api/Api";
 import { apiPaths } from "@/settings/api";
 import { RequestMethods } from "@/types/api";
 import { v4 as uuidv4 } from "uuid";
 import { sortWithCollator } from "@/helpers/sort";
+import { TimeZoneName } from "@/settings/schedule";
 
 export const useScheduleStore = defineStore("scheduleStore", () => {
-  const clients: Ref<Client[]> = ref([]);
+  const initialConfig = {
+    defaultInputTimezoneName: TimeZoneName.Esp,
+    dashboardTimezoneName: TimeZoneName.Esp,
+  };
 
+  const clients = ref<Client[]>([]);
   const schedule = ref<ScheduleDayItem[]>([]);
+  const config = ref<ScheduleConfig>(initialConfig);
 
   const addSlot = (date: string, slot: TimeSlotShort) => {
     const day = schedule.value.find((item) => item.date === date);
@@ -92,20 +99,22 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
   };
 
   const loadSchedule = async () => {
-    const data = await Api.request({
+    const data: SchedulePayload = await Api.request({
       path: apiPaths.schedule,
     });
 
     clients.value = data.clients ?? [];
     schedule.value = data.schedule ?? [];
+    config.value = data.config ?? initialConfig;
 
     sortWithCollator(clients.value, "name");
   };
 
   const saveSchedule = async () => {
-    const payload = {
+    const payload: SchedulePayload = {
       clients: clients.value,
       schedule: schedule.value,
+      config: config.value,
     };
 
     await Api.request({
@@ -117,6 +126,7 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
 
   return {
     clients,
+    config,
     schedule,
 
     createClient,

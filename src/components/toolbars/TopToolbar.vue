@@ -36,15 +36,14 @@
       />
     </div>
   </div>
+  <ProfileSidebar ref="profileSidebar" />
 </template>
 <script lang="ts" setup>
 import { lang } from "@/lang";
 import router from "@/router";
-import { publicRouteNames, routes } from "@/settings/routes";
-import { getAuthUser, resetAuthToken, resetAuthUser } from "@/helpers/auth";
+import { routes } from "@/settings/routes";
+import { resetAuthToken, resetAuthUser } from "@/helpers/auth";
 import Menu from "primevue/menu";
-import { showToast } from "@/helpers/toast";
-import { ToastType } from "@/types/toasts";
 import { computed, ref, watch } from "vue";
 import { useAppStore } from "@/store/appStore";
 import { storeToRefs } from "pinia";
@@ -52,23 +51,21 @@ import type { NavigationItem } from "@/types/common";
 import { useRoute } from "vue-router";
 import { fullUserName } from "@/helpers/common";
 import MyButton from "@/components/schedule/MyButton.vue";
+import ProfileSidebar from "@/components/schedule/ProfileSidebar.vue";
 
 const route = useRoute();
 
 const appStore = useAppStore();
 const { updateIsAuthorized } = appStore;
-const { isAuthorized } = storeToRefs(appStore);
+const { isAuthorized, user } = storeToRefs(appStore);
 
 const userMenu = ref();
 const navMenu = ref();
 const navigation = ref();
+const profileSidebar = ref();
 
 const title = computed(() => {
   return route.meta.title;
-});
-
-const isMainPageStyle = computed(() => {
-  return publicRouteNames.includes(route.name as string);
 });
 
 const navigationOptions = computed(() => {
@@ -105,15 +102,16 @@ const navigationOptions = computed(() => {
 });
 
 const menuAuthorized = computed(() => {
-  const user = getAuthUser();
-
   return [
     {
       label: lang.label.profile,
       items: [
         {
-          label: fullUserName(user),
+          label: fullUserName(user.value),
           icon: "pi pi-user",
+          command: () => {
+            profileSidebar.value.open();
+          },
         },
       ],
     },
