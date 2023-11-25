@@ -30,25 +30,33 @@
       <div class="schedule-slot-dialog__client">
         <Dropdown
           v-model="client"
-          :options="clients.filter((item) => !item.archived)"
+          :options="filteredClients"
           :placeholder="$lang.label.client"
-          :class="{ 'p-invalid': validated && !client }"
+          :class="{ 'p-invalid': validated && !client && !comment }"
           option-label="name"
+          show-clear
         />
       </div>
+      <InputText
+        v-model="comment"
+        :placeholder="lang.label.comment"
+        :class="{ 'p-invalid': validated && !client && !comment }"
+      />
     </div>
   </MyDialog>
 </template>
 
 <script setup lang="ts">
 import MyDialog from "@/components/dialogs/MyDialog.vue";
-import { ref } from "vue";
+import InputText from "primevue/inputtext";
+import { computed, ref } from "vue";
 import Dropdown from "primevue/dropdown";
 import { useScheduleStore } from "@/store/scheduleStore";
 import { storeToRefs } from "pinia";
 import type { Client, TimeSlotShort, TimeSlot } from "@/types/schedule";
 import { parseSlotTime, stringifySlotTime } from "@/helpers/schedule";
 import { TimeZoneName } from "@/settings/schedule";
+import { lang } from "@/lang";
 
 const scheduleStore = useScheduleStore();
 const { clients, userProfileConfig } = storeToRefs(scheduleStore);
@@ -65,8 +73,13 @@ const timezone = ref<string | null>(
   userProfileConfig.value.defaultInputTimezoneName
 );
 const client = ref<Client | null>(null);
+const comment = ref();
 const validated = ref<boolean>(false);
 const editMode = ref<boolean>(false);
+
+const filteredClients = computed<Client[]>(() => {
+  return clients.value.filter((item) => !item.archived);
+});
 
 const generateHourOptions = (): string[] => {
   const options = [];
@@ -99,7 +112,12 @@ const handleConfirm = async () => {
     return;
   }
 
-  if (!hour.value || !minute.value || !timezone.value || !client.value) {
+  if (
+    !hour.value ||
+    !minute.value ||
+    !timezone.value ||
+    (!client.value && !comment.value)
+  ) {
     validated.value = true;
     return;
   }
@@ -109,8 +127,9 @@ const handleConfirm = async () => {
   }
 
   addSlot(selectedDate, {
-    clientId: client.value.id,
+    clientId: client.value?.id ?? null,
     time: stringifySlotTime(hour.value, minute.value, timezone.value),
+    comment: comment.value,
   });
 
   await saveSchedule();
@@ -123,12 +142,15 @@ const open = (date: string, slot?: TimeSlotShort) => {
   hour.value = null;
   minute.value = null;
   timezone.value = userProfileConfig.value.defaultInputTimezoneName;
+  comment.value = undefined;
   client.value = null;
   validated.value = false;
 
   selectedDate = date;
 
   editMode.value = !!slot;
+
+  console.log("SL", slot);
 
   if (slot) {
     [hour.value, minute.value, timezone.value] = parseSlotTime(slot.time);
@@ -138,6 +160,8 @@ const open = (date: string, slot?: TimeSlotShort) => {
     if (foundClient) {
       client.value = foundClient;
     }
+
+    comment.value = slot.comment;
 
     editSlotConfig = { date, ...slot };
   } else {

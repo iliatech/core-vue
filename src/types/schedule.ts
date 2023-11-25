@@ -1,6 +1,7 @@
 export interface TimeSlotShort {
   time: string;
-  clientId: string;
+  clientId: string | null;
+  comment: string | undefined;
 }
 
 export interface TimeSlot extends TimeSlotShort {
