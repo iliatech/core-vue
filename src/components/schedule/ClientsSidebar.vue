@@ -30,6 +30,12 @@
         <template #body="{ data }">
           <div class="clients-sidebar__action-column">
             <MyButton
+              icon-pre="pencil"
+              @click="handleClickEditClient(data)"
+              icon-size="1rem"
+              no-border
+            />
+            <MyButton
               icon-pre="download"
               @click="handleClickDeleteClient(data)"
               icon-size="1rem"
@@ -49,13 +55,12 @@
     @confirm="confirmDeleteClient"
     :z-index="1200"
   >
-    {{ $lang.label.clientName }}: {{ clientToDelete?.name }}
+    {{ $lang.label.clientName }}: {{ selectedClient?.name }}
   </MyDialog>
 </template>
 <script lang="ts" setup>
-import { computed, onBeforeMount, ref } from "vue";
+import { computed, ref } from "vue";
 
-import type { ApiTagResponse } from "@/types/tag";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import { storeToRefs } from "pinia";
@@ -75,7 +80,7 @@ const { clients } = storeToRefs(scheduleStore);
 const { archiveClient } = scheduleStore;
 
 const clientDialog = ref();
-const clientToDelete = ref<Client>();
+const selectedClient = ref<Client>();
 const sidebar = ref();
 const deleteClientDialog = ref();
 
@@ -91,23 +96,28 @@ const handleClickAddClient = () => {
   clientDialog.value.open();
 };
 
-const handleClickDeleteClient = async (tag: ApiTagResponse) => {
-  clientToDelete.value = tag;
+const handleClickDeleteClient = async (client: Client) => {
+  selectedClient.value = client;
   deleteClientDialog.value.open();
 };
 
+const handleClickEditClient = async (client: Client) => {
+  selectedClient.value = client;
+  clientDialog.value.open(client);
+};
+
 const cancelDeleteClient = () => {
-  clientToDelete.value = undefined;
+  selectedClient.value = undefined;
 };
 
 const confirmDeleteClient = async () => {
-  if (!clientToDelete.value) {
+  if (!selectedClient.value) {
     return;
   }
 
-  await archiveClient(clientToDelete.value.id);
+  await archiveClient(selectedClient.value.id);
 
-  clientToDelete.value = undefined;
+  selectedClient.value = undefined;
 };
 
 defineExpose({ open });
@@ -129,6 +139,7 @@ defineExpose({ open });
   &__action-column {
     display: flex;
     justify-content: center;
+    gap: $px-15;
   }
 }
 

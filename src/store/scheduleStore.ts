@@ -69,6 +69,15 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
     await saveSchedule();
   };
 
+  const editClient = async (inputClient: Client) => {
+    const client = clients.value.find((item) => item.id === inputClient.id);
+
+    if (client) {
+      client.name = inputClient.name;
+      await saveSchedule();
+    }
+  };
+
   const getClientById = (id: string | undefined | null): Client | undefined => {
     if (!id) {
       return undefined;
@@ -129,11 +138,11 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
     clients,
     userProfileConfig,
     schedule,
-
     createClient,
     addSlot,
     archiveClient,
     deleteSlot,
+    editClient,
     getClientById,
     getClientNameById,
     loadSchedule,
