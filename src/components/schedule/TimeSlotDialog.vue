@@ -51,7 +51,7 @@ import { parseSlotTime, stringifySlotTime } from "@/helpers/schedule";
 import { TimeZoneName } from "@/settings/schedule";
 
 const scheduleStore = useScheduleStore();
-const { clients, config } = storeToRefs(scheduleStore);
+const { clients, userProfileConfig } = storeToRefs(scheduleStore);
 const { addSlot, deleteSlot, saveSchedule } = scheduleStore;
 
 let selectedDate: string | null = null;
@@ -61,7 +61,9 @@ const timezoneOptions = [TimeZoneName.Esp, TimeZoneName.Msk];
 const dialog = ref();
 const hour = ref<string | null>(null);
 const minute = ref<string | null>(null);
-const timezone = ref<string | null>(config.value.defaultInputTimezoneName);
+const timezone = ref<string | null>(
+  userProfileConfig.value.defaultInputTimezoneName
+);
 const client = ref<Client | null>(null);
 const validated = ref<boolean>(false);
 const editMode = ref<boolean>(false);
@@ -120,7 +122,7 @@ const handleConfirm = async () => {
 const open = (date: string, slot?: TimeSlotShort) => {
   hour.value = null;
   minute.value = null;
-  timezone.value = config.value.defaultInputTimezoneName;
+  timezone.value = userProfileConfig.value.defaultInputTimezoneName;
   client.value = null;
   validated.value = false;
 

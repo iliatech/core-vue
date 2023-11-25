@@ -72,7 +72,7 @@ import MyDialog from "@/components/dialogs/MyDialog.vue";
 
 const scheduleStore = useScheduleStore();
 const { clients } = storeToRefs(scheduleStore);
-const { loadSchedule, archiveClient } = scheduleStore;
+const { archiveClient } = scheduleStore;
 
 const clientDialog = ref();
 const clientToDelete = ref<Client>();
@@ -109,10 +109,6 @@ const confirmDeleteClient = async () => {
 
   clientToDelete.value = undefined;
 };
-
-onBeforeMount(async () => {
-  await loadSchedule();
-});
 
 defineExpose({ open });
 </script>

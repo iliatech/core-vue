@@ -28,6 +28,7 @@ export interface ScheduleDay {
 export interface ScheduleConfig {
   defaultInputTimezoneName: string;
   dashboardTimezoneName: string;
+  scheduleTitle?: string;
 }
 
 export interface SchedulePayload {

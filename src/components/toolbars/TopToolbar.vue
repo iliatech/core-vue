@@ -52,6 +52,7 @@ import { useRoute } from "vue-router";
 import { fullUserName } from "@/helpers/common";
 import MyButton from "@/components/schedule/MyButton.vue";
 import ProfileSidebar from "@/components/schedule/ProfileSidebar.vue";
+import { useScheduleStore } from "@/store/scheduleStore";
 
 const route = useRoute();
 
@@ -59,12 +60,22 @@ const appStore = useAppStore();
 const { updateIsAuthorized } = appStore;
 const { isAuthorized, user } = storeToRefs(appStore);
 
+const scheduleStore = useScheduleStore();
+const { userProfileConfig } = storeToRefs(scheduleStore);
+
 const userMenu = ref();
 const navMenu = ref();
 const navigation = ref();
 const profileSidebar = ref();
 
 const title = computed(() => {
+  if (
+    userProfileConfig.value.scheduleTitle &&
+    route.path === routes.schedule.path
+  ) {
+    return userProfileConfig.value.scheduleTitle;
+  }
+
   return route.meta.title;
 });
 

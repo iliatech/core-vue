@@ -16,6 +16,7 @@ export default {
   publicFeatures: "Useful Resources",
   privateFeatures: "Private Applications",
   profile: "Profile",
+  scheduleSettings: "Schedule Settings",
   siteTitle: "Home page",
   usefulLinks: "Useful Links",
   wordsApp: "Words Cards",

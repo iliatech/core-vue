@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from "vue-router";
 import { publicRouteNames, routes } from "@/settings/routes";
 import { getAuthToken, getAuthUser } from "@/helpers/auth";
 import { useAppStore } from "@/store/appStore";
-import { storeToRefs } from "pinia";
 import { lang } from "@/lang";
 
 const router = createRouter({

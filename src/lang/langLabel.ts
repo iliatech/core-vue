@@ -19,6 +19,8 @@ export default {
   timezone: "Timezone",
   defaultInputTimezoneName: "Default Input Timezone Name",
   dashboardTimezoneName: "Dashboard Timezone Name",
+  scheduleTitle: "Title",
   translations: "Translations",
   userId: "User ID",
+  username: "Username",
 };

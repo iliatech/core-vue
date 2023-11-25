@@ -31,7 +31,7 @@ import { storeToRefs } from "pinia";
 import { convertTime } from "@/helpers/timezone";
 
 const scheduleStore = useScheduleStore();
-const { config } = storeToRefs(scheduleStore);
+const { userProfileConfig } = storeToRefs(scheduleStore);
 const { getClientNameById } = scheduleStore;
 
 const emit = defineEmits(["click:delete", "click:edit"]);
@@ -57,8 +57,8 @@ const prepareTime = (time: string) => {
   return `${convertTime(
     Number(hours),
     timezone,
-    config.value.dashboardTimezoneName
-  )}:${minutes} ${config.value.dashboardTimezoneName}`;
+    userProfileConfig.value.dashboardTimezoneName
+  )}:${minutes} ${userProfileConfig.value.dashboardTimezoneName}`;
 };
 </script>
 

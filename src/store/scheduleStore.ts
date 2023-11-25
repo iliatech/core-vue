@@ -17,13 +17,14 @@ import { TimeZoneName } from "@/settings/schedule";
 
 export const useScheduleStore = defineStore("scheduleStore", () => {
   const initialConfig = {
+    scheduleTitle: undefined,
     defaultInputTimezoneName: TimeZoneName.Esp,
     dashboardTimezoneName: TimeZoneName.Esp,
   };
 
   const clients = ref<Client[]>([]);
   const schedule = ref<ScheduleDayItem[]>([]);
-  const config = ref<ScheduleConfig>(initialConfig);
+  const userProfileConfig = ref<ScheduleConfig>(initialConfig);
 
   const addSlot = (date: string, slot: TimeSlotShort) => {
     const day = schedule.value.find((item) => item.date === date);
@@ -105,7 +106,7 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
 
     clients.value = data.clients ?? [];
     schedule.value = data.schedule ?? [];
-    config.value = data.config ?? initialConfig;
+    userProfileConfig.value = data.config ?? initialConfig;
 
     sortWithCollator(clients.value, "name");
   };
@@ -114,7 +115,7 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
     const payload: SchedulePayload = {
       clients: clients.value,
       schedule: schedule.value,
-      config: config.value,
+      config: userProfileConfig.value,
     };
 
     await Api.request({
@@ -126,7 +127,7 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
 
   return {
     clients,
-    config,
+    userProfileConfig,
     schedule,
 
     createClient,

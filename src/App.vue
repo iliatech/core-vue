@@ -20,21 +20,25 @@ import ProgressSpinner from "primevue/progressspinner";
 import Toast from "primevue/toast";
 import { useAppStore } from "@/store/appStore";
 import { storeToRefs } from "pinia";
-import { onMounted, ref } from "vue";
+import { onBeforeMount, onMounted, ref } from "vue";
 import { setGlobalToastObject } from "@/helpers/toast";
-import { useTagsStore } from "@/store/tagsStore";
-const appStore = useAppStore();
-const tagsStore = useTagsStore();
 import TopToolbar from "@/components/toolbars/TopToolbar.vue";
+import { useScheduleStore } from "@/store/scheduleStore";
 
+const appStore = useAppStore();
 const { isLoading } = storeToRefs(appStore);
-//const { loadTags } = tagsStore; // TODO
+
+const scheduleStore = useScheduleStore();
+const { loadSchedule } = scheduleStore;
 
 const toast = ref();
 
+onBeforeMount(async () => {
+  await loadSchedule();
+});
+
 onMounted(async () => {
   setGlobalToastObject(toast.value);
-  //await loadTags(); // TODO
 });
 </script>
 

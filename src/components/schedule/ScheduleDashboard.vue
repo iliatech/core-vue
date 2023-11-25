@@ -85,7 +85,7 @@
   <TimeSlotDialog ref="slotDialog" />
 </template>
 <script lang="ts" setup>
-import { computed, onBeforeMount, ref } from "vue";
+import { computed, ref } from "vue";
 import type { ScheduleDay } from "@/types/schedule";
 import { useScheduleStore } from "@/store/scheduleStore";
 import { storeToRefs } from "pinia";
@@ -99,8 +99,7 @@ import MyDialog from "@/components/dialogs/MyDialog.vue";
 import type { TimeSlot } from "@/types/schedule";
 const scheduleStore = useScheduleStore();
 const { schedule } = storeToRefs(scheduleStore);
-const { loadSchedule, deleteSlot, getClientNameById, getClientById } =
-  scheduleStore;
+const { deleteSlot, getClientNameById, getClientById } = scheduleStore;
 
 const slotDialog = ref();
 const clientsSidebar = ref();
@@ -111,10 +110,6 @@ const today = format(new Date(), "d/MMM/yyyy");
 const currentMonday = ref<Date>(
   addDays(new Date(), 1 - Number(format(new Date(), "i")))
 );
-
-onBeforeMount(async () => {
-  await loadSchedule();
-});
 
 const weekDays = computed<ScheduleDay[]>(() => {
   const days: ScheduleDay[] = [];
