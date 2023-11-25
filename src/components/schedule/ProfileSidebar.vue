@@ -1,5 +1,10 @@
 <template>
-  <CustomSidebar ref="sidebar" :title="$lang.title.profile" close-button>
+  <CustomSidebar
+    ref="sidebar"
+    :title="$lang.title.profile"
+    close-button
+    @click:close="handleClickClose"
+  >
     <div class="profile-sidebar">
       <div
         v-for="setting in profileSidebarSettings.userMeta"
@@ -17,7 +22,10 @@
         <label>
           {{ $lang.label.scheduleTitle }}
         </label>
-        <InputText v-model="scheduleTitle" style="width: 100%" />
+        <InputText
+          v-model="userProfileConfig.scheduleTitle"
+          style="width: 100%"
+        />
       </div>
       <div>
         <label>
@@ -64,6 +72,11 @@ import Button from "primevue/button";
 import { useAppStore } from "@/store/appStore";
 import { profileSidebarSettings } from "@/settings/profileSidebarSettings";
 import InputText from "primevue/inputtext";
+import { ScheduleConfig } from "@/types/schedule";
+import { cloneDeep } from "lodash";
+import { showToast } from "@/helpers/toast";
+import { ToastType } from "@/types/toasts";
+import { lang } from "@/lang";
 
 const appStore = useAppStore();
 const { user } = storeToRefs(appStore);
@@ -73,17 +86,29 @@ const { userProfileConfig } = storeToRefs(scheduleStore);
 const { saveSchedule } = scheduleStore;
 
 const sidebar = ref();
-const scheduleTitle = ref();
+
+let savedUserProfileConfig: ScheduleConfig | null = null;
 
 const open = () => {
-  scheduleTitle.value = userProfileConfig.value.scheduleTitle;
+  savedUserProfileConfig = cloneDeep(userProfileConfig.value);
   sidebar.value.open();
 };
 
 const handleClickSave = () => {
-  userProfileConfig.value.scheduleTitle = scheduleTitle.value;
   saveSchedule();
   sidebar.value.close();
+  showToast({
+    type: ToastType.Success,
+    text: lang.success.profileSettingsWereSaved,
+  });
+};
+
+const handleClickClose = () => {
+  if (!savedUserProfileConfig) {
+    return;
+  }
+
+  userProfileConfig.value = savedUserProfileConfig;
 };
 
 defineExpose({ open });

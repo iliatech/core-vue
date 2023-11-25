@@ -11,7 +11,7 @@
           {{ title }}
         </div>
         <div class="custom-sidebar__header-icon">
-          <i class="pi pi-times" @click="close" />
+          <i class="pi pi-times" @click="handleClose" />
         </div>
       </div>
     </template>
@@ -22,17 +22,10 @@
       <div class="custom-sidebar__buttons">
         <slot name="buttons-before" />
         <Button
-          v-if="cancelButton"
-          @click="close"
-          :label="$lang.button.cancel"
-          class="cancel-button"
-          outlined
-        />
-        <Button
-          v-if="closeButton"
-          @click="close"
-          :label="$lang.button.close"
-          class="close-button"
+          v-if="cancelButton || closeButton"
+          @click="handleClose"
+          :label="cancelButton ? $lang.button.cancel : $lang.button.close"
+          :class="cancelButton ? 'close-button' : 'cancel-button'"
           outlined
         />
         <slot name="buttons-after" />
@@ -55,8 +48,12 @@ defineProps({
   cancelButton: Boolean,
 });
 
-const close = () => {
+const handleClose = () => {
   emit("click:close");
+  close();
+};
+
+const close = () => {
   show.value = false;
 };
 
