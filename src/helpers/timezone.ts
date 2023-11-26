@@ -14,7 +14,11 @@ export const convertTime = (
     return null;
   }
 
-  const newHour = hour + (targetTimezone.value - timezone.value);
+  let newHour = hour + (targetTimezone.value - timezone.value);
+
+  if (newHour < 0) {
+    newHour = 24 + newHour;
+  }
 
   return newHour.toString().length === 1 ? `0${newHour}` : `${newHour}`;
 };

@@ -13,7 +13,7 @@
         <label>
           {{ setting.label }}
         </label>
-        {{ user[setting.name] }}
+        {{ user?.[setting.name as keyof AuthorizedUser] }}
       </div>
       <div class="subtitle">
         {{ $lang.title.scheduleSettings }}
@@ -72,11 +72,12 @@ import Button from "primevue/button";
 import { useAppStore } from "@/store/appStore";
 import { profileSidebarSettings } from "@/settings/profileSidebarSettings";
 import InputText from "primevue/inputtext";
-import { ScheduleConfig } from "@/types/schedule";
+import type { ScheduleConfig } from "@/types/schedule";
 import { cloneDeep } from "lodash";
 import { showToast } from "@/helpers/toast";
 import { ToastType } from "@/types/toasts";
 import { lang } from "@/lang";
+import type { AuthorizedUser } from "@/types/user";
 
 const appStore = useAppStore();
 const { user } = storeToRefs(appStore);

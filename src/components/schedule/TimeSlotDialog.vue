@@ -64,7 +64,7 @@ const { addSlot, deleteSlot, saveSchedule } = scheduleStore;
 
 let selectedDate: string | null = null;
 let editSlotConfig: TimeSlot | null = null;
-const timezoneOptions = [TimeZoneName.Esp, TimeZoneName.Msk];
+const timezoneOptions = [TimeZoneName.Esp, TimeZoneName.Msk, TimeZoneName.Geo];
 
 const dialog = ref();
 const hour = ref<string | null>(null);
@@ -84,9 +84,15 @@ const filteredClients = computed<Client[]>(() => {
 const generateHourOptions = (): string[] => {
   const options = [];
 
-  for (let hour = 8; hour <= 22; hour++) {
-    const hourString = `${hour}`.length < 2 ? `0${hour}` : `${hour}`;
-    options.push(hourString);
+  const getHourString = (hour: number): string =>
+    `${hour}`.length < 2 ? `0${hour}` : `${hour}`;
+
+  for (let hour = 8; hour <= 23; hour++) {
+    options.push(getHourString(hour));
+  }
+
+  for (let hour = 0; hour <= 7; hour++) {
+    options.push(getHourString(hour));
   }
 
   return options;

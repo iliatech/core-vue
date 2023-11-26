@@ -15,6 +15,7 @@ export const scheduleColors: Record<string, string> = {
 
 export enum TimeZoneName {
   Esp = "ESP",
+  Geo = "GEO",
   Msk = "MSK",
 }
 
@@ -27,6 +28,11 @@ export const timeZones: TimeZone[] = [
   {
     name: TimeZoneName.Msk,
     value: 3,
+    summerTime: false,
+  },
+  {
+    name: TimeZoneName.Geo,
+    value: 4,
     summerTime: false,
   },
 ];
