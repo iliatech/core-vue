@@ -97,6 +97,7 @@ import TimeSlotComponent from "@/components/schedule/TimeSlotComponent.vue";
 import TimeSlotDialog from "@/components/schedule/TimeSlotDialog.vue";
 import MyDialog from "@/components/dialogs/MyDialog.vue";
 import type { TimeSlot } from "@/types/schedule";
+import { es } from "date-fns/locale";
 const scheduleStore = useScheduleStore();
 const { schedule } = storeToRefs(scheduleStore);
 const { deleteSlot, getClientNameById, getClientById } = scheduleStore;
@@ -118,7 +119,7 @@ const weekDays = computed<ScheduleDay[]>(() => {
     const date = addDays(currentMonday.value, i);
     days.push({
       date,
-      short: format(date, "E, d MMM"),
+      short: format(date, "E, d MMM", { locale: es }),
       full: format(date, "d/MMM/yyyy"),
       dayOfWeekNumber: Number(format(date, "i")),
     });
@@ -206,7 +207,7 @@ const openConfirmDeleteDialog = () => {
 
   &__day {
     @include zero-eight-hundred-seventy-five;
-    min-width: 150px;
+    width: 150px;
     border: 1px solid #888;
     border-radius: $px-2;
     padding-bottom: $px-10;
