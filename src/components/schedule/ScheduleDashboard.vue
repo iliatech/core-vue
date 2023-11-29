@@ -203,6 +203,11 @@ const openConfirmDeleteDialog = () => {
     gap: $px-20;
     flex-wrap: wrap;
     margin-bottom: $px-30;
+
+    @media (max-width: 450px) {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
   }
 
   &__day {
