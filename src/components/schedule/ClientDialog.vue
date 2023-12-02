@@ -14,11 +14,12 @@
       />
     </div>
     <template #buttons-before>
-      <MyButton
-        :label="id ? $lang.button.save : $lang.button.create"
+      <FutureButton
+        :label="$lang.button.save"
         color="forestGreen"
         outlined
         @click="handleClickSave"
+        width="80px"
       />
     </template>
   </CustomDialog>
@@ -27,7 +28,7 @@
 import { ref } from "vue";
 import InputText from "primevue/inputtext";
 import CustomDialog from "@/components/dialogs/CustomDialog.vue";
-import MyButton from "@/components/schedule/MyButton.vue";
+import FutureButton from "@/components/schedule/FutureButton.vue";
 import { useScheduleStore } from "@/store/scheduleStore";
 import { showToast } from "@/helpers/toast";
 import { ToastType } from "@/types/toasts";
@@ -62,9 +63,9 @@ const handleClickSave = async () => {
   }
 
   if (id.value) {
-    await editClient({ id: id.value, name: name.value.trim() });
+    await editClient({ id: id.value, name: name.value });
   } else {
-    await createClient(name.value.trim());
+    await createClient(name.value);
   }
 
   dialog.value.close();

@@ -1,4 +1,6 @@
 export default {
+  clientCreated: "Client created",
+  clientUpdated: "Client updated",
   login: "You are logged in",
   logout: "You are logged out",
   profileSettingsWereSaved: "Profile settings were saved",

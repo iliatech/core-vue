@@ -2,18 +2,20 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import type {
   Client,
-  ScheduleDayItem,
-  TimeSlotShort,
-  TimeSlot,
-  SchedulePayload,
   ScheduleConfig,
+  ScheduleDayItem,
+  SchedulePayload,
+  TimeSlot,
+  TimeSlotShort,
 } from "@/types/schedule";
 import Api from "@/api/Api";
 import { apiPaths } from "@/settings/api";
 import { RequestMethods } from "@/types/api";
-import { v4 as uuidv4 } from "uuid";
-import { sortWithCollator } from "@/helpers/sort";
 import { TimeZoneName } from "@/settings/schedule";
+import { showToast } from "@/helpers/toast";
+import { ToastType } from "@/types/toasts";
+import { lang } from "@/lang";
+import { sortWithCollator } from "@/helpers/sort";
 
 export const useScheduleStore = defineStore("scheduleStore", () => {
   const initialConfig = {
@@ -63,19 +65,43 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
     await saveSchedule();
   };
 
-  const createClient = async (name: string) => {
-    clients.value.push({ name, id: uuidv4() });
-
-    await saveSchedule();
+  const loadClients = async () => {
+    clients.value =
+      (await Api.request({
+        path: apiPaths.client,
+      })) ?? [];
   };
 
-  const editClient = async (inputClient: Client) => {
-    const client = clients.value.find((item) => item.id === inputClient.id);
+  const createClient = async (name: string) => {
+    await Api.request({
+      path: apiPaths.client,
+      method: RequestMethods.Post,
+      payload: { name },
+      successCallback: async () => {
+        showToast({
+          type: ToastType.Success,
+          text: lang.success.clientCreated,
+        });
 
-    if (client) {
-      client.name = inputClient.name;
-      await saveSchedule();
-    }
+        await loadClients();
+      },
+    });
+  };
+
+  const editClient = async (client: Client) => {
+    await Api.request({
+      path: `${apiPaths.client}/${client.id}`,
+      method: RequestMethods.Put,
+      payload: { name: client.name },
+      successCallback: async () => {
+        await loadClients();
+
+        showToast({
+          type: ToastType.Success,
+          text: lang.success.clientUpdated,
+        });
+      },
+    });
   };
 
   const getClientById = (id: string | undefined | null): Client | undefined => {
@@ -98,14 +124,14 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
     return client?.name ?? undefined;
   };
 
-  const archiveClient = async (id: string) => {
-    const client = clients.value.find((item) => item.id === id);
+  const archiveClient = async (client: Client) => {
+    await Api.request({
+      path: `${apiPaths.client}/${client.id}`,
+      method: RequestMethods.Patch,
+      payload: { archived: true },
+    });
 
-    if (client) {
-      client.archived = true;
-    }
-
-    await saveSchedule();
+    await loadClients();
   };
 
   const loadSchedule = async () => {
@@ -113,11 +139,8 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
       path: apiPaths.schedule,
     });
 
-    clients.value = data.clients ?? [];
     schedule.value = data.schedule ?? [];
     userProfileConfig.value = data.config ?? initialConfig;
-
-    sortWithCollator(clients.value, "name");
   };
 
   const saveSchedule = async () => {
@@ -129,7 +152,7 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
 
     await Api.request({
       path: apiPaths.schedule,
-      method: RequestMethods.Post,
+      method: RequestMethods.Put,
       payload,
     });
   };
@@ -138,6 +161,7 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
     clients,
     userProfileConfig,
     schedule,
+    loadClients,
     createClient,
     addSlot,
     archiveClient,

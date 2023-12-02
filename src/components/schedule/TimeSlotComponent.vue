@@ -8,13 +8,13 @@
       {{ modelValue.comment }}
     </div>
     <div class="schedule-timeslot__actions">
-      <MyButton
+      <FutureButton
         icon-pre="trash"
         color="pink"
         no-border
         @click="handleClickDeleteSlot(modelValue)"
       />
-      <MyButton
+      <FutureButton
         icon-post="pencil"
         color="paleOrange"
         no-border
@@ -28,7 +28,7 @@
 import type { TimeSlot } from "@/types/schedule";
 import type { PropType } from "vue";
 import { useScheduleStore } from "@/store/scheduleStore";
-import MyButton from "@/components/schedule/MyButton.vue";
+import FutureButton from "@/components/schedule/FutureButton.vue";
 import { parseSlotTime } from "@/helpers/schedule";
 import { storeToRefs } from "pinia";
 import { convertTime } from "@/helpers/timezone";

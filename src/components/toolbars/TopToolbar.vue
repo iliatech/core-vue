@@ -4,7 +4,7 @@
     <div class="top-toolbar__center">
       <div @click="openNavMenu" class="top-toolbar__title">
         {{ title }}
-        <MyButton
+        <FutureButton
           icon-pre="angle-down"
           width="14px"
           height="20px"
@@ -23,7 +23,7 @@
       </Menu>
     </div>
     <div class="top-toolbar__right">
-      <MyButton
+      <FutureButton
         icon-post="ellipsis-h"
         @click="handleClickUserMenu"
         margin-top="8px"
@@ -50,7 +50,7 @@ import { storeToRefs } from "pinia";
 import type { NavigationItem } from "@/types/common";
 import { useRoute } from "vue-router";
 import { fullUserName } from "@/helpers/common";
-import MyButton from "@/components/schedule/MyButton.vue";
+import FutureButton from "@/components/schedule/FutureButton.vue";
 import ProfileSidebar from "@/components/schedule/ProfileSidebar.vue";
 import { useScheduleStore } from "@/store/scheduleStore";
 

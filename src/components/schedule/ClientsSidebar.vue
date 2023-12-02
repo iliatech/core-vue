@@ -5,9 +5,9 @@
     :title="$lang.title.clients"
     close-button
   >
-    <MyButton
-      :label="$lang.button.add"
-      icon-post="plus"
+    <FutureButton
+      :label="$lang.button.create"
+      icon-pre="plus"
       @click="handleClickAddClient"
       color="forestGreen"
     />
@@ -29,14 +29,14 @@
       >
         <template #body="{ data }">
           <div class="clients-sidebar__action-column">
-            <MyButton
+            <FutureButton
               icon-pre="pencil"
               @click="handleClickEditClient(data)"
               icon-size="1rem"
               no-border
             />
-            <MyButton
-              icon-pre="download"
+            <FutureButton
+              icon-pre="trash"
               @click="handleClickDeleteClient(data)"
               icon-size="1rem"
               no-border
@@ -47,8 +47,8 @@
       <template #empty> {{ $lang.phrase.noClientsFound }} </template>
     </DataTable>
   </CustomSidebar>
-  <ScheduleClientDialog ref="clientDialog" />
-  <MyDialog
+  <ClientDialog ref="clientDialog" />
+  <FutureDialog
     ref="deleteClientDialog"
     :title="$lang.title.confirmDeleteClient"
     @cancel="cancelDeleteClient"
@@ -56,7 +56,7 @@
     :z-index="1200"
   >
     {{ $lang.label.clientName }}: {{ selectedClient?.name }}
-  </MyDialog>
+  </FutureDialog>
 </template>
 <script lang="ts" setup>
 import { computed, ref } from "vue";
@@ -65,19 +65,19 @@ import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import { storeToRefs } from "pinia";
 import CustomSidebar from "@/components/sidebars/CustomSidebar.vue";
-import MyButton from "@/components/schedule/MyButton.vue";
+import FutureButton from "@/components/schedule/FutureButton.vue";
 import {
   clientsTableColumns,
   ClientsTableColumns,
 } from "@/settings/tables/clientsTable";
 import { useScheduleStore } from "@/store/scheduleStore";
-import ScheduleClientDialog from "@/components/schedule/ScheduleClientDialog.vue";
+import ClientDialog from "@/components/schedule/ClientDialog.vue";
 import type { Client } from "@/types/schedule";
-import MyDialog from "@/components/dialogs/MyDialog.vue";
+import FutureDialog from "@/components/dialogs/FutureDialog.vue";
 
 const scheduleStore = useScheduleStore();
 const { clients } = storeToRefs(scheduleStore);
-const { archiveClient } = scheduleStore;
+const { loadClients, archiveClient } = scheduleStore;
 
 const clientDialog = ref();
 const selectedClient = ref<Client>();
@@ -88,7 +88,9 @@ const clientsFiltered = computed(() => {
   return clients.value.filter((item) => !item.archived);
 });
 
-const open = () => {
+const open = async () => {
+  await loadClients();
+
   sidebar.value.open();
 };
 
@@ -115,7 +117,7 @@ const confirmDeleteClient = async () => {
     return;
   }
 
-  await archiveClient(selectedClient.value.id);
+  await archiveClient(selectedClient.value);
 
   selectedClient.value = undefined;
 };

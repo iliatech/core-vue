@@ -2,20 +2,20 @@
   <div class="schedule">
     <div class="schedule__top-bar">
       <div class="schedule__week-selector">
-        <MyButton
+        <FutureButton
           @click="goPreviousWeek"
           :label="$lang.label.previousWeek"
           color="lightMagenta"
           icon-pre="caret-left"
         />
-        <MyButton
+        <FutureButton
           @click="goNextWeek"
           :label="$lang.label.nextWeek"
           color="lightMagenta"
           icon-post="caret-right"
         />
       </div>
-      <MyButton
+      <FutureButton
         @click="openClientsSidebar"
         :label="$lang.button.clients"
         color="lightBlue"
@@ -45,7 +45,7 @@
         </div>
         <div class="schedule__slots">
           <div class="schedule__slot-add">
-            <MyButton
+            <FutureButton
               icon-pre="plus"
               @click="handleClickAddSlot(day.full)"
               no-border
@@ -65,7 +65,7 @@
 
   <ClientsSidebar ref="clientsSidebar" />
 
-  <MyDialog
+  <FutureDialog
     ref="deleteSlotDialog"
     :title="$lang.title.confirmDeleteSlot"
     @cancel="cancelDeleteSlot"
@@ -80,27 +80,28 @@
     <br />
     {{ $lang.label.time }}:
     {{ deleteSlotConfig?.time }}
-  </MyDialog>
+  </FutureDialog>
 
   <TimeSlotDialog ref="slotDialog" />
 </template>
 <script lang="ts" setup>
-import { computed, ref } from "vue";
+import { computed, onBeforeMount, ref } from "vue";
 import type { ScheduleDay } from "@/types/schedule";
 import { useScheduleStore } from "@/store/scheduleStore";
 import { storeToRefs } from "pinia";
 import { sortWithCollator } from "@/helpers/sort";
 import { addDays, format } from "date-fns";
-import MyButton from "@/components/schedule/MyButton.vue";
+import FutureButton from "@/components/schedule/FutureButton.vue";
 import ClientsSidebar from "@/components/schedule/ClientsSidebar.vue";
 import TimeSlotComponent from "@/components/schedule/TimeSlotComponent.vue";
 import TimeSlotDialog from "@/components/schedule/TimeSlotDialog.vue";
-import MyDialog from "@/components/dialogs/MyDialog.vue";
+import FutureDialog from "@/components/dialogs/FutureDialog.vue";
 import type { TimeSlot } from "@/types/schedule";
 import { es } from "date-fns/locale";
 const scheduleStore = useScheduleStore();
 const { schedule } = storeToRefs(scheduleStore);
-const { deleteSlot, getClientNameById, getClientById } = scheduleStore;
+const { deleteSlot, getClientNameById, getClientById, loadClients } =
+  scheduleStore;
 
 const slotDialog = ref();
 const clientsSidebar = ref();
@@ -111,6 +112,10 @@ const today = format(new Date(), "d/MMM/yyyy");
 const currentMonday = ref<Date>(
   addDays(new Date(), 1 - Number(format(new Date(), "i")))
 );
+
+onBeforeMount(async () => {
+  await loadClients();
+});
 
 const weekDays = computed<ScheduleDay[]>(() => {
   const days: ScheduleDay[] = [];

@@ -1,5 +1,5 @@
 <template>
-  <MyDialog
+  <FutureDialog
     :title="editMode ? $lang.title.editSlot : $lang.title.addSlot"
     ref="dialog"
     @cancel="handleCancel"
@@ -43,11 +43,11 @@
         :class="{ 'p-invalid': validated && !client && !comment }"
       />
     </div>
-  </MyDialog>
+  </FutureDialog>
 </template>
 
 <script setup lang="ts">
-import MyDialog from "@/components/dialogs/MyDialog.vue";
+import FutureDialog from "@/components/dialogs/FutureDialog.vue";
 import InputText from "primevue/inputtext";
 import { computed, ref } from "vue";
 import Dropdown from "primevue/dropdown";
