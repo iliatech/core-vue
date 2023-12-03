@@ -6,6 +6,7 @@ export const apiPaths = {
   login: "login",
   schedule: "fileStorage/schedule",
   tag: "tag",
+  timeSlot: "timeSlot",
   translation: "translation",
   word: "word",
 };

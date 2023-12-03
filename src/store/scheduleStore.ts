@@ -1,12 +1,13 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import type {
+  ApiTimeSlotResponse,
   Client,
   ScheduleConfig,
   ScheduleDayItem,
   SchedulePayload,
   TimeSlot,
-  TimeSlotShort,
+  TimeSlotUpdate,
 } from "@/types/schedule";
 import Api from "@/api/Api";
 import { apiPaths } from "@/settings/api";
@@ -15,7 +16,7 @@ import { TimeZoneName } from "@/settings/schedule";
 import { showToast } from "@/helpers/toast";
 import { ToastType } from "@/types/toasts";
 import { lang } from "@/lang";
-import { sortWithCollator } from "@/helpers/sort";
+import { isNil, omitBy } from "lodash";
 
 export const useScheduleStore = defineStore("scheduleStore", () => {
   const initialConfig = {
@@ -27,42 +28,43 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
   const clients = ref<Client[]>([]);
   const schedule = ref<ScheduleDayItem[]>([]);
   const userProfileConfig = ref<ScheduleConfig>(initialConfig);
+  const timeSlots = ref<ApiTimeSlotResponse[]>([]);
 
-  const addSlot = (date: string, slot: TimeSlotShort) => {
-    const day = schedule.value.find((item) => item.date === date);
-
-    if (!day) {
-      schedule.value.push({ date, slots: [slot] });
-      return;
-    }
-
-    day.slots.push(slot);
+  const createSlot = async (slot: TimeSlot) => {
+    await Api.request({
+      path: apiPaths.timeSlot,
+      method: RequestMethods.Post,
+      payload: omitBy(slot, isNil),
+      successCallback: async () => {
+        await loadTimeSlots();
+      },
+    });
   };
 
-  const deleteSlot = async (config: TimeSlot | undefined | null) => {
-    if (!config) {
+  const updateSlot = async (slot: TimeSlotUpdate) => {
+    console.log("US", slot);
+    await Api.request({
+      path: `${apiPaths.timeSlot}/${slot.id}`,
+      method: RequestMethods.Put,
+      payload: slot,
+      successCallback: async () => {
+        await loadTimeSlots();
+      },
+    });
+  };
+
+  const deleteSlot = async (timeSlot: ApiTimeSlotResponse | null) => {
+    if (!timeSlot?.id) {
       return;
     }
 
-    const dayIndex = schedule.value.findIndex(
-      (item) => item.date === config.date
-    );
-
-    if (dayIndex === -1) {
-      return;
-    }
-
-    const slotIndex = schedule.value[dayIndex]?.slots.findIndex(
-      (item) => item.time === config.time && item.clientId === config.clientId
-    );
-
-    if (slotIndex === -1) {
-      return;
-    }
-
-    schedule.value[dayIndex].slots.splice(slotIndex, 1);
-
-    await saveSchedule();
+    await Api.request({
+      path: `${apiPaths.timeSlot}/${timeSlot.id}`,
+      method: RequestMethods.Delete,
+      successCallback: async () => {
+        await loadTimeSlots();
+      },
+    });
   };
 
   const loadClients = async () => {
@@ -88,7 +90,7 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
     });
   };
 
-  const editClient = async (client: Client) => {
+  const updateClient = async (client: Client) => {
     await Api.request({
       path: `${apiPaths.client}/${client.id}`,
       method: RequestMethods.Put,
@@ -132,6 +134,7 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
     });
 
     await loadClients();
+    await loadTimeSlots();
   };
 
   const loadSchedule = async () => {
@@ -141,6 +144,13 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
 
     schedule.value = data.schedule ?? [];
     userProfileConfig.value = data.config ?? initialConfig;
+  };
+
+  const loadTimeSlots = async () => {
+    timeSlots.value =
+      (await Api.request({
+        path: apiPaths.timeSlot,
+      })) ?? [];
   };
 
   const saveSchedule = async () => {
@@ -161,15 +171,18 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
     clients,
     userProfileConfig,
     schedule,
+    timeSlots,
     loadClients,
     createClient,
-    addSlot,
+    createSlot,
     archiveClient,
     deleteSlot,
-    editClient,
+    updateClient,
+    updateSlot,
     getClientById,
     getClientNameById,
     loadSchedule,
+    loadTimeSlots,
     saveSchedule,
   };
 });

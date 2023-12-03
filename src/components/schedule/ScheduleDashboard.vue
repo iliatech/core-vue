@@ -69,24 +69,24 @@
     ref="deleteSlotDialog"
     :title="$lang.title.confirmDeleteSlot"
     @cancel="cancelDeleteSlot"
-    @confirm="deleteSlot(deleteSlotConfig)"
+    @confirm="deleteSlot(selectedTimeSlot)"
     :z-index="1200"
   >
     {{ $lang.label.client }}:
-    {{ getClientNameById(deleteSlotConfig?.clientId) }}
+    {{ getClientNameById(selectedTimeSlot?.clientId) }}
     <br />
     {{ $lang.label.date }}:
-    {{ deleteSlotConfig?.date }}
+    {{ selectedTimeSlot?.date }}
     <br />
     {{ $lang.label.time }}:
-    {{ deleteSlotConfig?.time }}
+    {{ selectedTimeSlot?.time }}
   </FutureDialog>
 
   <TimeSlotDialog ref="slotDialog" />
 </template>
 <script lang="ts" setup>
 import { computed, onBeforeMount, ref } from "vue";
-import type { ScheduleDay } from "@/types/schedule";
+import type { ApiTimeSlotResponse, ScheduleDay } from "@/types/schedule";
 import { useScheduleStore } from "@/store/scheduleStore";
 import { storeToRefs } from "pinia";
 import { sortWithCollator } from "@/helpers/sort";
@@ -99,22 +99,23 @@ import FutureDialog from "@/components/dialogs/FutureDialog.vue";
 import type { TimeSlot } from "@/types/schedule";
 import { es } from "date-fns/locale";
 const scheduleStore = useScheduleStore();
-const { schedule } = storeToRefs(scheduleStore);
-const { deleteSlot, getClientNameById, getClientById, loadClients } =
+const { timeSlots } = storeToRefs(scheduleStore);
+const { deleteSlot, getClientNameById, loadClients, loadTimeSlots } =
   scheduleStore;
 
 const slotDialog = ref();
 const clientsSidebar = ref();
-let deleteSlotConfig = ref<TimeSlot | null>(null);
+let selectedTimeSlot = ref<ApiTimeSlotResponse | null>(null);
 const deleteSlotDialog = ref();
 
-const today = format(new Date(), "d/MMM/yyyy");
+const today = Number(format(new Date(), "yyyyMMdd"));
 const currentMonday = ref<Date>(
   addDays(new Date(), 1 - Number(format(new Date(), "i")))
 );
 
 onBeforeMount(async () => {
   await loadClients();
+  await loadTimeSlots();
 });
 
 const weekDays = computed<ScheduleDay[]>(() => {
@@ -125,7 +126,7 @@ const weekDays = computed<ScheduleDay[]>(() => {
     days.push({
       date,
       short: format(date, "E, d MMM", { locale: es }),
-      full: format(date, "d/MMM/yyyy"),
+      full: Number(format(date, "yyyyMMdd")),
       dayOfWeekNumber: Number(format(date, "i")),
     });
   }
@@ -145,16 +146,9 @@ const goNextWeek = () => {
   currentMonday.value = addDays(currentMonday.value, 7);
 };
 
-const getDaySlots = (date: string) => {
-  const dayIndex = schedule.value.findIndex((item) => item.date === date);
-
-  if (dayIndex === -1) {
-    return [];
-  }
-
-  const slots = schedule.value[dayIndex].slots.filter((item) => {
-    const client = getClientById(item.clientId);
-    return !client?.archived;
+const getDaySlots = (date: number) => {
+  const slots = timeSlots.value.filter((item) => {
+    return !item.client?.archived && item.date === date;
   });
 
   sortWithCollator(slots, "time");
@@ -163,15 +157,15 @@ const getDaySlots = (date: string) => {
 };
 
 const cancelDeleteSlot = () => {
-  deleteSlotConfig.value = null;
+  selectedTimeSlot.value = null;
 };
 
 const handleClickDeleteSlot = (slot: TimeSlot) => {
-  deleteSlotConfig.value = slot;
+  selectedTimeSlot.value = slot;
   openConfirmDeleteDialog();
 };
 
-const handleClickAddSlot = (date: string) => {
+const handleClickAddSlot = (date: number) => {
   slotDialog.value.open(date);
 };
 

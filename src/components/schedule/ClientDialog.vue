@@ -38,7 +38,7 @@ import type { Client } from "@/types/schedule";
 
 const scheduleStore = useScheduleStore();
 const { clients } = storeToRefs(scheduleStore);
-const { createClient, editClient } = scheduleStore;
+const { createClient, updateClient } = scheduleStore;
 
 const id = ref();
 const name = ref();
@@ -63,7 +63,7 @@ const handleClickSave = async () => {
   }
 
   if (id.value) {
-    await editClient({ id: id.value, name: name.value });
+    await updateClient({ id: id.value, name: name.value });
   } else {
     await createClient(name.value);
   }

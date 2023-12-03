@@ -53,17 +53,21 @@ import { computed, ref } from "vue";
 import Dropdown from "primevue/dropdown";
 import { useScheduleStore } from "@/store/scheduleStore";
 import { storeToRefs } from "pinia";
-import type { Client, TimeSlotShort, TimeSlot } from "@/types/schedule";
+import type {
+  Client,
+  TimeSlotShort,
+  ApiTimeSlotResponse,
+} from "@/types/schedule";
 import { parseSlotTime, stringifySlotTime } from "@/helpers/schedule";
 import { TimeZoneName } from "@/settings/schedule";
 import { lang } from "@/lang";
 
 const scheduleStore = useScheduleStore();
 const { clients, userProfileConfig } = storeToRefs(scheduleStore);
-const { addSlot, deleteSlot, saveSchedule } = scheduleStore;
+const { createSlot, updateSlot } = scheduleStore;
 
-let selectedDate: string | null = null;
-let editSlotConfig: TimeSlot | null = null;
+let selectedDate: number | null = null;
+let selectedSlot: ApiTimeSlotResponse | null = null;
 const timezoneOptions = [TimeZoneName.Esp, TimeZoneName.Msk, TimeZoneName.Geo];
 
 const dialog = ref();
@@ -128,23 +132,30 @@ const handleConfirm = async () => {
     return;
   }
 
-  if (editSlotConfig) {
-    await deleteSlot(editSlotConfig);
+  console.log("ESC", selectedSlot);
+
+  if (!selectedSlot) {
+    await createSlot({
+      clientId: client.value?.id ?? null,
+      date: selectedDate,
+      time: stringifySlotTime(hour.value, minute.value, timezone.value),
+      comment: comment.value,
+    });
+  } else {
+    await updateSlot({
+      id: selectedSlot.id,
+      date: selectedDate,
+      time: stringifySlotTime(hour.value, minute.value, timezone.value),
+      comment: comment.value,
+      clientId: client.value?.id ?? null,
+    });
   }
-
-  addSlot(selectedDate, {
-    clientId: client.value?.id ?? null,
-    time: stringifySlotTime(hour.value, minute.value, timezone.value),
-    comment: comment.value,
-  });
-
-  await saveSchedule();
 
   dialog.value.close();
   handleCancel();
 };
 
-const open = (date: string, slot?: TimeSlotShort) => {
+const open = (date: number, slot?: TimeSlotShort) => {
   hour.value = null;
   minute.value = null;
   timezone.value = userProfileConfig.value.defaultInputTimezoneName;
@@ -155,8 +166,6 @@ const open = (date: string, slot?: TimeSlotShort) => {
   selectedDate = date;
 
   editMode.value = !!slot;
-
-  console.log("SL", slot);
 
   if (slot) {
     [hour.value, minute.value, timezone.value] = parseSlotTime(slot.time);
@@ -169,9 +178,9 @@ const open = (date: string, slot?: TimeSlotShort) => {
 
     comment.value = slot.comment;
 
-    editSlotConfig = { date, ...slot };
+    selectedSlot = { date, ...slot };
   } else {
-    editSlotConfig = null;
+    selectedSlot = null;
   }
 
   dialog.value.open();

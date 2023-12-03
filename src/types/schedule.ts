@@ -5,7 +5,25 @@ export interface TimeSlotShort {
 }
 
 export interface TimeSlot extends TimeSlotShort {
-  date: string;
+  date: number;
+}
+
+export interface ApiTimeSlotResponse {
+  id: string;
+  clientId: string | null;
+  date: number | null;
+  time: string;
+  comment: string | null;
+  client: Client | null;
+}
+
+// TODO: Reuse ApiTimeSlotResponse.
+export interface TimeSlotUpdate {
+  id: string;
+  date: number | null;
+  time: string;
+  comment: string | null;
+  clientId: string | null;
 }
 
 export interface ScheduleDayItem {
@@ -22,7 +40,7 @@ export interface Client {
 export interface ScheduleDay {
   date: Date;
   short: string;
-  full: string;
+  full: number;
   dayOfWeekNumber: number;
 }
 
