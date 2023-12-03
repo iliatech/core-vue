@@ -51,13 +51,13 @@
               no-border
             />
           </div>
-          <TimeSlotComponent
-            v-for="slot in getDaySlots(day.full)"
-            :key="`${slot.clientId}_${slot.time}`"
-            :model-value="{ ...slot, date: day.full }"
-            @click:delete="handleClickDeleteSlot"
-            @click:edit="handleClickEditSlot"
-          />
+          <template v-for="slot in getDaySlots(day.full)" :key="slot.id">
+            <TimeSlotComponent
+              :model-value="slot"
+              @click:delete="handleClickDeleteSlot"
+              @click:edit="handleClickEditSlot"
+            />
+          </template>
         </div>
       </div>
     </div>
@@ -73,13 +73,13 @@
     :z-index="1200"
   >
     {{ $lang.label.client }}:
-    {{ getClientNameById(selectedTimeSlot?.clientId) }}
+    {{ selectedTimeSlot?.client?.name }}
     <br />
     {{ $lang.label.date }}:
-    {{ selectedTimeSlot?.date }}
+    {{ prepareDate(selectedTimeSlot?.date) }}
     <br />
     {{ $lang.label.time }}:
-    {{ selectedTimeSlot?.time }}
+    {{ prepareTime(selectedTimeSlot?.time) }}
   </FutureDialog>
 
   <TimeSlotDialog ref="slotDialog" />
@@ -96,12 +96,12 @@ import ClientsSidebar from "@/components/schedule/ClientsSidebar.vue";
 import TimeSlotComponent from "@/components/schedule/TimeSlotComponent.vue";
 import TimeSlotDialog from "@/components/schedule/TimeSlotDialog.vue";
 import FutureDialog from "@/components/dialogs/FutureDialog.vue";
-import type { TimeSlot } from "@/types/schedule";
 import { es } from "date-fns/locale";
+import { prepareDate } from "@/helpers/schedule";
+
 const scheduleStore = useScheduleStore();
 const { timeSlots } = storeToRefs(scheduleStore);
-const { deleteSlot, getClientNameById, loadClients, loadTimeSlots } =
-  scheduleStore;
+const { deleteSlot, loadTimeSlots, loadClients, prepareTime } = scheduleStore;
 
 const slotDialog = ref();
 const clientsSidebar = ref();
@@ -114,8 +114,8 @@ const currentMonday = ref<Date>(
 );
 
 onBeforeMount(async () => {
-  await loadClients();
   await loadTimeSlots();
+  await loadClients();
 });
 
 const weekDays = computed<ScheduleDay[]>(() => {
@@ -148,9 +148,10 @@ const goNextWeek = () => {
 
 const getDaySlots = (date: number) => {
   const slots = timeSlots.value.filter((item) => {
-    return !item.client?.archived && item.date === date;
+    return !item?.client?.archived && item.date === date;
   });
 
+  // TODO: Make better sorting which should include timezone.
   sortWithCollator(slots, "time");
 
   return slots;
@@ -160,7 +161,7 @@ const cancelDeleteSlot = () => {
   selectedTimeSlot.value = null;
 };
 
-const handleClickDeleteSlot = (slot: TimeSlot) => {
+const handleClickDeleteSlot = (slot: ApiTimeSlotResponse) => {
   selectedTimeSlot.value = slot;
   openConfirmDeleteDialog();
 };
@@ -169,7 +170,7 @@ const handleClickAddSlot = (date: number) => {
   slotDialog.value.open(date);
 };
 
-const handleClickEditSlot = (slot: TimeSlot) => {
+const handleClickEditSlot = (slot: ApiTimeSlotResponse) => {
   slotDialog.value.open(slot.date, slot);
 };
 

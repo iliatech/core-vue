@@ -26,11 +26,6 @@ export interface TimeSlotUpdate {
   clientId: string | null;
 }
 
-export interface ScheduleDayItem {
-  date: string;
-  slots: TimeSlotShort[];
-}
-
 export interface Client {
   id: string;
   name: string;
@@ -50,9 +45,7 @@ export interface ScheduleConfig {
   scheduleTitle?: string;
 }
 
-export interface SchedulePayload {
-  clients: Client[];
-  schedule: ScheduleDayItem[];
+export interface ScheduleConfigPayload {
   config: ScheduleConfig;
 }
 

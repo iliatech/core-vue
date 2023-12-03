@@ -1,8 +1,12 @@
 <template>
   <div class="schedule-timeslot">
     <div class="schedule-timeslot__data">
-      {{ prepareTime(modelValue.time) }}<br />
-      {{ getClientNameById(modelValue.clientId) }}
+      <div>
+        {{ prepareTime(modelValue.time) }}
+      </div>
+      <div v-if="modelValue.client">
+        {{ modelValue.client.name }}
+      </div>
     </div>
     <div v-if="modelValue.comment" class="schedule-timeslot__comment">
       {{ modelValue.comment }}
@@ -25,43 +29,29 @@
 </template>
 
 <script setup lang="ts">
-import type { TimeSlot } from "@/types/schedule";
+import type { ApiTimeSlotResponse } from "@/types/schedule";
 import type { PropType } from "vue";
 import { useScheduleStore } from "@/store/scheduleStore";
 import FutureButton from "@/components/schedule/FutureButton.vue";
-import { parseSlotTime } from "@/helpers/schedule";
-import { storeToRefs } from "pinia";
-import { convertTime } from "@/helpers/timezone";
 
 const scheduleStore = useScheduleStore();
-const { userProfileConfig } = storeToRefs(scheduleStore);
-const { getClientNameById } = scheduleStore;
+const { prepareTime } = scheduleStore;
 
 const emit = defineEmits(["click:delete", "click:edit"]);
 
 defineProps({
   modelValue: {
-    type: Object as PropType<TimeSlot>,
+    type: Object as PropType<ApiTimeSlotResponse>,
     required: true,
   },
 });
 
-const handleClickDeleteSlot = (slot: TimeSlot) => {
+const handleClickDeleteSlot = (slot: ApiTimeSlotResponse) => {
   emit("click:delete", slot);
 };
 
-const handleClickEditSlot = (slot: TimeSlot) => {
+const handleClickEditSlot = (slot: ApiTimeSlotResponse) => {
   emit("click:edit", slot);
-};
-
-const prepareTime = (time: string) => {
-  const [hours, minutes, timezone] = parseSlotTime(time);
-
-  return `${convertTime(
-    Number(hours),
-    timezone,
-    userProfileConfig.value.dashboardTimezoneName
-  )}:${minutes} ${userProfileConfig.value.dashboardTimezoneName}`;
 };
 </script>
 
@@ -81,6 +71,7 @@ const prepareTime = (time: string) => {
     padding: $px-15 $px-10 0;
     display: flex;
     justify-content: center;
+    flex-direction: column;
     text-align: center;
   }
 

@@ -29,12 +29,12 @@ const appStore = useAppStore();
 const { isLoading } = storeToRefs(appStore);
 
 const scheduleStore = useScheduleStore();
-const { loadSchedule } = scheduleStore;
+const { loadScheduleConfig } = scheduleStore;
 
 const toast = ref();
 
 onBeforeMount(async () => {
-  await loadSchedule();
+  await loadScheduleConfig();
 });
 
 onMounted(async () => {

@@ -4,8 +4,7 @@ import type {
   ApiTimeSlotResponse,
   Client,
   ScheduleConfig,
-  ScheduleDayItem,
-  SchedulePayload,
+  ScheduleConfigPayload,
   TimeSlot,
   TimeSlotUpdate,
 } from "@/types/schedule";
@@ -17,6 +16,7 @@ import { showToast } from "@/helpers/toast";
 import { ToastType } from "@/types/toasts";
 import { lang } from "@/lang";
 import { isNil, omitBy } from "lodash";
+import { convertTime, parseSlotTime } from "@/helpers/schedule";
 
 export const useScheduleStore = defineStore("scheduleStore", () => {
   const initialConfig = {
@@ -26,7 +26,6 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
   };
 
   const clients = ref<Client[]>([]);
-  const schedule = ref<ScheduleDayItem[]>([]);
   const userProfileConfig = ref<ScheduleConfig>(initialConfig);
   const timeSlots = ref<ApiTimeSlotResponse[]>([]);
 
@@ -42,7 +41,6 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
   };
 
   const updateSlot = async (slot: TimeSlotUpdate) => {
-    console.log("US", slot);
     await Api.request({
       path: `${apiPaths.timeSlot}/${slot.id}`,
       method: RequestMethods.Put,
@@ -115,17 +113,6 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
     return client ?? undefined;
   };
 
-  const getClientNameById = (
-    id: string | undefined | null
-  ): string | undefined => {
-    if (!id) {
-      return undefined;
-    }
-
-    const client = clients.value.find((item) => item.id === id);
-    return client?.name ?? undefined;
-  };
-
   const archiveClient = async (client: Client) => {
     await Api.request({
       path: `${apiPaths.client}/${client.id}`,
@@ -137,12 +124,11 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
     await loadTimeSlots();
   };
 
-  const loadSchedule = async () => {
-    const data: SchedulePayload = await Api.request({
+  const loadScheduleConfig = async () => {
+    const data: ScheduleConfigPayload = await Api.request({
       path: apiPaths.schedule,
     });
 
-    schedule.value = data.schedule ?? [];
     userProfileConfig.value = data.config ?? initialConfig;
   };
 
@@ -154,9 +140,7 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
   };
 
   const saveSchedule = async () => {
-    const payload: SchedulePayload = {
-      clients: clients.value,
-      schedule: schedule.value,
+    const payload: ScheduleConfigPayload = {
       config: userProfileConfig.value,
     };
 
@@ -167,10 +151,20 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
     });
   };
 
+  const prepareTime = (time: string) => {
+    const timezoneName = userProfileConfig.value.dashboardTimezoneName;
+    const [hours, minutes, timezone] = parseSlotTime(time);
+
+    return `${convertTime(
+      Number(hours),
+      timezone,
+      timezoneName
+    )}:${minutes} ${timezoneName}`;
+  };
+
   return {
     clients,
     userProfileConfig,
-    schedule,
     timeSlots,
     loadClients,
     createClient,
@@ -180,9 +174,9 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
     updateClient,
     updateSlot,
     getClientById,
-    getClientNameById,
-    loadSchedule,
+    loadScheduleConfig,
     loadTimeSlots,
     saveSchedule,
+    prepareTime,
   };
 });
