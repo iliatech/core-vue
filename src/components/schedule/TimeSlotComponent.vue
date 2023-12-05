@@ -63,6 +63,7 @@ const handleClickEditSlot = (slot: ApiTimeSlotResponse) => {
 .schedule-timeslot {
   margin: 0 $px-10;
   border: 1px solid $slot-border-color;
+  border-radius: $px-4;
   position: relative;
   justify-content: center;
   line-height: 22px;

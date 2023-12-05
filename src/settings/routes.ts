@@ -36,4 +36,4 @@ export const publicRouteNames = [
   routes.usefulLinks,
 ];
 
-export const mainPrivatePage = routes.words;
+export const mainPrivatePage = routes.schedule;

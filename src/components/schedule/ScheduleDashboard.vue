@@ -214,7 +214,7 @@ const openConfirmDeleteDialog = () => {
     @include zero-eight-hundred-seventy-five;
     width: 150px;
     border: 1px solid #888;
-    border-radius: $px-2;
+    border-radius: $px-4;
     padding-bottom: $px-10;
   }
 
@@ -228,6 +228,7 @@ const openConfirmDeleteDialog = () => {
   }
 
   &__day-title {
+    text-transform: capitalize;
     height: 40px;
     border-bottom: 1px solid #888;
     padding: $px-10 0;
