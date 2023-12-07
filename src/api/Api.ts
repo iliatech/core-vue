@@ -15,7 +15,7 @@ export default class Api {
     const appStore = useAppStore();
     const { updateIsAuthorized, startLoading, stopLoading } = appStore;
 
-    if (config.loader) {
+    if (!config.withoutLoader) {
       startLoading();
     }
 
@@ -110,7 +110,7 @@ export default class Api {
 
       return false;
     } finally {
-      if (config.loader) {
+      if (!config.withoutLoader) {
         stopLoading();
       }
     }

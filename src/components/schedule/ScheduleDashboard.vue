@@ -69,7 +69,7 @@
     ref="deleteSlotDialog"
     :title="$lang.title.confirmDeleteSlot"
     @cancel="cancelDeleteSlot"
-    @confirm="deleteSlot(selectedTimeSlot)"
+    @confirm="deleteTimeSlot(selectedTimeSlot)"
     :z-index="1200"
   >
     {{ $lang.label.client }}:
@@ -101,7 +101,8 @@ import { prepareDate } from "@/helpers/schedule";
 
 const scheduleStore = useScheduleStore();
 const { timeSlots } = storeToRefs(scheduleStore);
-const { deleteSlot, loadTimeSlots, loadClients, prepareTime } = scheduleStore;
+const { deleteTimeSlot, loadTimeSlots, loadClients, prepareTime } =
+  scheduleStore;
 
 const slotDialog = ref();
 const clientsSidebar = ref();

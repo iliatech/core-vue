@@ -10,7 +10,7 @@
         plain
       />
       <Button
-        :label="userProfileConfig.scheduleTitle || $lang.button.clientsSchedule"
+        :label="authUserConfig.schedule.title"
         @click="router.push(routes.schedule.path)"
         text
         raised
@@ -23,11 +23,11 @@
 import Button from "primevue/button";
 import router from "@/router";
 import { routes } from "@/settings/routes";
-import { useScheduleStore } from "@/store/scheduleStore";
+import { useAppStore } from "@/store/appStore";
 import { storeToRefs } from "pinia";
 
-const scheduleStore = useScheduleStore();
-const { userProfileConfig } = storeToRefs(scheduleStore);
+const appStore = useAppStore();
+const { authUserConfig } = storeToRefs(appStore);
 </script>
 <style lang="scss" scoped>
 @import "@/assets/variables";

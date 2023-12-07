@@ -107,7 +107,6 @@ const wordsSortedAndFiltered = computed<ApiWordResponse[]>(() => {
 const loadWords = async (): Promise<void> => {
   const data = await Api.request({
     path: apiPaths.word,
-    loader: true,
   });
 
   words.value = data?.length ? (data as ApiWordResponse[]) : [];
@@ -139,7 +138,6 @@ const onConfirmDelete = async (): Promise<void> => {
     method: RequestMethods.Delete,
     path: `${apiPaths.word}/${id}`,
     successToast: lang.success.wordDeleted(title),
-    loader: true,
     successCallback: () => {
       loadWords();
     },

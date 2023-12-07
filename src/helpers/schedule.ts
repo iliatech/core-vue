@@ -16,7 +16,11 @@ export const stringifySlotTime = (
   return `${hour}:${minute}${timezone}`;
 };
 
-export const prepareDate = (date: number) => {
+export const prepareDate = (date?: number | null) => {
+  if (!date) {
+    throw new Error("Date is not specified for method.");
+  }
+
   const strDate = date.toString();
   return (
     strDate.substring(0, 4) +

@@ -52,16 +52,12 @@ import { useRoute } from "vue-router";
 import { fullUserName } from "@/helpers/common";
 import FutureButton from "@/components/schedule/FutureButton.vue";
 import ProfileSidebar from "@/components/schedule/ProfileSidebar.vue";
-import { useScheduleStore } from "@/store/scheduleStore";
 
 const route = useRoute();
 
 const appStore = useAppStore();
+const { isAuthorized, user, authUserConfig } = storeToRefs(appStore);
 const { updateIsAuthorized } = appStore;
-const { isAuthorized, user } = storeToRefs(appStore);
-
-const scheduleStore = useScheduleStore();
-const { userProfileConfig } = storeToRefs(scheduleStore);
 
 const userMenu = ref();
 const navMenu = ref();
@@ -70,10 +66,10 @@ const profileSidebar = ref();
 
 const title = computed(() => {
   if (
-    userProfileConfig.value.scheduleTitle &&
+    authUserConfig.value.schedule.title &&
     route.path === routes.schedule.path
   ) {
-    return userProfileConfig.value.scheduleTitle;
+    return authUserConfig.value.schedule.title;
   }
 
   return route.meta.title;

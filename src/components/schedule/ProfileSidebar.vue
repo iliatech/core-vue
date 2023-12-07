@@ -13,7 +13,7 @@
         <label>
           {{ setting.label }}
         </label>
-        {{ user?.[setting.name as keyof AuthorizedUser] }}
+        {{ user?.[setting.name as keyof AuthUser] }}
       </div>
       <div class="subtitle">
         {{ $lang.title.scheduleSettings }}
@@ -22,17 +22,14 @@
         <label>
           {{ $lang.label.scheduleTitle }}
         </label>
-        <InputText
-          v-model="userProfileConfig.scheduleTitle"
-          style="width: 100%"
-        />
+        <InputText v-model="userScheduleConfig.title" style="width: 100%" />
       </div>
       <div>
         <label>
           {{ $lang.label.defaultInputTimezoneName }}
         </label>
         <Dropdown
-          v-model="userProfileConfig.defaultInputTimezoneName"
+          v-model="userScheduleConfig.defaultInputTimezoneName"
           :options="timeZones"
           option-label="name"
           option-value="name"
@@ -43,7 +40,7 @@
           {{ $lang.label.dashboardTimezoneName }}
         </label>
         <Dropdown
-          v-model="userProfileConfig.dashboardTimezoneName"
+          v-model="userScheduleConfig.dashboardTimezoneName"
           :options="timeZones"
           option-label="name"
           option-value="name"
@@ -64,39 +61,38 @@
 <script setup lang="ts">
 import CustomSidebar from "@/components/sidebars/CustomSidebar.vue";
 import Dropdown from "primevue/dropdown";
-import { ref } from "vue";
-import { useScheduleStore } from "@/store/scheduleStore";
+import { computed, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { timeZones } from "@/settings/schedule";
 import Button from "primevue/button";
 import { useAppStore } from "@/store/appStore";
 import { profileSidebarSettings } from "@/settings/profileSidebarSettings";
 import InputText from "primevue/inputtext";
-import type { ScheduleConfig } from "@/types/schedule";
 import { cloneDeep } from "lodash";
 import { showToast } from "@/helpers/toast";
 import { ToastType } from "@/types/toasts";
 import { lang } from "@/lang";
-import type { AuthorizedUser } from "@/types/user";
+import type { AuthUser, AuthUserScheduleConfig } from "@/types/user";
 
 const appStore = useAppStore();
-const { user } = storeToRefs(appStore);
-
-const scheduleStore = useScheduleStore();
-const { userProfileConfig } = storeToRefs(scheduleStore);
-const { saveSchedule } = scheduleStore;
+const { user, authUserConfig } = storeToRefs(appStore);
 
 const sidebar = ref();
 
-let savedUserProfileConfig: ScheduleConfig | null = null;
+let savedUserScheduleConfig: AuthUserScheduleConfig | null = null;
+
+const userScheduleConfig = computed(() => {
+  return authUserConfig.value.schedule;
+});
 
 const open = () => {
-  savedUserProfileConfig = cloneDeep(userProfileConfig.value);
+  savedUserScheduleConfig = cloneDeep(userScheduleConfig.value);
   sidebar.value.open();
 };
 
 const handleClickSave = () => {
-  saveSchedule();
+  // TODO: Add call to api saveAuthUserConfig.
+
   sidebar.value.close();
   showToast({
     type: ToastType.Success,
@@ -105,11 +101,11 @@ const handleClickSave = () => {
 };
 
 const handleClickClose = () => {
-  if (!savedUserProfileConfig) {
+  if (!savedUserScheduleConfig) {
     return;
   }
 
-  userProfileConfig.value = savedUserProfileConfig;
+  authUserConfig.value.schedule = savedUserScheduleConfig;
 };
 
 defineExpose({ open });

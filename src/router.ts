@@ -54,11 +54,11 @@ router.beforeEach((to) => {
   }
 
   const appStore = useAppStore();
-  const { updateIsAuthorized, updateUser } = appStore;
+  const { updateIsAuthorized, updateAuthUser } = appStore;
   const user = getAuthUser();
   if (getAuthToken() && user) {
     updateIsAuthorized(true);
-    updateUser(user);
+    updateAuthUser(user);
   }
 
   if (

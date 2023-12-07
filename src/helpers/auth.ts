@@ -1,5 +1,5 @@
 import { authorizedUserField, jwtTokenField } from "@/settings/auth";
-import type { AuthorizedUser } from "@/types/user";
+import type { AuthUser } from "@/types/user";
 
 export const saveAuthToken = (value: string) => {
   localStorage.setItem(jwtTokenField, value);
@@ -14,14 +14,7 @@ export const resetAuthToken = () => {
   localStorage.removeItem(jwtTokenField);
 };
 
-export const saveAuthUser = (user: AuthorizedUser) => {
-  const userString = JSON.stringify(user);
-  if (userString) {
-    localStorage.setItem(authorizedUserField, userString);
-  }
-};
-
-export const getAuthUser = (): AuthorizedUser | undefined => {
+export const getAuthUser = (): AuthUser | undefined => {
   const userString = localStorage.getItem(authorizedUserField);
   if (!userString) {
     return undefined;

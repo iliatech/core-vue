@@ -1,5 +1,5 @@
-import type { AuthorizedUser } from "@/types/user";
+import type { AuthUser } from "@/types/user";
 
-export const fullUserName = (user?: AuthorizedUser | null) => {
+export const fullUserName = (user?: AuthUser | null) => {
   return `${user?.firstName} ${user?.lastName}`;
 };

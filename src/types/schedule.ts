@@ -1,13 +1,3 @@
-export interface TimeSlotShort {
-  time: string;
-  clientId: string | null;
-  comment: string | undefined;
-}
-
-export interface TimeSlot extends TimeSlotShort {
-  date: number;
-}
-
 export interface ApiTimeSlotResponse {
   id: string;
   clientId: string | null;
@@ -17,7 +7,13 @@ export interface ApiTimeSlotResponse {
   client: Client | null;
 }
 
-// TODO: Reuse ApiTimeSlotResponse.
+export interface TimeSlotCreate {
+  date: number;
+  time: string;
+  clientId: string | null;
+  comment: string | null;
+}
+
 export interface TimeSlotUpdate {
   id: string;
   date: number | null;
@@ -37,16 +33,6 @@ export interface ScheduleDay {
   short: string;
   full: number;
   dayOfWeekNumber: number;
-}
-
-export interface ScheduleConfig {
-  defaultInputTimezoneName: string;
-  dashboardTimezoneName: string;
-  scheduleTitle?: string;
-}
-
-export interface ScheduleConfigPayload {
-  config: ScheduleConfig;
 }
 
 export interface TimeZone {

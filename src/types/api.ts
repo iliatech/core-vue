@@ -16,7 +16,7 @@ export interface RequestConfig {
   errorToast?: string;
   successCallback?: any;
   isDataResult?: boolean;
-  loader?: boolean;
+  withoutLoader?: boolean;
 }
 
 export interface ApiLoginResponse {

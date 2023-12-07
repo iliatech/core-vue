@@ -2,9 +2,9 @@ export const apiUrl = import.meta.env.VITE_API_URL;
 
 export const apiPaths = {
   authorization: "authorization",
+  getAuthUser: "getAuthUser",
   client: "client",
   login: "login",
-  schedule: "fileStorage/schedule",
   tag: "tag",
   timeSlot: "timeSlot",
   translation: "translation",

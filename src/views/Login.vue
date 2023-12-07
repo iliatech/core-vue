@@ -33,18 +33,13 @@ import { ToastType } from "@/types/toasts";
 import Api from "@/api/Api";
 import { RequestMethods } from "@/types/api";
 import { apiPaths } from "@/settings/api";
-import {
-  resetAuthToken,
-  resetAuthUser,
-  saveAuthToken,
-  saveAuthUser,
-} from "@/helpers/auth";
+import { resetAuthToken, resetAuthUser, saveAuthToken } from "@/helpers/auth";
 import router from "@/router";
 import { mainPrivatePage } from "@/settings/routes";
 import { useAppStore } from "@/store/appStore";
 
 const appStore = useAppStore();
-const { updateIsAuthorized, updateUser } = appStore;
+const { updateIsAuthorized, updateAuthUser } = appStore;
 
 const email = ref("");
 const password = ref("");
@@ -60,15 +55,14 @@ const onClickLogin = async () => {
   });
 
   if (jwt && user) {
-    saveAuthUser(user);
     saveAuthToken(jwt);
     updateIsAuthorized(true);
-    updateUser(user);
+    updateAuthUser(user);
     await router.push({ name: mainPrivatePage.name });
   } else {
     resetAuthToken();
     resetAuthUser();
-    updateUser(null);
+    updateAuthUser(null);
     showToast({ type: ToastType.Error, text: lang.error.loginFailed });
   }
 };

@@ -1,35 +1,29 @@
-import { defineStore } from "pinia";
+import { defineStore, storeToRefs } from "pinia";
 import { ref } from "vue";
 import type {
   ApiTimeSlotResponse,
   Client,
-  ScheduleConfig,
-  ScheduleConfigPayload,
-  TimeSlot,
+  TimeSlotCreate,
   TimeSlotUpdate,
 } from "@/types/schedule";
 import Api from "@/api/Api";
 import { apiPaths } from "@/settings/api";
 import { RequestMethods } from "@/types/api";
-import { TimeZoneName } from "@/settings/schedule";
 import { showToast } from "@/helpers/toast";
 import { ToastType } from "@/types/toasts";
 import { lang } from "@/lang";
 import { isNil, omitBy } from "lodash";
 import { convertTime, parseSlotTime } from "@/helpers/schedule";
+import { useAppStore } from "@/store/appStore";
 
 export const useScheduleStore = defineStore("scheduleStore", () => {
-  const initialConfig = {
-    scheduleTitle: undefined,
-    defaultInputTimezoneName: TimeZoneName.Esp,
-    dashboardTimezoneName: TimeZoneName.Esp,
-  };
+  const appStore = useAppStore();
+  const { authUserConfig } = storeToRefs(appStore);
 
   const clients = ref<Client[]>([]);
-  const userProfileConfig = ref<ScheduleConfig>(initialConfig);
   const timeSlots = ref<ApiTimeSlotResponse[]>([]);
 
-  const createSlot = async (slot: TimeSlot) => {
+  const createTimeSlot = async (slot: TimeSlotCreate) => {
     await Api.request({
       path: apiPaths.timeSlot,
       method: RequestMethods.Post,
@@ -40,7 +34,7 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
     });
   };
 
-  const updateSlot = async (slot: TimeSlotUpdate) => {
+  const updateTimeSlot = async (slot: TimeSlotUpdate) => {
     await Api.request({
       path: `${apiPaths.timeSlot}/${slot.id}`,
       method: RequestMethods.Put,
@@ -51,7 +45,7 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
     });
   };
 
-  const deleteSlot = async (timeSlot: ApiTimeSlotResponse | null) => {
+  const deleteTimeSlot = async (timeSlot: ApiTimeSlotResponse | null) => {
     if (!timeSlot?.id) {
       return;
     }
@@ -104,32 +98,16 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
     });
   };
 
-  const getClientById = (id: string | undefined | null): Client | undefined => {
-    if (!id) {
-      return undefined;
-    }
-
-    const client = clients.value.find((item) => item.id === id);
-    return client ?? undefined;
-  };
-
   const archiveClient = async (client: Client) => {
     await Api.request({
       path: `${apiPaths.client}/${client.id}`,
       method: RequestMethods.Patch,
       payload: { archived: true },
+      successCallback: async () => {
+        await loadClients();
+        await loadTimeSlots();
+      },
     });
-
-    await loadClients();
-    await loadTimeSlots();
-  };
-
-  const loadScheduleConfig = async () => {
-    const data: ScheduleConfigPayload = await Api.request({
-      path: apiPaths.schedule,
-    });
-
-    userProfileConfig.value = data.config ?? initialConfig;
   };
 
   const loadTimeSlots = async () => {
@@ -139,20 +117,12 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
       })) ?? [];
   };
 
-  const saveSchedule = async () => {
-    const payload: ScheduleConfigPayload = {
-      config: userProfileConfig.value,
-    };
+  const prepareTime = (time?: string) => {
+    if (!time) {
+      throw new Error("Time is not specified for method.");
+    }
 
-    await Api.request({
-      path: apiPaths.schedule,
-      method: RequestMethods.Put,
-      payload,
-    });
-  };
-
-  const prepareTime = (time: string) => {
-    const timezoneName = userProfileConfig.value.dashboardTimezoneName;
+    const timezoneName = authUserConfig.value.schedule.dashboardTimezoneName;
     const [hours, minutes, timezone] = parseSlotTime(time);
 
     return `${convertTime(
@@ -164,19 +134,15 @@ export const useScheduleStore = defineStore("scheduleStore", () => {
 
   return {
     clients,
-    userProfileConfig,
     timeSlots,
     loadClients,
     createClient,
-    createSlot,
+    createTimeSlot,
     archiveClient,
-    deleteSlot,
+    deleteTimeSlot,
     updateClient,
-    updateSlot,
-    getClientById,
-    loadScheduleConfig,
+    updateTimeSlot,
     loadTimeSlots,
-    saveSchedule,
     prepareTime,
   };
 });

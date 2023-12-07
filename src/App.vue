@@ -1,6 +1,6 @@
 <template>
   <Toast ref="toast" />
-  <div v-if="isLoading" class="app-loader">
+  <div v-if="isLoading || isPersistentLoading" class="app-loader">
     <ProgressSpinner
       stroke-width="2"
       class="app-loader__content"
@@ -23,18 +23,15 @@ import { storeToRefs } from "pinia";
 import { onBeforeMount, onMounted, ref } from "vue";
 import { setGlobalToastObject } from "@/helpers/toast";
 import TopToolbar from "@/components/toolbars/TopToolbar.vue";
-import { useScheduleStore } from "@/store/scheduleStore";
 
 const appStore = useAppStore();
-const { isLoading } = storeToRefs(appStore);
-
-const scheduleStore = useScheduleStore();
-const { loadScheduleConfig } = scheduleStore;
+const { isLoading, isPersistentLoading } = storeToRefs(appStore);
+const { loadAuthUser } = appStore;
 
 const toast = ref();
 
 onBeforeMount(async () => {
-  await loadScheduleConfig();
+  await loadAuthUser();
 });
 
 onMounted(async () => {

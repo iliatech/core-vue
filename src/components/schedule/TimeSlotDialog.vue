@@ -53,18 +53,18 @@ import { computed, ref } from "vue";
 import Dropdown from "primevue/dropdown";
 import { useScheduleStore } from "@/store/scheduleStore";
 import { storeToRefs } from "pinia";
-import type {
-  Client,
-  TimeSlotShort,
-  ApiTimeSlotResponse,
-} from "@/types/schedule";
+import type { Client, ApiTimeSlotResponse } from "@/types/schedule";
 import { parseSlotTime, stringifySlotTime } from "@/helpers/schedule";
 import { TimeZoneName } from "@/settings/schedule";
 import { lang } from "@/lang";
+import { useAppStore } from "@/store/appStore";
+
+const appStore = useAppStore();
+const { authUserConfig } = storeToRefs(appStore);
 
 const scheduleStore = useScheduleStore();
-const { clients, userProfileConfig } = storeToRefs(scheduleStore);
-const { createSlot, updateSlot } = scheduleStore;
+const { clients } = storeToRefs(scheduleStore);
+const { createTimeSlot, updateTimeSlot } = scheduleStore;
 
 let selectedDate: number | null = null;
 let selectedSlot: ApiTimeSlotResponse | null = null;
@@ -74,7 +74,7 @@ const dialog = ref();
 const hour = ref<string | null>(null);
 const minute = ref<string | null>(null);
 const timezone = ref<string | null>(
-  userProfileConfig.value.defaultInputTimezoneName
+  authUserConfig.value.schedule.defaultInputTimezoneName
 );
 const client = ref<Client | null>(null);
 const comment = ref();
@@ -135,14 +135,14 @@ const handleConfirm = async () => {
   console.log("ESC", selectedSlot);
 
   if (!selectedSlot) {
-    await createSlot({
+    await createTimeSlot({
       clientId: client.value?.id ?? null,
       date: selectedDate,
       time: stringifySlotTime(hour.value, minute.value, timezone.value),
       comment: comment.value,
     });
   } else {
-    await updateSlot({
+    await updateTimeSlot({
       id: selectedSlot.id,
       date: selectedDate,
       time: stringifySlotTime(hour.value, minute.value, timezone.value),
@@ -155,10 +155,10 @@ const handleConfirm = async () => {
   handleCancel();
 };
 
-const open = (date: number, slot?: TimeSlotShort) => {
+const open = (date: number, slot?: ApiTimeSlotResponse) => {
   hour.value = null;
   minute.value = null;
-  timezone.value = userProfileConfig.value.defaultInputTimezoneName;
+  timezone.value = authUserConfig.value.schedule.defaultInputTimezoneName;
   comment.value = undefined;
   client.value = null;
   validated.value = false;
@@ -178,7 +178,7 @@ const open = (date: number, slot?: TimeSlotShort) => {
 
     comment.value = slot.comment;
 
-    selectedSlot = { date, ...slot };
+    selectedSlot = { ...slot, date };
   } else {
     selectedSlot = null;
   }
