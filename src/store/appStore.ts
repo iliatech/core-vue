@@ -1,10 +1,11 @@
 import { defineStore } from "pinia";
-import { computed, ref } from "vue";
 import type { Ref } from "vue";
+import { ref } from "vue";
 import type { AuthUser, AuthUserConfig } from "@/types/user";
 import Api from "@/api/Api";
 import { apiPaths } from "@/settings/api";
 import { authorizedUserField, initialUserConfig } from "@/settings/auth";
+import { RequestMethods } from "@/types/api";
 
 export const useAppStore = defineStore("appStore", () => {
   const isLoading: Ref<boolean> = ref(false);
@@ -12,9 +13,7 @@ export const useAppStore = defineStore("appStore", () => {
   const isAuthorized: Ref<boolean> = ref(false);
   const user = ref<AuthUser | null>(null);
 
-  const authUserConfig = computed<AuthUserConfig>(() => {
-    return user.value?.config ?? initialUserConfig;
-  });
+  const authUserConfig = ref<AuthUserConfig>(initialUserConfig);
 
   const startLoading = (): void => {
     isLoading.value = true;
@@ -39,6 +38,8 @@ export const useAppStore = defineStore("appStore", () => {
   const updateAuthUser = (value: AuthUser | null) => {
     user.value = value;
 
+    authUserConfig.value = user.value?.config ?? initialUserConfig;
+
     const userString = JSON.stringify(value);
 
     if (userString) {
@@ -47,8 +48,6 @@ export const useAppStore = defineStore("appStore", () => {
   };
 
   const loadAuthUser = async () => {
-    startLoading();
-
     const user = await Api.request({
       path: apiPaths.getAuthUser,
     });
@@ -56,8 +55,14 @@ export const useAppStore = defineStore("appStore", () => {
     if (user) {
       updateAuthUser(user);
     }
+  };
 
-    stopLoading();
+  const saveAuthUserConfig = async () => {
+    await Api.request({
+      method: RequestMethods.Put,
+      path: apiPaths.saveAuthUserConfig,
+      payload: { config: authUserConfig.value },
+    });
   };
 
   return {
@@ -67,6 +72,7 @@ export const useAppStore = defineStore("appStore", () => {
     user,
     authUserConfig,
     loadAuthUser,
+    saveAuthUserConfig,
     startLoading,
     stopLoading,
     startPersistentLoading,

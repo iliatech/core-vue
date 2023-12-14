@@ -132,8 +132,6 @@ const handleConfirm = async () => {
     return;
   }
 
-  console.log("ESC", selectedSlot);
-
   if (!selectedSlot) {
     await createTimeSlot({
       clientId: client.value?.id ?? null,

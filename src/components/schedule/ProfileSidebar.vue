@@ -22,14 +22,17 @@
         <label>
           {{ $lang.label.scheduleTitle }}
         </label>
-        <InputText v-model="userScheduleConfig.title" style="width: 100%" />
+        <InputText
+          v-model="authUserConfig.schedule.title"
+          style="width: 100%"
+        />
       </div>
       <div>
         <label>
           {{ $lang.label.defaultInputTimezoneName }}
         </label>
         <Dropdown
-          v-model="userScheduleConfig.defaultInputTimezoneName"
+          v-model="authUserConfig.schedule.defaultInputTimezoneName"
           :options="timeZones"
           option-label="name"
           option-value="name"
@@ -40,7 +43,7 @@
           {{ $lang.label.dashboardTimezoneName }}
         </label>
         <Dropdown
-          v-model="userScheduleConfig.dashboardTimezoneName"
+          v-model="authUserConfig.schedule.dashboardTimezoneName"
           :options="timeZones"
           option-label="name"
           option-value="name"
@@ -76,27 +79,24 @@ import type { AuthUser, AuthUserScheduleConfig } from "@/types/user";
 
 const appStore = useAppStore();
 const { user, authUserConfig } = storeToRefs(appStore);
+const { saveAuthUserConfig } = appStore;
 
 const sidebar = ref();
 
 let savedUserScheduleConfig: AuthUserScheduleConfig | null = null;
 
-const userScheduleConfig = computed(() => {
-  return authUserConfig.value.schedule;
-});
-
 const open = () => {
-  savedUserScheduleConfig = cloneDeep(userScheduleConfig.value);
+  savedUserScheduleConfig = cloneDeep(authUserConfig.value.schedule);
   sidebar.value.open();
 };
 
 const handleClickSave = () => {
-  // TODO: Add call to api saveAuthUserConfig.
+  saveAuthUserConfig();
 
   sidebar.value.close();
   showToast({
     type: ToastType.Success,
-    text: lang.success.profileSettingsWereSaved,
+    text: lang.success.userConfigSaved,
   });
 };
 

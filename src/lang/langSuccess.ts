@@ -3,7 +3,7 @@ export default {
   clientUpdated: "Client updated",
   login: "You are logged in",
   logout: "You are logged out",
-  profileSettingsWereSaved: "Profile settings were saved",
+  userConfigSaved: "User config saved",
   tagAdded: "Tag added",
   tagDeleted: (name: string): string => `Tag '${name}' deleted`,
   tagsUpdated: "Tags updated",
