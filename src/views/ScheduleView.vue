@@ -12,5 +12,6 @@ import ScheduleDashboard from "@/components/schedule/ScheduleDashboard.vue";
 .schedule-view {
   display: flex;
   justify-content: center;
+  padding: $px-20;
 }
 </style>

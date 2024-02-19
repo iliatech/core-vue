@@ -1,22 +1,21 @@
 <template>
   <div class="home-page">
-    <PublicApplications />
-    <PrivateApplications />
+    <PrivateArea v-if="isAuthorized" />
+    <PublicArea v-else />
   </div>
 </template>
 <script lang="ts" setup>
-import PrivateApplications from "@/components/homePage/PrivateApplications.vue";
-import PublicApplications from "@/components/homePage/PublicApplications.vue";
+import PrivateArea from "@/components/homePage/PrivateArea.vue";
+import PublicArea from "@/components/homePage/PublicArea.vue";
+import { useAppStore } from "@/store/appStore";
+
+const appStore = useAppStore();
+
+const { isAuthorized } = appStore;
 </script>
 <style lang="scss" scoped>
 @import "@/assets/variables";
 .home-page {
-  margin-right: auto;
-  margin-left: auto;
-  margin-top: $px-15;
-  display: flex;
-  flex-direction: column;
-  gap: $px-30;
-  width: $main-page-buttons-width;
+  // Add styles if needed.
 }
 </style>

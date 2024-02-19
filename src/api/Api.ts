@@ -85,7 +85,7 @@ export default class Api {
           resetAuthToken();
           resetAuthUser();
           updateIsAuthorized(false);
-          await router.push(routes.login.path);
+          await router.push(routes.home.path);
           break;
         case 409:
           showToast({

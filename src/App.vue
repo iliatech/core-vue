@@ -65,6 +65,6 @@ onMounted(async () => {
 }
 
 .app-content {
-  padding: 0 $px-20;
+  // Add some styles if needed.
 }
 </style>

@@ -28,7 +28,7 @@ const router = createRouter({
     {
       path: routes.usefulLinks.path,
       name: routes.usefulLinks.name,
-      component: () => import("@/views/UsefulLinks.vue"),
+      component: () => import("@/views/UsefulLinksView.vue"),
       meta: {
         title: lang.title.usefulLinks,
       },

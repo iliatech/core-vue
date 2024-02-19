@@ -1,16 +1,23 @@
 <template>
   <div class="top-toolbar">
-    <div class="top-toolbar__left"></div>
+    <div class="top-toolbar__left">
+      Hello! My name is <b>ILIA DOMYSHEV</b>.
+      <br />
+      I am a full-time JavaScript programmer since 2020.
+    </div>
     <div class="top-toolbar__center">
-      <div @click="openNavMenu" class="top-toolbar__title">
-        {{ title }}
-        <FutureButton
-          icon-pre="angle-down"
-          width="14px"
-          height="20px"
-          no-border
-          icon-size="1rem"
-        />
+      <div class="top-toolbar__center-container">
+        <div class="top-toolbar__nav-title">Navigation:</div>
+        <div @click="openNavMenu" class="top-toolbar__nav-button">
+          {{ title }}
+          <FutureButton
+            icon-pre="angle-down"
+            width="14px"
+            height="20px"
+            no-border
+            icon-size="1rem"
+          />
+        </div>
       </div>
       <Menu ref="navMenu" :model="navigationOptions" popup>
         <template #item="{ item }">
@@ -81,27 +88,30 @@ const navigationOptions = computed(() => {
       label: "Home Page",
       path: routes.root.path,
     },
-    {
-      label: "Clients Schedule",
-      path: routes.schedule.path,
-    },
-    {
-      label: "Useful Links",
-      path: routes.usefulLinks.path,
-    },
   ];
+
+  if (isAuthorized.value) {
+    items.push(
+      {
+        label: "Clients Schedule",
+        path: routes.schedule.path,
+      },
+
+      {
+        label: "Words Cards",
+        path: routes.words.path,
+      },
+      {
+        label: "Useful Links",
+        path: routes.usefulLinks.path,
+      }
+    );
+  }
 
   if (!isAuthorized.value) {
     items.push({
       label: "Login Page",
       path: routes.login.path,
-    });
-  }
-
-  if (isAuthorized.value) {
-    items.push({
-      label: "Words Cards",
-      path: routes.words.path,
     });
   }
 
@@ -183,33 +193,40 @@ const onClickLogout = () => {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   align-items: center;
-  padding: $px-20;
-  margin-bottom: $px-20;
+  padding: $px-10 $px-20;
   border-bottom: 1px solid #aaa;
   background: #f1eceb;
 
   &__left {
-    display: flex;
     flex-direction: column;
     gap: $px-10;
     align-items: flex-start;
+    line-height: 1.5rem;
   }
 
   &__center {
     @include header-large;
-    margin-top: 5px;
     display: flex;
-    flex-direction: row;
     justify-content: center;
-    align-items: flex-end;
-    gap: $px-10;
     color: #333;
     text-decoration: none;
     white-space: nowrap;
   }
 
-  &__title {
+  &__center-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  &__nav-title {
+    font-size: 0.875rem;
+    margin-bottom: $px-2;
+  }
+
+  &__nav-button {
     cursor: pointer;
+    font-size: 1.125rem;
   }
 
   &__navigation-menu-item {

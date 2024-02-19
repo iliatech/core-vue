@@ -1,5 +1,5 @@
 <template>
-  <div class="useful-links">
+  <div class="useful-links-view">
     <a href="https://www.webfx.com/tools/emoji-cheat-sheet/" target="_blank">
       Emoji Cheat Sheet<span class="date"> 2/Nov/2023</span>
     </a>
@@ -16,10 +16,11 @@
 <style lang="scss" scoped>
 @import "@/assets/fonts";
 @import "@/assets/variables";
-.useful-links {
+.useful-links-view {
   display: flex;
   flex-direction: column;
   gap: $px-10;
+  padding: $px-20;
 
   a {
     @include font-large;

@@ -14,7 +14,7 @@
         />
       </div>
     </div>
-    <div class="words">
+    <div class="words-view__words">
       <PlusTile @click="onClickAddWord" />
       <WordTile
         v-for="(item, index) in wordsSortedAndFiltered"
@@ -172,12 +172,13 @@ const openManageTagsSidebar = () => {
 }
 
 .words-view {
+  padding: $px-20;
+
   &__top {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: $px-15;
-    margin-top: $px-10;
   }
 
   &__top-left {
@@ -191,15 +192,16 @@ const openManageTagsSidebar = () => {
     //  padding: 0;
     //}
   }
-}
 
-.words {
-  display: flex;
-  flex-wrap: wrap;
-  gap: $px-30;
-  div {
-    min-width: 350px;
-    @include flex-wrap-fix(250px);
+  &__words {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $px-30;
+
+    div {
+      min-width: 350px;
+      @include flex-wrap-fix(250px);
+    }
   }
 }
 </style>
