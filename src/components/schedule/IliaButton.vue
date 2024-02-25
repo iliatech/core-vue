@@ -5,6 +5,7 @@
       'schedule-button--no-border': noBorder,
       'schedule-button--small': size === 'small',
       'schedule-button--selected': selected,
+      'schedule-button--nowrap': nowrap,
     }"
     :style="{
       color: scheduleColors[color],
@@ -12,6 +13,7 @@
       width,
       height,
       marginTop,
+      fontSize,
     }"
   >
     <i
@@ -52,6 +54,8 @@ defineProps({
     default: "medium",
   },
   selected: Boolean,
+  nowrap: Boolean,
+  fontSize: String,
 });
 </script>
 
@@ -76,6 +80,10 @@ defineProps({
   &--selected {
     font-weight: bold;
     font-size: 1.1em;
+  }
+
+  &--nowrap {
+    white-space: nowrap;
   }
 
   &__icon {

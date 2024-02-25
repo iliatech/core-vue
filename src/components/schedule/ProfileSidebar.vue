@@ -4,6 +4,7 @@
     :title="$lang.title.profile"
     close-button
     @click:close="handleClickClose"
+    :position="isFullWidth ? 'full' : 'left'"
   >
     <div class="profile-sidebar">
       <div
@@ -64,7 +65,7 @@
 <script setup lang="ts">
 import CustomSidebar from "@/components/sidebars/CustomSidebar.vue";
 import Dropdown from "primevue/dropdown";
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { timeZones } from "@/settings/schedule";
 import Button from "primevue/button";
@@ -80,6 +81,10 @@ import type { AuthUser, AuthUserScheduleConfig } from "@/types/user";
 const appStore = useAppStore();
 const { user, authUserConfig } = storeToRefs(appStore);
 const { saveAuthUserConfig } = appStore;
+
+defineProps({
+  isFullWidth: Boolean,
+});
 
 const sidebar = ref();
 

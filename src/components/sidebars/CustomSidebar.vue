@@ -2,7 +2,7 @@
   <Sidebar
     v-model:visible="show"
     class="custom-sidebar"
-    position="right"
+    :position="position"
     :dismissable="false"
   >
     <template #header>
@@ -35,7 +35,7 @@
 </template>
 <script lang="ts" setup>
 import Sidebar from "primevue/sidebar";
-import { ref } from "vue";
+import { PropType, ref } from "vue";
 import Button from "primevue/button";
 
 const show = ref(false);
@@ -46,6 +46,12 @@ defineProps({
   title: String,
   closeButton: Boolean,
   cancelButton: Boolean,
+  position: {
+    type: String as PropType<
+      "left" | "right" | "top" | "bottom" | "full" | undefined
+    >,
+    default: "right",
+  },
 });
 
 const handleClose = () => {

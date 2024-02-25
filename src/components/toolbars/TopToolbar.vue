@@ -1,13 +1,19 @@
 <template>
   <div class="top-toolbar">
-    <div class="top-toolbar__left">
-      <div class="top-toolbar__logo">
-        {{
-          user?.firstName || user?.lastName
-            ? `${user?.firstName} ${user?.lastName}`
-            : $lang.title.iliaDomyshev
-        }}
-      </div>
+    <div class="top-toolbar__logo">
+      <IliaButton
+        @click="handleClickUserMenu"
+        :label="logoTitle"
+        font-size="1.125rem"
+        no-border
+      />
+      <Menu
+        ref="userMenu"
+        :model="isAuthorized ? menuAuthorized : menuPublic"
+        popup
+      />
+    </div>
+    <div class="top-toolbar__nav-container">
       <div class="top-toolbar__nav">
         <IliaButton
           v-for="item in navigationOptions"
@@ -17,31 +23,18 @@
           size="small"
           color="orange"
           :selected="$route.name === item.name"
+          nowrap
         />
       </div>
     </div>
-    <div class="top-toolbar__right">
-      <IliaButton
-        icon-post="ellipsis-h"
-        @click="handleClickUserMenu"
-        margin-top="8px"
-        no-border
-      />
-      <Menu
-        ref="userMenu"
-        :model="isAuthorized ? menuAuthorized : menuPublic"
-        popup
-      />
-    </div>
   </div>
-  <ProfileSidebar ref="profileSidebar" />
+  <ProfileSidebar ref="profileSidebar" :isFullWidth="isMobile" />
 </template>
 <script lang="ts" setup>
 import { lang } from "@/lang";
 import router from "@/router";
 import { routes } from "@/settings/routes";
 import { resetAuthToken, resetAuthUser } from "@/helpers/auth";
-import Menu from "primevue/menu";
 import { computed, ref, watch } from "vue";
 import { useAppStore } from "@/store/appStore";
 import { storeToRefs } from "pinia";
@@ -51,6 +44,7 @@ import { fullUserName } from "@/helpers/common";
 import IliaButton from "@/components/schedule/IliaButton.vue";
 import ProfileSidebar from "@/components/schedule/ProfileSidebar.vue";
 import { generateAvailableAppsList } from "@/helpers/navigation";
+import Menu from "primevue/menu";
 
 const route = useRoute();
 
@@ -61,6 +55,16 @@ const { updateIsAuthorized } = appStore;
 const userMenu = ref();
 const navigation = ref();
 const profileSidebar = ref();
+
+const isMobile = computed<boolean>(() => {
+  return window.innerWidth < 500;
+});
+
+const logoTitle = computed<string>(() => {
+  return user.value?.firstName || user.value?.lastName
+    ? `${user.value?.firstName?.[0]}${user.value?.lastName?.[0]}`
+    : lang.title.iliaDomyshev;
+});
 
 const navigationOptions = computed<NavigationItem[]>(() => {
   let items: NavigationItem[] = [
@@ -155,40 +159,40 @@ const onClickLogout = () => {
 $toolbar-border: 1px solid #aaa;
 
 .top-toolbar {
+  width: 100%;
   display: flex;
-  justify-content: space-between;
+  gap: $px-10;
+  align-items: center;
   border-bottom: $toolbar-border;
   background: #f1eceb;
-
-  &__left {
-    display: flex;
-    gap: $px-10;
-    line-height: 1.5rem;
-    align-items: center;
-  }
+  line-height: 1.5rem;
 
   &__logo {
     padding: $px-10 $px-20;
     border-right: $toolbar-border;
   }
 
+  &__nav-container {
+    position: relative;
+    flex-grow: 1;
+    height: 100%;
+  }
+
   &__nav {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    overflow-x: auto;
     display: flex;
     gap: $px-10;
-    padding: 0 $px-20;
-  }
+    padding: $px-8 0;
+    position: absolute;
 
-  &__center-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-
-  &__right {
-    display: flex;
-    padding-right: $px-20;
-    justify-content: flex-end;
-    gap: 50px;
+    @media (min-width: 600px) {
+      gap: $px-20;
+      padding: $px-10 $px-10;
+    }
   }
 
   :deep(.p-button) {

@@ -14,7 +14,7 @@
           :key="item.label"
           :label="item.label"
           @click="router.push({ name: item.name })"
-          color="superLightMagenta"
+          color="magenta"
         />
       </div>
     </div>
