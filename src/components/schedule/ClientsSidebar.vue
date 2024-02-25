@@ -5,7 +5,7 @@
     :title="$lang.title.clients"
     close-button
   >
-    <FutureButton
+    <IliaButton
       :label="$lang.button.create"
       icon-pre="plus"
       @click="handleClickAddClient"
@@ -29,13 +29,13 @@
       >
         <template #body="{ data }">
           <div class="clients-sidebar__action-column">
-            <FutureButton
+            <IliaButton
               icon-pre="pencil"
               @click="handleClickEditClient(data)"
               icon-size="1rem"
               no-border
             />
-            <FutureButton
+            <IliaButton
               icon-pre="trash"
               @click="handleClickDeleteClient(data)"
               icon-size="1rem"
@@ -65,7 +65,7 @@ import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import { storeToRefs } from "pinia";
 import CustomSidebar from "@/components/sidebars/CustomSidebar.vue";
-import FutureButton from "@/components/schedule/FutureButton.vue";
+import IliaButton from "@/components/schedule/IliaButton.vue";
 import {
   clientsTableColumns,
   ClientsTableColumns,

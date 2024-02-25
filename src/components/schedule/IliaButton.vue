@@ -1,7 +1,11 @@
 <template>
   <div
     class="schedule-button"
-    :class="{ 'schedule-button--no-border': noBorder }"
+    :class="{
+      'schedule-button--no-border': noBorder,
+      'schedule-button--small': size === 'small',
+      'schedule-button--selected': selected,
+    }"
     :style="{
       color: scheduleColors[color],
       borderColor: scheduleColors[color],
@@ -28,10 +32,11 @@
 
 <script setup lang="ts">
 import { scheduleColors } from "@/settings/schedule";
+import type { PropType } from "vue";
 
 defineProps({
   color: {
-    type: String,
+    type: String as PropType<keyof typeof scheduleColors>,
     default: scheduleColors.grey,
   },
   label: String,
@@ -42,6 +47,11 @@ defineProps({
   noBorder: Boolean,
   iconSize: { type: String, default: "0.8rem" },
   marginTop: String,
+  size: {
+    type: String as PropType<"small" | "medium" | "large">,
+    default: "medium",
+  },
+  selected: Boolean,
 });
 </script>
 
@@ -58,6 +68,15 @@ defineProps({
   display: inline-flex;
   align-items: center;
   justify-content: center;
+
+  &--small {
+    padding: $px-2 $px-5;
+  }
+
+  &--selected {
+    font-weight: bold;
+    font-size: 1.1em;
+  }
 
   &__icon {
     padding-right: $px-2;

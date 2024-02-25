@@ -9,40 +9,21 @@
         {{ $lang.title.privateArea[2] }}
       </h4>
       <div class="private-area__buttons-container">
-        <Button
-          :label="$lang.button.wordsApp"
-          @click="router.push(routes.words.path)"
-          text
-          raised
-          plain
-        />
-        <Button
-          :label="authUserConfig.schedule.title"
-          @click="router.push(routes.schedule.path)"
-          text
-          raised
-          plain
-        />
-        <Button
-          :label="$lang.button.usefulLinks"
-          @click="router.push(routes.usefulLinks.path)"
-          text
-          raised
-          plain
+        <IliaButton
+          v-for="item in generateAvailableAppsList()"
+          :key="item.label"
+          :label="item.label"
+          @click="router.push({ name: item.name })"
+          color="superLightMagenta"
         />
       </div>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-import Button from "primevue/button";
 import router from "@/router";
-import { routes } from "@/settings/routes";
-import { useAppStore } from "@/store/appStore";
-import { storeToRefs } from "pinia";
-
-const appStore = useAppStore();
-const { authUserConfig } = storeToRefs(appStore);
+import { generateAvailableAppsList } from "@/helpers/navigation";
+import IliaButton from "@/components/schedule/IliaButton.vue";
 </script>
 <style lang="scss" scoped>
 @import "@/assets/variables";

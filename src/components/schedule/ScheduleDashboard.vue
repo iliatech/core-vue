@@ -2,20 +2,20 @@
   <div class="schedule">
     <div class="schedule__top-bar">
       <div class="schedule__week-selector">
-        <FutureButton
+        <IliaButton
           @click="goPreviousWeek"
           :label="$lang.label.previousWeek"
           color="lightMagenta"
           icon-pre="caret-left"
         />
-        <FutureButton
+        <IliaButton
           @click="goNextWeek"
           :label="$lang.label.nextWeek"
           color="lightMagenta"
           icon-post="caret-right"
         />
       </div>
-      <FutureButton
+      <IliaButton
         @click="openClientsSidebar"
         :label="$lang.button.clients"
         color="lightBlue"
@@ -45,7 +45,7 @@
         </div>
         <div class="schedule__slots">
           <div class="schedule__slot-add">
-            <FutureButton
+            <IliaButton
               icon-pre="plus"
               @click="handleClickAddSlot(day.full)"
               no-border
@@ -91,7 +91,7 @@ import { useScheduleStore } from "@/store/scheduleStore";
 import { storeToRefs } from "pinia";
 import { sortWithCollator } from "@/helpers/sort";
 import { addDays, format } from "date-fns";
-import FutureButton from "@/components/schedule/FutureButton.vue";
+import IliaButton from "@/components/schedule/IliaButton.vue";
 import ClientsSidebar from "@/components/schedule/ClientsSidebar.vue";
 import TimeSlotComponent from "@/components/schedule/TimeSlotComponent.vue";
 import TimeSlotDialog from "@/components/schedule/TimeSlotDialog.vue";

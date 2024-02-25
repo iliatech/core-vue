@@ -1,36 +1,27 @@
 <template>
   <div class="top-toolbar">
     <div class="top-toolbar__left">
-      Hello! My name is <b>ILIA DOMYSHEV</b>.
-      <br />
-      I am a full-time JavaScript programmer since 2020.
-    </div>
-    <div class="top-toolbar__center">
-      <div class="top-toolbar__center-container">
-        <div class="top-toolbar__nav-title">Navigation:</div>
-        <div @click="openNavMenu" class="top-toolbar__nav-button">
-          {{ title }}
-          <FutureButton
-            icon-pre="angle-down"
-            width="14px"
-            height="20px"
-            no-border
-            icon-size="1rem"
-          />
-        </div>
+      <div class="top-toolbar__logo">
+        {{
+          user?.firstName || user?.lastName
+            ? `${user?.firstName} ${user?.lastName}`
+            : $lang.title.iliaDomyshev
+        }}
       </div>
-      <Menu ref="navMenu" :model="navigationOptions" popup>
-        <template #item="{ item }">
-          <div @click="router.push(item.path)">
-            <div class="top-toolbar__navigation-menu-item">
-              {{ item.label }}
-            </div>
-          </div>
-        </template>
-      </Menu>
+      <div class="top-toolbar__nav">
+        <IliaButton
+          v-for="item in navigationOptions"
+          :label="item.label"
+          @click="router.push({ name: item.name })"
+          :key="item.label"
+          size="small"
+          color="orange"
+          :selected="$route.name === item.name"
+        />
+      </div>
     </div>
     <div class="top-toolbar__right">
-      <FutureButton
+      <IliaButton
         icon-post="ellipsis-h"
         @click="handleClickUserMenu"
         margin-top="8px"
@@ -57,61 +48,36 @@ import { storeToRefs } from "pinia";
 import type { NavigationItem } from "@/types/common";
 import { useRoute } from "vue-router";
 import { fullUserName } from "@/helpers/common";
-import FutureButton from "@/components/schedule/FutureButton.vue";
+import IliaButton from "@/components/schedule/IliaButton.vue";
 import ProfileSidebar from "@/components/schedule/ProfileSidebar.vue";
+import { generateAvailableAppsList } from "@/helpers/navigation";
 
 const route = useRoute();
 
 const appStore = useAppStore();
-const { isAuthorized, user, authUserConfig } = storeToRefs(appStore);
+const { isAuthorized, user } = storeToRefs(appStore);
 const { updateIsAuthorized } = appStore;
 
 const userMenu = ref();
-const navMenu = ref();
 const navigation = ref();
 const profileSidebar = ref();
 
-const title = computed(() => {
-  if (
-    authUserConfig.value.schedule.title &&
-    route.path === routes.schedule.path
-  ) {
-    return authUserConfig.value.schedule.title;
-  }
-
-  return route.meta.title;
-});
-
-const navigationOptions = computed(() => {
-  const items: NavigationItem[] = [
+const navigationOptions = computed<NavigationItem[]>(() => {
+  let items: NavigationItem[] = [
     {
-      label: "Home Page",
-      path: routes.root.path,
+      label: routes.home.title ?? "",
+      name: routes.root.name,
     },
   ];
 
   if (isAuthorized.value) {
-    items.push(
-      {
-        label: "Clients Schedule",
-        path: routes.schedule.path,
-      },
-
-      {
-        label: "Words Cards",
-        path: routes.words.path,
-      },
-      {
-        label: "Useful Links",
-        path: routes.usefulLinks.path,
-      }
-    );
+    items = [...items, ...generateAvailableAppsList()];
   }
 
   if (!isAuthorized.value) {
     items.push({
-      label: "Login Page",
-      path: routes.login.path,
+      label: routes.login.title,
+      name: routes.login.name,
     });
   }
 
@@ -171,10 +137,6 @@ const handleClickUserMenu = (event: Event) => {
   userMenu.value.toggle(event);
 };
 
-const openNavMenu = (event: Event) => {
-  navMenu.value.toggle(event);
-};
-
 const onClickLogin = () => {
   router.push(routes.login.path);
 };
@@ -189,28 +151,31 @@ const onClickLogout = () => {
 <style lang="scss" scoped>
 @import "@/assets/variables.scss";
 @import "@/assets/fonts.scss";
+
+$toolbar-border: 1px solid #aaa;
+
 .top-toolbar {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  align-items: center;
-  padding: $px-10 $px-20;
-  border-bottom: 1px solid #aaa;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: $toolbar-border;
   background: #f1eceb;
 
   &__left {
-    flex-direction: column;
+    display: flex;
     gap: $px-10;
-    align-items: flex-start;
     line-height: 1.5rem;
+    align-items: center;
   }
 
-  &__center {
-    @include header-large;
+  &__logo {
+    padding: $px-10 $px-20;
+    border-right: $toolbar-border;
+  }
+
+  &__nav {
     display: flex;
-    justify-content: center;
-    color: #333;
-    text-decoration: none;
-    white-space: nowrap;
+    gap: $px-10;
+    padding: 0 $px-20;
   }
 
   &__center-container {
@@ -219,34 +184,9 @@ const onClickLogout = () => {
     justify-content: space-between;
   }
 
-  &__nav-title {
-    font-size: 0.875rem;
-    margin-bottom: $px-2;
-  }
-
-  &__nav-button {
-    cursor: pointer;
-    font-size: 1.125rem;
-  }
-
-  &__navigation-menu-item {
-    padding: $px-10 $px-20;
-    cursor: pointer;
-  }
-
-  :deep(.schedule-button) {
-    padding-left: 10px;
-    padding-right: 8px;
-    margin-bottom: 2px;
-  }
-
-  &__navigation-dropdown {
-    width: 200px;
-  }
-
   &__right {
     display: flex;
-
+    padding-right: $px-20;
     justify-content: flex-end;
     gap: 50px;
   }

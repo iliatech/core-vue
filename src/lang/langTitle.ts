@@ -12,6 +12,7 @@ export default {
   editClient: "Edit client",
   editSlot: "Edit slot",
   error: "Error",
+  iliaDomyshev: "Ilia Domyshev",
   login: "Login",
   manageTags: "Manage tags",
   publicArea: "Public Area",
