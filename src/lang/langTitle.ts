@@ -16,11 +16,7 @@ export default {
   login: "Login",
   manageTags: "Manage tags",
   publicArea: "Public Area",
-  privateArea: [
-    "You are in Private Area.",
-    "Please, choose the app ",
-    "you want to use:",
-  ],
+  privateArea: ["Dashboard", "Please, choose the app ", "you want to use:"],
   profile: "Profile",
   siteTitle: "Home page",
   schedule: "Schedule",

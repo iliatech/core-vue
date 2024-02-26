@@ -8,9 +8,14 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: routes.root.path,
-      name: routes.root.name,
+      path: routes.home.path,
+      name: routes.home.name,
       component: () => import("@/views/HomeView.vue"),
+    },
+    {
+      path: routes.dashboard.path,
+      name: routes.dashboard.name,
+      component: () => import("@/views/DashboardView.vue"),
     },
     {
       path: routes.words.path,
@@ -50,7 +55,7 @@ router.beforeEach((to) => {
   }
 
   if (!to.meta.url) {
-    to.meta.url = routes.root.path;
+    to.meta.url = routes.home.path;
   }
 
   const appStore = useAppStore();

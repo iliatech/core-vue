@@ -5,6 +5,8 @@ export default {
   createTranslation: "Create translation",
   date: "Date",
   email: "Email",
+  goToPrivateArea: "Go to private area",
+  goToPublicArea: "Go to public area",
   hour: "Hour",
   loader: "Loading",
   logout: "Logout",

@@ -67,22 +67,43 @@ const logoTitle = computed<string>(() => {
 });
 
 const navigationOptions = computed<NavigationItem[]>(() => {
-  let items: NavigationItem[] = [
-    {
-      label: routes.home.title ?? "",
-      name: routes.root.name,
-    },
-  ];
-
-  if (isAuthorized.value) {
-    items = [...items, ...generateAvailableAppsList()];
+  if (!route.name) {
+    console.error("Error: route name is undefined: ", route.name);
+    return [];
   }
 
-  if (!isAuthorized.value) {
-    items.push({
-      label: routes.login.title,
-      name: routes.login.name,
-    });
+  const localRoute = routes[route.name.toString()];
+
+  if (!localRoute) {
+    console.error("Error: local route is not found: ", route.name);
+    return [];
+  }
+
+  let items: NavigationItem[] = [];
+
+  if (localRoute.isPublic) {
+    items = [
+      {
+        label: routes.home.title,
+        name: routes.home.name,
+      },
+      {
+        label: routes.usefulLinks.title,
+        name: routes.usefulLinks.name,
+      },
+    ];
+
+    if (!isAuthorized.value) {
+      items.push({
+        label: routes.login.title,
+        name: routes.login.name,
+      });
+    }
+  } else {
+    items = [
+      { name: routes.dashboard.name, label: routes.dashboard.title },
+      ...generateAvailableAppsList(),
+    ];
   }
 
   return items;
@@ -98,6 +119,25 @@ const menuAuthorized = computed(() => {
           icon: "pi pi-user",
           command: () => {
             profileSidebar.value.open();
+          },
+        },
+      ],
+    },
+    {
+      label: lang.label.navigation,
+      items: [
+        {
+          label: lang.label.goToPublicArea,
+          icon: "pi pi-user",
+          command: () => {
+            router.push({ name: routes.home.name });
+          },
+        },
+        {
+          label: lang.label.goToPrivateArea,
+          icon: "pi pi-user",
+          command: () => {
+            router.push({ name: routes.dashboard.name });
           },
         },
       ],

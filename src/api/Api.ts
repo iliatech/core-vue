@@ -5,15 +5,16 @@ import { lang } from "@/lang";
 import { apiUrl } from "@/settings/api";
 import { showToast } from "@/helpers/toast";
 import { ToastType } from "@/types/toasts";
-import { getAuthToken, resetAuthToken, resetAuthUser } from "@/helpers/auth";
-import router from "@/router";
-import { routes } from "@/settings/routes";
+import {
+  getAuthToken,
+  resetAuthorizationAndGoToHomePage,
+} from "@/helpers/auth";
 import { useAppStore } from "@/store/appStore";
 
 export default class Api {
   static async request(config: RequestConfig): Promise<any> {
     const appStore = useAppStore();
-    const { updateIsAuthorized, startLoading, stopLoading } = appStore;
+    const { startLoading, stopLoading } = appStore;
 
     if (!config.withoutLoader) {
       startLoading();
@@ -78,14 +79,19 @@ export default class Api {
           : requestResult?.data) ?? null
       );
     } catch (e: any) {
+      console.error("API request error:", e);
+
+      if (!e?.response?.status) {
+        // In case when API is not accessible I cannot get status.
+        // TODO Is it correct for such a case clean the authorization?
+        return;
+      }
+
       const { status } = e.response;
 
       switch (status) {
         case 401:
-          resetAuthToken();
-          resetAuthUser();
-          updateIsAuthorized(false);
-          await router.push(routes.home.path);
+          await resetAuthorizationAndGoToHomePage();
           break;
         case 409:
           showToast({

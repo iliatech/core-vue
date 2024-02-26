@@ -1,23 +1,6 @@
 <template>
   <div class="public-area">
     <div class="public-area__left">
-      <h2>My Education</h2>
-
-      <p>
-        I graduated from
-        <a href="http://inter.isu.ru/" target="_blank">
-          Irkutsk State University</a
-        >
-        the faculty of `mathematics and computer science`<br />
-        with a <b>specialist degree: Mathematician and System programmer</b>
-        (2003 - 2008).
-      </p>
-
-      <p>
-        Before that, I graduated secondary school with advanced math learning
-        (1993 - 2003).
-      </p>
-
       <h2>Professional experience</h2>
 
       <p>
@@ -36,14 +19,14 @@
       <h2>Technology Stack</h2>
 
       <p>
-        (Work Now)<br />
+        (PRESENT)<br />
         JavaScript, Vue 3, Express, CSS3, HTML5, AmCharts5, Lodash, Date-Fns,
         Mapbox, Deck.gl<br />
         Soft: Jira, Confluence, GitHub, Git, Discord, Loom, WebStorm, MacOS
       </p>
 
       <p>
-        (Before)<br />
+        (PAST)<br />
         React, Vue 2, C#, ASP.NET, PHP, Laravel, PowerShell, MSSQL, Postgres,
         MySql, Docker
         <br />
@@ -52,6 +35,23 @@
         Admin: Microsoft Windows Servers, Linux Servers, VMWare & Hyper-V
         Virtualization,<br />
         TFS deploy server, IIS balancing, Zabbix
+      </p>
+
+      <h2>My Education</h2>
+
+      <p>
+        I graduated from
+        <a href="http://inter.isu.ru/" target="_blank">
+          Irkutsk State University</a
+        >
+        the faculty of `mathematics and computer science`<br />
+        with a <b>specialist degree: Mathematician and System programmer</b>
+        (2003 - 2008).
+      </p>
+
+      <p>
+        Before that, I graduated secondary school with advanced math learning
+        (1993 - 2003).
       </p>
     </div>
   </div>
