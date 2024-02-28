@@ -10,11 +10,12 @@ import {
   resetAuthorizationAndGoToHomePage,
 } from "@/helpers/auth";
 import { useAppStore } from "@/store/appStore";
+import { RegisteredError } from "@/types/errors";
 
 export default class Api {
   static async request(config: RequestConfig): Promise<any> {
     const appStore = useAppStore();
-    const { startLoading, stopLoading } = appStore;
+    const { startLoading, stopLoading, setGlobalError } = appStore;
 
     if (!config.withoutLoader) {
       startLoading();
@@ -73,6 +74,8 @@ export default class Api {
         config.successCallback();
       }
 
+      setGlobalError(undefined);
+
       return (
         (config.isDataResult
           ? requestResult?.data?.data ?? []
@@ -82,8 +85,9 @@ export default class Api {
       console.error("API request error:", e);
 
       if (!e?.response?.status) {
-        // In case when API is not accessible I cannot get status.
+        // In case when API is not accessible the HTTP status is undefined.
         // TODO Is it correct for such a case clean the authorization?
+        setGlobalError(RegisteredError.ServerNotAccessible);
         return;
       }
 

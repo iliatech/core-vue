@@ -7,10 +7,13 @@
       :aria-label="$lang.label.loader"
     />
   </div>
+
   <div class="app-container">
     <TopToolbar />
     <div class="app-content">
-      <RouterView />
+      <ErrorProcessing>
+        <RouterView />
+      </ErrorProcessing>
     </div>
   </div>
 </template>
@@ -23,6 +26,7 @@ import { storeToRefs } from "pinia";
 import { onBeforeMount, onMounted, ref } from "vue";
 import { setGlobalToastObject } from "@/helpers/toast";
 import TopToolbar from "@/components/toolbars/TopToolbar.vue";
+import ErrorProcessing from "@/components/error/ErrorProcessing.vue";
 
 const appStore = useAppStore();
 const { isLoading, isPersistentLoading } = storeToRefs(appStore);
@@ -65,6 +69,6 @@ onMounted(async () => {
 }
 
 .app-content {
-  // Add some styles if needed.
+  flex-grow: 1;
 }
 </style>

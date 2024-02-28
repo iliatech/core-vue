@@ -6,12 +6,14 @@ import Api from "@/api/Api";
 import { apiPaths } from "@/settings/api";
 import { authorizedUserField, initialUserConfig } from "@/settings/auth";
 import { RequestMethods } from "@/types/api";
+import type { RegisteredError } from "@/types/errors";
 
 export const useAppStore = defineStore("appStore", () => {
   const isLoading: Ref<boolean> = ref(false);
   const isPersistentLoading: Ref<boolean> = ref(false);
   const isAuthorized: Ref<boolean> = ref(false);
   const user = ref<AuthUser | null>(null);
+  const globalError = ref<RegisteredError | undefined>();
 
   const authUserConfig = ref<AuthUserConfig>(initialUserConfig);
 
@@ -65,7 +67,12 @@ export const useAppStore = defineStore("appStore", () => {
     });
   };
 
+  const setGlobalError = (value: RegisteredError | undefined) => {
+    globalError.value = value;
+  };
+
   return {
+    globalError,
     isAuthorized,
     isLoading,
     isPersistentLoading,
@@ -73,6 +80,7 @@ export const useAppStore = defineStore("appStore", () => {
     authUserConfig,
     loadAuthUser,
     saveAuthUserConfig,
+    setGlobalError,
     startLoading,
     stopLoading,
     startPersistentLoading,
