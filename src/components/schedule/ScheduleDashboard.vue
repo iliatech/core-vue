@@ -65,7 +65,7 @@
 
   <ClientsSidebar ref="clientsSidebar" />
 
-  <FutureDialog
+  <IliaDialog
     ref="deleteSlotDialog"
     :title="$lang.title.confirmDeleteSlot"
     @cancel="cancelDeleteSlot"
@@ -80,7 +80,7 @@
     <br />
     {{ $lang.label.time }}:
     {{ prepareTime(selectedTimeSlot?.time) }}
-  </FutureDialog>
+  </IliaDialog>
 
   <TimeSlotDialog ref="slotDialog" />
 </template>
@@ -95,7 +95,7 @@ import IliaButton from "@/components/schedule/IliaButton.vue";
 import ClientsSidebar from "@/components/schedule/ClientsSidebar.vue";
 import TimeSlotComponent from "@/components/schedule/TimeSlotComponent.vue";
 import TimeSlotDialog from "@/components/schedule/TimeSlotDialog.vue";
-import FutureDialog from "@/components/dialogs/FutureDialog.vue";
+import IliaDialog from "@/components/dialogs/IliaDialog.vue";
 import { es } from "date-fns/locale";
 import { prepareDate } from "@/helpers/schedule";
 

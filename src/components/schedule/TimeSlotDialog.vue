@@ -1,5 +1,5 @@
 <template>
-  <FutureDialog
+  <IliaDialog
     :title="editMode ? $lang.title.editSlot : $lang.title.addSlot"
     ref="dialog"
     @cancel="handleCancel"
@@ -43,11 +43,11 @@
         :class="{ 'p-invalid': validated && !client && !comment }"
       />
     </div>
-  </FutureDialog>
+  </IliaDialog>
 </template>
 
 <script setup lang="ts">
-import FutureDialog from "@/components/dialogs/FutureDialog.vue";
+import IliaDialog from "@/components/dialogs/IliaDialog.vue";
 import InputText from "primevue/inputtext";
 import { computed, ref } from "vue";
 import Dropdown from "primevue/dropdown";

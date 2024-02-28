@@ -48,7 +48,7 @@
     </DataTable>
   </CustomSidebar>
   <ClientDialog ref="clientDialog" />
-  <FutureDialog
+  <IliaDialog
     ref="deleteClientDialog"
     :title="$lang.title.confirmDeleteClient"
     @cancel="cancelDeleteClient"
@@ -56,7 +56,7 @@
     :z-index="1200"
   >
     {{ $lang.label.clientName }}: {{ selectedClient?.name }}
-  </FutureDialog>
+  </IliaDialog>
 </template>
 <script lang="ts" setup>
 import { computed, ref } from "vue";
@@ -73,7 +73,7 @@ import {
 import { useScheduleStore } from "@/store/scheduleStore";
 import ClientDialog from "@/components/schedule/ClientDialog.vue";
 import type { Client } from "@/types/schedule";
-import FutureDialog from "@/components/dialogs/FutureDialog.vue";
+import IliaDialog from "@/components/dialogs/IliaDialog.vue";
 
 const scheduleStore = useScheduleStore();
 const { clients } = storeToRefs(scheduleStore);
