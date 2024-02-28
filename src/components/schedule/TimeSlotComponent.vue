@@ -1,17 +1,24 @@
 <template>
   <div class="schedule-timeslot">
     <div class="schedule-timeslot__data">
-      {{ prepareTime(modelValue.time) }}<br />
-      {{ getClientNameById(modelValue.clientId) }}
+      <div>
+        {{ prepareTime(modelValue.time) }}
+      </div>
+      <div v-if="modelValue.client">
+        {{ modelValue.client.name }}
+      </div>
+    </div>
+    <div v-if="modelValue.comment" class="schedule-timeslot__comment">
+      {{ modelValue.comment }}
     </div>
     <div class="schedule-timeslot__actions">
-      <MyButton
+      <IliaButton
         icon-pre="trash"
         color="pink"
         no-border
         @click="handleClickDeleteSlot(modelValue)"
       />
-      <MyButton
+      <IliaButton
         icon-post="pencil"
         color="paleOrange"
         no-border
@@ -22,38 +29,29 @@
 </template>
 
 <script setup lang="ts">
-import type { TimeSlot } from "@/types/schedule";
+import type { ApiTimeSlotResponse } from "@/types/schedule";
 import type { PropType } from "vue";
 import { useScheduleStore } from "@/store/scheduleStore";
-import MyButton from "@/components/schedule/MyButton.vue";
-import { parseSlotTime } from "@/helpers/schedule";
-import { TIMEZONE_DIFFERENCE } from "@/settings/schedule";
+import IliaButton from "@/components/schedule/IliaButton.vue";
 
 const scheduleStore = useScheduleStore();
-const { getClientNameById } = scheduleStore;
+const { prepareTime } = scheduleStore;
 
 const emit = defineEmits(["click:delete", "click:edit"]);
 
 defineProps({
   modelValue: {
-    type: Object as PropType<TimeSlot>,
+    type: Object as PropType<ApiTimeSlotResponse>,
     required: true,
   },
 });
 
-const handleClickDeleteSlot = (slot: TimeSlot) => {
+const handleClickDeleteSlot = (slot: ApiTimeSlotResponse) => {
   emit("click:delete", slot);
 };
 
-const handleClickEditSlot = (slot: TimeSlot) => {
+const handleClickEditSlot = (slot: ApiTimeSlotResponse) => {
   emit("click:edit", slot);
-};
-
-const prepareTime = (time: string) => {
-  const [hours, minutes] = parseSlotTime(time);
-
-  // TODO It's a little bit hardcoded here ;)
-  return `${Number(hours) - TIMEZONE_DIFFERENCE}:${minutes} ESP`;
 };
 </script>
 
@@ -65,18 +63,21 @@ const prepareTime = (time: string) => {
 .schedule-timeslot {
   margin: 0 $px-10;
   border: 1px solid $slot-border-color;
+  border-radius: $px-4;
   position: relative;
   justify-content: center;
   line-height: 22px;
 
   &__data {
-    padding: $px-15 $px-10 $px-10;
+    padding: $px-15 $px-10 0;
     display: flex;
     justify-content: center;
+    flex-direction: column;
     text-align: center;
   }
 
   &__actions {
+    margin-top: $px-10;
     padding: $px-5 $px-10;
     display: flex;
     justify-content: space-between;
@@ -95,6 +96,18 @@ const prepareTime = (time: string) => {
     font-size: 32px;
     color: red;
     cursor: pointer;
+  }
+
+  &__comment {
+    margin: 0 auto;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    padding: 0 $px-10;
+    font-style: italic;
+    color: #333;
+    white-space: initial;
+    max-width: 120px;
   }
 }
 </style>

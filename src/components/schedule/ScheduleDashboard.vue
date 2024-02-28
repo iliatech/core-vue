@@ -2,20 +2,20 @@
   <div class="schedule">
     <div class="schedule__top-bar">
       <div class="schedule__week-selector">
-        <MyButton
+        <IliaButton
           @click="goPreviousWeek"
           :label="$lang.label.previousWeek"
           color="lightMagenta"
           icon-pre="caret-left"
         />
-        <MyButton
+        <IliaButton
           @click="goNextWeek"
           :label="$lang.label.nextWeek"
           color="lightMagenta"
           icon-post="caret-right"
         />
       </div>
-      <MyButton
+      <IliaButton
         @click="openClientsSidebar"
         :label="$lang.button.clients"
         color="lightBlue"
@@ -45,19 +45,19 @@
         </div>
         <div class="schedule__slots">
           <div class="schedule__slot-add">
-            <MyButton
+            <IliaButton
               icon-pre="plus"
               @click="handleClickAddSlot(day.full)"
               no-border
             />
           </div>
-          <TimeSlotComponent
-            v-for="slot in getDaySlots(day.full)"
-            :key="`${slot.clientId}_${slot.time}`"
-            :model-value="{ ...slot, date: day.full }"
-            @click:delete="handleClickDeleteSlot"
-            @click:edit="handleClickEditSlot"
-          />
+          <template v-for="slot in getDaySlots(day.full)" :key="slot.id">
+            <TimeSlotComponent
+              :model-value="slot"
+              @click:delete="handleClickDeleteSlot"
+              @click:edit="handleClickEditSlot"
+            />
+          </template>
         </div>
       </div>
     </div>
@@ -65,57 +65,58 @@
 
   <ClientsSidebar ref="clientsSidebar" />
 
-  <MyDialog
+  <IliaDialog
     ref="deleteSlotDialog"
     :title="$lang.title.confirmDeleteSlot"
     @cancel="cancelDeleteSlot"
-    @confirm="deleteSlot(deleteSlotConfig)"
+    @confirm="deleteTimeSlot(selectedTimeSlot)"
     :z-index="1200"
   >
     {{ $lang.label.client }}:
-    {{ getClientNameById(deleteSlotConfig?.clientId) }}
+    {{ selectedTimeSlot?.client?.name }}
     <br />
     {{ $lang.label.date }}:
-    {{ deleteSlotConfig?.date }}
+    {{ prepareDate(selectedTimeSlot?.date) }}
     <br />
     {{ $lang.label.time }}:
-    {{ deleteSlotConfig?.time }}
-  </MyDialog>
+    {{ prepareTime(selectedTimeSlot?.time) }}
+  </IliaDialog>
 
   <TimeSlotDialog ref="slotDialog" />
 </template>
 <script lang="ts" setup>
 import { computed, onBeforeMount, ref } from "vue";
-import type { ScheduleDay } from "@/types/schedule";
+import type { ApiTimeSlotResponse, ScheduleDay } from "@/types/schedule";
 import { useScheduleStore } from "@/store/scheduleStore";
 import { storeToRefs } from "pinia";
-import type { TimeSlotShort } from "@/types/schedule";
 import { sortWithCollator } from "@/helpers/sort";
 import { addDays, format } from "date-fns";
-import MyButton from "@/components/schedule/MyButton.vue";
+import IliaButton from "@/components/schedule/IliaButton.vue";
 import ClientsSidebar from "@/components/schedule/ClientsSidebar.vue";
 import TimeSlotComponent from "@/components/schedule/TimeSlotComponent.vue";
 import TimeSlotDialog from "@/components/schedule/TimeSlotDialog.vue";
-import MyDialog from "@/components/dialogs/MyDialog.vue";
-import type { TimeSlot } from "@/types/schedule";
+import IliaDialog from "@/components/dialogs/IliaDialog.vue";
+import { es } from "date-fns/locale";
+import { prepareDate } from "@/helpers/schedule";
 
 const scheduleStore = useScheduleStore();
-const { schedule } = storeToRefs(scheduleStore);
-const { loadSchedule, deleteSlot, getClientNameById, getClientById } =
+const { timeSlots } = storeToRefs(scheduleStore);
+const { deleteTimeSlot, loadTimeSlots, loadClients, prepareTime } =
   scheduleStore;
 
 const slotDialog = ref();
 const clientsSidebar = ref();
-let deleteSlotConfig = ref<TimeSlot | null>(null);
+let selectedTimeSlot = ref<ApiTimeSlotResponse | null>(null);
 const deleteSlotDialog = ref();
 
-const today = format(new Date(), "d/MMM/yyyy");
+const today = Number(format(new Date(), "yyyyMMdd"));
 const currentMonday = ref<Date>(
   addDays(new Date(), 1 - Number(format(new Date(), "i")))
 );
 
 onBeforeMount(async () => {
-  await loadSchedule();
+  await loadTimeSlots();
+  await loadClients();
 });
 
 const weekDays = computed<ScheduleDay[]>(() => {
@@ -125,8 +126,8 @@ const weekDays = computed<ScheduleDay[]>(() => {
     const date = addDays(currentMonday.value, i);
     days.push({
       date,
-      short: format(date, "E, d MMM"),
-      full: format(date, "d/MMM/yyyy"),
+      short: format(date, "E, d MMM", { locale: es }),
+      full: Number(format(date, "yyyyMMdd")),
       dayOfWeekNumber: Number(format(date, "i")),
     });
   }
@@ -146,37 +147,31 @@ const goNextWeek = () => {
   currentMonday.value = addDays(currentMonday.value, 7);
 };
 
-const getDaySlots = (date: string) => {
-  const dayIndex = schedule.value.findIndex((item) => item.date === date);
-
-  if (dayIndex === -1) {
-    return [];
-  }
-
-  const slots = schedule.value[dayIndex].slots.filter((item) => {
-    const client = getClientById(item.clientId);
-    return !client?.archived;
+const getDaySlots = (date: number) => {
+  const slots = timeSlots.value.filter((item) => {
+    return !item?.client?.archived && item.date === date;
   });
 
+  // TODO: Make better sorting which should include timezone.
   sortWithCollator(slots, "time");
 
   return slots;
 };
 
 const cancelDeleteSlot = () => {
-  deleteSlotConfig.value = null;
+  selectedTimeSlot.value = null;
 };
 
-const handleClickDeleteSlot = (slot: TimeSlot) => {
-  deleteSlotConfig.value = slot;
+const handleClickDeleteSlot = (slot: ApiTimeSlotResponse) => {
+  selectedTimeSlot.value = slot;
   openConfirmDeleteDialog();
 };
 
-const handleClickAddSlot = (date: string) => {
+const handleClickAddSlot = (date: number) => {
   slotDialog.value.open(date);
 };
 
-const handleClickEditSlot = (slot: TimeSlot) => {
+const handleClickEditSlot = (slot: ApiTimeSlotResponse) => {
   slotDialog.value.open(slot.date, slot);
 };
 
@@ -208,13 +203,19 @@ const openConfirmDeleteDialog = () => {
     display: flex;
     gap: $px-20;
     flex-wrap: wrap;
+    margin-bottom: $px-30;
+
+    @media (max-width: 450px) {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
   }
 
   &__day {
     @include zero-eight-hundred-seventy-five;
-    min-width: 150px;
+    width: 150px;
     border: 1px solid #888;
-    border-radius: $px-2;
+    border-radius: $px-4;
     padding-bottom: $px-10;
   }
 
@@ -228,6 +229,7 @@ const openConfirmDeleteDialog = () => {
   }
 
   &__day-title {
+    text-transform: capitalize;
     height: 40px;
     border-bottom: 1px solid #888;
     padding: $px-10 0;

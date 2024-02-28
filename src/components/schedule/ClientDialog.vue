@@ -1,7 +1,7 @@
 <template>
   <CustomDialog
     ref="dialog"
-    :title="$lang.title.createClient"
+    :title="id ? $lang.title.editClient : $lang.title.createClient"
     class="client-dialog"
     @click:cancel="onCancel"
   >
@@ -14,11 +14,12 @@
       />
     </div>
     <template #buttons-before>
-      <MyButton
-        :label="$lang.button.create"
+      <IliaButton
+        :label="$lang.button.save"
         color="forestGreen"
         outlined
-        @click="handleClickCreate"
+        @click="handleClickSave"
+        width="80px"
       />
     </template>
   </CustomDialog>
@@ -27,37 +28,46 @@
 import { ref } from "vue";
 import InputText from "primevue/inputtext";
 import CustomDialog from "@/components/dialogs/CustomDialog.vue";
-import MyButton from "@/components/schedule/MyButton.vue";
+import IliaButton from "@/components/schedule/IliaButton.vue";
 import { useScheduleStore } from "@/store/scheduleStore";
 import { showToast } from "@/helpers/toast";
 import { ToastType } from "@/types/toasts";
 import { lang } from "@/lang";
 import { storeToRefs } from "pinia";
+import type { Client } from "@/types/schedule";
 
 const scheduleStore = useScheduleStore();
 const { clients } = storeToRefs(scheduleStore);
-const { createClient } = scheduleStore;
+const { createClient, updateClient } = scheduleStore;
 
+const id = ref();
 const name = ref();
 const dialog = ref();
 const isValidated = ref(false);
 
-const handleClickCreate = async () => {
+const handleClickSave = async () => {
   isValidated.value = true;
 
   if (!validate()) {
     return;
   }
 
-  if (clients.value.find((item) => item.name === name.value.trim())) {
+  if (
+    clients.value.find(
+      (item) =>
+        item.name === name.value.trim() && (!id.value || id.value !== item.id)
+    )
+  ) {
     showToast({ type: ToastType.Error, text: lang.error.clientDuplicate });
     return false;
   }
 
-  await createClient(name.value.trim());
+  if (id.value) {
+    await updateClient({ id: id.value, name: name.value });
+  } else {
+    await createClient(name.value);
+  }
 
-  name.value = undefined;
-  isValidated.value = false;
   dialog.value.close();
 };
 
@@ -65,10 +75,19 @@ const validate = (): boolean => {
   return !!name.value;
 };
 const onCancel = () => {
-  name.value = undefined;
+  // TODO
 };
 
-const open = () => {
+const open = (client?: Client) => {
+  id.value = null;
+  name.value = undefined;
+  isValidated.value = false;
+
+  if (client) {
+    id.value = client.id;
+    name.value = client.name;
+  }
+
   dialog.value.open();
 };
 

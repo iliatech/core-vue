@@ -13,8 +13,7 @@ export default defineConfig({
     createHtmlPlugin({
       inject: {
         data: {
-          title:
-            "Self Platform | Ilia's Domyshev site | JS/VueJs Programmer | Specialist degree in Mathematics and programming",
+          title: "ILIA DOMYSHEV: Home",
           version: `${packageJson?.version}/${new Date().toISOString()}`,
         },
       },

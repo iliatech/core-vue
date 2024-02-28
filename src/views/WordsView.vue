@@ -14,7 +14,7 @@
         />
       </div>
     </div>
-    <div class="words">
+    <div class="words-view__words">
       <PlusTile @click="onClickAddWord" />
       <WordTile
         v-for="(item, index) in wordsSortedAndFiltered"
@@ -107,7 +107,6 @@ const wordsSortedAndFiltered = computed<ApiWordResponse[]>(() => {
 const loadWords = async (): Promise<void> => {
   const data = await Api.request({
     path: apiPaths.word,
-    loader: true,
   });
 
   words.value = data?.length ? (data as ApiWordResponse[]) : [];
@@ -139,7 +138,6 @@ const onConfirmDelete = async (): Promise<void> => {
     method: RequestMethods.Delete,
     path: `${apiPaths.word}/${id}`,
     successToast: lang.success.wordDeleted(title),
-    loader: true,
     successCallback: () => {
       loadWords();
     },
@@ -174,12 +172,13 @@ const openManageTagsSidebar = () => {
 }
 
 .words-view {
+  padding: $px-20;
+
   &__top {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: $px-15;
-    margin-top: $px-10;
   }
 
   &__top-left {
@@ -193,15 +192,16 @@ const openManageTagsSidebar = () => {
     //  padding: 0;
     //}
   }
-}
 
-.words {
-  display: flex;
-  flex-wrap: wrap;
-  gap: $px-30;
-  div {
-    min-width: 350px;
-    @include flex-wrap-fix(250px);
+  &__words {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $px-30;
+
+    div {
+      min-width: 350px;
+      @include flex-wrap-fix(250px);
+    }
   }
 }
 </style>

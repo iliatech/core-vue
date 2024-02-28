@@ -5,9 +5,9 @@
     :title="$lang.title.clients"
     close-button
   >
-    <MyButton
-      :label="$lang.button.add"
-      icon-post="plus"
+    <IliaButton
+      :label="$lang.button.create"
+      icon-pre="plus"
       @click="handleClickAddClient"
       color="forestGreen"
     />
@@ -29,8 +29,14 @@
       >
         <template #body="{ data }">
           <div class="clients-sidebar__action-column">
-            <MyButton
-              icon-pre="download"
+            <IliaButton
+              icon-pre="pencil"
+              @click="handleClickEditClient(data)"
+              icon-size="1rem"
+              no-border
+            />
+            <IliaButton
+              icon-pre="trash"
               @click="handleClickDeleteClient(data)"
               icon-size="1rem"
               no-border
@@ -41,41 +47,40 @@
       <template #empty> {{ $lang.phrase.noClientsFound }} </template>
     </DataTable>
   </CustomSidebar>
-  <ScheduleClientDialog ref="clientDialog" />
-  <MyDialog
+  <ClientDialog ref="clientDialog" />
+  <IliaDialog
     ref="deleteClientDialog"
     :title="$lang.title.confirmDeleteClient"
     @cancel="cancelDeleteClient"
     @confirm="confirmDeleteClient"
     :z-index="1200"
   >
-    {{ $lang.label.clientName }}: {{ clientToDelete?.name }}
-  </MyDialog>
+    {{ $lang.label.clientName }}: {{ selectedClient?.name }}
+  </IliaDialog>
 </template>
 <script lang="ts" setup>
-import { computed, onBeforeMount, ref } from "vue";
+import { computed, ref } from "vue";
 
-import type { ApiTagResponse } from "@/types/tag";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import { storeToRefs } from "pinia";
 import CustomSidebar from "@/components/sidebars/CustomSidebar.vue";
-import MyButton from "@/components/schedule/MyButton.vue";
+import IliaButton from "@/components/schedule/IliaButton.vue";
 import {
   clientsTableColumns,
   ClientsTableColumns,
 } from "@/settings/tables/clientsTable";
 import { useScheduleStore } from "@/store/scheduleStore";
-import ScheduleClientDialog from "@/components/schedule/ScheduleClientDialog.vue";
+import ClientDialog from "@/components/schedule/ClientDialog.vue";
 import type { Client } from "@/types/schedule";
-import MyDialog from "@/components/dialogs/MyDialog.vue";
+import IliaDialog from "@/components/dialogs/IliaDialog.vue";
 
 const scheduleStore = useScheduleStore();
 const { clients } = storeToRefs(scheduleStore);
-const { loadSchedule, archiveClient } = scheduleStore;
+const { loadClients, archiveClient } = scheduleStore;
 
 const clientDialog = ref();
-const clientToDelete = ref<Client>();
+const selectedClient = ref<Client>();
 const sidebar = ref();
 const deleteClientDialog = ref();
 
@@ -83,7 +88,9 @@ const clientsFiltered = computed(() => {
   return clients.value.filter((item) => !item.archived);
 });
 
-const open = () => {
+const open = async () => {
+  await loadClients();
+
   sidebar.value.open();
 };
 
@@ -91,28 +98,29 @@ const handleClickAddClient = () => {
   clientDialog.value.open();
 };
 
-const handleClickDeleteClient = async (tag: ApiTagResponse) => {
-  clientToDelete.value = tag;
+const handleClickDeleteClient = async (client: Client) => {
+  selectedClient.value = client;
   deleteClientDialog.value.open();
 };
 
+const handleClickEditClient = async (client: Client) => {
+  selectedClient.value = client;
+  clientDialog.value.open(client);
+};
+
 const cancelDeleteClient = () => {
-  clientToDelete.value = undefined;
+  selectedClient.value = undefined;
 };
 
 const confirmDeleteClient = async () => {
-  if (!clientToDelete.value) {
+  if (!selectedClient.value) {
     return;
   }
 
-  archiveClient(clientToDelete.value.id);
+  await archiveClient(selectedClient.value);
 
-  clientToDelete.value = undefined;
+  selectedClient.value = undefined;
 };
-
-onBeforeMount(async () => {
-  await loadSchedule();
-});
 
 defineExpose({ open });
 </script>
@@ -133,6 +141,7 @@ defineExpose({ open });
   &__action-column {
     display: flex;
     justify-content: center;
+    gap: $px-15;
   }
 }
 

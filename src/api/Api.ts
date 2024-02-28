@@ -5,17 +5,19 @@ import { lang } from "@/lang";
 import { apiUrl } from "@/settings/api";
 import { showToast } from "@/helpers/toast";
 import { ToastType } from "@/types/toasts";
-import { getAuthToken, resetAuthToken, resetAuthUser } from "@/helpers/auth";
-import router from "@/router";
-import { routes } from "@/settings/routes";
+import {
+  getAuthToken,
+  resetAuthorizationAndGoToHomePage,
+} from "@/helpers/auth";
 import { useAppStore } from "@/store/appStore";
+import { RegisteredError } from "@/types/errors";
 
 export default class Api {
   static async request(config: RequestConfig): Promise<any> {
     const appStore = useAppStore();
-    const { updateIsAuthorized, startLoading, stopLoading } = appStore;
+    const { startLoading, stopLoading, setGlobalError } = appStore;
 
-    if (config.loader) {
+    if (!config.withoutLoader) {
       startLoading();
     }
 
@@ -72,20 +74,28 @@ export default class Api {
         config.successCallback();
       }
 
+      setGlobalError(undefined);
+
       return (
         (config.isDataResult
           ? requestResult?.data?.data ?? []
           : requestResult?.data) ?? null
       );
     } catch (e: any) {
+      console.error("API request error:", e);
+
+      if (!e?.response?.status) {
+        // In case when API is not accessible the HTTP status is undefined.
+        // TODO Is it correct for such a case clean the authorization?
+        setGlobalError(RegisteredError.ServerNotAccessible);
+        return;
+      }
+
       const { status } = e.response;
 
       switch (status) {
         case 401:
-          resetAuthToken();
-          resetAuthUser();
-          updateIsAuthorized(false);
-          await router.push(routes.login.path);
+          await resetAuthorizationAndGoToHomePage();
           break;
         case 409:
           showToast({
@@ -110,7 +120,7 @@ export default class Api {
 
       return false;
     } finally {
-      if (config.loader) {
+      if (!config.withoutLoader) {
         stopLoading();
       }
     }

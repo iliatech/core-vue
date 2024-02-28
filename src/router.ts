@@ -2,16 +2,20 @@ import { createRouter, createWebHistory } from "vue-router";
 import { publicRouteNames, routes } from "@/settings/routes";
 import { getAuthToken, getAuthUser } from "@/helpers/auth";
 import { useAppStore } from "@/store/appStore";
-import { storeToRefs } from "pinia";
 import { lang } from "@/lang";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: routes.root.path,
-      name: routes.root.name,
+      path: routes.home.path,
+      name: routes.home.name,
       component: () => import("@/views/HomeView.vue"),
+    },
+    {
+      path: routes.dashboard.path,
+      name: routes.dashboard.name,
+      component: () => import("@/views/DashboardView.vue"),
     },
     {
       path: routes.words.path,
@@ -29,7 +33,7 @@ const router = createRouter({
     {
       path: routes.usefulLinks.path,
       name: routes.usefulLinks.name,
-      component: () => import("@/views/UsefulLinks.vue"),
+      component: () => import("@/views/UsefulLinksView.vue"),
       meta: {
         title: lang.title.usefulLinks,
       },
@@ -51,13 +55,16 @@ router.beforeEach((to) => {
   }
 
   if (!to.meta.url) {
-    to.meta.url = routes.root.path;
+    to.meta.url = routes.home.path;
   }
 
   const appStore = useAppStore();
-  const { updateIsAuthorized } = appStore;
-  if (getAuthToken() && getAuthUser()) {
+  const { updateIsAuthorized, updateAuthUser } = appStore;
+  const user = getAuthUser();
+
+  if (getAuthToken() && user) {
     updateIsAuthorized(true);
+    updateAuthUser(user);
   }
 
   if (

@@ -1,5 +1,8 @@
 import { authorizedUserField, jwtTokenField } from "@/settings/auth";
-import type { AuthorizedUser } from "@/types/user";
+import type { AuthUser } from "@/types/user";
+import router from "@/router";
+import { routes } from "@/settings/routes";
+import { useAppStore } from "@/store/appStore";
 
 export const saveAuthToken = (value: string) => {
   localStorage.setItem(jwtTokenField, value);
@@ -14,14 +17,7 @@ export const resetAuthToken = () => {
   localStorage.removeItem(jwtTokenField);
 };
 
-export const saveAuthUser = (user: AuthorizedUser) => {
-  const userString = JSON.stringify(user);
-  if (userString) {
-    localStorage.setItem(authorizedUserField, userString);
-  }
-};
-
-export const getAuthUser = (): AuthorizedUser | undefined => {
+export const getAuthUser = (): AuthUser | undefined => {
   const userString = localStorage.getItem(authorizedUserField);
   if (!userString) {
     return undefined;
@@ -34,4 +30,14 @@ export const getAuthUser = (): AuthorizedUser | undefined => {
 
 export const resetAuthUser = () => {
   localStorage.removeItem(authorizedUserField);
+};
+
+export const resetAuthorizationAndGoToHomePage = async () => {
+  const appStore = useAppStore();
+  const { updateIsAuthorized } = appStore;
+
+  resetAuthToken();
+  resetAuthUser();
+  updateIsAuthorized(false);
+  await router.push(routes.home.path);
 };

@@ -1,10 +1,10 @@
 <template>
-  <div class="home-page">
-    <PublicArea />
+  <div class="dashboard-view">
+    <PrivateArea />
   </div>
 </template>
 <script lang="ts" setup>
-import PublicArea from "@/components/homePage/PublicArea.vue";
+import PrivateArea from "@/components/homePage/PrivateArea.vue";
 </script>
 <style lang="scss" scoped>
 @import "@/assets/variables";

@@ -1,15 +1,25 @@
-export interface TimeSlotShort {
+export interface ApiTimeSlotResponse {
+  id: string;
+  clientId: string | null;
+  date: number | null;
   time: string;
-  clientId: string;
+  comment: string | null;
+  client: Client | null;
 }
 
-export interface TimeSlot extends TimeSlotShort {
-  date: string;
+export interface TimeSlotCreate {
+  date: number;
+  time: string;
+  clientId: string | null;
+  comment: string | null;
 }
 
-export interface ScheduleDayItem {
-  date: string;
-  slots: TimeSlotShort[];
+export interface TimeSlotUpdate {
+  id: string;
+  date: number | null;
+  time: string;
+  comment: string | null;
+  clientId: string | null;
 }
 
 export interface Client {
@@ -21,6 +31,12 @@ export interface Client {
 export interface ScheduleDay {
   date: Date;
   short: string;
-  full: string;
+  full: number;
   dayOfWeekNumber: number;
+}
+
+export interface TimeZone {
+  name: string;
+  value: number;
+  summerTime: boolean;
 }

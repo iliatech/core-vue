@@ -1,32 +1,10 @@
 <template>
   <div class="top-toolbar">
-    <div class="top-toolbar__left"></div>
-    <div class="top-toolbar__center">
-      <div @click="openNavMenu" class="top-toolbar__title">
-        {{ title }}
-        <MyButton
-          icon-pre="angle-down"
-          width="14px"
-          height="20px"
-          no-border
-          icon-size="1rem"
-        />
-      </div>
-      <Menu ref="navMenu" :model="navigationOptions" popup>
-        <template #item="{ item }">
-          <div @click="router.push(item.path)">
-            <div class="top-toolbar__navigation-menu-item">
-              {{ item.label }}
-            </div>
-          </div>
-        </template>
-      </Menu>
-    </div>
-    <div class="top-toolbar__right">
-      <MyButton
-        icon-post="ellipsis-h"
+    <div class="top-toolbar__logo">
+      <IliaButton
         @click="handleClickUserMenu"
-        margin-top="8px"
+        :label="logoTitle"
+        font-size="1.125rem"
         no-border
       />
       <Menu
@@ -35,85 +13,132 @@
         popup
       />
     </div>
+    <div class="top-toolbar__nav-container">
+      <div class="top-toolbar__nav">
+        <IliaButton
+          v-for="item in navigationOptions"
+          :label="item.label"
+          @click="router.push({ name: item.name })"
+          :key="item.label"
+          size="small"
+          color="orange"
+          :selected="$route.name === item.name"
+          nowrap
+        />
+      </div>
+    </div>
   </div>
+  <ProfileSidebar ref="profileSidebar" :isFullWidth="isMobile" />
 </template>
 <script lang="ts" setup>
 import { lang } from "@/lang";
 import router from "@/router";
-import { publicRouteNames, routes } from "@/settings/routes";
-import { getAuthUser, resetAuthToken, resetAuthUser } from "@/helpers/auth";
-import Menu from "primevue/menu";
-import { showToast } from "@/helpers/toast";
-import { ToastType } from "@/types/toasts";
+import { routes } from "@/settings/routes";
+import { resetAuthToken, resetAuthUser } from "@/helpers/auth";
 import { computed, ref, watch } from "vue";
 import { useAppStore } from "@/store/appStore";
 import { storeToRefs } from "pinia";
 import type { NavigationItem } from "@/types/common";
 import { useRoute } from "vue-router";
 import { fullUserName } from "@/helpers/common";
-import MyButton from "@/components/schedule/MyButton.vue";
+import IliaButton from "@/components/schedule/IliaButton.vue";
+import ProfileSidebar from "@/components/schedule/ProfileSidebar.vue";
+import { generateAvailableAppsList } from "@/helpers/navigation";
+import Menu from "primevue/menu";
 
 const route = useRoute();
 
 const appStore = useAppStore();
+const { isAuthorized, user } = storeToRefs(appStore);
 const { updateIsAuthorized } = appStore;
-const { isAuthorized } = storeToRefs(appStore);
 
 const userMenu = ref();
-const navMenu = ref();
 const navigation = ref();
+const profileSidebar = ref();
 
-const title = computed(() => {
-  return route.meta.title;
+const isMobile = computed<boolean>(() => {
+  return window.innerWidth < 500;
 });
 
-const isMainPageStyle = computed(() => {
-  return publicRouteNames.includes(route.name as string);
+const logoTitle = computed<string>(() => {
+  return user.value?.firstName || user.value?.lastName
+    ? `${user.value?.firstName?.[0]}${user.value?.lastName?.[0]}`
+    : lang.title.iliaDomyshev;
 });
 
-const navigationOptions = computed(() => {
-  const items: NavigationItem[] = [
-    {
-      label: "Home Page",
-      path: routes.root.path,
-    },
-    {
-      label: "Clients Schedule",
-      path: routes.schedule.path,
-    },
-    {
-      label: "Useful Links",
-      path: routes.usefulLinks.path,
-    },
-  ];
-
-  if (!isAuthorized.value) {
-    items.push({
-      label: "Login Page",
-      path: routes.login.path,
-    });
+const navigationOptions = computed<NavigationItem[]>(() => {
+  if (!route.name) {
+    console.error("Error: route name is undefined: ", route.name);
+    return [];
   }
 
-  if (isAuthorized.value) {
-    items.push({
-      label: "Words Cards",
-      path: routes.words.path,
-    });
+  const localRoute = routes[route.name.toString()];
+
+  if (!localRoute) {
+    console.error("Error: local route is not found: ", route.name);
+    return [];
+  }
+
+  let items: NavigationItem[] = [];
+
+  if (localRoute.isPublic) {
+    items = [
+      {
+        label: routes.home.title,
+        name: routes.home.name,
+      },
+      {
+        label: routes.usefulLinks.title,
+        name: routes.usefulLinks.name,
+      },
+    ];
+
+    if (!isAuthorized.value) {
+      items.push({
+        label: routes.login.title,
+        name: routes.login.name,
+      });
+    }
+  } else {
+    items = [
+      { name: routes.dashboard.name, label: routes.dashboard.title },
+      ...generateAvailableAppsList(),
+    ];
   }
 
   return items;
 });
 
 const menuAuthorized = computed(() => {
-  const user = getAuthUser();
-
   return [
     {
       label: lang.label.profile,
       items: [
         {
-          label: fullUserName(user),
+          label: fullUserName(user.value),
           icon: "pi pi-user",
+          command: () => {
+            profileSidebar.value.open();
+          },
+        },
+      ],
+    },
+    {
+      label: lang.label.navigation,
+      items: [
+        {
+          label: lang.label.goToPublicArea,
+          icon: "pi pi-user",
+          command: () => {
+            router.push({ name: routes.home.name });
+          },
+        },
+        {
+          label: lang.label.goToPrivateArea,
+          icon: "pi pi-user",
+          command: () => {
+            router.push({ name: routes.dashboard.name });
+          },
         },
       ],
     },
@@ -156,10 +181,6 @@ const handleClickUserMenu = (event: Event) => {
   userMenu.value.toggle(event);
 };
 
-const openNavMenu = (event: Event) => {
-  navMenu.value.toggle(event);
-};
-
 const onClickLogin = () => {
   router.push(routes.login.path);
 };
@@ -174,59 +195,44 @@ const onClickLogout = () => {
 <style lang="scss" scoped>
 @import "@/assets/variables.scss";
 @import "@/assets/fonts.scss";
+
+$toolbar-border: 1px solid #aaa;
+
 .top-toolbar {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  width: 100%;
+  display: flex;
+  gap: $px-10;
   align-items: center;
-  padding: $px-20;
-  margin-bottom: $px-20;
-  border-bottom: 1px solid #aaa;
+  border-bottom: $toolbar-border;
   background: #f1eceb;
+  line-height: 1.5rem;
 
-  &__left {
-    display: flex;
-    flex-direction: column;
-    gap: $px-10;
-    align-items: flex-start;
-  }
-
-  &__center {
-    @include header-large;
-    margin-top: 5px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: flex-end;
-    gap: $px-10;
-    color: #333;
-    text-decoration: none;
-    white-space: nowrap;
-  }
-
-  &__title {
-    cursor: pointer;
-  }
-
-  &__navigation-menu-item {
+  &__logo {
     padding: $px-10 $px-20;
-    cursor: pointer;
+    border-right: $toolbar-border;
   }
 
-  :deep(.schedule-button) {
-    padding-left: 10px;
-    padding-right: 8px;
-    margin-bottom: 2px;
+  &__nav-container {
+    position: relative;
+    flex-grow: 1;
+    height: 100%;
   }
 
-  &__navigation-dropdown {
-    width: 200px;
-  }
-
-  &__right {
+  &__nav {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    overflow-x: auto;
     display: flex;
+    gap: $px-10;
+    padding: $px-8 0;
+    position: absolute;
 
-    justify-content: flex-end;
-    gap: 50px;
+    @media (min-width: 600px) {
+      gap: $px-20;
+      padding: $px-10 $px-10;
+    }
   }
 
   :deep(.p-button) {

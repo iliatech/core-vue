@@ -1,9 +1,12 @@
 export default {
   client: "Client",
   clientName: "Client name",
+  comment: "Comment",
   createTranslation: "Create translation",
   date: "Date",
   email: "Email",
+  goToPrivateArea: "Go to private area",
+  goToPublicArea: "Go to public area",
   hour: "Hour",
   loader: "Loading",
   logout: "Logout",
@@ -17,5 +20,10 @@ export default {
   selectSorting: "Sort by",
   time: "Time",
   timezone: "Timezone",
+  defaultInputTimezoneName: "Default Input Timezone Name",
+  dashboardTimezoneName: "Dashboard Timezone Name",
+  scheduleTitle: "Title",
   translations: "Translations",
+  userId: "User ID",
+  username: "Username",
 };

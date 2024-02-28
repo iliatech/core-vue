@@ -1,3 +1,5 @@
+import type { TimeZone } from "@/types/schedule";
+
 export const scheduleColors: Record<string, string> = {
   forestGreen: "forestgreen",
   grey: "#666",
@@ -11,4 +13,26 @@ export const scheduleColors: Record<string, string> = {
   superLightMagenta: "#cd8dd3",
 };
 
-export const TIMEZONE_DIFFERENCE = 2;
+export enum TimeZoneName {
+  Esp = "ESP",
+  Geo = "GEO",
+  Msk = "MSK",
+}
+
+export const timeZones: TimeZone[] = [
+  {
+    name: TimeZoneName.Esp,
+    value: 1,
+    summerTime: true,
+  },
+  {
+    name: TimeZoneName.Msk,
+    value: 3,
+    summerTime: false,
+  },
+  {
+    name: TimeZoneName.Geo,
+    value: 4,
+    summerTime: false,
+  },
+];

@@ -1,5 +1,5 @@
 <template>
-  <MyDialog
+  <IliaDialog
     :title="editMode ? $lang.title.editSlot : $lang.title.addSlot"
     ref="dialog"
     @cancel="handleCancel"
@@ -30,47 +30,73 @@
       <div class="schedule-slot-dialog__client">
         <Dropdown
           v-model="client"
-          :options="clients.filter((item) => !item.archived)"
+          :options="filteredClients"
           :placeholder="$lang.label.client"
-          :class="{ 'p-invalid': validated && !client }"
+          :class="{ 'p-invalid': validated && !client && !comment }"
           option-label="name"
+          show-clear
         />
       </div>
+      <InputText
+        v-model="comment"
+        :placeholder="lang.label.comment"
+        :class="{ 'p-invalid': validated && !client && !comment }"
+      />
     </div>
-  </MyDialog>
+  </IliaDialog>
 </template>
 
 <script setup lang="ts">
-import MyDialog from "@/components/dialogs/MyDialog.vue";
-import { ref } from "vue";
+import IliaDialog from "@/components/dialogs/IliaDialog.vue";
+import InputText from "primevue/inputtext";
+import { computed, ref } from "vue";
 import Dropdown from "primevue/dropdown";
 import { useScheduleStore } from "@/store/scheduleStore";
 import { storeToRefs } from "pinia";
-import type { Client, TimeSlotShort, TimeSlot } from "@/types/schedule";
+import type { Client, ApiTimeSlotResponse } from "@/types/schedule";
 import { parseSlotTime, stringifySlotTime } from "@/helpers/schedule";
+import { TimeZoneName } from "@/settings/schedule";
+import { lang } from "@/lang";
+import { useAppStore } from "@/store/appStore";
+
+const appStore = useAppStore();
+const { authUserConfig } = storeToRefs(appStore);
 
 const scheduleStore = useScheduleStore();
 const { clients } = storeToRefs(scheduleStore);
-const { addSlot, deleteSlot, saveSchedule } = scheduleStore;
+const { createTimeSlot, updateTimeSlot } = scheduleStore;
 
-let selectedDate: string | null = null;
-let editSlotConfig: TimeSlot | null = null;
-const timezoneOptions = ["MSK"];
+let selectedDate: number | null = null;
+let selectedSlot: ApiTimeSlotResponse | null = null;
+const timezoneOptions = [TimeZoneName.Esp, TimeZoneName.Msk, TimeZoneName.Geo];
 
 const dialog = ref();
 const hour = ref<string | null>(null);
 const minute = ref<string | null>(null);
-const timezone = ref<string | null>("MSK");
+const timezone = ref<string | null>(
+  authUserConfig.value.schedule.defaultInputTimezoneName
+);
 const client = ref<Client | null>(null);
+const comment = ref();
 const validated = ref<boolean>(false);
 const editMode = ref<boolean>(false);
+
+const filteredClients = computed<Client[]>(() => {
+  return clients.value.filter((item) => !item.archived);
+});
 
 const generateHourOptions = (): string[] => {
   const options = [];
 
-  for (let hour = 8; hour <= 22; hour++) {
-    const hourString = `${hour}`.length < 2 ? `0${hour}` : `${hour}`;
-    options.push(hourString);
+  const getHourString = (hour: number): string =>
+    `${hour}`.length < 2 ? `0${hour}` : `${hour}`;
+
+  for (let hour = 8; hour <= 23; hour++) {
+    options.push(getHourString(hour));
+  }
+
+  for (let hour = 0; hour <= 7; hour++) {
+    options.push(getHourString(hour));
   }
 
   return options;
@@ -88,11 +114,7 @@ const generateMinuteOptions = (): string[] => {
 };
 
 const handleCancel = () => {
-  hour.value = null;
-  minute.value = null;
-  timezone.value = null;
-  client.value = null;
-  validated.value = false;
+  // TODO
 };
 
 const handleConfirm = async () => {
@@ -100,27 +122,45 @@ const handleConfirm = async () => {
     return;
   }
 
-  if (!hour.value || !minute.value || !timezone.value || !client.value) {
+  if (
+    !hour.value ||
+    !minute.value ||
+    !timezone.value ||
+    (!client.value && !comment.value)
+  ) {
     validated.value = true;
     return;
   }
 
-  if (editSlotConfig) {
-    await deleteSlot(editSlotConfig);
+  if (!selectedSlot) {
+    await createTimeSlot({
+      clientId: client.value?.id ?? null,
+      date: selectedDate,
+      time: stringifySlotTime(hour.value, minute.value, timezone.value),
+      comment: comment.value,
+    });
+  } else {
+    await updateTimeSlot({
+      id: selectedSlot.id,
+      date: selectedDate,
+      time: stringifySlotTime(hour.value, minute.value, timezone.value),
+      comment: comment.value,
+      clientId: client.value?.id ?? null,
+    });
   }
-
-  addSlot(selectedDate, {
-    clientId: client.value.id,
-    time: stringifySlotTime(hour.value, minute.value, timezone.value),
-  });
-
-  await saveSchedule();
 
   dialog.value.close();
   handleCancel();
 };
 
-const open = (date: string, slot?: TimeSlotShort) => {
+const open = (date: number, slot?: ApiTimeSlotResponse) => {
+  hour.value = null;
+  minute.value = null;
+  timezone.value = authUserConfig.value.schedule.defaultInputTimezoneName;
+  comment.value = undefined;
+  client.value = null;
+  validated.value = false;
+
   selectedDate = date;
 
   editMode.value = !!slot;
@@ -134,9 +174,11 @@ const open = (date: string, slot?: TimeSlotShort) => {
       client.value = foundClient;
     }
 
-    editSlotConfig = { date, ...slot };
+    comment.value = slot.comment;
+
+    selectedSlot = { ...slot, date };
   } else {
-    editSlotConfig = null;
+    selectedSlot = null;
   }
 
   dialog.value.open();

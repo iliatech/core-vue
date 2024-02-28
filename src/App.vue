@@ -1,16 +1,19 @@
 <template>
   <Toast ref="toast" />
-  <div v-if="isLoading" class="app-loader">
+  <div v-if="isLoading || isPersistentLoading" class="app-loader">
     <ProgressSpinner
       stroke-width="2"
       class="app-loader__content"
       :aria-label="$lang.label.loader"
     />
   </div>
+
   <div class="app-container">
     <TopToolbar />
     <div class="app-content">
-      <RouterView />
+      <ErrorProcessing>
+        <RouterView />
+      </ErrorProcessing>
     </div>
   </div>
 </template>
@@ -20,21 +23,23 @@ import ProgressSpinner from "primevue/progressspinner";
 import Toast from "primevue/toast";
 import { useAppStore } from "@/store/appStore";
 import { storeToRefs } from "pinia";
-import { onMounted, ref } from "vue";
+import { onBeforeMount, onMounted, ref } from "vue";
 import { setGlobalToastObject } from "@/helpers/toast";
-import { useTagsStore } from "@/store/tagsStore";
-const appStore = useAppStore();
-const tagsStore = useTagsStore();
 import TopToolbar from "@/components/toolbars/TopToolbar.vue";
+import ErrorProcessing from "@/components/error/ErrorProcessing.vue";
 
-const { isLoading } = storeToRefs(appStore);
-//const { loadTags } = tagsStore; // TODO
+const appStore = useAppStore();
+const { isLoading, isPersistentLoading } = storeToRefs(appStore);
+const { loadAuthUser } = appStore;
 
 const toast = ref();
 
+onBeforeMount(async () => {
+  await loadAuthUser();
+});
+
 onMounted(async () => {
   setGlobalToastObject(toast.value);
-  //await loadTags(); // TODO
 });
 </script>
 
@@ -64,6 +69,6 @@ onMounted(async () => {
 }
 
 .app-content {
-  padding: 0 $px-20;
+  flex-grow: 1;
 }
 </style>
