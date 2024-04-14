@@ -35,8 +35,11 @@
 </template>
 <script lang="ts" setup>
 import Sidebar from "primevue/sidebar";
-import { PropType, ref } from "vue";
+import { ref } from "vue";
+import type { PropType } from "vue";
 import Button from "primevue/button";
+
+type Position = "left" | "right" | "top" | "bottom" | "full" | undefined;
 
 const show = ref(false);
 
@@ -47,9 +50,7 @@ defineProps({
   closeButton: Boolean,
   cancelButton: Boolean,
   position: {
-    type: String as PropType<
-      "left" | "right" | "top" | "bottom" | "full" | undefined
-    >,
+    type: String as PropType<Position>,
     default: "right",
   },
 });

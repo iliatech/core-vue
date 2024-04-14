@@ -1,0 +1,35 @@
+name: Deploy Vue App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  web-deploy:
+    name: Deploy on Every Push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Latest Code
+        uses: actions/checkout@v3
+
+      - name: Prepare Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          #cache: "npm" // TODO Maybe use in the future.
+
+      - name: Install packages
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Upload files to remote server
+        uses: SamKirkland/web-deploy@v1
+        with:
+          source-path: ./dist/
+          target-server: iliatech.ru
+          remote-user: iliatech
+          private-ssh-key: ${{ secrets.SSH_KEY }}
+          destination-path: /var/www/self-platform.es/
