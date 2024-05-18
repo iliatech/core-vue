@@ -4,7 +4,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import ScheduleDashboard from "@/components/schedule/ScheduleDashboard.vue";
+import ScheduleDashboard from "@/modules/schedule/components/ScheduleDashboard.vue";
 </script>
 <style lang="scss" scoped>
 @import "@/assets/fonts";

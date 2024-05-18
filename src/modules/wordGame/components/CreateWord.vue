@@ -88,9 +88,9 @@ const checkCategory = (): boolean => {
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/variables.scss";
-@import "@/assets/fonts.scss";
-@import "@/assets/colors.scss";
+@import "@/assets/variables";
+@import "@/assets/fonts";
+@import "@/assets/colors";
 
 .create-word {
   padding: $px-10;

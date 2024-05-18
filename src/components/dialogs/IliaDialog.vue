@@ -31,7 +31,7 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import IliaButton from "@/components/schedule/IliaButton.vue";
+import IliaButton from "@/components/buttons/IliaButton.vue";
 
 const props = defineProps({
   title: { type: String, required: true },

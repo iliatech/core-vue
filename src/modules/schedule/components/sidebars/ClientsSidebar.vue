@@ -65,13 +65,13 @@ import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import { storeToRefs } from "pinia";
 import CustomSidebar from "@/components/sidebars/CustomSidebar.vue";
-import IliaButton from "@/components/schedule/IliaButton.vue";
+import IliaButton from "@/components/buttons/IliaButton.vue";
 import {
   clientsTableColumns,
   ClientsTableColumns,
 } from "@/settings/tables/clientsTable";
 import { useScheduleStore } from "@/store/scheduleStore";
-import ClientDialog from "@/components/schedule/ClientDialog.vue";
+import ClientDialog from "@/modules/schedule/components/dialogs/ClientDialog.vue";
 import type { Client } from "@/types/schedule";
 import IliaDialog from "@/components/dialogs/IliaDialog.vue";
 
@@ -125,8 +125,8 @@ const confirmDeleteClient = async () => {
 defineExpose({ open });
 </script>
 <style lang="scss" scoped>
-@import "@/assets/fonts.scss";
-@import "@/assets/variables.scss";
+@import "@/assets/fonts";
+@import "@/assets/variables";
 
 .clients-sidebar {
   &__title {

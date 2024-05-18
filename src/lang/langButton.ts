@@ -13,5 +13,5 @@ export default {
   ok: "OK",
   save: "Save",
   usefulLinks: "Useful Links",
-  wordsApp: "Words Cards",
+  wordsApp: "Word Game",
 };

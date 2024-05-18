@@ -33,7 +33,7 @@ const { selectedSorting, selectedSortingDirection } =
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/variables.scss";
+@import "@/assets/variables";
 
 .word-sorting {
   display: flex;

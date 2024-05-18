@@ -56,7 +56,7 @@ import {
   tagsTableColumns,
   TagsTableColumns,
 } from "@/settings/tables/tagsTable";
-import ManageTagDialog from "@/components/dialogs/ManageTagDialog.vue";
+import ManageTagDialog from "@/modules/wordGame/components/dialogs/ManageTagDialog.vue";
 import { RequestMethods } from "@/types/api";
 import { lang } from "@/lang";
 import { DialogType } from "@/types/dialog";
@@ -112,8 +112,8 @@ onBeforeMount(async () => {
 defineExpose({ open });
 </script>
 <style lang="scss" scoped>
-@import "@/assets/fonts.scss";
-@import "@/assets/variables.scss";
+@import "@/assets/fonts";
+@import "@/assets/variables";
 
 .manage-tags-sidebar {
   &__title {

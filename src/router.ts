@@ -20,7 +20,7 @@ const router = createRouter({
     {
       path: routes.words.path,
       name: routes.words.name,
-      component: () => import("@/views/WordsView.vue"),
+      component: () => import("@/modules/wordGame/views/WordsView.vue"),
       meta: {
         title: lang.title.wordsApp,
       },
@@ -33,7 +33,8 @@ const router = createRouter({
     {
       path: routes.usefulLinks.path,
       name: routes.usefulLinks.name,
-      component: () => import("@/views/UsefulLinksView.vue"),
+      component: () =>
+        import("@/modules/usefulLinks/views/UsefulLinksView.vue"),
       meta: {
         title: lang.title.usefulLinks,
       },
@@ -41,9 +42,18 @@ const router = createRouter({
     {
       path: routes.schedule.path,
       name: routes.schedule.name,
-      component: () => import("@/views/ScheduleView.vue"),
+      component: () => import("@/modules/schedule/views/ScheduleView.vue"),
       meta: {
         title: lang.title.clientsSchedule,
+      },
+    },
+    {
+      path: routes.credentials.path,
+      name: routes.credentials.name,
+      component: () =>
+        import("@/modules/credentials/views/CredentialsView.vue"),
+      meta: {
+        title: lang.title.credentials,
       },
     },
   ],

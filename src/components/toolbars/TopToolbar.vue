@@ -41,8 +41,8 @@ import { storeToRefs } from "pinia";
 import type { NavigationItem } from "@/types/common";
 import { useRoute } from "vue-router";
 import { fullUserName } from "@/helpers/common";
-import IliaButton from "@/components/schedule/IliaButton.vue";
-import ProfileSidebar from "@/components/schedule/ProfileSidebar.vue";
+import IliaButton from "@/components/buttons/IliaButton.vue";
+import ProfileSidebar from "@/modules/schedule/components/sidebars/ProfileSidebar.vue";
 import { generateAvailableAppsList } from "@/helpers/navigation";
 import Menu from "primevue/menu";
 
@@ -67,8 +67,9 @@ const logoTitle = computed<string>(() => {
 });
 
 const navigationOptions = computed<NavigationItem[]>(() => {
+  console.log("R N", route.name);
   if (!route.name) {
-    console.error("Error: route name is undefined: ", route.name);
+    //console.error("Error: route name is undefined: ", route.name);
     return [];
   }
 

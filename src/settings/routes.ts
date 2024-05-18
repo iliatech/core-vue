@@ -45,7 +45,14 @@ export const routes: Record<string, LocalRoute> = {
   words: {
     path: "/words",
     name: "words",
-    title: "Words Cards",
+    title: "Word Game",
+    isPublic: false,
+  },
+
+  credentials: {
+    path: "/credentials",
+    name: "credentials",
+    title: "Credentials",
     isPublic: false,
   },
 };

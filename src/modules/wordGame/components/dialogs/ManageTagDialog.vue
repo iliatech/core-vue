@@ -82,8 +82,8 @@ const open = () => {
 defineExpose({ open });
 </script>
 <style lang="scss" scoped>
-@import "@/assets/fonts.scss";
-@import "@/assets/variables.scss";
+@import "@/assets/fonts";
+@import "@/assets/variables";
 
 .manage-tag-dialog {
   &__content {
@@ -93,7 +93,7 @@ defineExpose({ open });
 </style>
 <style lang="scss" scoped></style>
 <style lang="scss">
-@import "@/assets/variables.scss";
+@import "@/assets/variables";
 .manage-tag-dialog .p-dialog-header {
   padding-bottom: $px-10 !important;
 }

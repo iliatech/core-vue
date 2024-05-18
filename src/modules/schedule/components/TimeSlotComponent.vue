@@ -32,7 +32,7 @@
 import type { ApiTimeSlotResponse } from "@/types/schedule";
 import type { PropType } from "vue";
 import { useScheduleStore } from "@/store/scheduleStore";
-import IliaButton from "@/components/schedule/IliaButton.vue";
+import IliaButton from "@/components/buttons/IliaButton.vue";
 
 const scheduleStore = useScheduleStore();
 const { prepareTime } = scheduleStore;

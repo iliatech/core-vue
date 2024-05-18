@@ -9,6 +9,7 @@ export default {
   createClient: "Create client",
   createTag: "Create tag",
   createWord: "Create word",
+  credentials: "Credentials",
   editClient: "Edit client",
   editSlot: "Edit slot",
   error: "Error",
@@ -22,5 +23,5 @@ export default {
   schedule: "Schedule",
   scheduleSettings: "Schedule Settings",
   usefulLinks: "Useful Links",
-  wordsApp: "Words Cards",
+  wordsApp: "Word Game",
 };

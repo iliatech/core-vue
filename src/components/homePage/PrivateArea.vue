@@ -23,7 +23,7 @@
 <script lang="ts" setup>
 import router from "@/router";
 import { generateAvailableAppsList } from "@/helpers/navigation";
-import IliaButton from "@/components/schedule/IliaButton.vue";
+import IliaButton from "@/components/buttons/IliaButton.vue";
 </script>
 <style lang="scss" scoped>
 @import "@/assets/variables";

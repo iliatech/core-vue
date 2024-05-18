@@ -135,8 +135,8 @@ defineExpose({ open });
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/variables.scss";
-@import "@/assets/fonts.scss";
+@import "@/assets/variables";
+@import "@/assets/fonts";
 .word-sidebar {
   &__title {
     padding: 0 0 $px-10;

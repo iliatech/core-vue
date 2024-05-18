@@ -70,8 +70,8 @@ onBeforeMount(async () => {
 const emit = defineEmits(["onClick", "onClickDelete", "changeTags"]);
 </script>
 <style lang="scss" scoped>
-@import "@/assets/fonts.scss";
-@import "@/assets/variables.scss";
+@import "@/assets/fonts";
+@import "@/assets/variables";
 
 .word-tile {
   aspect-ratio: $tile-aspect-ratio;

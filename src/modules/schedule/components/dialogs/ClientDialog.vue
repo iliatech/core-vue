@@ -28,7 +28,7 @@
 import { ref } from "vue";
 import InputText from "primevue/inputtext";
 import CustomDialog from "@/components/dialogs/CustomDialog.vue";
-import IliaButton from "@/components/schedule/IliaButton.vue";
+import IliaButton from "@/components/buttons/IliaButton.vue";
 import { useScheduleStore } from "@/store/scheduleStore";
 import { showToast } from "@/helpers/toast";
 import { ToastType } from "@/types/toasts";
@@ -94,8 +94,8 @@ const open = (client?: Client) => {
 defineExpose({ open });
 </script>
 <style lang="scss" scoped>
-@import "@/assets/fonts.scss";
-@import "@/assets/variables.scss";
+@import "@/assets/fonts";
+@import "@/assets/variables";
 
 .client-dialog {
   &__content {
@@ -105,7 +105,7 @@ defineExpose({ open });
 </style>
 <style lang="scss" scoped></style>
 <style lang="scss">
-@import "@/assets/variables.scss";
+@import "@/assets/variables";
 .client-dialog .p-dialog-header {
   padding-bottom: $px-10 !important;
 }

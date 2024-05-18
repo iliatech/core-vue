@@ -47,10 +47,10 @@ import { apiPaths } from "@/settings/api";
 import Api from "@/api/Api";
 import { getPaletteColor } from "@/settings/colorPalette";
 import type { ApiWordResponse } from "@/types/word";
-import WordTile from "@/components/WordTile.vue";
+import WordTile from "@/modules/wordGame/components/WordTile.vue";
 import Button from "primevue/button";
-import PlusTile from "@/components/PlusTile.vue";
-import WordSorting from "@/components/WordSorting.vue";
+import PlusTile from "@/modules/wordGame/components/PlusTile.vue";
+import WordSorting from "@/modules/wordGame/components/WordSorting.vue";
 import { RequestMethods } from "@/types/api";
 import { lang } from "@/lang";
 import CustomConfirmDialog from "@/components/dialogs/CustomConfirmDialog.vue";
@@ -58,11 +58,11 @@ import { DialogType } from "@/types/dialog";
 import { orderBy } from "lodash";
 import { SortingOptions, useWordsAppStore } from "@/store/wordsAppStore";
 import { storeToRefs } from "pinia";
-import ManageTagsSidebar from "@/components/sidebars/ManageTagsSidebar.vue";
-import WordFiltering from "@/components/WordFiltering.vue";
+import ManageTagsSidebar from "@/modules/wordGame/components/sidebars/ManageTagsSidebar.vue";
+import WordFiltering from "@/modules/wordGame/components/WordFiltering.vue";
 import { useTagsFilteringStore } from "@/store/tagsFilteringStore";
-import WordSidebar from "@/components/sidebars/WordSidebar.vue";
-import CreateWordSidebar from "@/components/sidebars/CreateWordSidebar.vue";
+import WordSidebar from "@/modules/wordGame/components/sidebars/WordSidebar.vue";
+import CreateWordSidebar from "@/modules/wordGame/components/sidebars/CreateWordSidebar.vue";
 
 const wordsAppStore = useWordsAppStore();
 const tagsFilteringStore = useTagsFilteringStore();
@@ -151,7 +151,7 @@ const openManageTagsSidebar = () => {
 };
 </script>
 <style lang="scss" scoped>
-@import "@/assets/variables.scss";
+@import "@/assets/variables";
 
 @mixin flex-wrap-fix($flex-basis, $max-viewport-width: 2000px) {
   flex-grow: 1;
