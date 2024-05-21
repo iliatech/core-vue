@@ -1,19 +1,18 @@
 <template>
   <div class="credentials-dashboard">
-    <DataTable :value="secretDatabase">
-      <Column field="name" header="Name"></Column>
-      <Column field="type" header="Type"></Column>
-    </DataTable>
+    <BaseTable :config="credentialTypeTable" :data="CredentialType.get()" />
+    <IliaButton @click="CredentialDatabase.save()" label="save database" />
   </div>
 </template>
 <script lang="ts" setup>
-import DataTable from "primevue/datatable";
-import Column from "primevue/column";
+import { CredentialType } from "@/modules/credentials/classes/entities/CredentialType";
+import BaseTable from "@/components/tables/BaseTable.vue";
+import { credentialTypeTable } from "@/modules/credentials/settings/tables/credentialTypeTable";
+import { onBeforeMount } from "vue";
+import { CredentialDatabase } from "@/modules/credentials/classes/CredentialDatabase";
+import IliaButton from "@/components/buttons/IliaButton.vue";
 
-const secretDatabase = [
-  {
-    type: "type1",
-    name: "name1",
-  },
-];
+onBeforeMount(() => {
+  CredentialDatabase.load();
+});
 </script>

@@ -10,4 +10,5 @@ export default {
   translationCreated: "Translation added.",
   wordCreated: "Word created",
   wordDeleted: (title: string): string => `Word '${title}' deleted`,
+  databaseSaved: "Database saved",
 };
