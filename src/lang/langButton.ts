@@ -10,6 +10,7 @@ export default {
   delete: "Delete",
   login: "Login",
   manageTags: "Manage tags",
+  newCredentialType: "New Credential Type",
   ok: "OK",
   save: "Save",
   usefulLinks: "Useful Links",

@@ -12,13 +12,13 @@
       {{ modelValue.comment }}
     </div>
     <div class="schedule-timeslot__actions">
-      <IliaButton
+      <UniversalButton
         icon-pre="trash"
         color="pink"
         no-border
         @click="handleClickDeleteSlot(modelValue)"
       />
-      <IliaButton
+      <UniversalButton
         icon-post="pencil"
         color="paleOrange"
         no-border
@@ -32,7 +32,7 @@
 import type { ApiTimeSlotResponse } from "@/types/schedule";
 import type { PropType } from "vue";
 import { useScheduleStore } from "@/store/scheduleStore";
-import IliaButton from "@/components/buttons/IliaButton.vue";
+import UniversalButton from "@/components/buttons/UniversalButton.vue";
 
 const scheduleStore = useScheduleStore();
 const { prepareTime } = scheduleStore;

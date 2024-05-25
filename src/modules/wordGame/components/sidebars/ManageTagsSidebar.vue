@@ -1,5 +1,5 @@
 <template>
-  <CustomSidebar
+  <UniversalSidebar
     ref="sidebar"
     class="manage-tags-sidebar"
     :title="$lang.title.manageTags"
@@ -30,7 +30,7 @@
       </Column>
       <template #empty> {{ $lang.phrase.noTagsFound }} </template>
     </DataTable>
-  </CustomSidebar>
+  </UniversalSidebar>
   <ManageTagDialog ref="manageTagDialog" @change="loadTags" />
   <!--TODO Fix ?? '' -->
   <CustomConfirmDialog
@@ -62,7 +62,7 @@ import { lang } from "@/lang";
 import { DialogType } from "@/types/dialog";
 import { useTagsStore } from "@/store/tagsStore";
 import { storeToRefs } from "pinia";
-import CustomSidebar from "@/components/sidebars/CustomSidebar.vue";
+import UniversalSidebar from "@/components/sidebars/UniversalSidebar.vue";
 
 const tagsStore = useTagsStore();
 const { tags } = storeToRefs(tagsStore);

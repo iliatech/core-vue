@@ -1,12 +1,20 @@
 <template>
   <div class="base-table">
-    <DataTable :value="data">
-      <Column
-        v-for="column in config"
-        :field="column.name"
-        :header="column.label"
-        :key="column.name"
-      ></Column>
+    <DataTable
+      :value="data"
+      :sort-field="config.find((item) => item.defaultSort)?.name"
+      :sort-order="
+        config.find((item) => item.defaultSortOrder)?.defaultSortOrder
+      "
+    >
+      <template v-for="column in config" :key="column.name">
+        <Column
+          v-if="!column.hidden"
+          :field="column.name"
+          :header="column.label"
+          :sortable="column.sortable"
+        />
+      </template>
     </DataTable>
   </div>
 </template>

@@ -10,6 +10,8 @@ export default {
   createTag: "Create tag",
   createWord: "Create word",
   credentials: "Credentials",
+  credentialType: "Credential Type",
+  credentialTypes: "Credential Types",
   editClient: "Edit client",
   editSlot: "Edit slot",
   error: "Error",

@@ -9,14 +9,14 @@
           <slot />
         </div>
         <div class="schedule-dialog__buttons">
-          <IliaButton
+          <UniversalButton
             @click="handleCancel"
             :label="$lang.button.cancel"
             color="grey"
             width="80px"
             class="schedule-dialog__cancel-button"
           />
-          <IliaButton
+          <UniversalButton
             @click="handleConfirm"
             :label="$lang.button.ok"
             color="pink"
@@ -31,7 +31,7 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import IliaButton from "@/components/buttons/IliaButton.vue";
+import UniversalButton from "@/components/buttons/UniversalButton.vue";
 
 const props = defineProps({
   title: { type: String, required: true },

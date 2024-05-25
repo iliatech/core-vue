@@ -1,5 +1,5 @@
 <template>
-  <CustomSidebar
+  <UniversalSidebar
     ref="sidebar"
     position="right"
     :dismissable="false"
@@ -26,7 +26,7 @@
         outlined
       />
     </template>
-  </CustomSidebar>
+  </UniversalSidebar>
 </template>
 
 <script lang="ts" setup>
@@ -38,7 +38,7 @@ import { apiPaths } from "@/settings/api";
 import { RequestMethods } from "@/types/api";
 import { lang } from "@/lang";
 import InputText from "primevue/inputtext";
-import CustomSidebar from "@/components/sidebars/CustomSidebar.vue";
+import UniversalSidebar from "@/components/sidebars/UniversalSidebar.vue";
 
 const sidebar = ref();
 const isValidated = ref(false);

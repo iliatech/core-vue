@@ -1,5 +1,5 @@
 <template>
-  <IliaDialog
+  <UniversalDialog
     :title="editMode ? $lang.title.editSlot : $lang.title.addSlot"
     ref="dialog"
     @cancel="handleCancel"
@@ -43,11 +43,11 @@
         :class="{ 'p-invalid': validated && !client && !comment }"
       />
     </div>
-  </IliaDialog>
+  </UniversalDialog>
 </template>
 
 <script setup lang="ts">
-import IliaDialog from "@/components/dialogs/IliaDialog.vue";
+import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
 import InputText from "primevue/inputtext";
 import { computed, ref } from "vue";
 import Dropdown from "primevue/dropdown";

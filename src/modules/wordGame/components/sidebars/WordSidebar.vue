@@ -1,5 +1,5 @@
 <template>
-  <CustomSidebar
+  <UniversalSidebar
     ref="sidebar"
     position="right"
     :dismissable="false"
@@ -42,7 +42,7 @@
         {{ $lang.phrase.hasBeenTranslatedNTimes(translations.length) }}
       </div>
     </div>
-  </CustomSidebar>
+  </UniversalSidebar>
 </template>
 
 <script lang="ts" setup>
@@ -57,7 +57,7 @@ import { lang } from "@/lang";
 import InputText from "primevue/inputtext";
 import type { Translation } from "@/types/translationType";
 import { orderBy } from "lodash";
-import CustomSidebar from "@/components/sidebars/CustomSidebar.vue";
+import UniversalSidebar from "@/components/sidebars/UniversalSidebar.vue";
 
 const wordId = ref<string | null>(null);
 const appStore = useAppStore();

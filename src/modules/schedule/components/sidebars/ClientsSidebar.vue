@@ -1,11 +1,11 @@
 <template>
-  <CustomSidebar
+  <UniversalSidebar
     ref="sidebar"
     class="clients-sidebar"
     :title="$lang.title.clients"
     close-button
   >
-    <IliaButton
+    <UniversalButton
       :label="$lang.button.create"
       icon-pre="plus"
       @click="handleClickAddClient"
@@ -29,13 +29,13 @@
       >
         <template #body="{ data }">
           <div class="clients-sidebar__action-column">
-            <IliaButton
+            <UniversalButton
               icon-pre="pencil"
               @click="handleClickEditClient(data)"
               icon-size="1rem"
               no-border
             />
-            <IliaButton
+            <UniversalButton
               icon-pre="trash"
               @click="handleClickDeleteClient(data)"
               icon-size="1rem"
@@ -46,9 +46,9 @@
       </Column>
       <template #empty> {{ $lang.phrase.noClientsFound }} </template>
     </DataTable>
-  </CustomSidebar>
+  </UniversalSidebar>
   <ClientDialog ref="clientDialog" />
-  <IliaDialog
+  <UniversalDialog
     ref="deleteClientDialog"
     :title="$lang.title.confirmDeleteClient"
     @cancel="cancelDeleteClient"
@@ -56,7 +56,7 @@
     :z-index="1200"
   >
     {{ $lang.label.clientName }}: {{ selectedClient?.name }}
-  </IliaDialog>
+  </UniversalDialog>
 </template>
 <script lang="ts" setup>
 import { computed, ref } from "vue";
@@ -64,8 +64,8 @@ import { computed, ref } from "vue";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import { storeToRefs } from "pinia";
-import CustomSidebar from "@/components/sidebars/CustomSidebar.vue";
-import IliaButton from "@/components/buttons/IliaButton.vue";
+import UniversalSidebar from "@/components/sidebars/UniversalSidebar.vue";
+import UniversalButton from "@/components/buttons/UniversalButton.vue";
 import {
   clientsTableColumns,
   ClientsTableColumns,
@@ -73,7 +73,7 @@ import {
 import { useScheduleStore } from "@/store/scheduleStore";
 import ClientDialog from "@/modules/schedule/components/dialogs/ClientDialog.vue";
 import type { Client } from "@/types/schedule";
-import IliaDialog from "@/components/dialogs/IliaDialog.vue";
+import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
 
 const scheduleStore = useScheduleStore();
 const { clients } = storeToRefs(scheduleStore);

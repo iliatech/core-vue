@@ -5,6 +5,7 @@ export interface ICredentialType {
 
 export interface ICredential {
   id: string;
+  type: string;
   u_field: string;
   p_field: string;
   comment: string;

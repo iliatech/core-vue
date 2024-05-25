@@ -1,5 +1,5 @@
 <template>
-  <CustomSidebar
+  <UniversalSidebar
     ref="sidebar"
     :title="$lang.title.profile"
     close-button
@@ -59,11 +59,11 @@
         outlined
       />
     </template>
-  </CustomSidebar>
+  </UniversalSidebar>
 </template>
 
 <script setup lang="ts">
-import CustomSidebar from "@/components/sidebars/CustomSidebar.vue";
+import UniversalSidebar from "@/components/sidebars/UniversalSidebar.vue";
 import Dropdown from "primevue/dropdown";
 import { ref } from "vue";
 import { storeToRefs } from "pinia";

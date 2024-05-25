@@ -1,7 +1,7 @@
 <template>
   <div class="top-toolbar">
     <div class="top-toolbar__logo">
-      <IliaButton
+      <UniversalButton
         @click="handleClickUserMenu"
         :label="logoTitle"
         font-size="1.125rem"
@@ -15,7 +15,7 @@
     </div>
     <div class="top-toolbar__nav-container">
       <div class="top-toolbar__nav">
-        <IliaButton
+        <UniversalButton
           v-for="item in navigationOptions"
           :label="item.label"
           @click="router.push({ name: item.name })"
@@ -41,7 +41,7 @@ import { storeToRefs } from "pinia";
 import type { NavigationItem } from "@/types/common";
 import { useRoute } from "vue-router";
 import { fullUserName } from "@/helpers/common";
-import IliaButton from "@/components/buttons/IliaButton.vue";
+import UniversalButton from "@/components/buttons/UniversalButton.vue";
 import ProfileSidebar from "@/modules/schedule/components/sidebars/ProfileSidebar.vue";
 import { generateAvailableAppsList } from "@/helpers/navigation";
 import Menu from "primevue/menu";

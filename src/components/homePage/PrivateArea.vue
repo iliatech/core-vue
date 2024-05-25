@@ -9,7 +9,7 @@
         {{ $lang.title.privateArea[2] }}
       </h4>
       <div class="private-area__buttons-container">
-        <IliaButton
+        <UniversalButton
           v-for="item in generateAvailableAppsList()"
           :key="item.label"
           :label="item.label"
@@ -23,7 +23,7 @@
 <script lang="ts" setup>
 import router from "@/router";
 import { generateAvailableAppsList } from "@/helpers/navigation";
-import IliaButton from "@/components/buttons/IliaButton.vue";
+import UniversalButton from "@/components/buttons/UniversalButton.vue";
 </script>
 <style lang="scss" scoped>
 @import "@/assets/variables";

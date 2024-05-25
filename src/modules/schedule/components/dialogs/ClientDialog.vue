@@ -14,7 +14,7 @@
       />
     </div>
     <template #buttons-before>
-      <IliaButton
+      <UniversalButton
         :label="$lang.button.save"
         color="forestGreen"
         outlined
@@ -28,7 +28,7 @@
 import { ref } from "vue";
 import InputText from "primevue/inputtext";
 import CustomDialog from "@/components/dialogs/CustomDialog.vue";
-import IliaButton from "@/components/buttons/IliaButton.vue";
+import UniversalButton from "@/components/buttons/UniversalButton.vue";
 import { useScheduleStore } from "@/store/scheduleStore";
 import { showToast } from "@/helpers/toast";
 import { ToastType } from "@/types/toasts";

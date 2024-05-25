@@ -11,6 +11,7 @@ export default {
   loader: "Loading",
   logout: "Logout",
   minute: "Minute",
+  name: "Name",
   navigation: "Navigation",
   nextWeek: "Next Week",
   password: "Password",

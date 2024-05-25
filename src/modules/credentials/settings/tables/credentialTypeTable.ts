@@ -3,10 +3,14 @@ import type { BaseTableColumn } from "@/types/tables";
 export const credentialTypeTable: BaseTableColumn[] = [
   {
     name: "name",
-    label: "Name",
+    label: "ID",
+    hidden: true,
   },
   {
     name: "label",
-    label: "Label",
+    label: "Name",
+    defaultSort: true,
+    defaultSortOrder: 1,
+    sortable: true,
   },
 ];

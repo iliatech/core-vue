@@ -2,20 +2,20 @@
   <div class="schedule">
     <div class="schedule__top-bar">
       <div class="schedule__week-selector">
-        <IliaButton
+        <UniversalButton
           @click="goPreviousWeek"
           :label="$lang.label.previousWeek"
           color="lightMagenta"
           icon-pre="caret-left"
         />
-        <IliaButton
+        <UniversalButton
           @click="goNextWeek"
           :label="$lang.label.nextWeek"
           color="lightMagenta"
           icon-post="caret-right"
         />
       </div>
-      <IliaButton
+      <UniversalButton
         @click="openClientsSidebar"
         :label="$lang.button.clients"
         color="lightBlue"
@@ -45,7 +45,7 @@
         </div>
         <div class="schedule__slots">
           <div class="schedule__slot-add">
-            <IliaButton
+            <UniversalButton
               icon-pre="plus"
               @click="handleClickAddSlot(day.full)"
               no-border
@@ -65,7 +65,7 @@
 
   <ClientsSidebar ref="clientsSidebar" />
 
-  <IliaDialog
+  <UniversalDialog
     ref="deleteSlotDialog"
     :title="$lang.title.confirmDeleteSlot"
     @cancel="cancelDeleteSlot"
@@ -80,7 +80,7 @@
     <br />
     {{ $lang.label.time }}:
     {{ prepareTime(selectedTimeSlot?.time) }}
-  </IliaDialog>
+  </UniversalDialog>
 
   <TimeSlotDialog ref="slotDialog" />
 </template>
@@ -91,11 +91,11 @@ import { useScheduleStore } from "@/store/scheduleStore";
 import { storeToRefs } from "pinia";
 import { sortWithCollator } from "@/helpers/sort";
 import { addDays, format } from "date-fns";
-import IliaButton from "@/components/buttons/IliaButton.vue";
+import UniversalButton from "@/components/buttons/UniversalButton.vue";
 import ClientsSidebar from "@/modules/schedule/components/sidebars/ClientsSidebar.vue";
 import TimeSlotComponent from "@/modules/schedule/components/TimeSlotComponent.vue";
 import TimeSlotDialog from "@/modules/schedule/components/dialogs/TimeSlotDialog.vue";
-import IliaDialog from "@/components/dialogs/IliaDialog.vue";
+import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
 import { es } from "date-fns/locale";
 import { prepareDate } from "@/helpers/schedule";
 
