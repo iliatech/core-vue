@@ -1,3 +1,3 @@
-export const trimAndCollapse = (value: string): string => {
+export const prepareName = (value: string): string => {
   return value.trim().replace(/\s+/g, " ");
 };

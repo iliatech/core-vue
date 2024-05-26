@@ -1,4 +1,6 @@
 import { RegisteredError } from "@/types/errors";
+import { lang } from "@/lang";
+import type { IEntity } from "@/settings/entities";
 
 export default {
   clientDuplicate: "Client with same name already exists",
@@ -10,4 +12,8 @@ export default {
     [RegisteredError.ServerNotAccessible]: "Server is not accessible",
   },
   secretKeyIsNotDefined: "Secret key is not defined",
+  entityWithSameNameExists: (name: IEntity): string =>
+    `${lang.entity[name]} with the same name already exists`,
+  entityShouldNotBeEmpty: (name: IEntity): string =>
+    `${lang.entity[name]} should not be empty`,
 };

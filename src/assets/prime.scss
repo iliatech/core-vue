@@ -14,4 +14,10 @@
   @include zero-nine-hundred;
 }
 
+// Remove light blue frame around all focused elements.
+*:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 $primary-color: #000;

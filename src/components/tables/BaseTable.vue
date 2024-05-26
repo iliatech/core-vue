@@ -1,6 +1,9 @@
 <template>
   <div class="base-table">
     <DataTable
+      :show-gridlines="true"
+      :striped-rows="true"
+      :row-hover="true"
       :value="data"
       :sort-field="config.find((item) => item.defaultSort)?.name"
       :sort-order="
