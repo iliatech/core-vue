@@ -23,7 +23,7 @@
     "primeicons": "^6.0.1",
     "primevue": "^3.34.1",
     "uuid": "^9.0.1",
-    "vue": "^3.2.45",
+    "vue": "^3.4.27",
     "vue-router": "^4.1.6"
   },
   "devDependencies": {

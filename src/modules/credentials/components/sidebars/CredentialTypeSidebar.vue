@@ -6,14 +6,12 @@
     @click:close="close"
   >
     <div class="credential-type-sidebar">
-      <label class="credential-type-sidebar__name-label">
-        {{ $lang.label.name }}
-      </label>
-      <InputText
-        v-model.trim="currentState.name"
-        @update:model-value="markInputStarted"
+      <UniversalText
+        v-model="currentState.name"
+        v-model:is-input-started="isInputStarted"
+        :label="$lang.label.name"
+        :errors="errorDetails"
       />
-      <ErrorDetails :errors="errorDetails" />
     </div>
     <template #buttons-after>
       <UniversalButton
@@ -28,7 +26,6 @@
 <script lang="ts" setup>
 import UniversalSidebar from "@/components/sidebars/UniversalSidebar.vue";
 import { computed, reactive, ref } from "vue";
-import InputText from "primevue/inputtext";
 import UniversalButton from "@/components/buttons/UniversalButton.vue";
 import { CredentialType } from "@/modules/credentials/classes/entities/CredentialType";
 import { showToast } from "@/helpers/toast";
@@ -36,8 +33,8 @@ import { ToastType } from "@/types/toasts";
 import { lang } from "@/lang";
 import { isEqual } from "lodash";
 import { IEntity } from "@/settings/entities";
-import ErrorDetails from "@/components/error/ErrorDetails.vue";
 import { prepareName } from "@/helpers/strings";
+import UniversalText from "@/components/UniversalText.vue";
 
 interface DrawerState {
   name: string;
@@ -81,10 +78,6 @@ const errorDetails = computed<string[]>(() => {
   return errors;
 });
 
-const markInputStarted = (): void => {
-  isInputStarted.value = true;
-};
-
 const close = () => {
   sidebar.value?.close();
 };
@@ -109,10 +102,6 @@ defineExpose({
 <style lang="scss" scoped>
 @import "@/assets/variables";
 .credential-type-sidebar {
-  &__name-label {
-    display: block;
-    margin-bottom: $px-10;
-    margin-top: $px-20;
-  }
+  // TODO
 }
 </style>
