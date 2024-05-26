@@ -9,7 +9,10 @@
     <BaseTable :config="credentialTypeTable" :data="CredentialType.get()" />
   </div>
 
-  <CredentialTypeSidebar ref="credentialTypeSidebar" />
+  <CredentialTypeSidebar
+    ref="credentialTypeSidebar"
+    @add:credential-type="handleAddCredentialType"
+  />
 </template>
 <script lang="ts" setup>
 import { credentialTypeTable } from "@/modules/credentials/settings/tables/credentialTypeTable";
@@ -24,6 +27,10 @@ const credentialTypeSidebar = ref<InstanceType<typeof UniversalSidebar>>();
 
 const handleClickAddCredentialType = () => {
   credentialTypeSidebar.value?.open();
+};
+
+const handleAddCredentialType = () => {
+  credentialTypeSidebar.value?.close();
 };
 </script>
 <style lang="scss" scoped>

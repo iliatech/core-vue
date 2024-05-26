@@ -1,11 +1,12 @@
 <template>
   <div
-    class="schedule-button"
+    class="universal-button"
     :class="{
-      'schedule-button--no-border': noBorder,
-      'schedule-button--small': size === 'small',
-      'schedule-button--selected': selected,
-      'schedule-button--nowrap': nowrap,
+      'universal-button--no-border': noBorder,
+      'universal-button--small': size === 'small',
+      'universal-button--selected': selected,
+      'universal-button--nowrap': nowrap,
+      'universal-button--disabled': disabled,
     }"
     :style="{
       color: scheduleColors[color],
@@ -18,14 +19,14 @@
   >
     <i
       v-if="iconPre"
-      class="pi schedule-button__pre-icon"
+      class="pi universal-button__pre-icon"
       :class="{ [`pi-${iconPre}`]: !!iconPre }"
       :style="{ fontSize: iconSize }"
     />
     <span>{{ label }}</span>
     <i
       v-if="iconPost"
-      class="pi schedule-button__post-icon"
+      class="pi universal-button__post-icon"
       :class="{ [`pi-${iconPost}`]: !!iconPost }"
       :style="{ fontSize: iconSize }"
     />
@@ -56,6 +57,7 @@ defineProps({
   selected: Boolean,
   nowrap: Boolean,
   fontSize: String,
+  disabled: Boolean,
 });
 </script>
 
@@ -63,7 +65,7 @@ defineProps({
 @import "@/assets/variables";
 @import "@/assets/fonts";
 
-.schedule-button {
+.universal-button {
   @include font-small-medium;
   cursor: pointer;
   border-radius: $border-radius-px-4;
@@ -72,6 +74,12 @@ defineProps({
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  user-select: none;
+
+  &:hover {
+    // TODO create color in colors library and use it here.
+    background: #eef;
+  }
 
   &--small {
     padding: $px-2 $px-5;
@@ -101,6 +109,14 @@ defineProps({
   &--no-border {
     border: none;
     padding: 0;
+  }
+
+  &--disabled {
+    pointer-events: none;
+    // TODO create color in colors library and use it here.
+    background: #eee;
+    // TODO create color in colors library and use it here.
+    color: #ccc;
   }
 }
 </style>

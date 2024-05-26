@@ -10,7 +10,7 @@ export const showToast = (toastConfig: ToastConfig): void => {
     // TODO: Refactor any with primevue type for toast config;
     severity: type,
     detail: text,
-    life: 2000,
+    life: 400,
   };
 
   if (type === ToastType.Error) {

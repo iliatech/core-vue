@@ -27,8 +27,6 @@ export class CredentialDatabase {
       method: RequestMethods.Put,
       payload: { encryptedData },
     });
-
-    showToast({ type: ToastType.Success, text: lang.success.databaseSaved });
   }
 
   public static async load(): Promise<void> {
@@ -43,6 +41,11 @@ export class CredentialDatabase {
     );
 
     if (!secretKey) {
+      showToast({
+        type: ToastType.Error,
+        text: lang.error.secretKeyIsNotDefined,
+      });
+
       throw new Error("Secret key is not defined");
     }
 
@@ -61,6 +64,11 @@ export class CredentialDatabase {
     );
 
     if (!secretKey) {
+      showToast({
+        type: ToastType.Error,
+        text: lang.error.secretKeyIsNotDefined,
+      });
+
       throw new Error("Secret key is not defined");
     }
 
