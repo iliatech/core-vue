@@ -1,6 +1,6 @@
 export interface ICredentialType {
+  id: string;
   name: string;
-  label: string;
 }
 
 export interface ICredential {

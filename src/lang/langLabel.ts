@@ -8,7 +8,7 @@ export default {
   goToPrivateArea: "Go to private area",
   goToPublicArea: "Go to public area",
   hour: "Hour",
-  fillInField: (fieldName: string) => `Fill in ${fieldName}`,
+  fillInField: (fieldName: string) => `Input ${fieldName}`,
   filterBy: (columnName: string) => `Filter by ${columnName}`,
   loader: "Loading",
   logout: "Logout",

@@ -28,6 +28,7 @@
       :sort-order="
         config.find((item) => item.defaultSortOrder)?.defaultSortOrder
       "
+      v-bind="$attrs"
     >
       <template v-for="column in config" :key="column.name">
         <Column
@@ -35,7 +36,17 @@
           :field="column.name"
           :header="column.label"
           :sortable="column.sortable"
-        />
+        >
+          <template #body="{ data: item, index }">
+            <UniversalTableCell
+              :column-config="column"
+              :index="index"
+              :item="item"
+              :key="objectHash(item)"
+              v-bind="$attrs"
+            />
+          </template>
+        </Column>
       </template>
       <template #empty>
         <div class="universal-table__empty">
@@ -56,6 +67,8 @@ import { pick } from "lodash";
 import type { UniversalFilterValues } from "@/types/filters";
 import { computed, ref } from "vue";
 import { prepareName } from "@/helpers/strings";
+import objectHash from "object-hash";
+import UniversalTableCell from "@/components/tables/UniversalTableCell.vue";
 
 const emit = defineEmits(["click:actionButton"]);
 

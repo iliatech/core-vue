@@ -47,28 +47,30 @@ import UniversalText from "@/components/UniversalText.vue";
 import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
 
 interface DrawerState {
+  id: string | null;
   name: string;
 }
 
 const initialState: DrawerState = {
+  id: null,
   name: "",
 };
-
-const emit = defineEmits(["added:credentialType"]);
 
 const sidebar = ref<InstanceType<typeof UniversalSidebar>>();
 const discardChangesDialog = ref<InstanceType<typeof UniversalSidebar>>();
 const isInputStarted = ref<boolean>(false);
-const currentState = reactive<DrawerState>({
-  name: "",
-});
+const currentState = reactive<DrawerState>({ ...initialState });
 
 const isChanged = computed<boolean>(() => {
   return !isEqual(initialState, currentState);
 });
 
 const isSameNameExists = computed<boolean>(() => {
-  return !!CredentialType.get({ label: prepareName(currentState.name) }).length;
+  const foundItem = CredentialType.get({
+    name: prepareName(currentState.name),
+  })?.[0];
+
+  return !!foundItem && foundItem.id !== currentState.id;
 });
 
 const errorDetails = computed<string[]>(() => {
@@ -108,12 +110,12 @@ const close = () => {
 };
 
 const handleClickAdd = async () => {
-  await CredentialType.add({ label: currentState.name });
+  await CredentialType.add({ name: currentState.name });
   showToast({
     type: ToastType.Success,
     text: lang.success.credentialTypeAdded,
   });
-  emit("added:credentialType");
+  sidebar.value?.close();
 };
 
 defineExpose({

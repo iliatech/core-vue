@@ -21,9 +21,9 @@ export class CredentialType {
     return items;
   }
 
-  public static async add(item: Omit<ICredentialType, "name">): Promise<void> {
+  public static async add(item: Omit<ICredentialType, "id">): Promise<void> {
     useCredentialStore().credentialDatabase.credentialTypes.push({
-      name: uuidv4(),
+      id: uuidv4(),
       ...item,
     });
 
