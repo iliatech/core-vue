@@ -33,7 +33,6 @@ defineProps({
 
 .universal-filters {
   :deep(.universal-text__label) {
-    margin-top: 0;
     margin-bottom: $px-5;
     @include font-small-medium;
   }

@@ -8,7 +8,7 @@ export const credentialTypeTable: UniversalTableColumn[] = [
   },
   {
     name: "label",
-    label: "Name",
+    label: "Type name",
     defaultSort: true,
     defaultSortOrder: 1,
     sortable: true,

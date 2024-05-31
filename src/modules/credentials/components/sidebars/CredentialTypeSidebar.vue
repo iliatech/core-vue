@@ -9,7 +9,7 @@
       <UniversalText
         v-model="currentState.name"
         v-model:is-input-started="isInputStarted"
-        :label="$lang.label.name"
+        :placeholder="$lang.label.fillInField($lang.label.name)"
         :errors="errorDetails"
       />
     </div>
@@ -94,6 +94,7 @@ const handleClickAdd = async () => {
 defineExpose({
   open() {
     Object.assign(currentState, initialState);
+    isInputStarted.value = false;
     sidebar.value?.open();
   },
   close,

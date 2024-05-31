@@ -1,25 +1,25 @@
 <template>
   <Sidebar
     v-model:visible="show"
-    class="custom-sidebar"
+    class="universal-sidebar"
     :position="position"
     :dismissable="false"
   >
     <template #header>
-      <div class="custom-sidebar__header">
-        <div class="custom-sidebar__header-title">
+      <div class="universal-sidebar__header">
+        <div class="universal-sidebar__header-title">
           {{ title }}
         </div>
-        <div class="custom-sidebar__header-icon">
+        <div class="universal-sidebar__header-icon">
           <i class="pi pi-times" @click="handleClose" />
         </div>
       </div>
     </template>
-    <div class="custom-sidebar__container">
-      <div class="custom-sidebar__content">
+    <div class="universal-sidebar__container">
+      <div class="universal-sidebar__content">
         <slot />
       </div>
-      <div class="custom-sidebar__buttons">
+      <div class="universal-sidebar__buttons">
         <slot name="buttons-before" />
         <Button
           v-if="cancelButton || closeButton"
@@ -74,11 +74,12 @@ defineExpose({ open, close });
 @import "@/assets/fonts";
 @import "@/assets/variables";
 
-.custom-sidebar {
+.universal-sidebar {
   &__header {
     @include header-medium;
     display: flex;
     justify-content: space-between;
+    width: 100%;
   }
 
   &__header-icon i {
@@ -105,7 +106,7 @@ defineExpose({ open, close });
 }
 </style>
 <style lang="scss">
-.custom-sidebar {
+.universal-sidebar {
   width: 400px !important;
 
   .p-sidebar-header-content {

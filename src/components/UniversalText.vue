@@ -45,7 +45,6 @@ defineProps({
   &__label {
     display: block;
     margin-bottom: $px-10;
-    margin-top: $px-20;
   }
 }
 </style>

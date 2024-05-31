@@ -78,7 +78,7 @@ defineProps({
 
   &:hover {
     // TODO create color in colors library and use it here.
-    background: #eef;
+    background: #eee;
   }
 
   &--small {
@@ -114,7 +114,7 @@ defineProps({
   &--disabled {
     pointer-events: none;
     // TODO create color in colors library and use it here.
-    background: #eee;
+    background: #fff;
     // TODO create color in colors library and use it here.
     color: #ccc;
   }
