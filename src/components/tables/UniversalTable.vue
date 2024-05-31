@@ -1,7 +1,7 @@
 <template>
-  <div class="base-table">
-    <div class="base-table__header">
-      <div class="base-table__filters">
+  <div class="universal-table">
+    <div class="universal-table__header">
+      <div class="universal-table__filters">
         <UniversalFilters
           v-model:filter-values="filterValues"
           :config="
@@ -11,7 +11,7 @@
           "
         />
       </div>
-      <div class="base-table__action-button">
+      <div class="universal-table__action-button">
         <UniversalButton
           v-if="actionButtonText"
           @click="emit('click:actionButton')"
@@ -37,6 +37,11 @@
           :sortable="column.sortable"
         />
       </template>
+      <template #empty>
+        <div class="universal-table__empty">
+          {{ $lang.label.noEntitiesFound }}
+        </div></template
+      >
     </DataTable>
   </div>
 </template>
@@ -84,7 +89,9 @@ const dataFiltered = computed<any[]>(() => {
 </script>
 <style lang="scss" scoped>
 @import "@/assets/variables";
-.base-table {
+@import "@/assets/fonts";
+
+.universal-table {
   &__header {
     margin-bottom: $px-15;
     width: 100%;
@@ -99,6 +106,11 @@ const dataFiltered = computed<any[]>(() => {
 
   &__action-button {
     //
+  }
+
+  &__empty {
+    @include font-medium;
+    text-align: center;
   }
 }
 </style>

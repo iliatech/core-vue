@@ -16,6 +16,7 @@ export default {
   name: "Name",
   navigation: "Navigation",
   nextWeek: "Next Week",
+  noEntitiesFound: "No Entities Found",
   password: "Password",
   previousWeek: "Prev Week",
   profile: "Profile",

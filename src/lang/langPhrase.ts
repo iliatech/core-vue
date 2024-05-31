@@ -6,4 +6,5 @@ export default {
   noTagsFound: "No tags found.",
   numberOfTranslations: "Translated times",
   previousTranslations: "Previous translations",
+  areYouSureToDiscardChanges: "Are you sure to discard changes?",
 };

@@ -1,4 +1,5 @@
 export default {
+  addCredentialType: "Add Credential Type",
   addSlot: "Add slot",
   clients: "Clients",
   clientsSchedule: "Clients Schedule",
@@ -10,8 +11,8 @@ export default {
   createTag: "Create tag",
   createWord: "Create word",
   credentials: "Credentials",
-  addCredentialType: "Add Credential Type",
   credentialTypes: "Credential Types",
+  discardChanges: "Discard Changes",
   editClient: "Edit client",
   editSlot: "Edit slot",
   error: "Error",

@@ -22,6 +22,15 @@
       />
     </template>
   </UniversalSidebar>
+  <UniversalDialog
+    :title="$lang.title.discardChanges"
+    ref="discardChangesDialog"
+    @cancel="handleCancelDiscardChanges"
+    @confirm="handleConfirmDiscardChanges"
+    :z-index="1200"
+  >
+    {{ $lang.phrase.areYouSureToDiscardChanges }}
+  </UniversalDialog>
 </template>
 <script lang="ts" setup>
 import UniversalSidebar from "@/components/sidebars/UniversalSidebar.vue";
@@ -35,6 +44,7 @@ import { isEqual } from "lodash";
 import { IEntity } from "@/settings/entities";
 import { prepareName } from "@/helpers/strings";
 import UniversalText from "@/components/UniversalText.vue";
+import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
 
 interface DrawerState {
   name: string;
@@ -47,6 +57,7 @@ const initialState: DrawerState = {
 const emit = defineEmits(["added:credentialType"]);
 
 const sidebar = ref<InstanceType<typeof UniversalSidebar>>();
+const discardChangesDialog = ref<InstanceType<typeof UniversalSidebar>>();
 const isInputStarted = ref<boolean>(false);
 const currentState = reactive<DrawerState>({
   name: "",
@@ -78,7 +89,21 @@ const errorDetails = computed<string[]>(() => {
   return errors;
 });
 
+const handleCancelDiscardChanges = () => {
+  discardChangesDialog.value?.close();
+};
+
+const handleConfirmDiscardChanges = () => {
+  discardChangesDialog.value?.close();
+  sidebar.value?.close();
+};
+
 const close = () => {
+  if (isChanged.value) {
+    discardChangesDialog.value?.open();
+    return;
+  }
+
   sidebar.value?.close();
 };
 

@@ -11,7 +11,7 @@
           {{ title }}
         </div>
         <div class="universal-sidebar__header-icon">
-          <i class="pi pi-times" @click="handleClose" />
+          <i class="pi pi-times" @click="emit('click:close')" />
         </div>
       </div>
     </template>
@@ -23,7 +23,7 @@
         <slot name="buttons-before" />
         <Button
           v-if="cancelButton || closeButton"
-          @click="handleClose"
+          @click="emit('click:close')"
           :label="cancelButton ? $lang.button.cancel : $lang.button.close"
           :class="cancelButton ? 'close-button' : 'cancel-button'"
           outlined
@@ -54,11 +54,6 @@ defineProps({
     default: "right",
   },
 });
-
-const handleClose = () => {
-  emit("click:close");
-  close();
-};
 
 const close = () => {
   show.value = false;
