@@ -7,6 +7,8 @@
       :model-value="modelText"
       @update:modelValue="modelText = prepareName($event)"
       @update:model-value="isInputStarted = true"
+      :placeholder="placeholder ?? ''"
+      :size="inputSize"
     />
     <ErrorDetails :errors="errors" />
   </div>
@@ -28,6 +30,11 @@ const isInputStarted = defineModel("isInputStarted", {
 
 defineProps({
   label: String,
+  placeholder: String,
+  inputSize: {
+    type: String as PropType<"small" | undefined | "large">,
+    default: undefined,
+  },
   errors: Object as PropType<string[]>,
 });
 </script>

@@ -67,9 +67,7 @@ const logoTitle = computed<string>(() => {
 });
 
 const navigationOptions = computed<NavigationItem[]>(() => {
-  console.log("R N", route.name);
   if (!route.name) {
-    //console.error("Error: route name is undefined: ", route.name);
     return [];
   }
 

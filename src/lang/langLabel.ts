@@ -8,6 +8,7 @@ export default {
   goToPrivateArea: "Go to private area",
   goToPublicArea: "Go to public area",
   hour: "Hour",
+  filterBy: (columnName: string) => `Filter by ${columnName}`,
   loader: "Loading",
   logout: "Logout",
   minute: "Minute",

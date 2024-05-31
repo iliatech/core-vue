@@ -30,8 +30,6 @@ export class CredentialDatabase {
   }
 
   public static async load(): Promise<void> {
-    // TODO
-    console.log("G E T");
     const encryptedData = await Api.request({
       path: apiPaths.credentialDatabase,
     });

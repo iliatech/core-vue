@@ -1,6 +1,6 @@
-import type { BaseTableColumn } from "@/types/tables";
+import type { UniversalTableColumn } from "@/types/tables";
 
-export const credentialTypeTable: BaseTableColumn[] = [
+export const credentialTypeTable: UniversalTableColumn[] = [
   {
     name: "name",
     label: "ID",
@@ -12,5 +12,6 @@ export const credentialTypeTable: BaseTableColumn[] = [
     defaultSort: true,
     defaultSortOrder: 1,
     sortable: true,
+    filterable: true,
   },
 ];

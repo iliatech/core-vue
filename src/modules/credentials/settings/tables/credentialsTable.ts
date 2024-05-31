@@ -1,6 +1,6 @@
-import type { BaseTableColumn } from "@/types/tables";
+import type { UniversalTableColumn } from "@/types/tables";
 
-export const credentialsTable: BaseTableColumn[] = [
+export const credentialsTable: UniversalTableColumn[] = [
   {
     name: "type",
     label: "Type",

@@ -44,7 +44,7 @@ const initialState: DrawerState = {
   name: "",
 };
 
-const emit = defineEmits(["add:credentialType"]);
+const emit = defineEmits(["added:credentialType"]);
 
 const sidebar = ref<InstanceType<typeof UniversalSidebar>>();
 const isInputStarted = ref<boolean>(false);
@@ -88,7 +88,7 @@ const handleClickAdd = async () => {
     type: ToastType.Success,
     text: lang.success.credentialTypeAdded,
   });
-  emit("add:credentialType");
+  emit("added:credentialType");
 };
 
 defineExpose({
