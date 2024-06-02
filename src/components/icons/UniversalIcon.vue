@@ -1,5 +1,15 @@
 <template>
-  <div class="universal-icon"><b>Universal icon</b></div>
+  <span class="universal-icon">
+    <span v-if="label">{{ label }}</span>
+  </span>
 </template>
-<script lang="ts" setup></script>
-<style lang="scss" scoped></style>
+<script lang="ts" setup>
+defineProps({
+  label: String,
+});
+</script>
+<style lang="scss" scoped>
+.universal-icon {
+  //
+}
+</style>

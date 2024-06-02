@@ -1,7 +1,11 @@
 <template>
   <div class="universal-table-cell">
     <template v-if="components?.length">
-      <div v-for="(component, indexKey) in components" :key="indexKey">
+      <div
+        v-for="(component, indexKey) in components"
+        :key="indexKey"
+        class="universal-table-cell__item"
+      >
         <component
           :is="component.component"
           v-bind="mergeProps(component.props, $attrs)"
@@ -44,4 +48,14 @@ const components = computed<UniversalTableCellComponentProp[] | null>(() => {
   return null;
 });
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+@import "@/assets/variables";
+
+.universal-table-cell {
+  display: flex;
+  gap: $px-10;
+  &__item {
+    display: block;
+  }
+}
+</style>
