@@ -53,7 +53,8 @@ const components = computed<UniversalTableCellComponentProp[] | null>(() => {
 
 .universal-table-cell {
   display: flex;
-  gap: $px-10;
+  gap: $px-20;
+
   &__item {
     display: block;
   }

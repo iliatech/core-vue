@@ -30,6 +30,19 @@ export class CredentialType {
     await this.save();
   }
 
+  public static async delete(id: string): Promise<void> {
+    const index =
+      useCredentialStore().credentialDatabase.credentialTypes.findIndex(
+        (item) => item.name === id
+      );
+
+    if (index > -1) {
+      useCredentialStore().credentialDatabase.credentialTypes.splice(index, 1);
+    }
+
+    await this.save();
+  }
+
   public static async save(): Promise<void> {
     await CredentialDatabase.save();
   }

@@ -1,27 +1,27 @@
 <template>
   <Teleport v-if="show" to="body">
-    <div class="schedule-dialog" :style="{ zIndex }">
-      <div class="schedule-dialog__container">
-        <div class="schedule-dialog__title">
+    <div class="universal-dialog" :style="{ zIndex }">
+      <div class="universal-dialog__container">
+        <div class="universal-dialog__title">
           {{ title }}
         </div>
-        <div class="schedule-dialog__content">
+        <div class="universal-dialog__content">
           <slot />
         </div>
-        <div class="schedule-dialog__buttons">
+        <div class="universal-dialog__buttons">
           <UniversalButton
             @click="handleCancel"
             :label="$lang.button.cancel"
             color="grey"
             width="80px"
-            class="schedule-dialog__cancel-button"
+            class="universal-dialog__cancel-button"
           />
           <UniversalButton
             @click="handleConfirm"
             :label="$lang.button.ok"
             color="pink"
             width="80px"
-            class="schedule-dialog__confirm-button"
+            class="universal-dialog__confirm-button"
           />
         </div>
       </div>
@@ -71,7 +71,7 @@ defineExpose({ open, close });
 @import "@/assets/colors";
 @import "@/assets/variables";
 
-.schedule-dialog {
+.universal-dialog {
   position: fixed;
   top: 0;
   left: 0;

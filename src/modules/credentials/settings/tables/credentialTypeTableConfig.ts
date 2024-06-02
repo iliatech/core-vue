@@ -23,7 +23,8 @@ export const credentialTypeTableConfig: UniversalTableColumn[] = [
         component: UniversalIcon,
         props: {
           label: "edit",
-          clickable: true,
+          primeIcon: "pencil",
+          link: true,
           onClick: () => {
             return emit("click:edit-item", item);
           },
@@ -33,7 +34,8 @@ export const credentialTypeTableConfig: UniversalTableColumn[] = [
         component: UniversalIcon,
         props: {
           label: "delete",
-          clickable: true,
+          primeIcon: "trash",
+          link: true,
           onClick: () => {
             return emit("click:delete-item", item);
           },

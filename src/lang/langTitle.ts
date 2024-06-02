@@ -12,6 +12,7 @@ export default {
   createWord: "Create word",
   credentials: "Credentials",
   credentialTypes: "Credential Types",
+  confirmDeleteCredentialType: "Confirm delete credential type",
   discardChanges: "Discard Changes",
   editClient: "Edit client",
   editSlot: "Edit slot",
