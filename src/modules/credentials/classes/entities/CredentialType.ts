@@ -30,6 +30,22 @@ export class CredentialType {
     await this.save();
   }
 
+  public static async update(credentialType: ICredentialType): Promise<void> {
+    const found = useCredentialStore().credentialDatabase.credentialTypes.find(
+      (item) => item.id === credentialType.id
+    );
+
+    if (!found) {
+      throw new Error(
+        `Credential type with id '${credentialType.id}' not found`
+      );
+    }
+
+    Object.assign(found, credentialType);
+
+    await this.save();
+  }
+
   public static async delete(id: string): Promise<void> {
     const index =
       useCredentialStore().credentialDatabase.credentialTypes.findIndex(

@@ -44,7 +44,7 @@ const handleClickDeleteItem = (item: ICredentialType) => {
 };
 
 const handleClickEditItem = (item: ICredentialType) => {
-  console.log("E I", item);
+  credentialTypeSidebar.value?.open(item);
 };
 
 const handleCancelDeleteItem = () => {

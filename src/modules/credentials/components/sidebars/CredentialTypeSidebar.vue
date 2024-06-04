@@ -15,8 +15,8 @@
     </div>
     <template #buttons-after>
       <UniversalButton
-        @click="handleClickAdd"
-        :label="$lang.button.add"
+        @click="handleClickSave"
+        :label="isEditMode ? $lang.button.save : $lang.button.add"
         width="70px"
         :disabled="!isChanged || isSameNameExists"
       />
@@ -45,6 +45,7 @@ import { IEntity } from "@/settings/entities";
 import { prepareName } from "@/helpers/strings";
 import UniversalText from "@/components/UniversalText.vue";
 import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
+import type { ICredentialType } from "@/modules/credentials/types/entities";
 
 interface DrawerState {
   id: string | null;
@@ -60,9 +61,14 @@ const sidebar = ref<InstanceType<typeof UniversalSidebar>>();
 const discardChangesDialog = ref<InstanceType<typeof UniversalSidebar>>();
 const isInputStarted = ref<boolean>(false);
 const currentState = reactive<DrawerState>({ ...initialState });
+const savedState = reactive<DrawerState>({ ...initialState });
 
 const isChanged = computed<boolean>(() => {
-  return !isEqual(initialState, currentState);
+  return !isEqual(currentState, savedState);
+});
+
+const isEditMode = computed<boolean>(() => {
+  return !!savedState.id;
 });
 
 const isSameNameExists = computed<boolean>(() => {
@@ -109,18 +115,29 @@ const close = () => {
   sidebar.value?.close();
 };
 
-const handleClickAdd = async () => {
-  await CredentialType.add({ name: currentState.name });
+const handleClickSave = async () => {
+  if (isEditMode.value) {
+    await CredentialType.update(currentState as ICredentialType);
+  } else {
+    await CredentialType.add({ name: currentState.name });
+  }
+
+  Object.assign(savedState, currentState);
+
   showToast({
     type: ToastType.Success,
-    text: lang.success.credentialTypeAdded,
+    text: isEditMode.value
+      ? lang.success.credentialTypeAdded
+      : lang.success.credentialTypeSaved,
   });
+
   sidebar.value?.close();
 };
 
 defineExpose({
-  open() {
-    Object.assign(currentState, initialState);
+  open(item?: ICredentialType) {
+    Object.assign(currentState, item ?? initialState);
+    Object.assign(savedState, currentState);
     isInputStarted.value = false;
     sidebar.value?.open();
   },

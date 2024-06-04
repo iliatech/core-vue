@@ -1,5 +1,6 @@
 export default {
   credentialTypeAdded: "Credential type added",
+  credentialTypeSaved: "Credential type saved",
   clientCreated: "Client created",
   clientUpdated: "Client updated",
   login: "You are logged in",
