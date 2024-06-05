@@ -4,6 +4,7 @@
       {{ $lang.label.name }}
     </label>
     <InputText
+      class="universal-text__input"
       :model-value="modelText"
       @update:modelValue="modelText = prepareName($event)"
       @update:model-value="isInputStarted = true"
@@ -45,6 +46,10 @@ defineProps({
   &__label {
     display: block;
     margin-bottom: $px-10;
+  }
+
+  &__input {
+    width: 100%;
   }
 }
 </style>

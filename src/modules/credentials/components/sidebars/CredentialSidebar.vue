@@ -1,16 +1,22 @@
 <template>
   <UniversalSidebar
     ref="sidebar"
-    :title="$lang.title.addCredentialType"
+    :title="$lang.title.addCredential"
     close-button
     @click:close="close"
   >
-    <div class="credential-type-sidebar">
-      <UniversalField :label="lang.label.name">
+    <div class="credential-sidebar">
+      <UniversalField :label="$lang.label.name">
         <UniversalText
           v-model="currentState.name"
           v-model:is-input-started="isInputStarted"
           :errors="errorDetails"
+        />
+      </UniversalField>
+      <UniversalField :label="$lang.label.type">
+        <UniversalSelector
+          v-model="currentState.type"
+          :options="options.type"
         />
       </UniversalField>
     </div>
@@ -19,7 +25,7 @@
         @click="handleClickSave"
         :label="isEditMode ? $lang.button.save : $lang.button.add"
         width="70px"
-        :disabled="!isChanged || isSameNameExists"
+        :disabled="!isChanged || !isValid"
       />
     </template>
   </UniversalSidebar>
@@ -47,16 +53,24 @@ import { prepareName } from "@/helpers/strings";
 import UniversalText from "@/components/UniversalText.vue";
 import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
 import UniversalField from "@/components/fields/UniversalField.vue";
+import UniversalSelector from "@/components/selectors/UniversalSelector.vue";
+import { Credential } from "@/modules/credentials/classes/entities/Credentials";
 import type { ICredentialType } from "@/modules/credentials/types";
 
 interface DrawerState {
   id: string | null;
   name: string;
+  type: string | null;
+}
+
+interface Options {
+  type: ICredentialType[];
 }
 
 const initialState: DrawerState = {
   id: null,
   name: "",
+  type: null,
 };
 
 const sidebar = ref<InstanceType<typeof UniversalSidebar>>();
@@ -64,6 +78,7 @@ const discardChangesDialog = ref<InstanceType<typeof UniversalSidebar>>();
 const isInputStarted = ref<boolean>(false);
 const currentState = reactive<DrawerState>({ ...initialState });
 const savedState = reactive<DrawerState>({ ...initialState });
+const options = reactive<Options>({ type: [] });
 
 const isChanged = computed<boolean>(() => {
   return !isEqual(currentState, savedState);
@@ -73,8 +88,12 @@ const isEditMode = computed<boolean>(() => {
   return !!savedState.id;
 });
 
+const isValid = computed<boolean>(() => {
+  return !isSameNameExists.value && !!currentState.type;
+});
+
 const isSameNameExists = computed<boolean>(() => {
-  const foundItem = CredentialType.get({
+  const foundItem = Credential.get({
     name: prepareName(currentState.name),
   })?.[0];
 
@@ -89,7 +108,7 @@ const errorDetails = computed<string[]>(() => {
   const errors = [];
 
   if (isSameNameExists.value) {
-    errors.push(lang.error.entityWithSameNameExists(IEntity.CredentialType));
+    errors.push(lang.error.entityWithSameNameExists(IEntity.CredentialName));
   }
 
   if (!prepareName(currentState.name)) {
@@ -118,10 +137,25 @@ const close = () => {
 };
 
 const handleClickSave = async () => {
+  if (!currentState.type) {
+    throw new Error("currentState.type  is not defined");
+  }
+
   if (isEditMode.value) {
-    await CredentialType.update(currentState as ICredentialType);
+    if (!currentState.id) {
+      throw new Error("currentState.id is not defined");
+    }
+
+    await Credential.update({
+      id: currentState.id,
+      name: currentState.name,
+      type: currentState.type,
+    });
   } else {
-    await CredentialType.add({ name: currentState.name });
+    await Credential.add({
+      name: currentState.name,
+      type: currentState.type,
+    });
   }
 
   Object.assign(savedState, currentState);
@@ -140,6 +174,7 @@ defineExpose({
   open(item?: ICredentialType) {
     Object.assign(currentState, item ?? initialState);
     Object.assign(savedState, currentState);
+    options.type = CredentialType.get();
     isInputStarted.value = false;
     sidebar.value?.open();
   },
@@ -148,7 +183,7 @@ defineExpose({
 </script>
 <style lang="scss" scoped>
 @import "@/assets/variables";
-.credential-type-sidebar {
+.credential-sidebar {
   // TODO
 }
 </style>

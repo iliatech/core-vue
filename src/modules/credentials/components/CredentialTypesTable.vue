@@ -27,8 +27,8 @@ import UniversalTable from "@/components/tables/UniversalTable.vue";
 import type UniversalSidebar from "@/components/sidebars/UniversalSidebar.vue";
 import CredentialTypeSidebar from "@/modules/credentials/components/sidebars/CredentialTypeSidebar.vue";
 import { ref } from "vue";
-import type { ICredentialType } from "@/modules/credentials/types/entities";
 import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
+import type { ICredentialType } from "@/modules/credentials/types";
 
 const credentialTypeSidebar = ref<InstanceType<typeof UniversalSidebar>>();
 const confirmDeleteItemDialog = ref<InstanceType<typeof UniversalDialog>>();

@@ -86,7 +86,7 @@ defineExpose({ open, close });
     flex-direction: column;
     justify-content: space-between;
     height: 100%;
-    padding: $px-10;
+    padding: $px-10 0;
   }
 
   &__content {

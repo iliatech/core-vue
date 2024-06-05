@@ -1,4 +1,5 @@
 export default {
+  addCredential: "Add Credential",
   addCredentialType: "Add Credential Type",
   addSlot: "Add slot",
   clients: "Clients",

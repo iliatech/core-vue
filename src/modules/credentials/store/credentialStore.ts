@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
-import type { ICredentialDatabase } from "@/modules/credentials/types/database";
 import { reactive } from "vue";
+import type { ICredentialDatabase } from "@/modules/credentials/types";
 
 export const useCredentialStore = defineStore("credentialStore", () => {
   const credentialDatabase = reactive<ICredentialDatabase>({

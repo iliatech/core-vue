@@ -1,7 +1,7 @@
-import type { ICredentialType } from "@/modules/credentials/types/entities";
 import { CredentialDatabase } from "@/modules/credentials/classes/CredentialDatabase";
 import { useCredentialStore } from "@/modules/credentials/store/credentialStore";
 import { v4 as uuidv4 } from "uuid";
+import type { ICredentialType } from "@/modules/credentials/types";
 
 type SearchObject = Record<
   string,
@@ -11,6 +11,7 @@ type SearchObject = Record<
 export class CredentialType {
   public static get(searchObject?: SearchObject): ICredentialType[] {
     let items = useCredentialStore().credentialDatabase.credentialTypes;
+
     if (searchObject) {
       Object.entries(searchObject).forEach(([key, value]) => {
         items = items.filter(
@@ -18,6 +19,7 @@ export class CredentialType {
         );
       });
     }
+
     return items;
   }
 
