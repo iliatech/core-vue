@@ -16,6 +16,8 @@ export default {
   confirmDeleteCredentialType: "Confirm delete credential type",
   discardChanges: "Discard Changes",
   editClient: "Edit client",
+  editCredential: "Edit Credential",
+  editCredentialType: "Edit Credential Type",
   editSlot: "Edit slot",
   error: "Error",
   iliaDomyshev: "Ilia Domyshev",

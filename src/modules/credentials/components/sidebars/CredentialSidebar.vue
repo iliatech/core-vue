@@ -1,7 +1,7 @@
 <template>
   <UniversalSidebar
     ref="sidebar"
-    :title="$lang.title.addCredential"
+    :title="isEditMode ? $lang.title.editCredential : $lang.title.addCredential"
     close-button
     @click:close="close"
   >

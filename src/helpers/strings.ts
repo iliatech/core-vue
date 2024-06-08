@@ -1,3 +1,3 @@
-export const prepareName = (value: string): string => {
-  return value.trim().replace(/\s+/g, " ");
+export const prepareName = (value: string | undefined): string => {
+  return (value ?? "").trim().replace(/\s+/g, " ");
 };

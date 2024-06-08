@@ -51,7 +51,7 @@ export class CredentialType {
   public static async delete(id: string): Promise<void> {
     const index =
       useCredentialStore().credentialDatabase.credentialTypes.findIndex(
-        (item) => item.name === id
+        (item) => item.id === id
       );
 
     if (index > -1) {
