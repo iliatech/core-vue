@@ -62,7 +62,7 @@ import { lang } from "@/lang";
 import { DialogType } from "@/types/dialog";
 import { useTagsStore } from "@/store/tagsStore";
 import { storeToRefs } from "pinia";
-import UniversalSidebar from "@/components/sidebars/UniversalSidebar.vue";
+import UniversalSidebar from "@/components/dialogs/UniversalSidebar.vue";
 
 const tagsStore = useTagsStore();
 const { tags } = storeToRefs(tagsStore);

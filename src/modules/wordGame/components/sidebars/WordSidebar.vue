@@ -57,7 +57,7 @@ import { lang } from "@/lang";
 import InputText from "primevue/inputtext";
 import type { Translation } from "@/types/translationType";
 import { orderBy } from "lodash";
-import UniversalSidebar from "@/components/sidebars/UniversalSidebar.vue";
+import UniversalSidebar from "@/components/dialogs/UniversalSidebar.vue";
 
 const wordId = ref<string | null>(null);
 const appStore = useAppStore();

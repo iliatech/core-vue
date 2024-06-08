@@ -25,7 +25,7 @@ import { credentialTypeTable } from "@/modules/credentials/settings/tables/crede
 import { CredentialType } from "@/modules/credentials/classes/entities/CredentialType";
 import { Credential } from "@/modules/credentials/classes/entities/Credential";
 import UniversalTable from "@/components/tables/UniversalTable.vue";
-import type UniversalSidebar from "@/components/sidebars/UniversalSidebar.vue";
+import type UniversalSidebar from "@/components/dialogs/UniversalSidebar.vue";
 import CredentialTypeSidebar from "@/modules/credentials/components/sidebars/CredentialTypeSidebar.vue";
 import { computed, ref } from "vue";
 import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";

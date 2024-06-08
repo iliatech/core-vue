@@ -63,7 +63,7 @@
 </template>
 
 <script setup lang="ts">
-import UniversalSidebar from "@/components/sidebars/UniversalSidebar.vue";
+import UniversalSidebar from "@/components/dialogs/UniversalSidebar.vue";
 import Dropdown from "primevue/dropdown";
 import { ref } from "vue";
 import { storeToRefs } from "pinia";

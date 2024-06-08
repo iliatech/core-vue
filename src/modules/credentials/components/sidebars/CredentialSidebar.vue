@@ -40,7 +40,7 @@
   </UniversalDialog>
 </template>
 <script lang="ts" setup>
-import UniversalSidebar from "@/components/sidebars/UniversalSidebar.vue";
+import UniversalSidebar from "@/components/dialogs/UniversalSidebar.vue";
 import { computed, reactive, ref } from "vue";
 import UniversalButton from "@/components/buttons/UniversalButton.vue";
 import { CredentialType } from "@/modules/credentials/classes/entities/CredentialType";
@@ -50,10 +50,10 @@ import { lang } from "@/lang";
 import { isEqual } from "lodash";
 import { IEntity } from "@/settings/entities";
 import { prepareName } from "@/helpers/strings";
-import UniversalText from "@/components/UniversalText.vue";
+import UniversalText from "@/components/fields/UniversalText.vue";
 import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
 import UniversalField from "@/components/fields/UniversalField.vue";
-import UniversalSelector from "@/components/selectors/UniversalSelector.vue";
+import UniversalSelector from "@/components/fields/UniversalSelector.vue";
 import { Credential } from "@/modules/credentials/classes/entities/Credential";
 import type { ICredentialType } from "@/modules/credentials/types";
 

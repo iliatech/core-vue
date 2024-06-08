@@ -12,7 +12,7 @@
 </template>
 <script lang="ts" setup>
 import type { PropType } from "vue";
-import UniversalText from "@/components/UniversalText.vue";
+import UniversalText from "@/components/fields/UniversalText.vue";
 import type { UniversalFilterValues, UniversalFilter } from "@/types/filters";
 
 defineModel("filterValues", {

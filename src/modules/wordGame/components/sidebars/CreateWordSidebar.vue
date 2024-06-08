@@ -38,7 +38,7 @@ import { apiPaths } from "@/settings/api";
 import { RequestMethods } from "@/types/api";
 import { lang } from "@/lang";
 import InputText from "primevue/inputtext";
-import UniversalSidebar from "@/components/sidebars/UniversalSidebar.vue";
+import UniversalSidebar from "@/components/dialogs/UniversalSidebar.vue";
 
 const sidebar = ref();
 const isValidated = ref(false);

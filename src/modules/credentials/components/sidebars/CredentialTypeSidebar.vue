@@ -13,8 +13,17 @@
       <UniversalField :label="lang.label.name">
         <UniversalText
           v-model="currentState.name"
-          v-model:is-input-started="isInputStarted"
-          :errors="errorDetails"
+          v-model:is-input-started="isInputStarted.name"
+          :errors="showErrors(isInputStarted.name, errorDetails.name)"
+        />
+      </UniversalField>
+      <UniversalField :label="lang.label.description">
+        <UniversalTextarea
+          v-model="currentState.description"
+          v-model:is-input-started="isInputStarted.description"
+          :errors="
+            showErrors(isInputStarted.description, errorDetails.description)
+          "
         />
       </UniversalField>
     </div>
@@ -38,7 +47,8 @@
   </UniversalDialog>
 </template>
 <script lang="ts" setup>
-import UniversalSidebar from "@/components/sidebars/UniversalSidebar.vue";
+import UniversalSidebar from "@/components/dialogs/UniversalSidebar.vue";
+import type { ComputedRef } from "vue";
 import { computed, reactive, ref } from "vue";
 import UniversalButton from "@/components/buttons/UniversalButton.vue";
 import { CredentialType } from "@/modules/credentials/classes/entities/CredentialType";
@@ -48,24 +58,45 @@ import { lang } from "@/lang";
 import { isEqual } from "lodash";
 import { IEntity } from "@/settings/entities";
 import { prepareName } from "@/helpers/strings";
-import UniversalText from "@/components/UniversalText.vue";
+import UniversalText from "@/components/fields/UniversalText.vue";
 import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
 import UniversalField from "@/components/fields/UniversalField.vue";
 import type { ICredentialType } from "@/modules/credentials/types";
+import UniversalTextarea from "@/components/fields/UniversalTextarea.vue";
 
 interface DrawerState {
   id: string | null;
   name: string;
+  description: string;
 }
+
+interface ErrorsDetails {
+  name: [];
+  description: [];
+}
+
+interface IsInputStarted {
+  name: boolean;
+  description: boolean;
+}
+
+const isInputStartedInitialValue = {
+  name: false,
+  description: false,
+};
 
 const initialState: DrawerState = {
   id: null,
   name: "",
+  description: "",
 };
 
 const sidebar = ref<InstanceType<typeof UniversalSidebar>>();
 const discardChangesDialog = ref<InstanceType<typeof UniversalSidebar>>();
-const isInputStarted = ref<boolean>(false);
+const isInputStarted = reactive<IsInputStarted>({
+  name: false,
+  description: false,
+});
 const currentState = reactive<DrawerState>({ ...initialState });
 const savedState = reactive<DrawerState>({ ...initialState });
 
@@ -85,19 +116,28 @@ const isSameNameExists = computed<boolean>(() => {
   return !!foundItem && foundItem.id !== currentState.id;
 });
 
-const errorDetails = computed<string[]>(() => {
-  if (!isInputStarted.value) {
-    return [];
-  }
+const errorDetails: ComputedRef<ErrorsDetails> = computed(() => {
+  const errors: ErrorsDetails = {
+    name: [],
+    description: [],
+  };
 
-  const errors = [];
-
+  // Name.
   if (isSameNameExists.value) {
-    errors.push(lang.error.entityWithSameNameExists(IEntity.CredentialType));
+    errors.name.push(
+      lang.error.entityWithSameNameExists(IEntity.CredentialType)
+    );
   }
 
   if (!prepareName(currentState.name)) {
-    errors.push(lang.error.entityShouldNotBeEmpty(IEntity.CredentialName));
+    errors.name.push(lang.error.entityShouldNotBeEmpty(IEntity.CredentialName));
+  }
+
+  // Description.
+  if (!prepareName(currentState.description)) {
+    errors.description.push(
+      lang.error.entityShouldNotBeEmpty(IEntity.CredentialDescription)
+    );
   }
 
   return errors;
@@ -140,11 +180,15 @@ const handleClickSave = async () => {
   sidebar.value?.close();
 };
 
+const showErrors = (isStarted: boolean, errors: string[]) => {
+  return isStarted ? errors : [];
+};
+
 defineExpose({
   open(item?: ICredentialType) {
     Object.assign(currentState, item ?? initialState);
     Object.assign(savedState, currentState);
-    isInputStarted.value = false;
+    Object.assign(isInputStarted, isInputStartedInitialValue);
     sidebar.value?.open();
   },
   close,

@@ -4,6 +4,7 @@ export default {
   comment: "Comment",
   createTranslation: "Create translation",
   date: "Date",
+  description: "Description",
   email: "Email",
   goToPrivateArea: "Go to private area",
   goToPublicArea: "Go to public area",

@@ -64,7 +64,7 @@ import { computed, ref } from "vue";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import { storeToRefs } from "pinia";
-import UniversalSidebar from "@/components/sidebars/UniversalSidebar.vue";
+import UniversalSidebar from "@/components/dialogs/UniversalSidebar.vue";
 import UniversalButton from "@/components/buttons/UniversalButton.vue";
 import {
   clientsTableColumns,
