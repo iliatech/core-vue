@@ -43,8 +43,8 @@ export const credentialTypeTable: UniversalTableColumn[] = [
           label: "delete",
           primeIcon: "trash",
           link: true,
-          disabled: !item.credentialsNumber,
-          onClick: item.credentialsNumber
+          disabled: !!item.credentialsNumber,
+          onClick: !item.credentialsNumber
             ? () => {
                 return emit("click:delete-item", item);
               }
