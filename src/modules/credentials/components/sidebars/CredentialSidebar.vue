@@ -15,7 +15,7 @@
       </UniversalField>
       <UniversalField :label="$lang.label.type">
         <UniversalSelector
-          v-model="currentState.type"
+          v-model="currentState.typeId"
           :options="options.type"
         />
       </UniversalField>
@@ -54,13 +54,13 @@ import UniversalText from "@/components/UniversalText.vue";
 import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
 import UniversalField from "@/components/fields/UniversalField.vue";
 import UniversalSelector from "@/components/selectors/UniversalSelector.vue";
-import { Credential } from "@/modules/credentials/classes/entities/Credentials";
+import { Credential } from "@/modules/credentials/classes/entities/Credential";
 import type { ICredentialType } from "@/modules/credentials/types";
 
 interface DrawerState {
   id: string | null;
   name: string;
-  type: string | null;
+  typeId: string | null;
 }
 
 interface Options {
@@ -70,7 +70,7 @@ interface Options {
 const initialState: DrawerState = {
   id: null,
   name: "",
-  type: null,
+  typeId: null,
 };
 
 const sidebar = ref<InstanceType<typeof UniversalSidebar>>();
@@ -89,7 +89,7 @@ const isEditMode = computed<boolean>(() => {
 });
 
 const isValid = computed<boolean>(() => {
-  return !isSameNameExists.value && !!currentState.type;
+  return !isSameNameExists.value && !!currentState.typeId;
 });
 
 const isSameNameExists = computed<boolean>(() => {
@@ -137,7 +137,7 @@ const close = () => {
 };
 
 const handleClickSave = async () => {
-  if (!currentState.type) {
+  if (!currentState.typeId) {
     throw new Error("currentState.type  is not defined");
   }
 
@@ -149,12 +149,12 @@ const handleClickSave = async () => {
     await Credential.update({
       id: currentState.id,
       name: currentState.name,
-      type: currentState.type,
+      typeId: currentState.typeId,
     });
   } else {
     await Credential.add({
       name: currentState.name,
-      type: currentState.type,
+      typeId: currentState.typeId,
     });
   }
 

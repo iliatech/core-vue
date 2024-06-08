@@ -1,7 +1,7 @@
 import type { UniversalTableColumn } from "@/types/tables";
 import UniversalIcon from "@/components/icons/UniversalIcon.vue";
 
-export const credentialTypeTableConfig: UniversalTableColumn[] = [
+export const credentialTypeTable: UniversalTableColumn[] = [
   {
     name: "id",
     label: "Id",
@@ -14,6 +14,13 @@ export const credentialTypeTableConfig: UniversalTableColumn[] = [
     defaultSortOrder: 1,
     sortable: true,
     filterable: true,
+  },
+  {
+    name: "credentialsNumber",
+    label: "Linked Credentials Number",
+    defaultSort: true,
+    defaultSortOrder: 1,
+    sortable: true,
   },
   {
     name: "actions",
@@ -36,9 +43,12 @@ export const credentialTypeTableConfig: UniversalTableColumn[] = [
           label: "delete",
           primeIcon: "trash",
           link: true,
-          onClick: () => {
-            return emit("click:delete-item", item);
-          },
+          disabled: !item.credentialsNumber,
+          onClick: item.credentialsNumber
+            ? () => {
+                return emit("click:delete-item", item);
+              }
+            : null,
         },
       },
     ],

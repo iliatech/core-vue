@@ -11,7 +11,7 @@ export interface ICredentialType {
 export interface ICredential {
   id: string;
   name: string;
-  type: string;
+  typeId: string;
   // type: string;
   // u_field: string;
   // p_field: string;
@@ -23,4 +23,12 @@ export interface ICredentialDatabase {
   updated: string;
   credentials: ICredential[];
   credentialTypes: ICredentialType[];
+}
+
+export interface ICredentialsTableItem extends ICredential {
+  type: ICredentialType | null;
+}
+
+export interface ICredentialTypesTableItem extends ICredentialType {
+  credentialsNumber: number;
 }

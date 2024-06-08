@@ -1,8 +1,8 @@
 <template>
   <div class="credentials-tab">
     <UniversalTable
-      :config="credentialTypeTableConfig"
-      :data="CredentialType.get()"
+      :config="credentialTypeTable"
+      :data="tableData"
       :action-button-text="$lang.button.newCredentialType"
       @click:action-button="handleClickAddCredentialType"
       @click:delete-item="handleClickDeleteItem"
@@ -21,18 +21,30 @@
   </UniversalDialog>
 </template>
 <script lang="ts" setup>
-import { credentialTypeTableConfig } from "@/modules/credentials/settings/tables/credentialTypeTableConfig";
+import { credentialTypeTable } from "@/modules/credentials/settings/tables/credentialTypeTable";
 import { CredentialType } from "@/modules/credentials/classes/entities/CredentialType";
+import { Credential } from "@/modules/credentials/classes/entities/Credential";
 import UniversalTable from "@/components/tables/UniversalTable.vue";
 import type UniversalSidebar from "@/components/sidebars/UniversalSidebar.vue";
 import CredentialTypeSidebar from "@/modules/credentials/components/sidebars/CredentialTypeSidebar.vue";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
-import type { ICredentialType } from "@/modules/credentials/types";
+import type {
+  ICredentialType,
+  ICredentialTypesTableItem,
+} from "@/modules/credentials/types";
 
 const credentialTypeSidebar = ref<InstanceType<typeof UniversalSidebar>>();
 const confirmDeleteItemDialog = ref<InstanceType<typeof UniversalDialog>>();
 const selectedItem = ref<ICredentialType | null>(null);
+
+const tableData = computed<ICredentialTypesTableItem[]>(() => {
+  const credentials = Credential.get();
+  return CredentialType.get().map((item) => ({
+    ...item,
+    credentialsNumber: credentials.filter((el) => el.typeId === item.id).length,
+  }));
+});
 
 const handleClickAddCredentialType = () => {
   credentialTypeSidebar.value?.open();
@@ -54,11 +66,10 @@ const handleCancelDeleteItem = () => {
 
 const handleConfirmDeleteItem = () => {
   if (!selectedItem.value) {
-    // TODO Use InternalWarning instead.
     throw new Error("selectedItem is undefined");
   }
 
-  CredentialType.delete(selectedItem.value.name); // TODO should be .id
+  CredentialType.delete(selectedItem.value.id);
   confirmDeleteItemDialog.value?.close();
 };
 </script>

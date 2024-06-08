@@ -13,7 +13,7 @@
       </div>
     </template>
     <template v-else>
-      {{ item[columnConfig.name] }}
+      {{ get(item, columnConfig.name) }}
     </template>
   </div>
 </template>
@@ -24,6 +24,7 @@ import type {
   UniversalTableColumn,
 } from "@/types/tables";
 import { computed, mergeProps } from "vue";
+import { get } from "lodash";
 
 const emit = defineEmits([]);
 

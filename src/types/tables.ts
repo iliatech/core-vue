@@ -1,4 +1,5 @@
 import type { Component } from "vue";
+import type { ICredentialTypesTableItem } from "@/modules/credentials/types";
 
 export interface UniversalTableCellComponentProp {
   component: Component;
@@ -15,7 +16,7 @@ export interface UniversalTableColumn {
   filterable?: boolean;
   getComponents?: (props: {
     value: any;
-    item: any;
+    item: ICredentialTypesTableItem;
     emit: any;
     index: number;
   }) => UniversalTableCellComponentProp[];

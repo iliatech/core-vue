@@ -1,7 +1,18 @@
 <template>
-  <span class="universal-icon" :class="{ 'universal-icon__link': link }">
+  <span
+    class="universal-icon"
+    :class="{
+      'universal-icon__link': link,
+      'universal-icon--disabled': disabled,
+    }"
+  >
     <i :class="`pi pi-${primeIcon}`" />
-    <span v-if="label" :class="{ 'universal-icon__link-text': link }">
+    <span
+      v-if="label"
+      :class="{
+        'universal-icon__link-text': link,
+      }"
+    >
       {{ label }}
     </span>
   </span>
@@ -11,6 +22,7 @@ defineProps({
   label: String,
   primeIcon: String,
   link: Boolean,
+  disabled: Boolean,
 });
 </script>
 <style lang="scss" scoped>
@@ -27,6 +39,10 @@ defineProps({
 
   &__link-text:hover {
     text-decoration: underline;
+  }
+
+  &--disabled {
+    opacity: 0.5;
   }
 }
 </style>
