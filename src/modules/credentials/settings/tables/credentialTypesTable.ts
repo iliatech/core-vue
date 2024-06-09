@@ -1,7 +1,7 @@
 import type { UniversalTableColumn } from "@/types/tables";
 import UniversalIcon from "@/components/icons/UniversalIcon.vue";
 
-export const credentialTypeTable: UniversalTableColumn[] = [
+export const credentialTypesTable: UniversalTableColumn[] = [
   {
     name: "id",
     label: "Id",
@@ -21,6 +21,10 @@ export const credentialTypeTable: UniversalTableColumn[] = [
     defaultSort: true,
     defaultSortOrder: 1,
     sortable: true,
+  },
+  {
+    name: "description",
+    label: "Description",
   },
   {
     name: "actions",

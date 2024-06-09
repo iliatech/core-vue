@@ -55,7 +55,7 @@ import { CredentialType } from "@/modules/credentials/classes/entities/Credentia
 import { showToast } from "@/helpers/toast";
 import { ToastType } from "@/types/toasts";
 import { lang } from "@/lang";
-import { isEqual } from "lodash";
+import { isEqual, omit } from "lodash";
 import { IEntity } from "@/settings/entities";
 import { prepareName } from "@/helpers/strings";
 import UniversalText from "@/components/fields/UniversalText.vue";
@@ -63,6 +63,7 @@ import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
 import UniversalField from "@/components/fields/UniversalField.vue";
 import type { ICredentialType } from "@/modules/credentials/types";
 import UniversalTextarea from "@/components/fields/UniversalTextarea.vue";
+import { showErrors } from "@/helpers/formValidation";
 
 interface DrawerState {
   id: string | null;
@@ -71,8 +72,8 @@ interface DrawerState {
 }
 
 interface ErrorsDetails {
-  name: [];
-  description: [];
+  name: string[];
+  description: string[];
 }
 
 interface IsInputStarted {
@@ -93,10 +94,7 @@ const initialState: DrawerState = {
 
 const sidebar = ref<InstanceType<typeof UniversalSidebar>>();
 const discardChangesDialog = ref<InstanceType<typeof UniversalSidebar>>();
-const isInputStarted = reactive<IsInputStarted>({
-  name: false,
-  description: false,
-});
+const isInputStarted = reactive<IsInputStarted>(isInputStartedInitialValue);
 const currentState = reactive<DrawerState>({ ...initialState });
 const savedState = reactive<DrawerState>({ ...initialState });
 
@@ -130,13 +128,8 @@ const errorDetails: ComputedRef<ErrorsDetails> = computed(() => {
   }
 
   if (!prepareName(currentState.name)) {
-    errors.name.push(lang.error.entityShouldNotBeEmpty(IEntity.CredentialName));
-  }
-
-  // Description.
-  if (!prepareName(currentState.description)) {
-    errors.description.push(
-      lang.error.entityShouldNotBeEmpty(IEntity.CredentialDescription)
+    errors.name.push(
+      lang.error.entityShouldNotBeEmpty(IEntity.CredentialTypeName)
     );
   }
 
@@ -165,7 +158,7 @@ const handleClickSave = async () => {
   if (isEditMode.value) {
     await CredentialType.update(currentState as ICredentialType);
   } else {
-    await CredentialType.add({ name: currentState.name });
+    await CredentialType.add(omit(currentState, ["id"]));
   }
 
   Object.assign(savedState, currentState);
@@ -173,15 +166,11 @@ const handleClickSave = async () => {
   showToast({
     type: ToastType.Success,
     text: isEditMode.value
-      ? lang.success.credentialTypeAdded
-      : lang.success.credentialTypeSaved,
+      ? lang.success.credentialTypeSaved
+      : lang.success.credentialTypeAdded,
   });
 
   sidebar.value?.close();
-};
-
-const showErrors = (isStarted: boolean, errors: string[]) => {
-  return isStarted ? errors : [];
 };
 
 defineExpose({

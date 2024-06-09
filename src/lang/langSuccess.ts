@@ -1,4 +1,6 @@
 export default {
+  credentialAdded: "Credential added",
+  credentialSaved: "Credential saved",
   credentialTypeAdded: "Credential type added",
   credentialTypeSaved: "Credential type saved",
   clientCreated: "Client created",

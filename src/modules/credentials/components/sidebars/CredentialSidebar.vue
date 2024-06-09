@@ -9,14 +9,30 @@
       <UniversalField :label="$lang.label.name">
         <UniversalText
           v-model="currentState.name"
-          v-model:is-input-started="isInputStarted"
-          :errors="errorDetails"
+          v-model:is-input-started="isInputStarted.name"
+          :errors="showErrors(isInputStarted.name, errorDetails.name)"
         />
       </UniversalField>
       <UniversalField :label="$lang.label.type">
         <UniversalSelector
           v-model="currentState.typeId"
           :options="options.type"
+        />
+      </UniversalField>
+      <UniversalField :label="$lang.label.password">
+        <UniversalText
+          v-model="currentState.password"
+          v-model:is-input-started="isInputStarted.password"
+          :errors="showErrors(isInputStarted.password, errorDetails.password)"
+        />
+      </UniversalField>
+      <UniversalField :label="lang.label.description">
+        <UniversalTextarea
+          v-model="currentState.description"
+          v-model:is-input-started="isInputStarted.description"
+          :errors="
+            showErrors(isInputStarted.description, errorDetails.description)
+          "
         />
       </UniversalField>
     </div>
@@ -56,26 +72,50 @@ import UniversalField from "@/components/fields/UniversalField.vue";
 import UniversalSelector from "@/components/fields/UniversalSelector.vue";
 import { Credential } from "@/modules/credentials/classes/entities/Credential";
 import type { ICredentialType } from "@/modules/credentials/types";
+import UniversalTextarea from "@/components/fields/UniversalTextarea.vue";
+import { showErrors } from "@/helpers/formValidation";
 
 interface DrawerState {
   id: string | null;
   name: string;
   typeId: string | null;
+  description: string;
+  password: string;
 }
 
 interface Options {
   type: ICredentialType[];
 }
 
+interface IsInputStarted {
+  name: boolean;
+  password: boolean;
+  description: boolean;
+}
+
+interface ErrorsDetails {
+  name: string[];
+  password: string[];
+  description: string[];
+}
+
 const initialState: DrawerState = {
   id: null,
   name: "",
   typeId: null,
+  description: "",
+  password: "",
+};
+
+const isInputStartedInitialValue = {
+  name: false,
+  password: false,
+  description: false,
 };
 
 const sidebar = ref<InstanceType<typeof UniversalSidebar>>();
 const discardChangesDialog = ref<InstanceType<typeof UniversalSidebar>>();
-const isInputStarted = ref<boolean>(false);
+const isInputStarted = reactive<IsInputStarted>(isInputStartedInitialValue);
 const currentState = reactive<DrawerState>({ ...initialState });
 const savedState = reactive<DrawerState>({ ...initialState });
 const options = reactive<Options>({ type: [] });
@@ -100,19 +140,29 @@ const isSameNameExists = computed<boolean>(() => {
   return !!foundItem && foundItem.id !== currentState.id;
 });
 
-const errorDetails = computed<string[]>(() => {
-  if (!isInputStarted.value) {
-    return [];
-  }
+const errorDetails = computed<ErrorsDetails>(() => {
+  const errors: ErrorsDetails = {
+    name: [],
+    password: [],
+    description: [],
+  };
 
-  const errors = [];
-
+  // Name.
   if (isSameNameExists.value) {
-    errors.push(lang.error.entityWithSameNameExists(IEntity.CredentialName));
+    errors.name.push(
+      lang.error.entityWithSameNameExists(IEntity.CredentialName)
+    );
   }
 
   if (!prepareName(currentState.name)) {
-    errors.push(lang.error.entityShouldNotBeEmpty(IEntity.CredentialName));
+    errors.name.push(lang.error.entityShouldNotBeEmpty(IEntity.CredentialName));
+  }
+
+  // Password.
+  if (!prepareName(currentState.password)) {
+    errors.password.push(
+      lang.error.entityShouldNotBeEmpty(IEntity.CredentialPassword)
+    );
   }
 
   return errors;
@@ -150,11 +200,15 @@ const handleClickSave = async () => {
       id: currentState.id,
       name: currentState.name,
       typeId: currentState.typeId,
+      password: currentState.password,
+      description: currentState.description,
     });
   } else {
     await Credential.add({
       name: currentState.name,
       typeId: currentState.typeId,
+      password: currentState.password,
+      description: currentState.description,
     });
   }
 
@@ -163,8 +217,8 @@ const handleClickSave = async () => {
   showToast({
     type: ToastType.Success,
     text: isEditMode.value
-      ? lang.success.credentialTypeAdded
-      : lang.success.credentialTypeSaved,
+      ? lang.success.credentialSaved
+      : lang.success.credentialAdded,
   });
 
   sidebar.value?.close();
@@ -175,7 +229,7 @@ defineExpose({
     Object.assign(currentState, item ?? initialState);
     Object.assign(savedState, currentState);
     options.type = CredentialType.get();
-    isInputStarted.value = false;
+    Object.assign(isInputStarted, isInputStartedInitialValue);
     sidebar.value?.open();
   },
   close,

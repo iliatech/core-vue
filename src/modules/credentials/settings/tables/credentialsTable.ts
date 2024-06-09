@@ -20,8 +20,8 @@ export const credentialsTable: UniversalTableColumn[] = [
     label: "Type",
   },
   {
-    name: "comment",
-    label: "Comment",
+    name: "description",
+    label: "Description",
   },
   {
     name: "actions",

@@ -6,12 +6,15 @@ export type SearchObject = Record<
 export interface ICredentialType {
   id: string;
   name: string;
+  description: string;
 }
 
 export interface ICredential {
   id: string;
   name: string;
   typeId: string;
+  description: string;
+  password: string;
   // type: string;
   // u_field: string;
   // p_field: string;

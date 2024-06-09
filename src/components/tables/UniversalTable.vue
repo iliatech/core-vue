@@ -51,8 +51,8 @@
       <template #empty>
         <div class="universal-table__empty">
           {{ $lang.label.noEntitiesFound }}
-        </div></template
-      >
+        </div>
+      </template>
     </DataTable>
   </div>
 </template>

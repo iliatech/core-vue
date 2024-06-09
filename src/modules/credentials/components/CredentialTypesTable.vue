@@ -1,7 +1,7 @@
 <template>
   <div class="credentials-tab">
     <UniversalTable
-      :config="credentialTypeTable"
+      :config="credentialTypesTable"
       :data="tableData"
       :action-button-text="$lang.button.newCredentialType"
       @click:action-button="handleClickAddCredentialType"
@@ -21,7 +21,7 @@
   </UniversalDialog>
 </template>
 <script lang="ts" setup>
-import { credentialTypeTable } from "@/modules/credentials/settings/tables/credentialTypeTable";
+import { credentialTypesTable } from "@/modules/credentials/settings/tables/credentialTypesTable";
 import { CredentialType } from "@/modules/credentials/classes/entities/CredentialType";
 import { Credential } from "@/modules/credentials/classes/entities/Credential";
 import UniversalTable from "@/components/tables/UniversalTable.vue";
