@@ -1,5 +1,6 @@
 import type { UniversalTableColumn } from "@/types/tables";
 import UniversalIcon from "@/components/icons/UniversalIcon.vue";
+import UniversalPassword from "@/components/fields/UniversalPassword.vue";
 
 export const credentialsTable: UniversalTableColumn[] = [
   {
@@ -22,6 +23,19 @@ export const credentialsTable: UniversalTableColumn[] = [
   {
     name: "description",
     label: "Description",
+  },
+  {
+    name: "password",
+    label: "Password",
+    getComponents: ({ value, emit, item }) => [
+      {
+        component: UniversalPassword,
+        props: {
+          value: value,
+          entityLabel: "Password",
+        },
+      },
+    ],
   },
   {
     name: "actions",

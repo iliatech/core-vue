@@ -57,6 +57,7 @@ const components = computed<UniversalTableCellComponentProp[] | null>(() => {
   gap: $px-20;
 
   &__item {
+    width: 100%;
     display: block;
   }
 }

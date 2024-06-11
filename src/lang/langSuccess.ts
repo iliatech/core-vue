@@ -5,6 +5,8 @@ export default {
   credentialTypeSaved: "Credential type saved",
   clientCreated: "Client created",
   clientUpdated: "Client updated",
+  copiedToClipboard: (entityLabel: string) =>
+    `${entityLabel} copied to clipboard`,
   login: "You are logged in",
   logout: "You are logged out",
   userConfigSaved: "User config saved",

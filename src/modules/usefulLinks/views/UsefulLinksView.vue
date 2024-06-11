@@ -14,7 +14,7 @@
   </div>
 </template>
 <style lang="scss" scoped>
-@import "fonts";
+@import "@/assets/fonts";
 @import "@/assets/variables";
 .useful-links-view {
   display: flex;
