@@ -129,15 +129,15 @@ const isEditMode = computed<boolean>(() => {
 });
 
 const isValid = computed<boolean>(() => {
-  return !isSameNameExists.value && !!currentState.typeId;
-});
+  let isError = false;
 
-const isSameNameExists = computed<boolean>(() => {
-  const foundItem = Credential.get({
-    name: prepareName(currentState.name),
-  })?.[0];
+  Object.values(errorDetails.value).forEach((value) => {
+    if (value.length) {
+      isError = true;
+    }
+  });
 
-  return !!foundItem && foundItem.id !== currentState.id;
+  return !isError;
 });
 
 const errorDetails = computed<ErrorsDetails>(() => {
@@ -146,13 +146,6 @@ const errorDetails = computed<ErrorsDetails>(() => {
     password: [],
     description: [],
   };
-
-  // Name.
-  if (isSameNameExists.value) {
-    errors.name.push(
-      lang.error.entityWithSameNameExists(IEntity.CredentialName)
-    );
-  }
 
   if (!prepareName(currentState.name)) {
     errors.name.push(lang.error.entityShouldNotBeEmpty(IEntity.CredentialName));
