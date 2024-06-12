@@ -20,7 +20,7 @@ interface Option {
   name: string;
 }
 
-const model = defineModel<any[]>();
+const model = defineModel<string | null>();
 
 const props = defineProps({
   options: {
