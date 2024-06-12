@@ -10,5 +10,5 @@ export const apiPaths = {
   timeSlot: "timeSlot",
   translation: "translation",
   word: "word",
-  credentialDatabase: "fileStorage/credentials",
+  credentialDatabase: "fileStorage/credentialsV2",
 };
