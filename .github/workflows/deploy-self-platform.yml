@@ -21,6 +21,12 @@ jobs:
       - name: Install packages
         run: npm ci
 
+      - name: Create env file
+        run: |
+          touch .env
+          echo VITE_API_URL="http://next-api.iliatech.ru:3020" >> .env
+          cat .env
+
       - name: Build
         run: npm run build
 
