@@ -24,7 +24,7 @@ jobs:
       - name: Create env file
         run: |
           touch .env
-          echo VITE_API_URL="https://next-api.iliatech.ru:3020" >> .env
+          echo VITE_API_URL="http://next-api.iliatech.ru:3020" >> .env
           cat .env
 
       - name: Build
