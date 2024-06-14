@@ -95,6 +95,7 @@ interface IsInputStarted {
 
 interface ErrorsDetails {
   name: string[];
+  type: string[];
   password: string[];
   description: string[];
 }
@@ -143,12 +144,19 @@ const isValid = computed<boolean>(() => {
 const errorDetails = computed<ErrorsDetails>(() => {
   const errors: ErrorsDetails = {
     name: [],
+    type: [],
     password: [],
     description: [],
   };
 
+  // Name.
   if (!prepareName(currentState.name)) {
     errors.name.push(lang.error.entityShouldNotBeEmpty(IEntity.CredentialName));
+  }
+
+  // Type.
+  if (!currentState.typeId) {
+    errors.type.push(lang.error.entityShouldNotBeEmpty(IEntity.CredentialType));
   }
 
   // Password.

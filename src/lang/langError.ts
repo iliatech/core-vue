@@ -18,4 +18,5 @@ export default {
     [RegisteredError.ServerNotAccessible]: "Server is not accessible",
   },
   secretKeyIsNotDefined: "Secret key is not defined",
+  secretKeyIsWrong: "Secret key is wrong",
 };

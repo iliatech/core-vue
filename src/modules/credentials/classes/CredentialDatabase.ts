@@ -29,31 +29,30 @@ export class CredentialDatabase {
     });
   }
 
-  public static async load(): Promise<void> {
+  public static async load(secretKey?: string): Promise<void> {
     const encryptedData = await Api.request({
       path: apiPaths.credentialDatabase,
     });
 
-    const secretKey = localStorage.getItem(
-      LocalStorageKeys.CredentialDatabaseKey
-    );
+    secretKey =
+      secretKey ??
+      localStorage.getItem(LocalStorageKeys.CredentialDatabaseKey) ??
+      undefined;
 
     if (!secretKey) {
-      showToast({
-        type: ToastType.Error,
-        text: lang.error.secretKeyIsNotDefined,
-      });
-
       throw new Error("Secret key is not defined");
     }
 
-    const decryptedData = this.decryptDatabase(encryptedData, secretKey);
-    const parsedAndDecryptedData = JSON.parse(decryptedData);
+    try {
+      const decryptedData = this.decryptDatabase(encryptedData, secretKey);
+      const parsedAndDecryptedData = await JSON.parse(decryptedData);
 
-    // TODO!!!
-    debugInfo("CURRENT DATA", parsedAndDecryptedData);
+      debugInfo("CURRENT DATA", parsedAndDecryptedData);
 
-    useCredentialStore().updateCredentialDatabase(parsedAndDecryptedData);
+      useCredentialStore().updateCredentialDatabase(parsedAndDecryptedData);
+    } catch {
+      throw new Error("Cannot decrypt data with this secret key");
+    }
   }
 
   private static getSecretKey = (): string => {

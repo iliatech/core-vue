@@ -19,6 +19,7 @@ export default {
   editCredential: "Edit Credential",
   editCredentialType: "Edit Credential Type",
   editSlot: "Edit slot",
+  enterSecretKey: "Enter Secret Key",
   error: "Error",
   iliaDomyshev: "Ilia Domyshev",
   login: "Login",

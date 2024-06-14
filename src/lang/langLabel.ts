@@ -20,6 +20,7 @@ export default {
   password: "Password",
   previousWeek: "Prev Week",
   profile: "Profile",
+  secretKey: "Secret Key",
   selectFiltering: "Filter by tags",
   selectSorting: "Sort by",
   time: "Time",
