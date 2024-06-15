@@ -1,5 +1,5 @@
 <template>
-  <div class="schedule-view">
+  <div class="credentials-view">
     <CredentialsDashboard />
   </div>
   <UniversalDialog
@@ -54,9 +54,8 @@ const handleConfirmSecretKey = async () => {
 <style lang="scss" scoped>
 @import "@/assets/fonts";
 @import "@/assets/variables";
-.schedule-view {
-  display: flex;
-  justify-content: center;
+.credentials-view {
+  height: 100%;
   padding: $px-20;
 }
 </style>

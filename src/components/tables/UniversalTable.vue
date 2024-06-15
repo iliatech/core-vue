@@ -19,41 +19,45 @@
         />
       </div>
     </div>
-    <DataTable
-      :show-gridlines="true"
-      :striped-rows="true"
-      :row-hover="true"
-      :value="dataFiltered"
-      :sort-field="config.find((item) => item.defaultSort)?.name"
-      :sort-order="
-        config.find((item) => item.defaultSortOrder)?.defaultSortOrder
-      "
-      v-bind="$attrs"
-    >
-      <template v-for="column in config" :key="column.name">
-        <Column
-          v-if="!column.hidden"
-          :field="column.name"
-          :header="column.label"
-          :sortable="column.sortable"
-        >
-          <template #body="{ data: item, index }">
-            <UniversalTableCell
-              :column-config="column"
-              :index="index"
-              :item="item"
-              :key="objectHash(item)"
-              v-bind="$attrs"
-            />
-          </template>
-        </Column>
-      </template>
-      <template #empty>
-        <div class="universal-table__empty">
-          {{ $lang.label.noEntitiesFound }}
-        </div>
-      </template>
-    </DataTable>
+    <div class="universal-table__container" ref="tableContainerRef">
+      <DataTable
+        scrollable
+        :scroll-height="`${tableContainerRef?.clientHeight}px`"
+        :show-gridlines="true"
+        :striped-rows="true"
+        :row-hover="true"
+        :value="dataFiltered"
+        :sort-field="config.find((item) => item.defaultSort)?.name"
+        :sort-order="
+          config.find((item) => item.defaultSortOrder)?.defaultSortOrder
+        "
+        v-bind="$attrs"
+      >
+        <template v-for="column in config" :key="column.name">
+          <Column
+            v-if="!column.hidden"
+            :field="column.name"
+            :header="column.label"
+            :sortable="column.sortable"
+          >
+            <template #body="{ data: item, index }">
+              <UniversalTableCell
+                :column-config="column"
+                :index="index"
+                :item="item"
+                :key="objectHash(item)"
+                v-bind="$attrs"
+              />
+            </template>
+          </Column>
+        </template>
+        <template #empty>
+          <div class="universal-table__empty">
+            {{ $lang.label.noEntitiesFound }}
+          </div>
+        </template>
+      </DataTable>
+    </div>
   </div>
 </template>
 <script lang="ts" setup>
@@ -85,6 +89,7 @@ const props = defineProps({
 });
 
 const filterValues = ref<UniversalFilterValues>({});
+const tableContainerRef = ref();
 
 const dataFiltered = computed<any[]>(() => {
   let itemsFiltered = props.data;
@@ -105,6 +110,10 @@ const dataFiltered = computed<any[]>(() => {
 @import "@/assets/fonts";
 
 .universal-table {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
   &__header {
     margin-bottom: $px-15;
     width: 100%;
@@ -124,6 +133,10 @@ const dataFiltered = computed<any[]>(() => {
   &__empty {
     @include font-medium;
     text-align: center;
+  }
+
+  &__container {
+    flex-grow: 1;
   }
 }
 </style>

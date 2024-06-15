@@ -1,5 +1,5 @@
 <template>
-  <div class="credentials-tab">
+  <div class="credentials-table">
     <UniversalTable
       :config="credentialsTable"
       :data="tableData"
@@ -73,4 +73,8 @@ const handleConfirmDeleteItem = () => {
   confirmDeleteItemDialog.value?.close();
 };
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.credentials-table {
+  height: 100%;
+}
+</style>

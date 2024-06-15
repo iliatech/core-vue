@@ -1,5 +1,5 @@
 <template>
-  <div class="credentials-tab">
+  <div class="credential-types-table">
     <UniversalTable
       :config="credentialTypesTable"
       :data="tableData"
@@ -75,7 +75,7 @@ const handleConfirmDeleteItem = () => {
 </script>
 <style lang="scss" scoped>
 @import "@/assets/variables";
-.credentials-tab {
-  //
+.credential-types-table {
+  height: 100%;
 }
 </style>

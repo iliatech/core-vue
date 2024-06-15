@@ -24,6 +24,22 @@ onBeforeMount(() => {
 </script>
 <style lang="scss" scoped>
 .credentials-dashboard {
+  height: 100%;
   width: 100%;
+}
+
+:deep(.p-tabview) {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+:deep(.p-tabview-panels) {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+:deep(.p-tabview-panel) {
+  height: 100%;
 }
 </style>
