@@ -72,6 +72,7 @@ const handleConfirmDeleteItem = () => {
   CredentialType.delete(selectedItem.value.id);
   confirmDeleteItemDialog.value?.close();
 };
+console.log("I M TAB");
 </script>
 <style lang="scss" scoped>
 @import "@/assets/variables";

@@ -55,7 +55,23 @@ export const routes: Record<string, LocalRoute> = {
     title: "Credentials",
     isPublic: false,
   },
+  credentialsCredentials: {
+    path: "credentials",
+    name: "credentialsCredentials",
+    title: "Credentials",
+    isPublic: false,
+  },
+  credentialsTypes: {
+    path: "types",
+    name: "credentialsTypes",
+    title: "Credential Types",
+    isPublic: false,
+  },
 };
+
+export const credentialsRoutes = Object.values(routes).filter((item) =>
+  ["credentialsCredentials", "credentialsTypes"].includes(item.name)
+);
 
 export const publicRouteNames = [
   routes.login.name,

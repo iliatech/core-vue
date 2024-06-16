@@ -1,6 +1,19 @@
 <template>
   <div class="credentials-view">
-    <CredentialsDashboard />
+    <div class="credentials-view__menu">
+      <div
+        class="credentials-view__menu-item"
+        :class="{
+          'credentials-view__menu-item--selected': item.name === route.name,
+        }"
+        v-for="item in credentialsRoutes"
+        :key="item.title"
+        @click="handleClickMenuItem(item.name)"
+      >
+        {{ item.title }}
+      </div>
+    </div>
+    <RouterView />
   </div>
   <UniversalDialog
     :title="$lang.title.enterSecretKey"
@@ -12,7 +25,6 @@
   </UniversalDialog>
 </template>
 <script lang="ts" setup>
-import CredentialsDashboard from "@/modules/credentials/components/CredentialsDashboard.vue";
 import { LocalStorageKeys } from "@/settings/app";
 import { onMounted, ref } from "vue";
 import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
@@ -21,6 +33,13 @@ import { prepareName } from "@/helpers/strings";
 import { CredentialDatabase } from "@/modules/credentials/classes/CredentialDatabase";
 import { showErrorToast, showSuccessToast } from "@/helpers/toast";
 import { lang } from "@/lang";
+import { credentialsRoutes, routes } from "@/settings/routes";
+import { useRoute, useRouter } from "vue-router";
+
+const router = useRouter();
+const route = useRoute();
+
+console.log("R", routes);
 
 const secretKeyDialog = ref<InstanceType<typeof UniversalDialog>>();
 const secretKey = ref<string>("");
@@ -33,6 +52,8 @@ onMounted(() => {
   if (!secretKey) {
     secretKeyDialog.value?.open();
   }
+
+  CredentialDatabase.load();
 });
 
 const handleConfirmSecretKey = async () => {
@@ -50,6 +71,10 @@ const handleConfirmSecretKey = async () => {
     }
   }
 };
+
+const handleClickMenuItem = (routeName: string) => {
+  router.push({ name: routeName });
+};
 </script>
 <style lang="scss" scoped>
 @import "@/assets/fonts";
@@ -57,5 +82,22 @@ const handleConfirmSecretKey = async () => {
 .credentials-view {
   height: 100%;
   padding: $px-20;
+
+  &__menu {
+    display: flex;
+    margin-top: $px-10;
+    margin-bottom: $px-20;
+    padding: 0 $px-5 $px-5;
+    gap: $px-20;
+    border-bottom: 2px solid #ccc;
+  }
+
+  &__menu-item {
+    cursor: pointer;
+  }
+
+  &__menu-item--selected {
+    font-weight: bold;
+  }
 }
 </style>

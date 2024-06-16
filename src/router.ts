@@ -55,6 +55,20 @@ const router = createRouter({
       meta: {
         title: lang.title.credentials,
       },
+      children: [
+        {
+          path: routes.credentialsCredentials.path,
+          component: () =>
+            import("@/modules/credentials/components/CredentialsTable.vue"),
+          name: routes.credentialsCredentials.name,
+        },
+        {
+          path: routes.credentialsTypes.path,
+          component: () =>
+            import("@/modules/credentials/components/CredentialTypesTable.vue"),
+          name: routes.credentialsTypes.name,
+        },
+      ],
     },
   ],
 });
