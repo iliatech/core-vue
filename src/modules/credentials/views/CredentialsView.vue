@@ -12,6 +12,9 @@
       >
         {{ item.title }}
       </div>
+      <div
+        class="credentials-view__menu-item credentials-view__menu-item-last"
+      />
     </div>
     <RouterView />
   </div>
@@ -88,16 +91,23 @@ const handleClickMenuItem = (routeName: string) => {
     margin-top: $px-10;
     margin-bottom: $px-20;
     padding: 0 $px-5 $px-5;
-    gap: $px-20;
-    border-bottom: 2px solid #ccc;
   }
 
   &__menu-item {
     cursor: pointer;
+    border-bottom: 2px solid #ccc;
+    padding-left: $px-20;
+    padding-right: $px-20;
+    padding-bottom: $px-5;
+  }
+
+  &__menu-item-last {
+    flex-grow: 1;
   }
 
   &__menu-item--selected {
     font-weight: bold;
+    border-bottom-color: #666;
   }
 }
 </style>
