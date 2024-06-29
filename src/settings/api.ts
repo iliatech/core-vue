@@ -6,6 +6,7 @@ export const apiPaths = {
   client: "client",
   login: "login",
   saveAuthUserConfig: "saveAuthUserConfig",
+  register: "register",
   tag: "tag",
   timeSlot: "timeSlot",
   translation: "translation",

@@ -5,7 +5,6 @@
       <InputText v-model="email" />
       <label class="login-page__field-label">{{ lang.label.password }}</label>
 
-      <!-- TODO: Should we write false? -->
       <Password
         v-model="password"
         :feedback="false"
@@ -17,6 +16,15 @@
           :label="lang.button.login"
           @click="onClickLogin"
           :disabled="!email || !password"
+        />
+      </div>
+      <div class="login-page__register">
+        {{ lang.phrase.dontHaveAccount }}
+        <UniversalButton
+          :label="lang.button.register"
+          no-border
+          text
+          @click="handleClickRegister"
         />
       </div>
     </form>
@@ -34,9 +42,12 @@ import Api from "@/api/Api";
 import { RequestMethods } from "@/types/api";
 import { apiPaths } from "@/settings/api";
 import { resetAuthToken, resetAuthUser, saveAuthToken } from "@/helpers/auth";
-import router from "@/router";
-import { mainPrivatePage } from "@/settings/routes";
+import { mainPrivatePage, routes } from "@/settings/routes";
 import { useAppStore } from "@/store/appStore";
+import UniversalButton from "@/components/buttons/UniversalButton.vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const appStore = useAppStore();
 const { updateIsAuthorized, updateAuthUser } = appStore;
@@ -66,6 +77,10 @@ const onClickLogin = async () => {
     showToast({ type: ToastType.Error, text: lang.error.loginFailed });
   }
 };
+
+const handleClickRegister = () => {
+  router.push({ name: routes.register.name });
+};
 </script>
 <style lang="scss" scoped>
 @import "@/assets/variables.scss";
@@ -78,6 +93,7 @@ const onClickLogin = async () => {
   height: calc(100vh - $header-height);
 
   &__form {
+    //
   }
 
   &__field-label {
@@ -93,6 +109,11 @@ const onClickLogin = async () => {
   &__title {
     @include header-medium;
     margin-bottom: $px-30;
+  }
+
+  &__register {
+    @include font-small-medium;
+    margin-top: $px-30;
   }
 }
 </style>

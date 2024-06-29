@@ -9,6 +9,7 @@ export default {
     `${entityLabel} copied to clipboard`,
   login: "You are logged in",
   logout: "You are logged out",
+  userRegistered: "User was registered",
   secretKeySaved: "Secret key saved",
   tagAdded: "Tag added",
   tagDeleted: (name: string): string => `Tag '${name}' deleted`,

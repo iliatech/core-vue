@@ -7,6 +7,7 @@
       'universal-button--selected': selected,
       'universal-button--nowrap': nowrap,
       'universal-button--disabled': disabled,
+      'universal-button--text': text,
     }"
     :style="{
       color: scheduleColors[color],
@@ -58,6 +59,7 @@ defineProps({
   nowrap: Boolean,
   fontSize: String,
   disabled: Boolean,
+  text: Boolean,
 });
 </script>
 
@@ -117,6 +119,15 @@ defineProps({
     background: #fff;
     // TODO create color in colors library and use it here.
     color: #ccc;
+  }
+
+  &--text {
+    text-decoration: underline;
+  }
+
+  &--text:hover {
+    background: none;
+    text-decoration: none;
   }
 }
 </style>

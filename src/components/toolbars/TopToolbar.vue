@@ -45,6 +45,7 @@ import UniversalButton from "@/components/buttons/UniversalButton.vue";
 import ProfileSidebar from "@/modules/schedule/components/sidebars/ProfileSidebar.vue";
 import { generateAvailableAppsList } from "@/helpers/navigation";
 import Menu from "primevue/menu";
+import { CredentialDatabase } from "@/modules/credentials/classes/CredentialDatabase";
 
 const route = useRoute();
 
@@ -186,6 +187,7 @@ const onClickLogin = () => {
 
 const onClickLogout = () => {
   router.push(routes.login.path);
+  CredentialDatabase.unload();
   resetAuthUser();
   resetAuthToken();
   updateIsAuthorized(false);

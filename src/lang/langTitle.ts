@@ -27,6 +27,8 @@ export default {
   publicArea: "Public Area",
   privateArea: ["Dashboard", "Please, choose the app ", "you want to use:"],
   profile: "Profile",
+  register: "Register",
+  registration: "Registration",
   siteTitle: "Home page",
   schedule: "Schedule",
   scheduleSettings: "Schedule Settings",

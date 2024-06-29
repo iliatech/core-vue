@@ -34,6 +34,11 @@ export class CredentialDatabase {
       path: apiPaths.credentialDatabase,
     });
 
+    if (encryptedData?.isEmptyData) {
+      CredentialDatabase.unload();
+      return;
+    }
+
     secretKey =
       secretKey ??
       localStorage.getItem(LocalStorageKeys.CredentialDatabaseKey) ??
@@ -54,6 +59,10 @@ export class CredentialDatabase {
       throw new Error("Cannot decrypt data with this secret key");
     }
   }
+
+  public static unload = () => {
+    useCredentialStore().unloadCredentialDatabase();
+  };
 
   private static getSecretKey = (): string => {
     const secretKey = localStorage.getItem(

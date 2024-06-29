@@ -14,6 +14,13 @@ export const routes: Record<string, LocalRoute> = {
     isPublic: true,
   },
 
+  register: {
+    path: "/register",
+    name: "register",
+    title: "Register",
+    isPublic: true,
+  },
+
   home: {
     path: "/",
     name: "home",
@@ -75,6 +82,7 @@ export const credentialsRoutes = Object.values(routes).filter((item) =>
 
 export const publicRouteNames = [
   routes.login.name,
+  routes.register.name,
   routes.home.name,
   routes.usefulLinks.name,
 ];

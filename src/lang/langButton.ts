@@ -13,6 +13,7 @@ export default {
   newCredential: "New Credential",
   newCredentialType: "New Credential Type",
   ok: "OK",
+  register: "Register",
   save: "Save",
   usefulLinks: "Useful Links",
   wordsApp: "Word Game",

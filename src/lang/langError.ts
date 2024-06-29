@@ -17,6 +17,7 @@ export default {
     [RegisteredError.UnknownError]: "Something went wrong",
     [RegisteredError.ServerNotAccessible]: "Server is not accessible",
   },
+  registerFailed: "User registration failed",
   secretKeyIsNotDefined: "Secret key is not defined",
   secretKeyIsWrong: "Secret key is wrong",
 };
