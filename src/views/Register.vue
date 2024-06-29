@@ -1,38 +1,52 @@
 <template>
   <div class="register-page">
-    <form class="register-page__form">
-      <div class="register-page__title">
-        {{ lang.title.registration }}
-      </div>
-      <UniversalField :label="lang.label.email">
-        <InputText v-model="email" style="width: 100%" />
-      </UniversalField>
-      <UniversalField :label="lang.label.password">
-        <div class="register-page__passwords">
-          <Password
-            v-model="passwordMain"
-            :input-props="{ autocomplete: 'new-password' }"
-            toggle-mask
+    <div class="register-page__container">
+      <form class="register-page__form">
+        <div class="register-page__title">
+          {{ lang.title.registration }}
+        </div>
+        <UniversalField
+          :label="lang.label.email"
+          :errors="getValidationErrors(formErrors, 'email')"
+        >
+          <UniversalText
+            v-model="email"
+            style="width: 100%"
+            :placeholder="lang.placeholder.enterEmail"
           />
-          <Password
-            v-model="passwordConfirm"
-            :feedback="false"
-            :input-props="{ autocomplete: 'new-password' }"
-            name="pass1"
-            autocomplete="confirm-password"
-            toggle-mask
+        </UniversalField>
+        <UniversalField
+          :label="lang.label.password"
+          :errors="getValidationErrors(formErrors, 'password')"
+        >
+          <div class="register-page__passwords">
+            <Password
+              v-model="passwordMain"
+              :input-props="{ autocomplete: 'new-password' }"
+              :placeholder="lang.placeholder.enterPassword"
+              toggle-mask
+            />
+            <Password
+              v-model="passwordConfirm"
+              :placeholder="lang.placeholder.confirmPassword"
+              :feedback="false"
+              :input-props="{ autocomplete: 'new-password' }"
+              name="pass1"
+              autocomplete="confirm-password"
+              toggle-mask
+            />
+          </div>
+        </UniversalField>
+
+        <div class="register-page__button-container">
+          <Button
+            :label="lang.button.register"
+            @click="onClickRegister"
+            :disabled="!email || !passwordMain"
           />
         </div>
-      </UniversalField>
-
-      <div class="register-page__button-container">
-        <Button
-          :label="lang.button.register"
-          @click="onClickRegister"
-          :disabled="!email || !passwordMain"
-        />
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
 </template>
 <script lang="ts" setup>
@@ -51,6 +65,9 @@ import router from "@/router";
 import { mainPrivatePage, routes } from "@/settings/routes";
 import { useAppStore } from "@/store/appStore";
 import UniversalField from "@/components/fields/UniversalField.vue";
+import { getValidationErrors } from "@/helpers/formValidation";
+import type { ApiValidationError } from "@/types/common";
+import UniversalText from "@/components/fields/UniversalText.vue";
 
 const appStore = useAppStore();
 const { updateIsAuthorized, updateAuthUser } = appStore;
@@ -58,9 +75,10 @@ const { updateIsAuthorized, updateAuthUser } = appStore;
 const email = ref("");
 const passwordMain = ref("");
 const passwordConfirm = ref("");
+const formErrors = ref<ApiValidationError[]>([]);
 
 const onClickRegister = async () => {
-  const { created } = await Api.request({
+  const res = await Api.request({
     method: RequestMethods.Post,
     path: apiPaths.register,
     payload: {
@@ -68,6 +86,12 @@ const onClickRegister = async () => {
       password: passwordMain.value,
     },
   });
+
+  const { created, validationErrors } = res;
+
+  formErrors.value = validationErrors;
+
+  console.log("V E", formErrors);
 
   if (created) {
     showSuccessToast({ text: lang.success.userRegistered });
@@ -81,6 +105,7 @@ const onClickRegister = async () => {
 
 .register-page {
   display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   height: calc(100vh - $header-height);
@@ -90,7 +115,8 @@ const onClickRegister = async () => {
   }
 
   &__title {
-    @include font-extra-large;
+    flex-grow: 1;
+    @include header-large;
     margin-bottom: $px-30;
   }
 
@@ -98,6 +124,12 @@ const onClickRegister = async () => {
     display: flex;
     flex-direction: column;
     gap: $px-10;
+  }
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
 }
 </style>

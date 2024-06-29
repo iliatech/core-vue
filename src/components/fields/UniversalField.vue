@@ -6,11 +6,18 @@
     <div class="universal-field__container">
       <slot />
     </div>
+    <div class="universal-field__errors" v-if="errors?.length">
+      <ErrorDetails :errors="errors" />
+    </div>
   </div>
 </template>
 <script lang="ts" setup>
+import type { PropType } from "vue";
+import ErrorDetails from "@/components/error/ErrorDetails.vue";
+
 defineProps({
   label: String,
+  errors: Array as PropType<string[]>,
 });
 </script>
 <style lang="scss" scoped>
@@ -18,6 +25,8 @@ defineProps({
 @import "@/assets/fonts";
 
 .universal-field {
+  margin-bottom: $px-20;
+
   &__label {
     @include font-medium;
     font-weight: bold;
@@ -28,6 +37,8 @@ defineProps({
     //
   }
 
-  margin-bottom: $px-20;
+  &__errors {
+    //
+  }
 }
 </style>

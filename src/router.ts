@@ -91,6 +91,8 @@ router.beforeEach((to) => {
   const { updateIsAuthorized, updateAuthUser } = appStore;
   const user = getAuthUser();
 
+  console.log("HEY");
+
   if (getAuthToken() && user) {
     updateIsAuthorized(true);
     updateAuthUser(user);
@@ -100,6 +102,8 @@ router.beforeEach((to) => {
     (!getAuthToken() || !getAuthUser()) &&
     !publicRouteNames.includes((to.name as string) ?? "")
   ) {
+    console.log("T N", to.name);
+
     return { name: routes.login.name };
   }
 });

@@ -115,7 +115,7 @@ const menuAuthorized = computed(() => {
       label: lang.label.profile,
       items: [
         {
-          label: fullUserName(user.value),
+          label: user.value?.email,
           icon: "pi pi-user",
           command: () => {
             profileSidebar.value.open();

@@ -3,12 +3,9 @@ import { RequestMethods } from "@/types/api";
 import axios from "axios";
 import { lang } from "@/lang";
 import { apiUrl } from "@/settings/api";
-import { showToast } from "@/helpers/toast";
+import { showErrorToast, showToast } from "@/helpers/toast";
 import { ToastType } from "@/types/toasts";
-import {
-  getAuthToken,
-  resetAuthorizationAndGoToHomePage,
-} from "@/helpers/auth";
+import { getAuthToken, resetAuthorization } from "@/helpers/auth";
 import { useAppStore } from "@/store/appStore";
 import { RegisteredError } from "@/types/errors";
 
@@ -93,29 +90,28 @@ export default class Api {
 
       const { status } = e.response;
 
+      const validationErrors = e.response?.data?.errors ?? [];
+
       switch (status) {
         case 401:
-          await resetAuthorizationAndGoToHomePage();
+          await resetAuthorization();
           break;
         case 409:
-          showToast({
-            type: ToastType.Error,
-            text: lang.error.duplicateFound,
+          console.log(e.response);
+          showErrorToast({
+            text: e.response?.data?.error ?? lang.error.duplicateFound,
           });
           break;
         default:
           console.error(`HTTP error status ${status}:`, e);
-          showToast({
-            type: ToastType.Error,
-            text: lang.error.unknownError,
-          });
-      }
 
-      if (config.errorToast) {
-        showToast({
-          type: ToastType.Error,
-          text: config.errorToast,
-        });
+          if (validationErrors.length) {
+            return { validationErrors };
+          } else {
+            showErrorToast({
+              text: lang.error.unknownError,
+            });
+          }
       }
 
       return false;

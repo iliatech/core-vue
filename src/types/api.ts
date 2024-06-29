@@ -11,7 +11,6 @@ export interface RequestConfig {
   method?: RequestMethods;
   payload?: unknown;
   successToast?: string;
-  errorToast?: string;
   successCallback?: any;
   isDataResult?: boolean;
   withoutLoader?: boolean;

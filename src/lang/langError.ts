@@ -1,6 +1,7 @@
 import { RegisteredError } from "@/types/errors";
 import { lang } from "@/lang";
 import type { IEntity } from "@/settings/entities";
+import { capitalize } from "lodash";
 
 export default {
   clientDuplicate: "Client with same name already exists",
@@ -9,6 +10,8 @@ export default {
     `${lang.entity[name]} with the same name already exists`,
   entityShouldNotBeEmpty: (name: IEntity): string =>
     `${lang.entity[name]} should not be empty`,
+  fieldError: (fieldName: string): string =>
+    `${capitalize(fieldName)} is incorrect`,
   loginFailed: "Login failed",
   notCopiedToClipboard: (entityLabel: string) =>
     `${entityLabel} not copied to clipboard`,
