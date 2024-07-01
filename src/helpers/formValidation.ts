@@ -9,8 +9,15 @@ export const getValidationErrors = (
   validationErrors: ApiValidationError[] | undefined,
   fieldName: string
 ): string[] => {
-  const isError = !!validationErrors?.find((item) => item.path === fieldName)
-    ?.path;
+  const error = validationErrors?.find((item) => item.path === fieldName);
 
-  return isError ? [langError.fieldError(fieldName)] : [];
+  if (!error) {
+    return [];
+  }
+
+  if (error.customMessage) {
+    return [error.customMessage];
+  }
+
+  return [langError.fieldError(fieldName)];
 };

@@ -1,4 +1,5 @@
 export default {
+  alreadyHaveAccount: "Already have an account?",
   dontHaveAccount: "Don't have an account?",
   hasBeenTranslatedNTimes: (value: number) =>
     `Has been translated ${value} times.`,

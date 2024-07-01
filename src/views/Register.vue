@@ -1,56 +1,65 @@
 <template>
-  <div class="register-page">
-    <div class="register-page__container">
-      <form class="register-page__form">
-        <div class="register-page__title">
-          {{ lang.title.registration }}
-        </div>
-        <UniversalField
-          :label="lang.label.email"
-          :errors="getValidationErrors(formErrors, 'email')"
-        >
-          <UniversalText
-            v-model="email"
-            style="width: 100%"
-            :placeholder="lang.placeholder.enterEmail"
+  <CenteredBlockTemplate>
+    <template #title>
+      {{ lang.title.registration }}
+    </template>
+    <form class="register-page__form">
+      <UniversalField
+        :label="lang.label.email"
+        :errors="getValidationErrors(formErrors, 'email')"
+      >
+        <UniversalText
+          v-model="email"
+          style="width: 100%"
+          :placeholder="lang.placeholder.enterEmail"
+        />
+      </UniversalField>
+      <UniversalField
+        :label="lang.label.password"
+        :errors="getValidationErrors(formErrors, 'password')"
+      >
+        <div class="register-page__passwords">
+          <Password
+            v-model="passwordMain"
+            :input-props="{ autocomplete: 'new-password' }"
+            :placeholder="lang.placeholder.enterPassword"
+            toggle-mask
           />
-        </UniversalField>
-        <UniversalField
-          :label="lang.label.password"
-          :errors="getValidationErrors(formErrors, 'password')"
-        >
-          <div class="register-page__passwords">
-            <Password
-              v-model="passwordMain"
-              :input-props="{ autocomplete: 'new-password' }"
-              :placeholder="lang.placeholder.enterPassword"
-              toggle-mask
-            />
-            <Password
-              v-model="passwordConfirm"
-              :placeholder="lang.placeholder.confirmPassword"
-              :feedback="false"
-              :input-props="{ autocomplete: 'new-password' }"
-              name="pass1"
-              autocomplete="confirm-password"
-              toggle-mask
-            />
-          </div>
-        </UniversalField>
+          <Password
+            v-model="passwordConfirm"
+            :placeholder="lang.placeholder.confirmPassword"
+            :feedback="false"
+            :input-props="{ autocomplete: 'new-password' }"
+            name="pass1"
+            autocomplete="confirm-password"
+            toggle-mask
+          />
+        </div>
+      </UniversalField>
 
-        <div class="register-page__button-container">
-          <Button
-            :label="lang.button.register"
-            @click="onClickRegister"
-            :disabled="!email || !passwordMain"
-          />
-        </div>
-      </form>
-    </div>
-  </div>
+      <div class="register-page__button-container">
+        <Button
+          :label="lang.button.register"
+          @click="onClickRegister"
+          :disabled="
+            !email || !passwordMain || passwordConfirm !== passwordMain
+          "
+        />
+      </div>
+    </form>
+    <template #notes>
+      {{ lang.phrase.alreadyHaveAccount }}
+      <UniversalButton
+        :label="lang.button.login"
+        no-border
+        text
+        @click="handleClickLogin"
+      />
+    </template>
+  </CenteredBlockTemplate>
 </template>
 <script lang="ts" setup>
-import { ref } from "vue";
+import { computed, ref, watch } from "vue";
 import Password from "primevue/password";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
@@ -68,14 +77,29 @@ import UniversalField from "@/components/fields/UniversalField.vue";
 import { getValidationErrors } from "@/helpers/formValidation";
 import type { ApiValidationError } from "@/types/common";
 import UniversalText from "@/components/fields/UniversalText.vue";
+import CenteredBlockTemplate from "@/components/templates/CenteredBlockTemplate.vue";
+import UniversalButton from "@/components/buttons/UniversalButton.vue";
 
 const appStore = useAppStore();
-const { updateIsAuthorized, updateAuthUser } = appStore;
+const { updateIsAuthorized, updateAuthUser, updatePageMessages } = appStore;
 
 const email = ref("");
 const passwordMain = ref("");
 const passwordConfirm = ref("");
-const formErrors = ref<ApiValidationError[]>([]);
+const validationErrors = ref<ApiValidationError[]>([]);
+
+const formErrors = computed<ApiValidationError[]>(() => {
+  const errors: ApiValidationError[] = [];
+
+  if (passwordMain.value !== passwordConfirm.value && passwordConfirm.value) {
+    errors.push({
+      path: "password",
+      customMessage: lang.error.passwordAndConfirmationAreDifferent,
+    });
+  }
+
+  return [...errors, ...validationErrors.value];
+});
 
 const onClickRegister = async () => {
   const res = await Api.request({
@@ -87,16 +111,20 @@ const onClickRegister = async () => {
     },
   });
 
-  const { created, validationErrors } = res;
+  const { created, validationErrors: errors } = res;
 
-  formErrors.value = validationErrors;
-
-  console.log("V E", formErrors);
+  validationErrors.value = errors;
 
   if (created) {
-    showSuccessToast({ text: lang.success.userRegistered });
+    updatePageMessages("login", [
+      { text: lang.success.youRegistered(email.value), color: "green" },
+    ]);
     await router.push({ name: routes.login.name });
   }
+};
+
+const handleClickLogin = () => {
+  router.push({ name: routes.login.name });
 };
 </script>
 <style lang="scss" scoped>
@@ -104,32 +132,14 @@ const onClickRegister = async () => {
 @import "@/assets/fonts.scss";
 
 .register-page {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  height: calc(100vh - $header-height);
-
   &__button-container {
     margin-top: $px-20;
-  }
-
-  &__title {
-    flex-grow: 1;
-    @include header-large;
-    margin-bottom: $px-30;
   }
 
   &__passwords {
     display: flex;
     flex-direction: column;
     gap: $px-10;
-  }
-
-  &__container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
   }
 }
 </style>

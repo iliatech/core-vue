@@ -1,15 +1,26 @@
 <template>
-  <div class="login-page">
+  <CenteredBlockTemplate :messages="pagesMessages['login']">
+    <template #title>
+      {{ lang.title.login }}
+    </template>
     <form class="login-page__form">
-      <label class="login-page__field-label">{{ lang.label.email }}</label>
-      <InputText v-model="email" />
-      <label class="login-page__field-label">{{ lang.label.password }}</label>
+      <UniversalField
+        :label="lang.label.email"
+        :errors="getValidationErrors(formErrors, 'email')"
+      >
+        <InputText v-model="email" />
+      </UniversalField>
 
-      <Password
-        v-model="password"
-        :feedback="false"
-        autocomplete="current-password"
-      />
+      <UniversalField
+        :label="lang.label.password"
+        :errors="getValidationErrors(formErrors, 'password')"
+      >
+        <Password
+          v-model="password"
+          :feedback="false"
+          autocomplete="current-password"
+        />
+      </UniversalField>
 
       <div class="login-page__button-container">
         <Button
@@ -18,17 +29,17 @@
           :disabled="!email || !password"
         />
       </div>
-      <div class="login-page__register">
-        {{ lang.phrase.dontHaveAccount }}
-        <UniversalButton
-          :label="lang.button.register"
-          no-border
-          text
-          @click="handleClickRegister"
-        />
-      </div>
     </form>
-  </div>
+    <template #notes>
+      {{ lang.phrase.dontHaveAccount }}
+      <UniversalButton
+        :label="lang.button.register"
+        no-border
+        text
+        @click="handleClickRegister"
+      />
+    </template>
+  </CenteredBlockTemplate>
 </template>
 <script lang="ts" setup>
 import { ref } from "vue";
@@ -46,14 +57,21 @@ import { mainPrivatePage, routes } from "@/settings/routes";
 import { useAppStore } from "@/store/appStore";
 import UniversalButton from "@/components/buttons/UniversalButton.vue";
 import { useRouter } from "vue-router";
+import { storeToRefs } from "pinia";
+import CenteredBlockTemplate from "@/components/templates/CenteredBlockTemplate.vue";
+import { getValidationErrors } from "@/helpers/formValidation";
+import UniversalField from "@/components/fields/UniversalField.vue";
+import type { ApiValidationError } from "@/types/common";
 
 const router = useRouter();
 
 const appStore = useAppStore();
-const { updateIsAuthorized, updateAuthUser } = appStore;
+const { updateIsAuthorized, updateAuthUser, updatePageMessages } = appStore;
+const { pagesMessages } = storeToRefs(appStore);
 
 const email = ref("");
 const password = ref("");
+const formErrors = ref<ApiValidationError[]>([]);
 
 const onClickLogin = async () => {
   const { jwt, user } = await Api.request({
@@ -69,6 +87,7 @@ const onClickLogin = async () => {
     saveAuthToken(jwt);
     updateIsAuthorized(true);
     updateAuthUser(user);
+    updatePageMessages("login", []);
     await router.push({ name: mainPrivatePage.name });
   } else {
     resetAuthToken();
@@ -87,15 +106,6 @@ const handleClickRegister = () => {
 @import "@/assets/fonts.scss";
 
 .login-page {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: calc(100vh - $header-height);
-
-  &__form {
-    //
-  }
-
   &__field-label {
     display: block;
     margin-bottom: $px-10;
@@ -109,11 +119,6 @@ const handleClickRegister = () => {
   &__title {
     @include header-medium;
     margin-bottom: $px-30;
-  }
-
-  &__register {
-    @include font-small-medium;
-    margin-top: $px-30;
   }
 }
 </style>

@@ -5,8 +5,18 @@ export interface NavigationItem {
 
 export interface ApiValidationError {
   path: string;
-  type: string;
-  value: string;
-  msg: string;
-  location: string;
+  type?: string;
+  value?: string;
+  msg?: string;
+  location?: string;
+  customMessage?: string;
+}
+
+export interface PageMessage {
+  text: string;
+  color: string;
+}
+
+export interface PagesMessages {
+  login: PageMessage[];
 }

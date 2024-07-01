@@ -1,12 +1,14 @@
 import { defineStore } from "pinia";
 import type { Ref } from "vue";
-import { ref } from "vue";
+import { reactive, ref } from "vue";
 import type { AuthUser, AuthUserConfig } from "@/types/user";
 import Api from "@/api/Api";
 import { apiPaths } from "@/settings/api";
 import { authorizedUserField, initialUserConfig } from "@/settings/auth";
 import { RequestMethods } from "@/types/api";
 import type { RegisteredError } from "@/types/errors";
+import type { PageMessage, PagesMessages } from "@/types/common";
+import { lang } from "@/lang";
 
 export const useAppStore = defineStore("appStore", () => {
   const isLoading: Ref<boolean> = ref(false);
@@ -14,6 +16,9 @@ export const useAppStore = defineStore("appStore", () => {
   const isAuthorized: Ref<boolean> = ref(false);
   const user = ref<AuthUser | null>(null);
   const globalError = ref<RegisteredError | undefined>();
+  const pagesMessages = reactive<PagesMessages>({
+    login: [],
+  });
 
   const authUserConfig = ref<AuthUserConfig>(initialUserConfig);
 
@@ -71,6 +76,13 @@ export const useAppStore = defineStore("appStore", () => {
     globalError.value = value;
   };
 
+  const updatePageMessages = (
+    pageName: keyof PagesMessages,
+    messages: PageMessage[]
+  ) => {
+    pagesMessages[pageName] = messages;
+  };
+
   return {
     globalError,
     isAuthorized,
@@ -78,6 +90,7 @@ export const useAppStore = defineStore("appStore", () => {
     isPersistentLoading,
     user,
     authUserConfig,
+    pagesMessages,
     loadAuthUser,
     saveAuthUserConfig,
     setGlobalError,
@@ -87,5 +100,6 @@ export const useAppStore = defineStore("appStore", () => {
     stopPersistentLoading,
     updateIsAuthorized,
     updateAuthUser,
+    updatePageMessages,
   };
 });

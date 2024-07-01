@@ -7,9 +7,9 @@ export default {
   clientUpdated: "Client updated",
   copiedToClipboard: (entityLabel: string) =>
     `${entityLabel} copied to clipboard`,
+  databaseSaved: "Database saved",
   login: "You are logged in",
   logout: "You are logged out",
-  userRegistered: "User was registered",
   secretKeySaved: "Secret key saved",
   tagAdded: "Tag added",
   tagDeleted: (name: string): string => `Tag '${name}' deleted`,
@@ -18,5 +18,6 @@ export default {
   userConfigSaved: "User config saved",
   wordCreated: "Word created",
   wordDeleted: (title: string): string => `Word '${title}' deleted`,
-  databaseSaved: "Database saved",
+  youRegistered: (email: string) =>
+    `You have registered successfully with email: ${email}`,
 };
