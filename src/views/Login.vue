@@ -8,7 +8,10 @@
         :label="lang.label.email"
         :errors="getValidationErrors(formErrors, 'email')"
       >
-        <InputText v-model="email" />
+        <UniversalText
+          v-model="email"
+          :placeholder="lang.placeholder.enterEmail"
+        />
       </UniversalField>
 
       <UniversalField
@@ -62,6 +65,7 @@ import CenteredBlockTemplate from "@/components/templates/CenteredBlockTemplate.
 import { getValidationErrors } from "@/helpers/formValidation";
 import UniversalField from "@/components/fields/UniversalField.vue";
 import type { ApiValidationError } from "@/types/common";
+import UniversalText from "@/components/fields/UniversalText.vue";
 
 const router = useRouter();
 

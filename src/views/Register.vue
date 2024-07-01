@@ -10,7 +10,6 @@
       >
         <UniversalText
           v-model="email"
-          style="width: 100%"
           :placeholder="lang.placeholder.enterEmail"
         />
       </UniversalField>
@@ -30,8 +29,6 @@
             :placeholder="lang.placeholder.confirmPassword"
             :feedback="false"
             :input-props="{ autocomplete: 'new-password' }"
-            name="pass1"
-            autocomplete="confirm-password"
             toggle-mask
           />
         </div>

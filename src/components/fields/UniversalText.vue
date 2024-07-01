@@ -43,6 +43,8 @@ defineProps({
 @import "@/assets/variables";
 
 .universal-text {
+  width: 100%;
+
   &__label {
     display: block;
     margin-bottom: $px-10;
