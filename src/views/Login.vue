@@ -25,6 +25,12 @@
         />
       </UniversalField>
 
+      <vue-turnstile
+        :site-key="CLOUDFLARE_TURNSTILE_SITE_KEY"
+        v-model="token"
+        theme="light"
+      />
+
       <div class="login-page__button-container">
         <Button
           :label="lang.button.login"
@@ -47,7 +53,6 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import Password from "primevue/password";
-import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 import { lang } from "@/lang";
 import { showToast } from "@/helpers/toast";
@@ -66,6 +71,8 @@ import { getValidationErrors } from "@/helpers/formValidation";
 import UniversalField from "@/components/fields/UniversalField.vue";
 import type { ApiValidationError } from "@/types/common";
 import UniversalText from "@/components/fields/UniversalText.vue";
+import { CLOUDFLARE_TURNSTILE_SITE_KEY } from "@/settings/app";
+import VueTurnstile from "vue-turnstile";
 
 const router = useRouter();
 
@@ -76,6 +83,7 @@ const { pagesMessages } = storeToRefs(appStore);
 const email = ref("");
 const password = ref("");
 const formErrors = ref<ApiValidationError[]>([]);
+const token = ref();
 
 const onClickLogin = async () => {
   const { jwt, user } = await Api.request({

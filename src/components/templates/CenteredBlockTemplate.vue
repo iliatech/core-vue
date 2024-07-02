@@ -45,7 +45,7 @@ defineProps({
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    width: 230px;
+    width: 300px;
   }
 
   &__title {

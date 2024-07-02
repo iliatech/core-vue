@@ -19,5 +19,5 @@ export default {
   wordCreated: "Word created",
   wordDeleted: (title: string): string => `Word '${title}' deleted`,
   youRegistered: (email: string) =>
-    `You have registered successfully with email: ${email}`,
+    `We sent confirmation to your email ${email}. Once, you confirm email - you can login.`,
 };

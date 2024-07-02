@@ -34,12 +34,24 @@
         </div>
       </UniversalField>
 
+      <UniversalField :errors="getValidationErrors(formErrors, 'token')">
+        <vue-turnstile
+          :key="turnstileKey"
+          :site-key="CLOUDFLARE_TURNSTILE_SITE_KEY"
+          v-model="token"
+          theme="light"
+        />
+      </UniversalField>
+
       <div class="register-page__button-container">
         <Button
           :label="lang.button.register"
           @click="onClickRegister"
           :disabled="
-            !email || !passwordMain || passwordConfirm !== passwordMain
+            !email ||
+            !passwordMain ||
+            passwordConfirm !== passwordMain ||
+            !token
           "
         />
       </div>
@@ -56,19 +68,16 @@
   </CenteredBlockTemplate>
 </template>
 <script lang="ts" setup>
-import { computed, ref, watch } from "vue";
+import { computed, ref } from "vue";
 import Password from "primevue/password";
-import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 import { lang } from "@/lang";
-import { showErrorToast, showSuccessToast, showToast } from "@/helpers/toast";
-import { ToastType } from "@/types/toasts";
+import VueTurnstile from "vue-turnstile";
 import Api from "@/api/Api";
 import { RequestMethods } from "@/types/api";
 import { apiPaths } from "@/settings/api";
-import { resetAuthToken, resetAuthUser, saveAuthToken } from "@/helpers/auth";
 import router from "@/router";
-import { mainPrivatePage, routes } from "@/settings/routes";
+import { routes } from "@/settings/routes";
 import { useAppStore } from "@/store/appStore";
 import UniversalField from "@/components/fields/UniversalField.vue";
 import { getValidationErrors } from "@/helpers/formValidation";
@@ -76,14 +85,17 @@ import type { ApiValidationError } from "@/types/common";
 import UniversalText from "@/components/fields/UniversalText.vue";
 import CenteredBlockTemplate from "@/components/templates/CenteredBlockTemplate.vue";
 import UniversalButton from "@/components/buttons/UniversalButton.vue";
+import { CLOUDFLARE_TURNSTILE_SITE_KEY } from "@/settings/app";
 
 const appStore = useAppStore();
-const { updateIsAuthorized, updateAuthUser, updatePageMessages } = appStore;
+const { updatePageMessages } = appStore;
 
 const email = ref("");
 const passwordMain = ref("");
 const passwordConfirm = ref("");
 const validationErrors = ref<ApiValidationError[]>([]);
+const token = ref();
+const turnstileKey = ref(0);
 
 const formErrors = computed<ApiValidationError[]>(() => {
   const errors: ApiValidationError[] = [];
@@ -105,8 +117,12 @@ const onClickRegister = async () => {
     payload: {
       email: email.value,
       password: passwordMain.value,
+      token: token.value,
     },
   });
+
+  token.value = undefined;
+  turnstileKey.value++;
 
   const { created, validationErrors: errors } = res;
 
