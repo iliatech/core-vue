@@ -51,7 +51,7 @@
   </CenteredBlockTemplate>
 </template>
 <script lang="ts" setup>
-import { ref } from "vue";
+import { onBeforeMount, ref } from "vue";
 import Password from "primevue/password";
 import Button from "primevue/button";
 import { lang } from "@/lang";
@@ -64,7 +64,7 @@ import { resetAuthToken, resetAuthUser, saveAuthToken } from "@/helpers/auth";
 import { mainPrivatePage, routes } from "@/settings/routes";
 import { useAppStore } from "@/store/appStore";
 import UniversalButton from "@/components/buttons/UniversalButton.vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 import CenteredBlockTemplate from "@/components/templates/CenteredBlockTemplate.vue";
 import { getValidationErrors } from "@/helpers/formValidation";
@@ -75,6 +75,7 @@ import { CLOUDFLARE_TURNSTILE_SITE_KEY } from "@/settings/app";
 import VueTurnstile from "vue-turnstile";
 
 const router = useRouter();
+const route = useRoute();
 
 const appStore = useAppStore();
 const { updateIsAuthorized, updateAuthUser, updatePageMessages } = appStore;
@@ -84,6 +85,38 @@ const email = ref("");
 const password = ref("");
 const formErrors = ref<ApiValidationError[]>([]);
 const token = ref();
+
+onBeforeMount(async () => {
+  const email = route.query?.email;
+  const code = route.query?.code;
+
+  if (code && email) {
+    const { success } = await Api.request({
+      method: RequestMethods.Post,
+      path: apiPaths.confirmEmail,
+      payload: {
+        email,
+        code,
+      },
+    });
+
+    if (success) {
+      updatePageMessages("login", [
+        {
+          text: `Your email ${email} was verified. Now you can login.`,
+          color: "green",
+        },
+      ]);
+    } else {
+      updatePageMessages("login", [
+        {
+          text: `Problem with verifying your email ${email} appeared. Please, try again and if no result - contact with our support, please.`,
+          color: "red",
+        },
+      ]);
+    }
+  }
+});
 
 const onClickLogin = async () => {
   const { jwt, user } = await Api.request({
