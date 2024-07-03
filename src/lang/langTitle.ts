@@ -21,7 +21,7 @@ export default {
   editSlot: "Edit slot",
   enterSecretKey: "Enter Secret Key",
   error: "Error",
-  iliaDomyshev: "Ilia Domyshev",
+  siteName: "Self-Platform.es",
   login: "Login",
   manageTags: "Manage tags",
   publicArea: "Public Area",

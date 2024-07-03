@@ -132,6 +132,7 @@ const onClickRegister = async () => {
     updatePageMessages("login", [
       { text: lang.success.youRegistered(email.value), color: "green" },
     ]);
+
     await router.push({ name: routes.login.name });
   }
 };

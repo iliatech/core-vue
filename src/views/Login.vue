@@ -25,17 +25,20 @@
         />
       </UniversalField>
 
-      <vue-turnstile
-        :site-key="CLOUDFLARE_TURNSTILE_SITE_KEY"
-        v-model="token"
-        theme="light"
-      />
+      <UniversalField :errors="getValidationErrors(formErrors, 'token')">
+        <vue-turnstile
+          :key="turnstileKey"
+          :site-key="CLOUDFLARE_TURNSTILE_SITE_KEY"
+          v-model="token"
+          theme="light"
+        />
+      </UniversalField>
 
       <div class="login-page__button-container">
         <Button
           :label="lang.button.login"
           @click="onClickLogin"
-          :disabled="!email || !password"
+          :disabled="!email || !password || !token"
         />
       </div>
     </form>
@@ -85,6 +88,7 @@ const email = ref("");
 const password = ref("");
 const formErrors = ref<ApiValidationError[]>([]);
 const token = ref();
+const turnstileKey = ref(0);
 
 onBeforeMount(async () => {
   const email = route.query?.email;
@@ -125,8 +129,12 @@ const onClickLogin = async () => {
     payload: {
       user: email.value,
       password: password.value,
+      token: token.value,
     },
   });
+
+  token.value = undefined;
+  turnstileKey.value++;
 
   if (jwt && user) {
     saveAuthToken(jwt);

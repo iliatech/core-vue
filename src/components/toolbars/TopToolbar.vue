@@ -3,10 +3,11 @@
     <div class="top-toolbar__logo">
       <UniversalButton
         @click="handleClickUserMenu"
-        :label="logoTitle"
+        :label="lang.title.siteName"
         font-size="1.125rem"
         no-border
       />
+      <div class="top-toolbar__logo-notes">by Ilia Domyshev</div>
       <Menu
         ref="userMenu"
         :model="isAuthorized ? menuAuthorized : menuPublic"
@@ -59,12 +60,6 @@ const profileSidebar = ref();
 
 const isMobile = computed<boolean>(() => {
   return window.innerWidth < 500;
-});
-
-const logoTitle = computed<string>(() => {
-  return user.value?.firstName || user.value?.lastName
-    ? `${user.value?.firstName?.[0]}${user.value?.lastName?.[0]}`
-    : lang.title.iliaDomyshev;
 });
 
 const navigationOptions = computed<NavigationItem[]>(() => {
@@ -211,6 +206,11 @@ $toolbar-border: 1px solid #aaa;
   &__logo {
     padding: $px-10 $px-20;
     border-right: $toolbar-border;
+  }
+
+  &__logo-notes {
+    font-size: 0.75em;
+    line-height: 0.75em;
   }
 
   &__nav-container {
