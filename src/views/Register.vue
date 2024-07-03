@@ -57,13 +57,15 @@
       </div>
     </form>
     <template #notes>
-      {{ lang.phrase.alreadyHaveAccount }}
-      <UniversalButton
-        :label="lang.button.login"
-        no-border
-        text
-        @click="handleClickLogin"
-      />
+      <div>
+        {{ lang.phrase.alreadyHaveAccount }}<br />
+        <UniversalButton
+          :label="lang.button.login"
+          no-border
+          text
+          @click="handleClickLogin"
+        />
+      </div>
     </template>
   </CenteredBlockTemplate>
 </template>
@@ -126,7 +128,7 @@ const onClickRegister = async () => {
 
   const { created, validationErrors: errors } = res;
 
-  validationErrors.value = errors;
+  validationErrors.value = errors ?? [];
 
   if (created) {
     updatePageMessages("login", [

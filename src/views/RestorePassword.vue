@@ -1,9 +1,9 @@
 <template>
-  <CenteredBlockTemplate :messages="pagesMessages['login']">
+  <CenteredBlockTemplate :messages="pagesMessages['restorePassword']">
     <template #title>
-      {{ lang.title.login }}
+      {{ lang.title.restorePassword }}
     </template>
-    <form class="login-page__form">
+    <form class="restore-password__form">
       <UniversalField
         :label="lang.label.email"
         :errors="getValidationErrors(formErrors, 'email')"
@@ -11,17 +11,6 @@
         <UniversalText
           v-model="email"
           :placeholder="lang.placeholder.enterEmail"
-        />
-      </UniversalField>
-
-      <UniversalField
-        :label="lang.label.password"
-        :errors="getValidationErrors(formErrors, 'password')"
-      >
-        <Password
-          v-model="password"
-          :feedback="false"
-          autocomplete="current-password"
         />
       </UniversalField>
 
@@ -34,22 +23,22 @@
         />
       </UniversalField>
 
-      <div class="login-page__button-container">
+      <div class="restore-password__button-container">
         <Button
-          :label="lang.button.login"
-          @click="onClickLogin"
-          :disabled="!email || !password || !token"
+          :label="lang.button.restore"
+          @click="onClickRestore"
+          :disabled="!email || !token"
         />
       </div>
     </form>
     <template #notes>
-      <div class="login-page__restore-password">
-        {{ lang.phrase.dontRememberPassword }}<br />
+      <div class="restore-password__restore-password">
+        {{ lang.phrase.returnToLoginPage }}<br />
         <UniversalButton
-          :label="lang.button.restorePassword"
+          :label="lang.button.login"
           no-border
           text
-          @click="handleClickRestorePassword"
+          @click="handleClickLogin"
         />
       </div>
       <div>
@@ -65,20 +54,16 @@
   </CenteredBlockTemplate>
 </template>
 <script lang="ts" setup>
-import { onBeforeMount, ref } from "vue";
-import Password from "primevue/password";
+import { ref } from "vue";
 import Button from "primevue/button";
 import { lang } from "@/lang";
-import { showToast } from "@/helpers/toast";
-import { ToastType } from "@/types/toasts";
 import Api from "@/api/Api";
 import { RequestMethods } from "@/types/api";
 import { apiPaths } from "@/settings/api";
-import { resetAuthToken, resetAuthUser, saveAuthToken } from "@/helpers/auth";
-import { mainPrivatePage, routes } from "@/settings/routes";
+import { routes } from "@/settings/routes";
 import { useAppStore } from "@/store/appStore";
 import UniversalButton from "@/components/buttons/UniversalButton.vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 import CenteredBlockTemplate from "@/components/templates/CenteredBlockTemplate.vue";
 import { getValidationErrors } from "@/helpers/formValidation";
@@ -89,75 +74,52 @@ import { CLOUDFLARE_TURNSTILE_SITE_KEY } from "@/settings/app";
 import VueTurnstile from "vue-turnstile";
 
 const router = useRouter();
-const route = useRoute();
 
 const appStore = useAppStore();
-const { updateIsAuthorized, updateAuthUser, updatePageMessages } = appStore;
+const { updatePageMessages } = appStore;
 const { pagesMessages } = storeToRefs(appStore);
 
 const email = ref("");
-const password = ref("");
 const formErrors = ref<ApiValidationError[]>([]);
 const token = ref();
 const turnstileKey = ref(0);
 
-onBeforeMount(async () => {
-  const email = route.query?.email;
-  const code = route.query?.code;
-
-  if (code && email) {
-    const { success } = await Api.request({
-      method: RequestMethods.Post,
-      path: apiPaths.confirmEmail,
-      payload: {
-        email,
-        code,
-      },
-    });
-
-    if (success) {
-      updatePageMessages("login", [
-        {
-          text: `Your email ${email} was verified. Now you can login.`,
-          color: "green",
-        },
-      ]);
-    } else {
-      updatePageMessages("login", [
-        {
-          text: `Problem with verifying your email ${email} appeared. Please, try again and if no result - contact with our support, please.`,
-          color: "red",
-        },
-      ]);
-    }
-  }
-});
-
-const onClickLogin = async () => {
-  const { jwt, user } = await Api.request({
+const onClickRestore = async () => {
+  const { success, validationErrors } = await Api.request({
     method: RequestMethods.Post,
-    path: apiPaths.login,
+    path: apiPaths.restorePassword,
     payload: {
-      user: email.value,
-      password: password.value,
+      email: email.value,
       token: token.value,
     },
   });
 
+  formErrors.value = validationErrors;
+
   token.value = undefined;
   turnstileKey.value++;
 
-  if (jwt && user) {
-    saveAuthToken(jwt);
-    updateIsAuthorized(true);
-    updateAuthUser(user);
-    updatePageMessages("login", []);
-    await router.push({ name: mainPrivatePage.name });
+  if (validationErrors?.length) {
+    updatePageMessages("restorePassword", []);
+    return;
+  }
+
+  if (success) {
+    updatePageMessages("login", [
+      {
+        text: "We have sent further instructions to your email if it exists in our database",
+        color: "green",
+      },
+    ]);
+
+    await router.push({ name: routes.login.name });
   } else {
-    resetAuthToken();
-    resetAuthUser();
-    updateAuthUser(null);
-    showToast({ type: ToastType.Error, text: lang.error.loginFailed });
+    updatePageMessages("restorePassword", [
+      {
+        text: "Something went wrong when try to restore password",
+        color: "red",
+      },
+    ]);
   }
 };
 
@@ -165,15 +127,15 @@ const handleClickRegister = () => {
   router.push({ name: routes.register.name });
 };
 
-const handleClickRestorePassword = () => {
-  router.push({ name: routes.restorePassword.name });
+const handleClickLogin = () => {
+  router.push({ name: routes.login.name });
 };
 </script>
 <style lang="scss" scoped>
 @import "@/assets/variables.scss";
 @import "@/assets/fonts.scss";
 
-.login-page {
+.restore-password {
   &__field-label {
     display: block;
     margin-bottom: $px-10;

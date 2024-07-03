@@ -36,6 +36,11 @@ const router = createRouter({
       component: () => import("@/views/Register.vue"),
     },
     {
+      path: routes.restorePassword.path,
+      name: routes.restorePassword.name,
+      component: () => import("@/views/RestorePassword.vue"),
+    },
+    {
       path: routes.usefulLinks.path,
       name: routes.usefulLinks.name,
       component: () =>

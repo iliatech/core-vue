@@ -63,6 +63,9 @@ defineProps({
   &__notes {
     @include font-small-medium;
     margin-top: $px-30;
+    display: flex;
+    flex-direction: column;
+    gap: $px-10;
   }
 }
 </style>

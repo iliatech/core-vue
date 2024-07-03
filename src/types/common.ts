@@ -14,9 +14,10 @@ export interface ApiValidationError {
 
 export interface PageMessage {
   text: string;
-  color: string;
+  color: "green" | "red";
 }
 
 export interface PagesMessages {
   login: PageMessage[];
+  restorePassword: PageMessage[];
 }

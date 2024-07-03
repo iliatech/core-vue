@@ -29,6 +29,7 @@ export default {
   profile: "Profile",
   register: "Register",
   registration: "Registration",
+  restorePassword: "Restore Password",
   siteTitle: "Home page",
   schedule: "Schedule",
   scheduleSettings: "Schedule Settings",

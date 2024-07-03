@@ -14,6 +14,8 @@ export default {
   newCredentialType: "New Credential Type",
   ok: "OK",
   register: "Register",
+  restore: "Restore",
+  restorePassword: "Restore Password",
   save: "Save",
   usefulLinks: "Useful Links",
   wordsApp: "Word Game",

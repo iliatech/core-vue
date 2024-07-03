@@ -8,6 +8,7 @@ export const apiPaths = {
   login: "login",
   saveAuthUserConfig: "saveAuthUserConfig",
   register: "register",
+  restorePassword: "restorePassword",
   tag: "tag",
   timeSlot: "timeSlot",
   translation: "translation",
