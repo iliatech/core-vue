@@ -10,6 +10,7 @@ export default {
   databaseSaved: "Database saved",
   login: "You are logged in",
   logout: "You are logged out",
+  passwordChanged: "Password was changed. Now you can login with new password.",
   secretKeySaved: "Secret key saved",
   tagAdded: "Tag added",
   tagDeleted: (name: string): string => `Tag '${name}' deleted`,

@@ -103,15 +103,15 @@ const turnstileKey = ref(0);
 
 onBeforeMount(async () => {
   const email = route.query?.email;
-  const code = route.query?.code;
+  const regCode = route.query?.regCode;
 
-  if (code && email) {
+  if (regCode && email) {
     const { success } = await Api.request({
       method: RequestMethods.Post,
       path: apiPaths.confirmEmail,
       payload: {
         email,
-        code,
+        regCode,
       },
     });
 

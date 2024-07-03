@@ -13,6 +13,7 @@ export default {
   loader: "Loading",
   logout: "Logout",
   minute: "Minute",
+  newPassword: "New Password",
   name: "Name",
   navigation: "Navigation",
   nextWeek: "Next Week",

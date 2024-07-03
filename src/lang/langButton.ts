@@ -2,6 +2,7 @@ export default {
   add: "Add",
   back: "Back",
   cancel: "Cancel",
+  changePassword: "Change",
   clients: "Clients",
   clientsSchedule: "Clients Schedule",
   close: "Close",

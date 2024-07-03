@@ -20,4 +20,5 @@ export interface PageMessage {
 export interface PagesMessages {
   login: PageMessage[];
   restorePassword: PageMessage[];
+  changePassword: PageMessage[];
 }

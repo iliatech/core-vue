@@ -2,6 +2,7 @@ export default {
   addCredential: "Add Credential",
   addCredentialType: "Add Credential Type",
   addSlot: "Add slot",
+  changePassword: "Change Password",
   clients: "Clients",
   clientsSchedule: "Clients Schedule",
   confirmDeleteTag: (name: string) => `Delete tag "${name}"?`,

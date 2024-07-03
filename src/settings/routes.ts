@@ -28,6 +28,13 @@ export const routes: Record<string, LocalRoute> = {
     isPublic: true,
   },
 
+  changePassword: {
+    path: "/changePassword",
+    name: "changePassword",
+    title: "Change Password",
+    isPublic: true,
+  },
+
   home: {
     path: "/",
     name: "home",
@@ -91,6 +98,7 @@ export const publicRouteNames = [
   routes.login.name,
   routes.register.name,
   routes.restorePassword.name,
+  routes.changePassword.name,
   routes.home.name,
   routes.usefulLinks.name,
 ];

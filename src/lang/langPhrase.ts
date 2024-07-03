@@ -3,7 +3,7 @@ export default {
   dontHaveAccount: "Don't have an account?",
   hasBeenTranslatedNTimes: (value: number) =>
     `Has been translated ${value} times.`,
-  dontRememberPassword: "In case you forgot you password:",
+  dontRememberPassword: "In case you forgot password:",
   noClientsFound: "No clients found.",
   noTagsFound: "No tags found.",
   numberOfTranslations: "Translated times",

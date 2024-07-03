@@ -107,7 +107,7 @@ const onClickRestore = async () => {
   if (success) {
     updatePageMessages("login", [
       {
-        text: "We have sent further instructions to your email if it exists in our database",
+        text: "We have sent instructions to your email if it's registered in our system",
         color: "green",
       },
     ]);

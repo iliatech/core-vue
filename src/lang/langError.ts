@@ -16,6 +16,7 @@ export default {
   notCopiedToClipboard: (entityLabel: string) =>
     `${entityLabel} not copied to clipboard`,
   unknownError: "Unknown error",
+  passwordNotChanged: "Unknown error when try to change password",
   passwordAndConfirmationAreDifferent:
     "Password confirmation and password are different",
   registeredErrors: {
