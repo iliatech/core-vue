@@ -1,4 +1,4 @@
-name: Deploy Self Platform UI
+name: Deploy Self-Platform.es UI
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   web-deploy:
-    name: Deploy Self Platform UI
+    name: Deploy Self-Platform.es UI
     runs-on: ubuntu-latest
     steps:
       - name: Get Latest Code
@@ -24,7 +24,7 @@ jobs:
       - name: Create env file
         run: |
           touch .env
-          echo VITE_API_URL="http://next-api.iliatech.ru:3020" >> .env
+          echo VITE_API_URL="http://api.self-platform.es:3030" >> .env
           cat .env
 
       - name: Build
