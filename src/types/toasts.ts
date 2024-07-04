@@ -9,3 +9,5 @@ export interface ToastConfig {
   type: ToastType;
   text: string;
 }
+
+export type ToastConfigWithoutType = Omit<ToastConfig, "type">;

@@ -1,12 +1,13 @@
 <template>
   <div class="top-toolbar">
     <div class="top-toolbar__logo">
-      <IliaButton
+      <UniversalButton
         @click="handleClickUserMenu"
-        :label="logoTitle"
+        :label="lang.title.siteName"
         font-size="1.125rem"
         no-border
       />
+      <div class="top-toolbar__logo-notes">by Ilia Domyshev</div>
       <Menu
         ref="userMenu"
         :model="isAuthorized ? menuAuthorized : menuPublic"
@@ -15,7 +16,7 @@
     </div>
     <div class="top-toolbar__nav-container">
       <div class="top-toolbar__nav">
-        <IliaButton
+        <UniversalButton
           v-for="item in navigationOptions"
           :label="item.label"
           @click="router.push({ name: item.name })"
@@ -41,10 +42,11 @@ import { storeToRefs } from "pinia";
 import type { NavigationItem } from "@/types/common";
 import { useRoute } from "vue-router";
 import { fullUserName } from "@/helpers/common";
-import IliaButton from "@/components/schedule/IliaButton.vue";
-import ProfileSidebar from "@/components/schedule/ProfileSidebar.vue";
+import UniversalButton from "@/components/buttons/UniversalButton.vue";
+import ProfileSidebar from "@/modules/schedule/components/sidebars/ProfileSidebar.vue";
 import { generateAvailableAppsList } from "@/helpers/navigation";
 import Menu from "primevue/menu";
+import { CredentialDatabase } from "@/modules/credentials/classes/CredentialDatabase";
 
 const route = useRoute();
 
@@ -60,15 +62,8 @@ const isMobile = computed<boolean>(() => {
   return window.innerWidth < 500;
 });
 
-const logoTitle = computed<string>(() => {
-  return user.value?.firstName || user.value?.lastName
-    ? `${user.value?.firstName?.[0]}${user.value?.lastName?.[0]}`
-    : lang.title.iliaDomyshev;
-});
-
 const navigationOptions = computed<NavigationItem[]>(() => {
   if (!route.name) {
-    console.error("Error: route name is undefined: ", route.name);
     return [];
   }
 
@@ -115,7 +110,7 @@ const menuAuthorized = computed(() => {
       label: lang.label.profile,
       items: [
         {
-          label: fullUserName(user.value),
+          label: user.value?.email,
           icon: "pi pi-user",
           command: () => {
             profileSidebar.value.open();
@@ -187,6 +182,7 @@ const onClickLogin = () => {
 
 const onClickLogout = () => {
   router.push(routes.login.path);
+  CredentialDatabase.unload();
   resetAuthUser();
   resetAuthToken();
   updateIsAuthorized(false);
@@ -210,6 +206,11 @@ $toolbar-border: 1px solid #aaa;
   &__logo {
     padding: $px-10 $px-20;
     border-right: $toolbar-border;
+  }
+
+  &__logo-notes {
+    font-size: 0.75em;
+    line-height: 0.75em;
   }
 
   &__nav-container {
