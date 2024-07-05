@@ -102,30 +102,31 @@ const token = ref();
 const turnstileKey = ref(0);
 
 onBeforeMount(async () => {
-  const email = route.query?.email;
+  const queryEmail = route.query?.email;
   const regCode = route.query?.regCode;
 
-  if (regCode && email) {
+  if (regCode && queryEmail) {
     const { success } = await Api.request({
       method: RequestMethods.Post,
       path: apiPaths.confirmEmail,
       payload: {
-        email,
+        email: queryEmail,
         regCode,
       },
     });
 
     if (success) {
+      email.value = queryEmail as string;
       updatePageMessages("login", [
         {
-          text: `Your email ${email} was verified. Now you can login.`,
+          text: `Your email ${queryEmail} was verified. Now you can login.`,
           color: "green",
         },
       ]);
     } else {
       updatePageMessages("login", [
         {
-          text: `Problem with verifying your email ${email} appeared. Please, try again and if no result - contact with our support, please.`,
+          text: `Problem with verifying your email ${queryEmail} appeared. Please, try again and if no result - contact with our support, please.`,
           color: "red",
         },
       ]);
