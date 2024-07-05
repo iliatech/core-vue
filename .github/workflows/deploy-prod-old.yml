@@ -1,13 +1,13 @@
-name: Deploy Self-Platform.es UI
+name: Deploy Vue App
 
 on:
   push:
     branches:
-      - DEPLOY_SELF_PLATFORM
+      - main_old
 
 jobs:
   web-deploy:
-    name: Deploy Self-Platform.es UI
+    name: Deploy on Every Push
     runs-on: ubuntu-latest
     steps:
       - name: Get Latest Code
@@ -21,13 +21,6 @@ jobs:
       - name: Install packages
         run: npm ci
 
-      - name: Create env file
-        run: |
-          touch .env
-          echo VITE_API_URL="http://api.self-platform.es:3030" >> .env
-          echo VITE_CLOUDFLARE_TURNSTILE_SITE_KEY=${{ secrets.TURNSTILE_SITE_KEY }} >> .env
-          cat .env
-
       - name: Build
         run: npm run build
 
@@ -39,4 +32,4 @@ jobs:
           ARGS: "-rlgoDzvc -i --delete --exclude=.htaccess"
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
-          TARGET: /var/www/self-platform.es/
+          TARGET: ${{ secrets.REMOTE_TARGET }}
