@@ -7,6 +7,9 @@ export const jwtTokenField = "jwt";
 export const authorizedUserField = "authorized_user";
 
 export const initialUserConfig: AuthUserConfig = {
+  acl: {
+    topMenu: [],
+  },
   schedule: {
     title: langTitle.schedule,
     defaultInputTimezoneName: TimeZoneName.Esp,

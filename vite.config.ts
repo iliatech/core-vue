@@ -13,7 +13,7 @@ export default defineConfig({
     createHtmlPlugin({
       inject: {
         data: {
-          title: "ILIA DOMYSHEV: Home",
+          title: "Self-Platform.es",
           version: `${packageJson?.version}/${new Date().toISOString()}`,
         },
       },

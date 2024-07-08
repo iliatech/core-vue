@@ -5,6 +5,9 @@ export interface AuthUserScheduleConfig {
 }
 
 export interface AuthUserConfig {
+  acl: {
+    topMenu: string[];
+  };
   schedule: AuthUserScheduleConfig;
 }
 

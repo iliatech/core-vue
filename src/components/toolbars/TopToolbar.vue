@@ -1,4 +1,27 @@
 <template>
+  <div class="top-line">
+    <div></div>
+    <div class="top-logo">
+      <div>{{ lang.title.siteName }}</div>
+      <div class="top-toolbar__logo-notes">by Ilia Domyshev</div>
+    </div>
+    <div class="auth-block">
+      <div>Sign Up</div>
+      <div>Sign In</div>
+      <div>Sign Out</div>
+    </div>
+  </div>
+  <div class="top-menu">
+    <UniversalButton
+      v-for="item in topMenuItems"
+      :label="item.label"
+      @click="router.push({ name: item.name })"
+      :key="item.label"
+      :selected="$route.name === item.name"
+      no-border
+    />
+  </div>
+
   <div class="top-toolbar">
     <div class="top-toolbar__logo">
       <UniversalButton
@@ -14,20 +37,6 @@
         popup
       />
     </div>
-    <div class="top-toolbar__nav-container">
-      <div class="top-toolbar__nav">
-        <UniversalButton
-          v-for="item in navigationOptions"
-          :label="item.label"
-          @click="router.push({ name: item.name })"
-          :key="item.label"
-          size="small"
-          color="orange"
-          :selected="$route.name === item.name"
-          nowrap
-        />
-      </div>
-    </div>
   </div>
   <ProfileSidebar ref="profileSidebar" :isFullWidth="isMobile" />
 </template>
@@ -41,18 +50,40 @@ import { useAppStore } from "@/store/appStore";
 import { storeToRefs } from "pinia";
 import type { NavigationItem } from "@/types/common";
 import { useRoute } from "vue-router";
-import { fullUserName } from "@/helpers/common";
 import UniversalButton from "@/components/buttons/UniversalButton.vue";
 import ProfileSidebar from "@/modules/schedule/components/sidebars/ProfileSidebar.vue";
 import { generateAvailableAppsList } from "@/helpers/navigation";
 import Menu from "primevue/menu";
 import { CredentialDatabase } from "@/modules/credentials/classes/CredentialDatabase";
+import { privateTopMenuItems, publicTopMenuItems } from "@/settings/menu";
 
 const route = useRoute();
 
 const appStore = useAppStore();
 const { isAuthorized, user } = storeToRefs(appStore);
 const { updateIsAuthorized } = appStore;
+
+const topMenuItems = computed(() => {
+  const items: NavigationItem[] = [];
+
+  const itemsNames = [
+    ...publicTopMenuItems,
+    ...privateTopMenuItems.filter((name) =>
+      (user.value?.config?.acl?.topMenu ?? []).includes(name)
+    ),
+  ];
+
+  itemsNames.forEach((name) => {
+    const route = routes[name];
+
+    items.push({
+      name: route.name,
+      label: route.title,
+    });
+  });
+
+  return items;
+});
 
 const userMenu = ref();
 const navigation = ref();
@@ -194,6 +225,50 @@ const onClickLogout = () => {
 
 $toolbar-border: 1px solid #aaa;
 
+.top-line {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.top-logo {
+  margin-top: $px-30;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  gap: $px-5;
+  font-size: 1.75rem;
+}
+
+.auth-block {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: $px-10;
+  padding-right: $px-20;
+  gap: $px-10;
+}
+
+.top-menu {
+  margin: $px-30 0 $px-50;
+  font-size: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: $px-20;
+
+  :deep(.universal-button) {
+    font-size: 1.5rem;
+  }
+
+  :deep(.universal-button:hover) {
+    background: none;
+  }
+
+  :deep(.universal-button--selected) {
+    text-decoration: underline;
+  }
+}
+
 .top-toolbar {
   width: 100%;
   display: flex;
@@ -206,6 +281,11 @@ $toolbar-border: 1px solid #aaa;
   &__logo {
     padding: $px-10 $px-20;
     border-right: $toolbar-border;
+  }
+
+  &__link {
+    font-size: 1rem;
+    color: black;
   }
 
   &__logo-notes {
