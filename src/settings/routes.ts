@@ -45,7 +45,7 @@ export const routes: Record<string, LocalRoute> = {
   usefulLinks: {
     path: "/useful-links",
     name: "usefulLinks",
-    title: "Useful links",
+    title: "Links",
     isPublic: true,
   },
 
@@ -66,7 +66,7 @@ export const routes: Record<string, LocalRoute> = {
   words: {
     path: "/words",
     name: "words",
-    title: "Word Game",
+    title: "Dictionary",
     isPublic: false,
   },
 

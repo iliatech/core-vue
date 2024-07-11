@@ -25,7 +25,7 @@
           v-if="cancelButton || closeButton"
           @click="emit('click:close')"
           :label="cancelButton ? $lang.button.cancel : $lang.button.close"
-          :class="cancelButton ? 'close-button' : 'cancel-button'"
+          class="cancel-button"
           outlined
         />
         <slot name="buttons-after" />
