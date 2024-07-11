@@ -92,7 +92,7 @@ const router = useRouter();
 const route = useRoute();
 
 const appStore = useAppStore();
-const { updateIsAuthorized, updateAuthUser, updatePageMessages } = appStore;
+const { updateAuthUser, updatePageMessages } = appStore;
 const { pagesMessages } = storeToRefs(appStore);
 
 const email = ref("");
@@ -150,7 +150,6 @@ const onClickLogin = async () => {
 
   if (jwt && user) {
     saveAuthToken(jwt);
-    updateIsAuthorized(true);
     updateAuthUser(user);
     updatePageMessages("login", []);
     await router.push({ name: mainPrivatePage.name });

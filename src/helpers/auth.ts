@@ -34,9 +34,9 @@ export const resetAuthUser = () => {
 
 export const resetAuthorization = async () => {
   const appStore = useAppStore();
-  const { updateIsAuthorized } = appStore;
+  const { updateAuthUser } = appStore;
 
   resetAuthToken();
   resetAuthUser();
-  updateIsAuthorized(false);
+  updateAuthUser(null);
 };

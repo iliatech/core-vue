@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import type { Ref } from "vue";
-import { reactive, ref } from "vue";
+import { computed, reactive, ref } from "vue";
 import type { AuthUser, AuthUserConfig } from "@/types/user";
 import Api from "@/api/Api";
 import { apiPaths } from "@/settings/api";
@@ -8,19 +8,21 @@ import { authorizedUserField, initialUserConfig } from "@/settings/auth";
 import { RequestMethods } from "@/types/api";
 import type { RegisteredError } from "@/types/errors";
 import type { PageMessage, PagesMessages } from "@/types/common";
-import { lang } from "@/lang";
 
 export const useAppStore = defineStore("appStore", () => {
   const isLoading: Ref<boolean> = ref(false);
   const isPersistentLoading: Ref<boolean> = ref(false);
-  const isAuthorized: Ref<boolean> = ref(false);
   const user = ref<AuthUser | null>(null);
   const globalError = ref<RegisteredError | undefined>();
   const pagesMessages = reactive<PagesMessages>({
     login: [],
+    restorePassword: [],
+    changePassword: [],
   });
 
   const authUserConfig = ref<AuthUserConfig>(initialUserConfig);
+
+  const isAuthorized = computed(() => !!user.value);
 
   const startLoading = (): void => {
     isLoading.value = true;
@@ -36,10 +38,6 @@ export const useAppStore = defineStore("appStore", () => {
 
   const stopPersistentLoading = (): void => {
     isPersistentLoading.value = false;
-  };
-
-  const updateIsAuthorized = (value: boolean) => {
-    isAuthorized.value = value;
   };
 
   const updateAuthUser = (value: AuthUser | null) => {
@@ -98,7 +96,6 @@ export const useAppStore = defineStore("appStore", () => {
     stopLoading,
     startPersistentLoading,
     stopPersistentLoading,
-    updateIsAuthorized,
     updateAuthUser,
     updatePageMessages,
   };

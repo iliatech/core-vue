@@ -23,6 +23,7 @@ export default {
   enterSecretKey: "Enter Secret Key",
   error: "Error",
   siteName: "Self-Platform.es",
+  siteNameBy: "by Ilia Domyshev",
   login: "Login",
   manageTags: "Manage tags",
   publicArea: "Public Area",
