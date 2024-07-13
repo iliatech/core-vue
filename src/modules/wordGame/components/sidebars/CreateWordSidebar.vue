@@ -1,27 +1,24 @@
 <template>
   <UniversalSidebar
     ref="sidebar"
-    position="right"
     :dismissable="false"
     :title="$lang.title.createWord"
-    cancel-button
-    @click:close="onClose"
-    class="create-word-sidebar"
+    @click:close="handleClickClose"
+    close-button
   >
-    <div class="word-sidebar__create-translation">
+    <div class="add-word-sidebar">
       <InputText
         type="text"
         width="500px"
         v-model="word"
-        :placeholder="$lang.placeholder.inputWord"
+        :placeholder="$lang.placeholder.enterWord"
         :class="{ 'p-invalid': !word && isValidated }"
       />
     </div>
     <template #buttons-after>
-      <Button
+      <UniversalButton
         @click="onClickCreateWord"
         :label="$lang.button.create"
-        class="add-button"
         :disabled="!validate()"
         outlined
       />
@@ -30,8 +27,6 @@
 </template>
 
 <script lang="ts" setup>
-import Button from "primevue/button";
-
 import { ref } from "vue";
 import Api from "@/api/Api";
 import { apiPaths } from "@/settings/api";
@@ -39,6 +34,7 @@ import { RequestMethods } from "@/types/api";
 import { lang } from "@/lang";
 import InputText from "primevue/inputtext";
 import UniversalSidebar from "@/components/dialogs/UniversalSidebar.vue";
+import UniversalButton from "@/components/buttons/UniversalButton.vue";
 
 const sidebar = ref();
 const isValidated = ref(false);
@@ -75,24 +71,10 @@ const open = async () => {
   sidebar.value.open();
 };
 
-const onClose = () => {
+const handleClickClose = () => {
   word.value = null;
+  sidebar.value.close();
 };
 
 defineExpose({ open });
 </script>
-
-<style lang="scss" scoped>
-@import "@/assets/variables";
-@import "@/assets/fonts";
-
-:deep(.p-inputtext) {
-  width: 80%;
-}
-</style>
-<style lang="scss">
-.p-sidebar-header {
-  justify-content: space-between !important;
-  padding-left: 1.5rem !important;
-}
-</style>

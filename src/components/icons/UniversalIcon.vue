@@ -6,7 +6,7 @@
       'universal-icon--disabled': disabled,
     }"
   >
-    <i :class="`pi pi-${primeIcon}`" />
+    <i :class="`pi pi-${primeIcon}`" :style="{ fontSize: size }" />
     <span
       v-if="label"
       :class="{
@@ -23,6 +23,7 @@ defineProps({
   primeIcon: String,
   link: Boolean,
   disabled: Boolean,
+  size: String,
 });
 </script>
 <style lang="scss" scoped>

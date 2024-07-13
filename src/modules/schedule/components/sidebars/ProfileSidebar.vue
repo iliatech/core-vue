@@ -1,10 +1,10 @@
 <template>
   <UniversalSidebar
     ref="sidebar"
-    :title="$lang.title.profile"
-    close-button
+    :title="$lang.title.userSettings"
     @click:close="handleClickClose"
-    :position="isFullWidth ? 'full' : 'left'"
+    :position="isFullWidth ? 'full' : 'right'"
+    close-button
   >
     <div class="profile-sidebar">
       <div
@@ -52,10 +52,9 @@
       </div>
     </div>
     <template #buttons-after>
-      <Button
+      <UniversalButton
         @click="handleClickSave"
         :label="$lang.button.save"
-        class="save-button"
         outlined
       />
     </template>
@@ -68,7 +67,6 @@ import Dropdown from "primevue/dropdown";
 import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { timeZones } from "@/settings/schedule";
-import Button from "primevue/button";
 import { useAppStore } from "@/store/appStore";
 import { profileSidebarSettings } from "@/settings/profileSidebarSettings";
 import InputText from "primevue/inputtext";
@@ -77,6 +75,7 @@ import { showToast } from "@/helpers/toast";
 import { ToastType } from "@/types/toasts";
 import { lang } from "@/lang";
 import type { AuthUser, AuthUserScheduleConfig } from "@/types/user";
+import UniversalButton from "@/components/buttons/UniversalButton.vue";
 
 const appStore = useAppStore();
 const { user, authUserConfig } = storeToRefs(appStore);
@@ -111,6 +110,7 @@ const handleClickClose = () => {
   }
 
   authUserConfig.value.schedule = savedUserScheduleConfig;
+  sidebar.value.close();
 };
 
 defineExpose({ open });

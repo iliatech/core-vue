@@ -13,6 +13,11 @@ const router = createRouter({
       component: () => import("@/views/HomeView.vue"),
     },
     {
+      path: routes.contacts.path,
+      name: routes.contacts.name,
+      component: () => import("@/views/ContactsView.vue"),
+    },
+    {
       path: routes.dashboard.path,
       name: routes.dashboard.name,
       component: () => import("@/views/DashboardView.vue"),
@@ -48,8 +53,7 @@ const router = createRouter({
     {
       path: routes.usefulLinks.path,
       name: routes.usefulLinks.name,
-      component: () =>
-        import("@/modules/usefulLinks/views/UsefulLinksView.vue"),
+      component: () => import("@/modules/links/views/LinksView.vue"),
       meta: {
         title: lang.title.usefulLinks,
       },
@@ -98,11 +102,10 @@ router.beforeEach((to) => {
   }
 
   const appStore = useAppStore();
-  const { updateIsAuthorized, updateAuthUser } = appStore;
+  const { updateAuthUser } = appStore;
   const user = getAuthUser();
 
   if (getAuthToken() && user) {
-    updateIsAuthorized(true);
     updateAuthUser(user);
   }
 

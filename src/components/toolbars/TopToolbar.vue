@@ -1,34 +1,58 @@
 <template>
-  <div class="top-toolbar">
-    <div class="top-toolbar__logo">
-      <UniversalButton
-        @click="handleClickUserMenu"
-        :label="lang.title.siteName"
-        font-size="1.125rem"
-        no-border
-      />
-      <div class="top-toolbar__logo-notes">by Ilia Domyshev</div>
-      <Menu
-        ref="userMenu"
-        :model="isAuthorized ? menuAuthorized : menuPublic"
-        popup
-      />
+  <div class="top-line">
+    <div class="settings"></div>
+    <div class="top-logo">
+      <div>{{ lang.title.siteName }}</div>
+      <div class="logo-notes">{{ lang.title.siteNameBy }}</div>
     </div>
-    <div class="top-toolbar__nav-container">
-      <div class="top-toolbar__nav">
-        <UniversalButton
-          v-for="item in navigationOptions"
-          :label="item.label"
-          @click="router.push({ name: item.name })"
-          :key="item.label"
-          size="small"
-          color="orange"
-          :selected="$route.name === item.name"
-          nowrap
+    <div class="auth-block">
+      <div v-if="user" class="user">
+        <UniversalIcon
+          prime-icon="cog"
+          class="gear-icon"
+          size="20px"
+          @click="profileSidebar.open()"
+          link
+        />
+        <UniversalIcon
+          prime-icon="user"
+          class="gear-icon"
+          size="20px"
+          @click="handleClickUserMenu"
+          link
+        />
+        <Menu
+          ref="userMenu"
+          :model="userMenuItems"
+          :pt="{ root: { class: 'top-user-menu' } }"
+          popup
         />
       </div>
+      <UniversalButton
+        v-if="!isAuthorized"
+        :label="lang.button.signUp"
+        @click="router.push({ name: routes.register.name })"
+        no-border
+      />
+      <UniversalButton
+        v-if="!isAuthorized"
+        :label="lang.button.signIn"
+        @click="router.push({ name: routes.login.name })"
+        no-border
+      />
     </div>
   </div>
+  <div class="top-menu">
+    <UniversalButton
+      v-for="item in topMenuItems"
+      :label="item.label"
+      @click="router.push({ name: item.name })"
+      :key="item.label"
+      :selected="$route.name === item.name"
+      no-border
+    />
+  </div>
+
   <ProfileSidebar ref="profileSidebar" :isFullWidth="isMobile" />
 </template>
 <script lang="ts" setup>
@@ -41,125 +65,66 @@ import { useAppStore } from "@/store/appStore";
 import { storeToRefs } from "pinia";
 import type { NavigationItem } from "@/types/common";
 import { useRoute } from "vue-router";
-import { fullUserName } from "@/helpers/common";
 import UniversalButton from "@/components/buttons/UniversalButton.vue";
 import ProfileSidebar from "@/modules/schedule/components/sidebars/ProfileSidebar.vue";
-import { generateAvailableAppsList } from "@/helpers/navigation";
 import Menu from "primevue/menu";
 import { CredentialDatabase } from "@/modules/credentials/classes/CredentialDatabase";
+import { privateTopMenuItems, publicTopMenuItems } from "@/settings/menu";
+import UniversalIcon from "@/components/icons/UniversalIcon.vue";
 
 const route = useRoute();
 
 const appStore = useAppStore();
 const { isAuthorized, user } = storeToRefs(appStore);
-const { updateIsAuthorized } = appStore;
+const { updateAuthUser } = appStore;
 
 const userMenu = ref();
 const navigation = ref();
 const profileSidebar = ref();
 
-const isMobile = computed<boolean>(() => {
-  return window.innerWidth < 500;
-});
+const topMenuItems = computed(() => {
+  const items: NavigationItem[] = [];
 
-const navigationOptions = computed<NavigationItem[]>(() => {
-  if (!route.name) {
-    return [];
-  }
+  const itemsNames = [
+    ...publicTopMenuItems,
+    ...privateTopMenuItems.filter((name) =>
+      (user.value?.config?.acl?.topMenu ?? []).includes(name)
+    ),
+  ];
 
-  const localRoute = routes[route.name.toString()];
+  itemsNames.forEach((name) => {
+    const route = routes[name];
 
-  if (!localRoute) {
-    console.error("Error: local route is not found: ", route.name);
-    return [];
-  }
-
-  let items: NavigationItem[] = [];
-
-  if (localRoute.isPublic) {
-    items = [
-      {
-        label: routes.home.title,
-        name: routes.home.name,
-      },
-      {
-        label: routes.usefulLinks.title,
-        name: routes.usefulLinks.name,
-      },
-    ];
-
-    if (!isAuthorized.value) {
-      items.push({
-        label: routes.login.title,
-        name: routes.login.name,
-      });
+    if (!route) {
+      console.error(`Cannot find route with name ${name}`);
+      return;
     }
-  } else {
-    items = [
-      { name: routes.dashboard.name, label: routes.dashboard.title },
-      ...generateAvailableAppsList(),
-    ];
-  }
+
+    items.push({
+      name: route.name,
+      label: route.title,
+    });
+  });
 
   return items;
 });
 
-const menuAuthorized = computed(() => {
-  return [
-    {
-      label: lang.label.profile,
-      items: [
-        {
-          label: user.value?.email,
-          icon: "pi pi-user",
-          command: () => {
-            profileSidebar.value.open();
-          },
-        },
-      ],
-    },
-    {
-      label: lang.label.navigation,
-      items: [
-        {
-          label: lang.label.goToPublicArea,
-          icon: "pi pi-user",
-          command: () => {
-            router.push({ name: routes.home.name });
-          },
-        },
-        {
-          label: lang.label.goToPrivateArea,
-          icon: "pi pi-user",
-          command: () => {
-            router.push({ name: routes.dashboard.name });
-          },
-        },
-      ],
-    },
-    {
-      label: lang.label.logout,
-      items: [
-        {
-          label: lang.menu.logout,
-          icon: "pi pi-sign-out",
-          command: () => {
-            onClickLogout();
-          },
-        },
-      ],
-    },
-  ];
+const isMobile = computed<boolean>(() => {
+  return window.innerWidth < 500;
 });
 
-const menuPublic = computed(() => {
+const userMenuItems = computed(() => {
   return [
     {
-      label: lang.menu.login,
-      icon: "pi pi-sign-out",
-      command: () => {
-        onClickLogin();
-      },
+      label: user.value?.email,
+      items: [
+        {
+          label: lang.button.signOut,
+          command: () => {
+            handleClickSignOut();
+          },
+        },
+      ],
     },
   ];
 });
@@ -176,16 +141,12 @@ const handleClickUserMenu = (event: Event) => {
   userMenu.value.toggle(event);
 };
 
-const onClickLogin = () => {
-  router.push(routes.login.path);
-};
-
-const onClickLogout = () => {
-  router.push(routes.login.path);
+const handleClickSignOut = () => {
+  router.push(routes.home.path);
   CredentialDatabase.unload();
   resetAuthUser();
   resetAuthToken();
-  updateIsAuthorized(false);
+  updateAuthUser(null);
 };
 </script>
 <style lang="scss" scoped>
@@ -194,50 +155,103 @@ const onClickLogout = () => {
 
 $toolbar-border: 1px solid #aaa;
 
-.top-toolbar {
-  width: 100%;
+.top-line {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.top-logo {
+  margin-top: $px-30;
   display: flex;
-  gap: $px-10;
+  justify-content: flex-start;
   align-items: center;
-  border-bottom: $toolbar-border;
-  background: #f1eceb;
-  line-height: 1.5rem;
+  flex-direction: column;
+  gap: $px-5;
+  font-size: 1.75rem;
+}
 
-  &__logo {
+.settings {
+  padding-left: $px-20;
+  padding-top: $px-20;
+  display: flex;
+  flex-direction: row;
+}
+
+.logo-notes {
+  font-size: 1rem;
+}
+
+.user {
+  font-size: 1rem;
+  margin-right: $px-20;
+  display: flex;
+  gap: $px-20;
+}
+
+.auth-block {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding-right: $px-20;
+  padding-top: $px-20;
+  gap: $px-10;
+
+  :deep(.universal-button) {
+    font-size: 1rem;
+  }
+
+  :deep(.universal-button:hover) {
+    background: none;
+    text-decoration: underline;
+  }
+
+  :deep(.universal-button--selected) {
+    text-decoration: underline;
+  }
+}
+
+.top-menu {
+  margin: $px-30 0 $px-50;
+  font-size: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: $px-20;
+
+  :deep(.universal-button) {
+    font-size: 1.125rem;
+  }
+
+  :deep(.universal-button:hover) {
+    background: none;
+  }
+
+  :deep(.universal-button--selected) {
+    text-decoration: underline;
+  }
+}
+</style>
+<style lang="scss">
+@import "@/assets/variables.scss";
+
+.top-user-menu {
+  box-shadow: none;
+  border: 1px solid #666;
+  border-radius: 3px;
+
+  .p-submenu-header {
+    font-weight: normal;
+    font-size: 0.875rem;
     padding: $px-10 $px-20;
-    border-right: $toolbar-border;
   }
 
-  &__logo-notes {
-    font-size: 0.75em;
-    line-height: 0.75em;
+  .p-menuitem {
+    font-size: 0.875rem;
   }
 
-  &__nav-container {
-    position: relative;
-    flex-grow: 1;
-    height: 100%;
-  }
-
-  &__nav {
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    overflow-x: auto;
-    display: flex;
-    gap: $px-10;
-    padding: $px-8 0;
-    position: absolute;
-
-    @media (min-width: 600px) {
-      gap: $px-20;
-      padding: $px-10 $px-10;
-    }
-  }
-
-  :deep(.p-button) {
-    color: #999;
+  .p-menuitem-link {
+    background: none;
+    padding: $px-10 $px-20;
   }
 }
 </style>

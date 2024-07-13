@@ -1,14 +1,14 @@
 <template>
-  <div class="home-page">
-    <PublicArea />
+  <div class="home-view">
+    <Home />
   </div>
 </template>
 <script lang="ts" setup>
-import PublicArea from "@/components/homePage/PublicArea.vue";
+import Home from "@/components/homePage/Home.vue";
 </script>
 <style lang="scss" scoped>
 @import "@/assets/variables";
-.home-page {
+.home-view {
   // Add styles if needed.
 }
 </style>

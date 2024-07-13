@@ -172,7 +172,7 @@ const openManageTagsSidebar = () => {
 }
 
 .words-view {
-  padding: $px-20;
+  padding: 0 $px-60;
 
   &__top {
     display: flex;

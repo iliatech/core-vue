@@ -18,6 +18,9 @@ export default {
   restore: "Restore",
   restorePassword: "Restore Password",
   save: "Save",
-  usefulLinks: "Useful Links",
-  wordsApp: "Word Game",
+  signIn: "Sign In",
+  signOut: "Sign Out",
+  signUp: "Sign Up",
+  usefulLinks: "Links",
+  wordsApp: "Dictionary",
 };

@@ -12,6 +12,6 @@ import ScheduleDashboard from "@/modules/schedule/components/ScheduleDashboard.v
 .schedule-view {
   display: flex;
   justify-content: center;
-  padding: $px-20;
+  padding: 0 $px-60;
 }
 </style>
