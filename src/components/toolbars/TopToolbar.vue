@@ -95,6 +95,11 @@ const topMenuItems = computed(() => {
   itemsNames.forEach((name) => {
     const route = routes[name];
 
+    if (!route) {
+      console.error(`Cannot find route with name ${name}`);
+      return;
+    }
+
     items.push({
       name: route.name,
       label: route.title,

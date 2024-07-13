@@ -20,7 +20,7 @@
   display: flex;
   flex-direction: column;
   gap: $px-10;
-  padding: $px-20;
+  padding: 0 $px-60;
 
   a {
     @include font-large;

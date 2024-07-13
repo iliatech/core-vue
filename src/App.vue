@@ -71,5 +71,6 @@ onMounted(async () => {
 .app-content {
   flex-grow: 1;
   overflow-y: auto;
+  margin-bottom: $px-40;
 }
 </style>

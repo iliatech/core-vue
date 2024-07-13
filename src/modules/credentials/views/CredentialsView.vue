@@ -84,7 +84,7 @@ const handleClickMenuItem = (routeName: string) => {
 @import "@/assets/variables";
 .credentials-view {
   height: 100%;
-  padding: $px-20;
+  padding: 0 $px-60;
 
   &__menu {
     display: flex;

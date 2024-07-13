@@ -10,8 +10,7 @@
       <p>Hello! My name is <b>Ilia Domyshev</b>.</p>
       <p>I'm interesting in technologies and work full-time as programmer.</p>
       <p>
-        I also focused on frontend but also have experience as backend
-        developer.
+        I focused on frontend but also have experience as backend developer.
       </p>
 
       <h2>Professional experience</h2>
@@ -34,15 +33,16 @@
       <h2>Technology Stack</h2>
 
       <p>
-        JavaScript, Vue 3, Express, CSS3, HTML5, AmCharts5, Lodash, Date-Fns,
-        Mapbox, Deck.gl<br />
+        TypeScript, JavaScript<br />
+        Vue 3, Vue 2, CSS3, HTML5, AmCharts5, Lodash, Date-Fns, Mapbox,
+        Deck.gl<br />
         Soft: Jira, Confluence, GitHub, Git, Discord, Loom, WebStorm, MacOS
       </p>
 
       <p>
-        (PAST)<br />
-        React, Vue 2, C#, ASP.NET, PHP, Laravel, PowerShell, MSSQL, Postgres,
-        MySql, Docker
+        <b>Also had experience with</b><br />
+        React, Vue 2, Express, C#, ASP.NET, PHP, Laravel, PowerShell, MSSQL,
+        Postgres, MySql, Docker
         <br />
         Soft: YouTrack, Asana, Slack, Microsoft Visual Studio, Linux, Windows
         <br />
@@ -78,7 +78,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-bottom: $px-50;
 }
 
 .home {
