@@ -85,12 +85,13 @@ const profileSidebar = ref();
 const topMenuItems = computed(() => {
   const items: NavigationItem[] = [];
 
-  const itemsNames = [
-    ...publicTopMenuItems,
-    ...privateTopMenuItems.filter((name) =>
-      (user.value?.config?.acl?.topMenu ?? []).includes(name)
-    ),
-  ];
+  const aclPrivateItems = user.value?.config?.acl?.topMenu ?? [];
+
+  const privateItems = aclPrivateItems.length
+    ? privateTopMenuItems.filter((name) => aclPrivateItems.includes(name))
+    : privateTopMenuItems;
+
+  const itemsNames = [...publicTopMenuItems, ...privateItems];
 
   itemsNames.forEach((name) => {
     const route = routes[name];
