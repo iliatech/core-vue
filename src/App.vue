@@ -9,7 +9,7 @@
   </div>
 
   <div class="app-container">
-    <TopToolbar />
+    <SiteHeader />
     <div class="app-content">
       <ErrorProcessing>
         <RouterView />
@@ -25,7 +25,7 @@ import { useAppStore } from "@/store/appStore";
 import { storeToRefs } from "pinia";
 import { onBeforeMount, onMounted, ref } from "vue";
 import { setGlobalToastObject } from "@/helpers/toast";
-import TopToolbar from "@/components/toolbars/TopToolbar.vue";
+import SiteHeader from "@/components/toolbars/SiteHeader.vue";
 import ErrorProcessing from "@/components/error/ErrorProcessing.vue";
 
 const appStore = useAppStore();
@@ -55,6 +55,7 @@ onMounted(async () => {
   width: 100vw;
   height: 100vh;
   background: rgba(255, 255, 255, 0.5);
+
   &__content {
     width: 70px;
     height: 70px;
@@ -70,7 +71,6 @@ onMounted(async () => {
 
 .app-content {
   flex-grow: 1;
-  overflow-y: auto;
   margin-bottom: $px-40;
 }
 </style>

@@ -1,56 +1,58 @@
 <template>
-  <div class="top-line">
-    <div class="settings"></div>
-    <div class="top-logo">
-      <div>{{ lang.title.siteName }}</div>
-      <div class="logo-notes">{{ lang.title.siteNameBy }}</div>
-    </div>
-    <div class="auth-block">
-      <div v-if="user" class="user">
-        <UniversalIcon
-          prime-icon="cog"
-          class="gear-icon"
-          size="20px"
-          @click="profileSidebar.open()"
-          link
+  <div class="site-header">
+    <div class="top-line">
+      <div class="settings"></div>
+      <div class="top-logo">
+        <div>{{ lang.title.siteName }}</div>
+        <div class="logo-notes">{{ lang.title.siteNameBy }}</div>
+      </div>
+      <div class="auth-block">
+        <div v-if="user" class="user">
+          <UniversalIcon
+            prime-icon="cog"
+            class="gear-icon"
+            size="20px"
+            @click="profileSidebar.open()"
+            link
+          />
+          <UniversalIcon
+            prime-icon="user"
+            class="gear-icon"
+            size="20px"
+            @click="handleClickUserMenu"
+            link
+          />
+          <Menu
+            ref="userMenu"
+            :model="userMenuItems"
+            :pt="{ root: { class: 'top-user-menu' } }"
+            popup
+          />
+        </div>
+        <UniversalButton
+          v-if="!isAuthorized"
+          :label="lang.button.signUp"
+          @click="router.push({ name: routes.register.name })"
+          no-border
         />
-        <UniversalIcon
-          prime-icon="user"
-          class="gear-icon"
-          size="20px"
-          @click="handleClickUserMenu"
-          link
-        />
-        <Menu
-          ref="userMenu"
-          :model="userMenuItems"
-          :pt="{ root: { class: 'top-user-menu' } }"
-          popup
+        <UniversalButton
+          v-if="!isAuthorized"
+          :label="lang.button.signIn"
+          @click="router.push({ name: routes.login.name })"
+          no-border
         />
       </div>
+    </div>
+    <div class="top-menu">
       <UniversalButton
-        v-if="!isAuthorized"
-        :label="lang.button.signUp"
-        @click="router.push({ name: routes.register.name })"
-        no-border
-      />
-      <UniversalButton
-        v-if="!isAuthorized"
-        :label="lang.button.signIn"
-        @click="router.push({ name: routes.login.name })"
+        v-for="item in topMenuItems"
+        :label="item.label"
+        @click="router.push({ name: item.name })"
+        :key="item.label"
+        :selected="$route.name === item.name"
         no-border
       />
     </div>
-  </div>
-  <div class="top-menu">
-    <UniversalButton
-      v-for="item in topMenuItems"
-      :label="item.label"
-      @click="router.push({ name: item.name })"
-      :key="item.label"
-      :selected="$route.name === item.name"
-      no-border
-    />
   </div>
 
   <ProfileSidebar ref="profileSidebar" :isFullWidth="isMobile" />
