@@ -1,10 +1,10 @@
 <template>
   <div class="credentials-view">
-    <div class="credentials-view__menu">
+    <div class="credentials-view__tabs">
       <div
-        class="credentials-view__menu-item"
+        class="credentials-view__tabs-item"
         :class="{
-          'credentials-view__menu-item--selected': item.name === route.name,
+          'credentials-view__tabs-item--selected': item.name === route.name,
         }"
         v-for="item in credentialsRoutes"
         :key="item.title"
@@ -13,10 +13,12 @@
         {{ item.title }}
       </div>
       <div
-        class="credentials-view__menu-item credentials-view__menu-item-last"
+        class="credentials-view__tabs-item credentials-view__tabs-item-last"
       />
     </div>
-    <RouterView />
+    <div class="credentials-view__content">
+      <RouterView />
+    </div>
   </div>
   <UniversalDialog
     :title="$lang.title.enterSecretKey"
@@ -85,15 +87,21 @@ const handleClickMenuItem = (routeName: string) => {
 .credentials-view {
   height: 100%;
   padding: 0 $px-60;
+  display: flex;
+  flex-direction: column;
 
-  &__menu {
+  &__tabs {
     display: flex;
     margin-top: $px-10;
     margin-bottom: $px-20;
     padding: 0 $px-5 $px-5;
   }
 
-  &__menu-item {
+  &__content {
+    flex-grow: 1;
+  }
+
+  &__tabs-item {
     cursor: pointer;
     border-bottom: 2px solid #ccc;
     padding-left: $px-20;
@@ -101,11 +109,11 @@ const handleClickMenuItem = (routeName: string) => {
     padding-bottom: $px-5;
   }
 
-  &__menu-item-last {
+  &__tabs-item-last {
     flex-grow: 1;
   }
 
-  &__menu-item--selected {
+  &__tabs-item--selected {
     font-weight: bold;
     border-bottom-color: #666;
   }
