@@ -19,10 +19,12 @@ export const credentialsTable: UniversalTableColumn[] = [
   {
     name: "type.name",
     label: "Type",
+    filterable: true,
   },
   {
     name: "description",
     label: "Description",
+    filterable: true,
   },
   {
     name: "password",

@@ -68,7 +68,7 @@ import type { PropType } from "vue";
 import type { UniversalTableColumn } from "@/types/tables";
 import UniversalButton from "@/components/buttons/UniversalButton.vue";
 import UniversalFilters from "@/components/filters/UniversalFilters.vue";
-import { pick } from "lodash";
+import { get, pick } from "lodash";
 import type { UniversalFilterValues } from "@/types/filters";
 import { computed, ref } from "vue";
 import { prepareName } from "@/helpers/strings";
@@ -96,7 +96,9 @@ const dataFiltered = computed<any[]>(() => {
 
   Object.entries(filterValues.value).forEach(([columnName, filterValue]) => {
     itemsFiltered = itemsFiltered.filter((item) => {
-      return prepareName(item[columnName])
+      const value = get(item, columnName);
+
+      return prepareName(value)
         .toLowerCase()
         .includes(prepareName(filterValue).toLowerCase());
     });

@@ -16,15 +16,16 @@ export const credentialTypesTable: UniversalTableColumn[] = [
     filterable: true,
   },
   {
+    name: "description",
+    label: "Description",
+    filterable: true,
+  },
+  {
     name: "credentialsNumber",
     label: "Linked Credentials Number",
     defaultSort: true,
     defaultSortOrder: 1,
     sortable: true,
-  },
-  {
-    name: "description",
-    label: "Description",
   },
   {
     name: "actions",

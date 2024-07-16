@@ -32,6 +32,10 @@ defineProps({
 @import "@/assets/variables";
 
 .universal-filters {
+  display: flex;
+  flex-direction: row;
+  gap: $px-20;
+
   :deep(.universal-text__label) {
     margin-bottom: $px-5;
     @include font-small-medium;
