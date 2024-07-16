@@ -38,13 +38,11 @@ import { prepareName } from "@/helpers/strings";
 import { CredentialDatabase } from "@/modules/credentials/classes/CredentialDatabase";
 import { showErrorToast, showSuccessToast } from "@/helpers/toast";
 import { lang } from "@/lang";
-import { credentialsRoutes, routes } from "@/settings/routes";
+import { credentialsRoutes } from "@/settings/routes";
 import { useRoute, useRouter } from "vue-router";
 
 const router = useRouter();
 const route = useRoute();
-
-console.log("R", routes);
 
 const secretKeyDialog = ref<InstanceType<typeof UniversalDialog>>();
 const secretKey = ref<string>("");
@@ -65,7 +63,6 @@ const handleConfirmSecretKey = async () => {
   const key = prepareName(secretKey.value);
 
   if (key) {
-    console.log("handleConfirmSecretKey");
     try {
       await CredentialDatabase.load(key);
       localStorage.setItem(LocalStorageKeys.CredentialDatabaseKey, key);

@@ -113,8 +113,6 @@ router.beforeEach((to) => {
     (!getAuthToken() || !getAuthUser()) &&
     !publicRouteNames.includes((to.name as string) ?? "")
   ) {
-    console.log("T N", to.name);
-
     return { name: routes.login.name };
   }
 });
