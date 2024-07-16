@@ -10,6 +10,7 @@
         </div>
         <div class="universal-dialog__buttons">
           <UniversalButton
+            v-if="!withoutCancel"
             @click="handleCancel"
             :label="$lang.button.cancel"
             color="grey"
@@ -37,6 +38,7 @@ const props = defineProps({
   title: { type: String, required: true },
   notCloseOnConfirm: Boolean,
   zIndex: { type: Number, default: 1000 },
+  withoutCancel: Boolean,
 });
 
 const emit = defineEmits(["confirm", "cancel"]);

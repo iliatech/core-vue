@@ -1,19 +1,27 @@
 <template>
   <div class="universal-password">
     <UniversalIcon
-      prime-icon="copy"
-      class="universal-password__copy-icon"
-      @click="handleClickCopy"
+      prime-icon="eye"
+      class="universal-password__show-icon"
+      @click="handleClickShow"
     />
   </div>
+  <UniversalDialog
+    ref="showPasswordDialog"
+    :title="$lang.title.password"
+    @confirm="handleClickCloseShow"
+    :z-index="1200"
+    without-cancel
+  >
+    {{ value }}
+  </UniversalDialog>
 </template>
 <script lang="ts" setup>
 import UniversalIcon from "@/components/icons/UniversalIcon.vue";
-import { showToast } from "@/helpers/toast";
-import { ToastType } from "@/types/toasts";
-import { lang } from "@/lang";
+import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
+import { ref } from "vue";
 
-const props = defineProps({
+defineProps({
   value: {
     type: String,
     required: true,
@@ -24,19 +32,14 @@ const props = defineProps({
   },
 });
 
-const handleClickCopy = async () => {
-  try {
-    await navigator.clipboard.writeText(props.value);
-    showToast({
-      type: ToastType.Success,
-      text: lang.success.copiedToClipboard(props.entityLabel),
-    });
-  } catch (err) {
-    showToast({
-      type: ToastType.Error,
-      text: lang.error.notCopiedToClipboard(props.entityLabel),
-    });
-  }
+const showPasswordDialog = ref();
+
+const handleClickShow = async () => {
+  showPasswordDialog.value?.open();
+};
+
+const handleClickCloseShow = async () => {
+  showPasswordDialog.value?.close();
 };
 </script>
 <style lang="scss" scoped>
@@ -47,7 +50,7 @@ const handleClickCopy = async () => {
   display: flex;
   justify-content: space-between;
 
-  &__copy-icon {
+  &__show-icon {
     cursor: pointer;
   }
 }

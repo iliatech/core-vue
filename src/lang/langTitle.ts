@@ -26,6 +26,7 @@ export default {
   siteNameBy: "by Ilia Domyshev",
   login: "Login",
   manageTags: "Manage tags",
+  password: "Password",
   publicArea: "Public Area",
   privateArea: ["Dashboard", "Please, choose the app ", "you want to use:"],
   register: "Register",
