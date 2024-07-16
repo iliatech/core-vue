@@ -227,6 +227,7 @@ $toolbar-border: 1px solid #aaa;
 
   :deep(.universal-button:hover) {
     background: none;
+    text-decoration: underline;
   }
 
   :deep(.universal-button--selected) {
