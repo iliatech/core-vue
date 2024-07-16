@@ -9,10 +9,6 @@ import Home from "@/components/homePage/Home.vue";
 <style lang="scss" scoped>
 @import "@/assets/variables";
 .home-view {
-  //position: absolute;
-  //top: 0;
-  //left: 0;
-  //height: 100%;
-  //width: 100%;
+  // Add styles if needed.
 }
 </style>
