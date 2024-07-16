@@ -19,7 +19,7 @@
         @click="openClientsSidebar"
         :label="$lang.button.clients"
         color="lightBlue"
-        icon-pre="cog"
+        icon-pre="users"
       />
     </div>
 

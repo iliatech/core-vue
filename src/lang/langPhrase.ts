@@ -4,7 +4,7 @@ export default {
   hasBeenTranslatedNTimes: (value: number) =>
     `Has been translated ${value} times.`,
   dontRememberPassword: "In case you forgot password:",
-  noClientsFound: "No clients found.",
+  noClientsFound: "No interactions found.",
   noTagsFound: "No tags found.",
   numberOfTranslations: "Translated times",
   previousTranslations: "Previous translations",

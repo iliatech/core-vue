@@ -1,6 +1,6 @@
 export default {
-  client: "Client",
-  clientName: "Client name",
+  client: "Interaction",
+  clientName: "Interaction name",
   comment: "Comment",
   createTranslation: "Create translation",
   date: "Date",

@@ -3,6 +3,7 @@
     ref="sidebar"
     class="clients-sidebar"
     :title="$lang.title.clients"
+    @click:close="closeSidebar"
     close-button
   >
     <UniversalButton
@@ -91,7 +92,7 @@ const clientsFiltered = computed(() => {
 const open = async () => {
   await loadClients();
 
-  sidebar.value.open();
+  sidebar.value?.open();
 };
 
 const handleClickAddClient = () => {
@@ -120,6 +121,10 @@ const confirmDeleteClient = async () => {
   await archiveClient(selectedClient.value);
 
   selectedClient.value = undefined;
+};
+
+const closeSidebar = () => {
+  sidebar.value.close();
 };
 
 defineExpose({ open });
