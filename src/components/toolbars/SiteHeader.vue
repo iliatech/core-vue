@@ -93,7 +93,9 @@ const topMenuItems = computed(() => {
     ? privateTopMenuItems.filter((name) => aclPrivateItems.includes(name))
     : privateTopMenuItems;
 
-  const itemsNames = [...publicTopMenuItems, ...privateItems];
+  const itemsNames = isAuthorized.value
+    ? [...publicTopMenuItems, ...privateItems]
+    : publicTopMenuItems;
 
   itemsNames.forEach((name) => {
     const route = routes[name];
