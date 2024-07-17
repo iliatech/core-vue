@@ -1,5 +1,5 @@
 <template>
-  <UniversalSidebar
+  <UniversalDrawer
     ref="sidebar"
     class="clients-sidebar"
     :title="$lang.title.clients"
@@ -47,8 +47,8 @@
       </Column>
       <template #empty> {{ $lang.phrase.noClientsFound }} </template>
     </DataTable>
-  </UniversalSidebar>
-  <ClientDialog ref="clientDialog" />
+  </UniversalDrawer>
+  <InteractionDialog ref="clientDialog" />
   <UniversalDialog
     ref="deleteClientDialog"
     :title="$lang.title.confirmDeleteClient"
@@ -65,14 +65,14 @@ import { computed, ref } from "vue";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import { storeToRefs } from "pinia";
-import UniversalSidebar from "@/components/dialogs/UniversalSidebar.vue";
+import UniversalDrawer from "@/components/dialogs/UniversalDrawer.vue";
 import UniversalButton from "@/components/buttons/UniversalButton.vue";
 import {
   clientsTableColumns,
   ClientsTableColumns,
 } from "@/settings/tables/clientsTable";
 import { useScheduleStore } from "@/store/scheduleStore";
-import ClientDialog from "@/modules/schedule/components/dialogs/ClientDialog.vue";
+import InteractionDialog from "@/modules/schedule/components/dialogs/InteractionDialog.vue";
 import type { Client } from "@/types/schedule";
 import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
 

@@ -25,7 +25,7 @@ const router = createRouter({
     {
       path: routes.words.path,
       name: routes.words.name,
-      component: () => import("@/modules/wordGame/views/WordsView.vue"),
+      component: () => import("@/modules/dictionary/views/WordsView.vue"),
       meta: {
         title: lang.title.wordsApp,
       },

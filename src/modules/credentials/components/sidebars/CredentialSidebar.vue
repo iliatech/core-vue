@@ -1,5 +1,5 @@
 <template>
-  <UniversalSidebar
+  <UniversalDrawer
     ref="sidebar"
     :title="isEditMode ? $lang.title.editCredential : $lang.title.addCredential"
     close-button
@@ -44,7 +44,7 @@
         :disabled="!isChanged || !isValid"
       />
     </template>
-  </UniversalSidebar>
+  </UniversalDrawer>
   <UniversalDialog
     :title="$lang.title.discardChanges"
     ref="discardChangesDialog"
@@ -56,7 +56,7 @@
   </UniversalDialog>
 </template>
 <script lang="ts" setup>
-import UniversalSidebar from "@/components/dialogs/UniversalSidebar.vue";
+import UniversalDrawer from "@/components/dialogs/UniversalDrawer.vue";
 import { computed, reactive, ref } from "vue";
 import UniversalButton from "@/components/buttons/UniversalButton.vue";
 import { CredentialType } from "@/modules/credentials/classes/entities/CredentialType";
@@ -114,8 +114,8 @@ const isInputStartedInitialValue = {
   description: false,
 };
 
-const sidebar = ref<InstanceType<typeof UniversalSidebar>>();
-const discardChangesDialog = ref<InstanceType<typeof UniversalSidebar>>();
+const sidebar = ref<InstanceType<typeof UniversalDrawer>>();
+const discardChangesDialog = ref<InstanceType<typeof UniversalDrawer>>();
 const isInputStarted = reactive<IsInputStarted>(isInputStartedInitialValue);
 const currentState = reactive<DrawerState>({ ...initialState });
 const savedState = reactive<DrawerState>({ ...initialState });

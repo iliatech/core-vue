@@ -26,7 +26,7 @@ import { credentialsTable } from "@/modules/credentials/settings/tables/credenti
 import { Credential } from "@/modules/credentials/classes/entities/Credential";
 import CredentialSidebar from "@/modules/credentials/components/sidebars/CredentialSidebar.vue";
 import { computed, ref } from "vue";
-import type UniversalSidebar from "@/components/dialogs/UniversalSidebar.vue";
+import type UniversalDrawer from "@/components/dialogs/UniversalDrawer.vue";
 import type {
   ICredential,
   ICredentialsTableItem,
@@ -34,7 +34,7 @@ import type {
 import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
 import { CredentialType } from "@/modules/credentials/classes/entities/CredentialType";
 
-const credentialSidebar = ref<InstanceType<typeof UniversalSidebar>>();
+const credentialSidebar = ref<InstanceType<typeof UniversalDrawer>>();
 const selectedItem = ref<ICredential | null>(null);
 const confirmDeleteItemDialog = ref<InstanceType<typeof UniversalDialog>>();
 

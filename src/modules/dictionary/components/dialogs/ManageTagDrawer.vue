@@ -72,6 +72,7 @@ const validate = (): boolean => {
   return !!name.value;
 };
 const onCancel = () => {
+  dialog.value?.close();
   name.value = undefined;
 };
 
