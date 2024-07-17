@@ -96,8 +96,9 @@ defineExpose({ open, close });
     width: 400px;
     background: #fff;
     padding: $px-20;
-    border: 1px solid mediumpurple;
+    border: 2px dashed mediumpurple;
     margin: $px-40;
+    border-radius: $px-10;
   }
 
   &__title {

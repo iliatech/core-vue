@@ -37,7 +37,7 @@
               no-border
             />
             <UniversalButton
-              icon-pre="trash"
+              icon-pre="download"
               @click="handleClickDeleteClient(data)"
               icon-size="1rem"
               no-border

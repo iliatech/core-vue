@@ -6,7 +6,7 @@
     @click:cancel="onCancel"
     z-index="1200"
     :confirm-button-label="lang.button.save"
-    confirm-button-color="forestGreen"
+    confirm-button-color="mediumPurple"
     @confirm="handleClickSave"
   >
     <div class="client-dialog__content">

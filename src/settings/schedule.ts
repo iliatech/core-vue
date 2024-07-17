@@ -2,6 +2,7 @@ import type { TimeZone } from "@/types/schedule";
 
 export const scheduleColors: Record<string, string> = {
   forestGreen: "forestgreen",
+  mediumPurple: "mediumpurple",
   grey: "#666",
   lightBlue: "#549ed3",
   lightGreen: "#67d540",
