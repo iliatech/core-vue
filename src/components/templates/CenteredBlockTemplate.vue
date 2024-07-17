@@ -39,7 +39,7 @@ defineProps({
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  height: calc(100vh - $header-height);
+  height: 100%;
 
   &__container {
     display: flex;
