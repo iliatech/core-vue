@@ -1,0 +1,42 @@
+name: Deploy Self-Platform.es UI
+
+on:
+  push:
+    branches:
+      - stable
+
+jobs:
+  web-deploy:
+    name: Deploy Self-Platform.es UI
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Latest Code
+        uses: actions/checkout@v3
+
+      - name: Prepare Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install packages
+        run: npm ci
+
+      - name: Create env file
+        run: |
+          touch .env
+          echo VITE_API_URL="http://api.self-platform.es:3040" >> .env
+          echo VITE_CLOUDFLARE_TURNSTILE_SITE_KEY=${{ secrets.TURNSTILE_SITE_KEY }} >> .env
+          cat .env
+
+      - name: Build
+        run: npm run build
+
+      - name: Upload files to remote server
+        uses: easingthemes/ssh-deploy@main
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SOURCE: "dist/"
+          ARGS: "-rlgoDzvc -i --delete --exclude=.htaccess"
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          TARGET: /var/www/stable.self-platform.es/
