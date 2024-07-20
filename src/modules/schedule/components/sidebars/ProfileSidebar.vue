@@ -1,5 +1,5 @@
 <template>
-  <UniversalSidebar
+  <UniversalDrawer
     ref="sidebar"
     :title="$lang.title.userSettings"
     @click:close="handleClickClose"
@@ -58,11 +58,11 @@
         outlined
       />
     </template>
-  </UniversalSidebar>
+  </UniversalDrawer>
 </template>
 
 <script setup lang="ts">
-import UniversalSidebar from "@/components/dialogs/UniversalSidebar.vue";
+import UniversalDrawer from "@/components/dialogs/UniversalDrawer.vue";
 import Dropdown from "primevue/dropdown";
 import { ref } from "vue";
 import { storeToRefs } from "pinia";

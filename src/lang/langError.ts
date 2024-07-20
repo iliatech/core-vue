@@ -4,7 +4,7 @@ import type { IEntity } from "@/settings/entities";
 import { capitalize } from "lodash";
 
 export default {
-  clientDuplicate: "Client with same name already exists",
+  interactionDuplicate: "Interaction with same name already exists",
   duplicateFound: "Duplicate found",
   entityWithSameNameExists: (name: IEntity): string =>
     `${lang.entity[name]} with the same name already exists`,

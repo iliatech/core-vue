@@ -1,40 +1,36 @@
 <template>
-  <CustomDialog
-    ref="dialog"
-    :title="id ? $lang.title.editClient : $lang.title.createClient"
-    class="client-dialog"
+  <UniversalDialog
+    ref="dialogRef"
+    :title="id ? $lang.title.editInteraction : $lang.title.createInteraction"
+    class="interaction-drawer"
     @click:cancel="onCancel"
+    z-index="1200"
+    :confirm-button-label="lang.button.save"
+    confirm-button-color="mediumPurple"
+    @confirm="handleClickSave"
   >
     <div class="client-dialog__content">
-      <InputText
-        type="text"
-        v-model.trim="name"
-        :placeholder="$lang.placeholder.inputClientName"
-        :class="{ 'p-invalid': !validate() && isValidated }"
-      />
+      <UniversalField :label="lang.label.name">
+        <UniversalText
+          v-model="name"
+          :placeholder="$lang.placeholder.inputClientName"
+          :class="{ 'p-invalid': !validate() && isValidated }"
+        />
+      </UniversalField>
     </div>
-    <template #buttons-before>
-      <UniversalButton
-        :label="$lang.button.save"
-        color="forestGreen"
-        outlined
-        @click="handleClickSave"
-        width="80px"
-      />
-    </template>
-  </CustomDialog>
+  </UniversalDialog>
 </template>
 <script lang="ts" setup>
 import { ref } from "vue";
-import InputText from "primevue/inputtext";
-import CustomDialog from "@/components/dialogs/CustomDialog.vue";
-import UniversalButton from "@/components/buttons/UniversalButton.vue";
 import { useScheduleStore } from "@/store/scheduleStore";
 import { showToast } from "@/helpers/toast";
 import { ToastType } from "@/types/toasts";
 import { lang } from "@/lang";
 import { storeToRefs } from "pinia";
 import type { Client } from "@/types/schedule";
+import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
+import UniversalText from "@/components/fields/UniversalText.vue";
+import UniversalField from "@/components/fields/UniversalField.vue";
 
 const scheduleStore = useScheduleStore();
 const { clients } = storeToRefs(scheduleStore);
@@ -42,7 +38,7 @@ const { createClient, updateClient } = scheduleStore;
 
 const id = ref();
 const name = ref();
-const dialog = ref();
+const dialogRef = ref();
 const isValidated = ref(false);
 
 const handleClickSave = async () => {
@@ -58,7 +54,7 @@ const handleClickSave = async () => {
         item.name === name.value.trim() && (!id.value || id.value !== item.id)
     )
   ) {
-    showToast({ type: ToastType.Error, text: lang.error.clientDuplicate });
+    showToast({ type: ToastType.Error, text: lang.error.interactionDuplicate });
     return false;
   }
 
@@ -68,7 +64,7 @@ const handleClickSave = async () => {
     await createClient(name.value);
   }
 
-  dialog.value.close();
+  dialogRef.value.close();
 };
 
 const validate = (): boolean => {
@@ -88,7 +84,7 @@ const open = (client?: Client) => {
     name.value = client.name;
   }
 
-  dialog.value.open();
+  dialogRef.value.open();
 };
 
 defineExpose({ open });
@@ -97,7 +93,7 @@ defineExpose({ open });
 @import "@/assets/fonts";
 @import "@/assets/variables";
 
-.client-dialog {
+.interaction-drawer {
   &__content {
     margin-bottom: $px-20;
   }
@@ -106,7 +102,7 @@ defineExpose({ open });
 <style lang="scss" scoped></style>
 <style lang="scss">
 @import "@/assets/variables";
-.client-dialog .p-dialog-header {
+.interaction-drawer .p-dialog-header {
   padding-bottom: $px-10 !important;
 }
 </style>

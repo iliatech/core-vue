@@ -3,8 +3,8 @@ export default {
   credentialSaved: "Credential saved",
   credentialTypeAdded: "Credential type added",
   credentialTypeSaved: "Credential type saved",
-  clientCreated: "Client created",
-  clientUpdated: "Client updated",
+  clientCreated: "Interaction created",
+  clientUpdated: "Interaction updated",
   copiedToClipboard: (entityLabel: string) =>
     `${entityLabel} copied to clipboard`,
   databaseSaved: "Database saved",

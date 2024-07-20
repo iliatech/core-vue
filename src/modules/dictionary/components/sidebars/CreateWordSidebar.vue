@@ -1,5 +1,5 @@
 <template>
-  <UniversalSidebar
+  <UniversalDrawer
     ref="sidebar"
     :dismissable="false"
     :title="$lang.title.createWord"
@@ -23,7 +23,7 @@
         outlined
       />
     </template>
-  </UniversalSidebar>
+  </UniversalDrawer>
 </template>
 
 <script lang="ts" setup>
@@ -33,7 +33,7 @@ import { apiPaths } from "@/settings/api";
 import { RequestMethods } from "@/types/api";
 import { lang } from "@/lang";
 import InputText from "primevue/inputtext";
-import UniversalSidebar from "@/components/dialogs/UniversalSidebar.vue";
+import UniversalDrawer from "@/components/dialogs/UniversalDrawer.vue";
 import UniversalButton from "@/components/buttons/UniversalButton.vue";
 
 const sidebar = ref();

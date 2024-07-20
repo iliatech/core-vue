@@ -9,6 +9,7 @@
           <slot />
         </div>
         <div class="universal-dialog__buttons">
+          <slot name="buttons-before" />
           <UniversalButton
             v-if="!withoutCancel"
             @click="handleCancel"
@@ -19,11 +20,12 @@
           />
           <UniversalButton
             @click="handleConfirm"
-            :label="$lang.button.ok"
-            color="pink"
+            :label="confirmButtonLabel ?? $lang.button.ok"
+            :color="confirmButtonColor ?? 'pink'"
             width="80px"
             class="universal-dialog__confirm-button"
           />
+          <slot name="buttons-after" />
         </div>
       </div>
     </div>
@@ -35,8 +37,11 @@ import { ref } from "vue";
 import UniversalButton from "@/components/buttons/UniversalButton.vue";
 
 const props = defineProps({
+  confirmButtonColor: String,
+  confirmButtonLabel: String,
   title: { type: String, required: true },
   notCloseOnConfirm: Boolean,
+  notCloseOnCancel: Boolean,
   zIndex: { type: Number, default: 1000 },
   withoutCancel: Boolean,
 });
@@ -62,7 +67,10 @@ const handleConfirm = () => {
 
 const handleCancel = () => {
   emit("cancel");
-  close();
+
+  if (!props.notCloseOnCancel) {
+    close();
+  }
 };
 
 defineExpose({ open, close });
@@ -88,8 +96,9 @@ defineExpose({ open, close });
     width: 400px;
     background: #fff;
     padding: $px-20;
-    border: 1px solid mediumpurple;
+    border: 2px dashed mediumpurple;
     margin: $px-40;
+    border-radius: $px-10;
   }
 
   &__title {

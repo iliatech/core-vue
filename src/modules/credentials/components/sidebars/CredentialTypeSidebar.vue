@@ -1,5 +1,5 @@
 <template>
-  <UniversalSidebar
+  <UniversalDrawer
     ref="sidebar"
     :title="
       isEditMode
@@ -35,7 +35,7 @@
         :disabled="!isChanged || isSameNameExists"
       />
     </template>
-  </UniversalSidebar>
+  </UniversalDrawer>
   <UniversalDialog
     :title="$lang.title.discardChanges"
     ref="discardChangesDialog"
@@ -47,7 +47,7 @@
   </UniversalDialog>
 </template>
 <script lang="ts" setup>
-import UniversalSidebar from "@/components/dialogs/UniversalSidebar.vue";
+import UniversalDrawer from "@/components/dialogs/UniversalDrawer.vue";
 import type { ComputedRef } from "vue";
 import { computed, reactive, ref } from "vue";
 import UniversalButton from "@/components/buttons/UniversalButton.vue";
@@ -92,8 +92,8 @@ const initialState: DrawerState = {
   description: "",
 };
 
-const sidebar = ref<InstanceType<typeof UniversalSidebar>>();
-const discardChangesDialog = ref<InstanceType<typeof UniversalSidebar>>();
+const sidebar = ref<InstanceType<typeof UniversalDrawer>>();
+const discardChangesDialog = ref<InstanceType<typeof UniversalDrawer>>();
 const isInputStarted = reactive<IsInputStarted>(isInputStartedInitialValue);
 const currentState = reactive<DrawerState>({ ...initialState });
 const savedState = reactive<DrawerState>({ ...initialState });

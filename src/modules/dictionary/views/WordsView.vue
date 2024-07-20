@@ -35,7 +35,7 @@
     @on-cancel="onCancelDelete"
     @on-confirm="onConfirmDelete"
   />
-  <ManageTagsSidebar ref="manageTagsSidebar" />
+  <ManageTagsDrawer ref="manageTagsSidebar" />
   <WordSidebar ref="wordSidebar" />
   <CreateWordSidebar ref="addWordSidebar" @create:word="loadWords" />
 </template>
@@ -47,10 +47,10 @@ import { apiPaths } from "@/settings/api";
 import Api from "@/api/Api";
 import { getPaletteColor } from "@/settings/colorPalette";
 import type { ApiWordResponse } from "@/types/word";
-import WordTile from "@/modules/wordGame/components/WordTile.vue";
+import WordTile from "@/modules/dictionary/components/WordTile.vue";
 import Button from "primevue/button";
-import PlusTile from "@/modules/wordGame/components/PlusTile.vue";
-import WordSorting from "@/modules/wordGame/components/WordSorting.vue";
+import PlusTile from "@/modules/dictionary/components/PlusTile.vue";
+import WordSorting from "@/modules/dictionary/components/WordSorting.vue";
 import { RequestMethods } from "@/types/api";
 import { lang } from "@/lang";
 import CustomConfirmDialog from "@/components/dialogs/CustomConfirmDialog.vue";
@@ -58,11 +58,11 @@ import { DialogType } from "@/types/dialog";
 import { orderBy } from "lodash";
 import { SortingOptions, useWordsAppStore } from "@/store/wordsAppStore";
 import { storeToRefs } from "pinia";
-import ManageTagsSidebar from "@/modules/wordGame/components/sidebars/ManageTagsSidebar.vue";
-import WordFiltering from "@/modules/wordGame/components/WordFiltering.vue";
+import ManageTagsDrawer from "@/modules/dictionary/components/sidebars/ManageTagsDrawer.vue";
+import WordFiltering from "@/modules/dictionary/components/WordFiltering.vue";
 import { useTagsFilteringStore } from "@/store/tagsFilteringStore";
-import WordSidebar from "@/modules/wordGame/components/sidebars/WordSidebar.vue";
-import CreateWordSidebar from "@/modules/wordGame/components/sidebars/CreateWordSidebar.vue";
+import WordSidebar from "@/modules/dictionary/components/sidebars/WordSidebar.vue";
+import CreateWordSidebar from "@/modules/dictionary/components/sidebars/CreateWordSidebar.vue";
 
 const wordsAppStore = useWordsAppStore();
 const tagsFilteringStore = useTagsFilteringStore();

@@ -1,5 +1,5 @@
 <template>
-  <UniversalSidebar
+  <UniversalDrawer
     ref="sidebar"
     class="manage-tags-sidebar"
     :title="$lang.title.manageTags"
@@ -30,8 +30,8 @@
       </Column>
       <template #empty> {{ $lang.phrase.noTagsFound }} </template>
     </DataTable>
-  </UniversalSidebar>
-  <ManageTagDialog ref="manageTagDialog" @change="loadTags" />
+  </UniversalDrawer>
+  <ManageTagDrawer ref="manageTagDialog" @change="loadTags" />
   <!--TODO Fix ?? '' -->
   <CustomConfirmDialog
     v-model="selectedTag"
@@ -56,13 +56,13 @@ import {
   tagsTableColumns,
   TagsTableColumns,
 } from "@/settings/tables/tagsTable";
-import ManageTagDialog from "@/modules/wordGame/components/dialogs/ManageTagDialog.vue";
+import ManageTagDrawer from "@/modules/dictionary/components/dialogs/ManageTagDrawer.vue";
 import { RequestMethods } from "@/types/api";
 import { lang } from "@/lang";
 import { DialogType } from "@/types/dialog";
 import { useTagsStore } from "@/store/tagsStore";
 import { storeToRefs } from "pinia";
-import UniversalSidebar from "@/components/dialogs/UniversalSidebar.vue";
+import UniversalDrawer from "@/components/dialogs/UniversalDrawer.vue";
 
 const tagsStore = useTagsStore();
 const { tags } = storeToRefs(tagsStore);
