@@ -23,7 +23,7 @@ export class CredentialDatabase {
     );
 
     await Api.request({
-      path: apiPaths.credentialDatabase,
+      path: apiPaths.fileStorage,
       method: RequestMethods.Put,
       payload: { encryptedData },
     });
@@ -31,7 +31,7 @@ export class CredentialDatabase {
 
   public static async load(secretKey?: string): Promise<void> {
     const encryptedData = await Api.request({
-      path: apiPaths.credentialDatabase,
+      path: apiPaths.fileStorage,
     });
 
     if (encryptedData?.isEmptyData) {
