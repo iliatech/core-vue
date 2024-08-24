@@ -1,5 +1,5 @@
 export default {
   home: "Home",
-  login: "Login",
+  login: "Sign In",
   logout: "Logout",
 };

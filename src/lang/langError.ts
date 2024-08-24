@@ -12,7 +12,7 @@ export default {
     `${lang.entity[name]} should not be empty`,
   fieldError: (fieldName: string): string =>
     `${capitalize(fieldName)} is incorrect`,
-  loginFailed: "Login failed",
+  loginFailed: "Sign In failed",
   notCopiedToClipboard: (entityLabel: string) =>
     `${entityLabel} not copied to clipboard`,
   unknownError: "Unknown error",

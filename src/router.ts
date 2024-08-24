@@ -25,7 +25,7 @@ const router = createRouter({
     {
       path: routes.words.path,
       name: routes.words.name,
-      component: () => import("@/modules/dictionary/views/WordsView.vue"),
+      component: () => import("@/modules/dictionary/views/DictionaryView.vue"),
       meta: {
         title: lang.title.wordsApp,
       },
@@ -33,12 +33,12 @@ const router = createRouter({
     {
       path: routes.login.path,
       name: routes.login.name,
-      component: () => import("@/views/Login.vue"),
+      component: () => import("@/views/SignIn.vue"),
     },
     {
       path: routes.register.path,
       name: routes.register.name,
-      component: () => import("@/views/Register.vue"),
+      component: () => import("@/views/SignUp.vue"),
     },
     {
       path: routes.restorePassword.path,

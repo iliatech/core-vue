@@ -1,7 +1,7 @@
 <template>
   <CenteredBlockTemplate>
     <template #title>
-      {{ lang.title.registration }}
+      {{ lang.title.signUp }}
     </template>
     <form class="register-page__form">
       <UniversalField

@@ -2,20 +2,22 @@
   <div class="words-view">
     <div class="words-view__top">
       <div class="words-view__top-left">
-        <WordSorting />
-        <WordFiltering />
+        <a href="#" @click="onClickAddWord">Add Word</a>
+        <WordSorting v-if="false" />
+        <WordFiltering v-if="false" />
       </div>
       <div class="words-view__top-button">
+        <a href="#">Delete Mode</a>
         <Button
           :label="$lang.button.manageTags"
           @click="openManageTagsSidebar"
           outlined
           size="small"
+          v-if="false"
         />
       </div>
     </div>
     <div class="words-view__words">
-      <PlusTile @click="onClickAddWord" />
       <WordTile
         v-for="(item, index) in wordsSortedAndFiltered"
         :key="item.id"
@@ -198,10 +200,10 @@ const openManageTagsSidebar = () => {
     flex-wrap: wrap;
     gap: $px-30;
 
-    div {
-      min-width: 350px;
-      @include flex-wrap-fix(250px);
-    }
+    //div {
+    //  min-width: 350px;
+    //  @include flex-wrap-fix(250px);
+    //}
   }
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
-  <div class="word-tile" :style="{ borderColor: backgroundColor }">
-    <div class="word-tile__top">
+  <div class="word-tile">
+    <div class="word-tile__top" v-if="false">
       <MultiSelect
         :model-value="selectedTags"
         display="chip"
@@ -15,10 +15,14 @@
       />
     </div>
     <div class="word-tile__content">
-      <i class="pi pi-eye word-tile__top-icon" @click="emit('onClick')" />
+      <i
+        class="pi pi-eye word-tile__top-icon"
+        @click="emit('onClick')"
+        v-if="false"
+      />
       <div class="word-tile__text">{{ data.title }}</div>
     </div>
-    <div class="word-tile__bottom">
+    <div class="word-tile__bottom" v-if="false">
       <div class="word-tile__number">
         {{ $lang.phrase.numberOfTranslations }}: {{ data.translations.length }}
       </div>
@@ -74,13 +78,12 @@ const emit = defineEmits(["onClick", "onClickDelete", "changeTags"]);
 @import "@/assets/variables";
 
 .word-tile {
-  aspect-ratio: $tile-aspect-ratio;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   padding: $px-20;
   border-radius: $border-radius-ten;
-  border: 2px dashed;
+  border: 2px solid #aaa;
 
   &__top {
     overflow: hidden;

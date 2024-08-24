@@ -31,7 +31,7 @@
         </div>
         <UniversalButton
           v-if="!isAuthorized"
-          :label="lang.button.signUp"
+          :label="lang.button.register"
           @click="router.push({ name: routes.register.name })"
           no-border
         />

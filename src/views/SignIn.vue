@@ -22,6 +22,7 @@
           v-model="password"
           :feedback="false"
           autocomplete="current-password"
+          toggle-mask
         />
       </UniversalField>
 

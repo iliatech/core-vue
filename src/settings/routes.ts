@@ -9,13 +9,13 @@ export const routes: Record<string, LocalRoute> = {
   login: {
     path: "/login",
     name: "login",
-    title: "Login",
+    title: "Sign In",
   },
 
   register: {
     path: "/register",
     name: "register",
-    title: "Register",
+    title: "Sign Up",
   },
 
   restorePassword: {

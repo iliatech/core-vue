@@ -1,6 +1,6 @@
 <template>
   <div class="plus-tile">
-    <i class="pi pi-plus plus-tile__icon"></i>
+    <i class="pi pi-plus plus-tile__icon" />
   </div>
 </template>
 
@@ -11,19 +11,20 @@
 @import "@/assets/colors";
 
 .plus-tile {
+  width: 25px;
+  height: 25px;
   position: relative;
   background: $tomato;
-  aspect-ratio: $tile-aspect-ratio;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   overflow: hidden;
-  border-radius: $border-radius;
+  border-radius: 6px;
 
   &__icon {
     display: block;
-    font-size: 4rem;
+    font-size: 20px;
     color: $color-white;
   }
 }
