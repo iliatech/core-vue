@@ -23,18 +23,18 @@ export class CredentialDatabase {
     );
 
     await Api.request({
-      path: apiPaths.fileStorage,
+      path: apiPaths.credentialsFile,
       method: RequestMethods.Put,
-      payload: { encryptedData },
+      payload: { data: encryptedData },
     });
   }
 
   public static async load(secretKey?: string): Promise<void> {
     const encryptedData = await Api.request({
-      path: apiPaths.fileStorage,
+      path: apiPaths.credentialsFile,
     });
 
-    if (encryptedData?.isEmptyData) {
+    if (!encryptedData) {
       CredentialDatabase.unload();
       return;
     }
