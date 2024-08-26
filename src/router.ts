@@ -13,9 +13,9 @@ const router = createRouter({
       component: () => import("@/views/HomeView.vue"),
     },
     {
-      path: routes.contacts.path,
-      name: routes.contacts.name,
-      component: () => import("@/views/ContactsView.vue"),
+      path: routes.portfolio.path,
+      name: routes.portfolio.name,
+      component: () => import("@/views/PortfolioView.vue"),
     },
     {
       path: routes.dashboard.path,
@@ -49,14 +49,6 @@ const router = createRouter({
       path: routes.changePassword.path,
       name: routes.changePassword.name,
       component: () => import("@/views/ChangePassword.vue"),
-    },
-    {
-      path: routes.usefulLinks.path,
-      name: routes.usefulLinks.name,
-      component: () => import("@/modules/links/views/LinksView.vue"),
-      meta: {
-        title: lang.title.usefulLinks,
-      },
     },
     {
       path: routes.schedule.path,

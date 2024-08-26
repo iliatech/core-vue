@@ -77,6 +77,7 @@ defineProps({
   align-items: center;
   justify-content: center;
   user-select: none;
+  font-family: "Comic Sans MS", sans-serif;
 
   &:hover {
     // TODO create color in colors library and use it here.

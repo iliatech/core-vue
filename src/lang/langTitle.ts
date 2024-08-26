@@ -25,7 +25,8 @@ export default {
   enterSecretKey: "Enter Secret Key",
   error: "Error",
   siteName: "Self-Platform.es",
-  siteNameBy: "by Ilia Domyshev",
+  siteNameBy1: "Ilia Domyshev,",
+  siteNameBy2: "software-engineer",
   login: "Login",
   manageTags: "Manage tags",
   password: "Password",
@@ -37,7 +38,6 @@ export default {
   siteTitle: "Home page",
   schedule: "Schedule",
   scheduleSettings: "Schedule Settings",
-  usefulLinks: "Links",
   userSettings: "Personal settings",
   wordsApp: "Dictionary",
 };

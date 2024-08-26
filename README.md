@@ -5,4 +5,3 @@ On 19-Feb-2024 includes:
 * Authorization based on JSON web tokens
 * Schedule application
 * Words Cards application
-* Useful links page

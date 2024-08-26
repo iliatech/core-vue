@@ -1,4 +1,4 @@
-export const publicTopMenuItems = ["home", "usefulLinks", "contacts"];
+export const publicTopMenuItems = ["home"];
 export const privateTopMenuItems = [
   "schedule",
   "words",

@@ -139,7 +139,7 @@ const onClickLogin = async () => {
     method: RequestMethods.Post,
     path: apiPaths.login,
     payload: {
-      user: email.value,
+      email: email.value,
       password: password.value,
       token: token.value,
     },

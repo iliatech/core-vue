@@ -36,16 +36,10 @@ export const routes: Record<string, LocalRoute> = {
     title: "Home",
   },
 
-  contacts: {
-    path: "/contacts",
-    name: "contacts",
-    title: "Contacts",
-  },
-
-  usefulLinks: {
-    path: "/useful-links",
-    name: "usefulLinks",
-    title: "Links",
+  portfolio: {
+    path: "/",
+    name: "portfolio",
+    title: "Portfolio",
   },
 
   dashboard: {
@@ -93,8 +87,6 @@ export const publicRouteNames = [
   routes.restorePassword.name,
   routes.changePassword.name,
   routes.home.name,
-  routes.usefulLinks.name,
-  routes.contacts.name,
 ];
 
 export const mainPrivatePage = routes.schedule;

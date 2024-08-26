@@ -1,11 +1,9 @@
 <template>
-  <div class="site-header">
+  <div class="main-header">
     <div class="top-line">
       <div class="settings"></div>
-      <div class="top-logo">
-        <div>{{ lang.title.siteName }}</div>
-        <div class="logo-notes">{{ lang.title.siteNameBy }}</div>
-      </div>
+      <div></div>
+
       <div class="auth-block">
         <div v-if="user" class="user">
           <UniversalIcon
@@ -41,6 +39,16 @@
           @click="router.push({ name: routes.login.name })"
           no-border
         />
+      </div>
+    </div>
+    <div class="site-logo">
+      <div class="top-logo">
+        <div class="top-logo__first">
+          {{ lang.title.siteNameBy1 }}
+        </div>
+        <div class="top-logo__second">
+          <span>{{ lang.title.siteNameBy2 }}</span>
+        </div>
       </div>
     </div>
     <div class="top-menu">
@@ -160,19 +168,31 @@ const handleClickSignOut = () => {
 
 $toolbar-border: 1px solid #aaa;
 
+.site-header {
+  //
+}
+
 .top-line {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
 }
 
 .top-logo {
-  margin-top: $px-30;
   display: flex;
   justify-content: flex-start;
   align-items: center;
   flex-direction: column;
   gap: $px-5;
-  font-size: 1.75rem;
+
+  font-family: "Comic Sans MS", sans-serif;
+
+  &__first {
+    font-size: 1.75rem;
+  }
+
+  &__second {
+    font-size: 1.25rem;
+  }
 }
 
 .settings {
@@ -184,6 +204,7 @@ $toolbar-border: 1px solid #aaa;
 
 .logo-notes {
   font-size: 1rem;
+  text-align: center;
 }
 
 .user {
