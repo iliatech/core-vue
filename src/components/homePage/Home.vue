@@ -7,8 +7,18 @@
     />
 
     <div class="buttons-container">
-      <UniversalButton label="My LinkedIn" icon-pre="linkedin" />
-      <UniversalButton label="My GitHub" icon-pre="github" />
+      <UniversalButton
+        label="My LinkedIn"
+        icon-pre="linkedin"
+        href="https://www.linkedin.com/in/idomyshev/"
+        open-in-new-tab
+      />
+      <UniversalButton
+        label="My GitHub"
+        icon-pre="github"
+        href="https://github.com/idomyshev"
+        open-in-new-tab
+      />
       <UniversalButton label="My portfolio" icon-pre="id-card" />
       <UniversalButton label="Download my CV" icon-pre="download" />
     </div>
@@ -24,7 +34,12 @@ import UniversalButton from "@/components/buttons/UniversalButton.vue";
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: $px-20;
+  gap: $px-40;
+  flex-direction: row;
+
+  @media (max-width: 700px) {
+    flex-direction: column;
+  }
 }
 
 .profile-photo {

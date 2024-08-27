@@ -87,6 +87,7 @@ export const publicRouteNames = [
   routes.restorePassword.name,
   routes.changePassword.name,
   routes.home.name,
+  routes.portfolio.name,
 ];
 
 export const mainPrivatePage = routes.schedule;

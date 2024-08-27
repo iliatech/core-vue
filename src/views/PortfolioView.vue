@@ -7,6 +7,8 @@
 <style lang="scss" scoped>
 @import "@/assets/variables";
 .portfolio-view {
-  // Add styles if needed.
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

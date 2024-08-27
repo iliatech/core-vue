@@ -17,6 +17,7 @@
       marginTop,
       fontSize,
     }"
+    @click="handleClick"
   >
     <i
       v-if="iconPre"
@@ -24,7 +25,9 @@
       :class="{ [`pi-${iconPre}`]: !!iconPre }"
       :style="{ fontSize: iconSize }"
     />
-    <span>{{ label }}</span>
+    <span>
+      {{ label }}
+    </span>
     <i
       v-if="iconPost"
       class="pi universal-button__post-icon"
@@ -38,7 +41,7 @@
 import { scheduleColors } from "@/settings/schedule";
 import type { PropType } from "vue";
 
-defineProps({
+const props = defineProps({
   color: {
     type: String as PropType<keyof typeof scheduleColors>,
     default: scheduleColors.grey,
@@ -60,7 +63,19 @@ defineProps({
   fontSize: String,
   disabled: Boolean,
   text: Boolean,
+  href: String,
+  openInNewTab: Boolean,
 });
+
+const handleClick = () => {
+  if (props.href) {
+    if (props.openInNewTab) {
+      window.open(props.href, "_blank");
+    } else {
+      window.location.href = props.href;
+    }
+  }
+};
 </script>
 
 <style scoped lang="scss">
@@ -90,6 +105,7 @@ defineProps({
 
   &--selected {
     font-weight: bold;
+    text-decoration: none !important;
     font-size: 1.1em;
   }
 
