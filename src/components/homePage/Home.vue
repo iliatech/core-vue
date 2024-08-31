@@ -19,13 +19,18 @@
         href="https://github.com/idomyshev"
         open-in-new-tab
       />
-      <UniversalButton label="My portfolio" icon-pre="id-card" />
+      <UniversalButton
+        label="My portfolio"
+        icon-pre="id-card"
+        :route-name="routes.portfolio.name"
+      />
       <UniversalButton label="Download my CV" icon-pre="download" />
     </div>
   </div>
 </template>
 <script lang="ts" setup>
 import UniversalButton from "@/components/buttons/UniversalButton.vue";
+import { routes } from "@/settings/routes";
 </script>
 <style lang="scss" scoped>
 @import "@/assets/variables";

@@ -40,6 +40,9 @@
 <script setup lang="ts">
 import { scheduleColors } from "@/settings/schedule";
 import type { PropType } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const props = defineProps({
   color: {
@@ -65,9 +68,14 @@ const props = defineProps({
   text: Boolean,
   href: String,
   openInNewTab: Boolean,
+  routeName: String,
 });
 
 const handleClick = () => {
+  if (props.routeName) {
+    router.push({ name: props.routeName });
+  }
+
   if (props.href) {
     if (props.openInNewTab) {
       window.open(props.href, "_blank");
