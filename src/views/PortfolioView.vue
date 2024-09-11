@@ -46,7 +46,9 @@ const leftSections = [
   {
     title: "Libraries",
     body: [
-      "PrimeVue, Vuetify, Pinia, Vuex, AWS Amplify, Facebook JS SDK, AmCharts, Mapbox, Deck.gl, Lodash, DateFNS, Axios, html2pdf.js",
+      "PrimeVue, Vuetify, Pinia, Vuex",
+      "AWS Amplify, Facebook JS SDK, AmCharts, Mapbox, Deck.gl, html2pdf.js",
+      "Lodash, DateFNS, Axios",
     ],
   },
   {
@@ -61,11 +63,14 @@ const leftSections = [
     ],
   },
   {
-    title: "Other technologies",
+    title: "ALSO FAMILIAR WITH",
     body: [
       "Frontend: Nuxt, React, Redux + Saga",
-      "Backend: Nest, Express.js, Node.js, C#, ASP.NET, PHP, Laravel, Databases: Prisma, Sequelize, Postgres, MySQL, MSSQL, MongoDB",
-      "Services: Apache, Nginx, IPTables, PowerShell, TFS Deploy Sever, IIS",
+      "Backend: Nest, Express.js, Node.js, ASP.NET, Laravel",
+      "Languages: C#, PHP, PowerShell",
+      "Databases&ORM: Prisma, Sequelize, Postgres, MSSQL, MySQL, MongoDB",
+      "Services: Apache, Nginx, IPTables, IIS",
+      "Deploy: TFS Deploy Sever",
       "OS: Windows Servers, Linux (Debian, Ubuntu) Servers",
       "Virtualization: VMWare, HyperV",
       "IDE: Visual Studio",
@@ -129,6 +134,10 @@ const leftSections = [
     margin-bottom: $px-20;
     font-size: 0.875rem;
     line-height: 1.25rem;
+  }
+
+  &__section-body-item {
+    margin-top: $px-5;
   }
 }
 </style>

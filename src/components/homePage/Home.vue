@@ -2,7 +2,7 @@
   <div class="home-page">
     <img
       class="profile-photo"
-      src="@/images/ID_Leon.jpg"
+      src="@/images/bearrobot2.png"
       alt="Ilia Domyshev 2024"
     />
 
