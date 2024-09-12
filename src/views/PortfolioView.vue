@@ -1,7 +1,8 @@
 <template>
   <div class="portfolio-view">
-    <div class="cv">
+    <div class="cv" ref="pdfContainerRef">
       <div class="cv__left">
+        <UniversalButton @click="handlePdfExport" label="PDF export" />
         <div class="cv__person">ILIA<br />DOMYSHEV</div>
         <div class="cv__position">FRONTEND VUE DEVELOPER</div>
         <div class="cv__contacts">
@@ -34,10 +35,14 @@
   </div>
 </template>
 <script lang="ts" setup>
+import html2pdf from "html2pdf.js";
+import UniversalButton from "@/components/buttons/UniversalButton.vue";
+import { ref } from "vue";
+
 const leftSections = [
   {
     title: "Frameworks",
-    body: ["Vue 3, Vue 2"],
+    body: ["Vue 3 (Composition API), Vue 2"],
   },
   {
     title: "Languages",
@@ -55,6 +60,7 @@ const leftSections = [
     title: "Tools",
     body: [
       "Git, GitHub",
+      "Vite, Webpack",
       "Docker, GitHub Actions",
       "Swagger, Postman, Ngrok, Valet, Heroku, npm, nvm",
       "Webstorm, Visual Studio Code",
@@ -77,6 +83,25 @@ const leftSections = [
     ],
   },
 ];
+
+const pdfContainerRef = ref();
+
+const handlePdfExport = () => {
+  const options = {
+    html2canvas: {
+      scale: 2,
+    },
+    jsPDF: {
+      unit: "px",
+      //format: ["800px", "1000px"],
+      orientation: "l",
+    },
+    margin: [0, 0, 0, 0],
+    filename: "myExport.pdf",
+  };
+
+  html2pdf().set(options).from(pdfContainerRef.value).save();
+};
 </script>
 <style lang="scss" scoped>
 @import "@/assets/variables";

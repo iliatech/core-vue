@@ -20,17 +20,32 @@
         open-in-new-tab
       />
       <UniversalButton
+        v-if="false"
         label="My portfolio"
         icon-pre="id-card"
         :route-name="routes.portfolio.name"
       />
-      <UniversalButton label="Download my CV" icon-pre="download" />
+      <UniversalButton
+        label="Download my CV"
+        icon-pre="download"
+        @click="downloadFile"
+      />
     </div>
   </div>
 </template>
 <script lang="ts" setup>
 import UniversalButton from "@/components/buttons/UniversalButton.vue";
 import { routes } from "@/settings/routes";
+
+const downloadFile = () => {
+  const link = document.createElement("a");
+  link.download = "CV_ILIA-DOMYSHEV_12-SEP-2024";
+  link.href = "http://localhost:5050/CV_ILIA_DOMYSHEV_12-SEP-2024.pdf";
+  link.click();
+
+  // Clean up by removing the anchor element
+  link.remove();
+};
 </script>
 <style lang="scss" scoped>
 @import "@/assets/variables";
