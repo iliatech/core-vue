@@ -18,7 +18,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { RouterView } from "vue-router";
+import { RouterView, useRouter } from "vue-router";
 import ProgressSpinner from "primevue/progressspinner";
 import Toast from "primevue/toast";
 import { useAppStore } from "@/store/appStore";
@@ -27,18 +27,25 @@ import { onBeforeMount, onMounted, ref } from "vue";
 import { setGlobalToastObject } from "@/helpers/toast";
 import SiteHeader from "@/components/toolbars/SiteHeader.vue";
 import ErrorProcessing from "@/components/error/ErrorProcessing.vue";
+import { publicRouteNames } from "@/settings/routes";
 
 const appStore = useAppStore();
+const route = useRouter();
 const { isLoading, isPersistentLoading } = storeToRefs(appStore);
 const { loadAuthUser } = appStore;
 
 const toast = ref();
 
 onBeforeMount(async () => {
-  await loadAuthUser();
+  console.log(publicRouteNames);
+  if (!publicRouteNames.includes(route.name)) {
+    console.log("BU");
+    //await loadAuthUser();
+  }
 });
 
 onMounted(async () => {
+  console.log("RN", route.currentRoute.value);
   setGlobalToastObject(toast.value);
 });
 </script>

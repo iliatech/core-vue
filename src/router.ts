@@ -3,6 +3,7 @@ import { publicRouteNames, routes } from "@/settings/routes";
 import { getAuthToken, getAuthUser } from "@/helpers/auth";
 import { useAppStore } from "@/store/appStore";
 import { lang } from "@/lang";
+import { RegisteredError } from "@/types/errors";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -84,7 +85,19 @@ const router = createRouter({
   ],
 });
 
-router.beforeEach((to) => {
+router.beforeEach(async (to) => {
+  const appStore = useAppStore();
+  const { updateAuthUser, loadAuthUser, setGlobalError } = appStore;
+
+  if (!publicRouteNames.includes(to.name as string)) {
+    try {
+      console.log("BRR", await loadAuthUser());
+      console.log("GO GO");
+    } catch (err) {}
+    //setGlobalError(RegisteredError.ServerNotAccessible);
+    console.log("PRIVATE");
+  }
+
   if (!to.meta.title) {
     to.meta.title = lang.title.siteTitle;
   }
@@ -93,8 +106,6 @@ router.beforeEach((to) => {
     to.meta.url = routes.home.path;
   }
 
-  const appStore = useAppStore();
-  const { updateAuthUser } = appStore;
   const user = getAuthUser();
 
   if (getAuthToken() && user) {

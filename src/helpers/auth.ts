@@ -1,7 +1,5 @@
 import { authorizedUserField, jwtTokenField } from "@/settings/auth";
 import type { AuthUser } from "@/types/user";
-import router from "@/router";
-import { publicRouteNames, routes } from "@/settings/routes";
 import { useAppStore } from "@/store/appStore";
 
 export const saveAuthToken = (value: string) => {
