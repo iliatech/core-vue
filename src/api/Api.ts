@@ -84,7 +84,7 @@ export default class Api {
       if (!e?.response?.status) {
         // In case when API is not accessible the HTTP status is undefined.
         // TODO Is it correct for such a case clean the authorization?
-        setGlobalError(RegisteredError.ServerNotAccessible);
+        //setGlobalError(RegisteredError.ServerNotAccessible);
         return;
       }
 
