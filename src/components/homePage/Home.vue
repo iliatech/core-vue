@@ -40,7 +40,7 @@ import { routes } from "@/settings/routes";
 const downloadFile = () => {
   const link = document.createElement("a");
   link.download = "CV_ILIA-DOMYSHEV_12-SEP-2024";
-  link.href = "http://localhost:5050/CV_ILIA_DOMYSHEV_12-SEP-2024.pdf";
+  link.href = "CV_ILIA_DOMYSHEV_12-SEP-2024.pdf";
   link.click();
 
   // Clean up by removing the anchor element

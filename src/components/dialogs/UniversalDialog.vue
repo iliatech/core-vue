@@ -42,7 +42,7 @@ const props = defineProps({
   title: { type: String, required: true },
   notCloseOnConfirm: Boolean,
   notCloseOnCancel: Boolean,
-  zIndex: { type: Number, default: 1000 },
+  zIndex: { type: [Number, String], default: 1000 },
   withoutCancel: Boolean,
 });
 

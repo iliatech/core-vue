@@ -9,7 +9,7 @@
   </div>
 
   <div class="app-container">
-    <SiteHeader />
+    <AppHeader />
     <div class="app-content">
       <ErrorProcessing>
         <RouterView />
@@ -25,7 +25,7 @@ import { useAppStore } from "@/store/appStore";
 import { storeToRefs } from "pinia";
 import { onBeforeMount, onMounted, ref } from "vue";
 import { setGlobalToastObject } from "@/helpers/toast";
-import SiteHeader from "@/components/toolbars/SiteHeader.vue";
+import AppHeader from "@/components/toolbars/AppHeader.vue";
 import ErrorProcessing from "@/components/error/ErrorProcessing.vue";
 import { publicRouteNames } from "@/settings/routes";
 

@@ -29,7 +29,7 @@ export const credentialsTable: UniversalTableColumn[] = [
   {
     name: "password",
     label: "Password",
-    getComponents: ({ value, emit, item }) => [
+    getComponents: ({ value }) => [
       {
         component: UniversalPassword,
         props: {

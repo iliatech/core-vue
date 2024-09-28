@@ -5,15 +5,17 @@ import vue from "@vitejs/plugin-vue";
 import vueJsx from "@vitejs/plugin-vue-jsx";
 import { createHtmlPlugin } from "vite-plugin-html";
 import packageJson from "./package.json";
+import vueDevTools from "vite-plugin-vue-devtools";
 
 export default defineConfig({
   plugins: [
     vue(),
+    vueDevTools(),
     vueJsx(),
     createHtmlPlugin({
       inject: {
         data: {
-          title: "Self-Platform.es",
+          title: "Bear",
           version: `${packageJson?.version}/${new Date().toISOString()}`,
         },
       },

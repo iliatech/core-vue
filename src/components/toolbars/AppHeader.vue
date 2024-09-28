@@ -1,70 +1,3 @@
-<template>
-  <div class="main-header">
-    <div class="top-line">
-      <div class="settings"></div>
-      <div></div>
-
-      <div class="auth-block">
-        <div v-if="user" class="user">
-          <UniversalIcon
-            prime-icon="cog"
-            class="gear-icon"
-            size="20px"
-            @click="profileSidebar.open()"
-            link
-          />
-          <UniversalIcon
-            prime-icon="user"
-            class="gear-icon"
-            size="20px"
-            @click="handleClickUserMenu"
-            link
-          />
-          <Menu
-            ref="userMenu"
-            :model="userMenuItems"
-            :pt="{ root: { class: 'top-user-menu' } }"
-            popup
-          />
-        </div>
-        <UniversalButton
-          v-if="!isAuthorized"
-          :label="lang.button.signUp"
-          @click="router.push({ name: routes.register.name })"
-          no-border
-        />
-        <UniversalButton
-          v-if="!isAuthorized"
-          :label="lang.button.signIn"
-          @click="router.push({ name: routes.login.name })"
-          no-border
-        />
-      </div>
-    </div>
-    <div class="site-logo">
-      <div class="top-logo">
-        <div class="top-logo__first">
-          {{ lang.title.siteNameBy1 }}
-        </div>
-        <div class="top-logo__second">
-          <span>{{ lang.title.siteNameBy2 }}</span>
-        </div>
-      </div>
-    </div>
-    <div class="top-menu">
-      <UniversalButton
-        v-for="item in topMenuItems"
-        :label="item.label"
-        @click="router.push({ name: item.name })"
-        :key="item.label"
-        :selected="$route.name === item.name"
-        no-border
-      />
-    </div>
-  </div>
-
-  <ProfileSidebar ref="profileSidebar" :isFullWidth="isMobile" />
-</template>
 <script lang="ts" setup>
 import { lang } from "@/lang";
 import router from "@/router";
@@ -81,6 +14,7 @@ import Menu from "primevue/menu";
 import { CredentialDatabase } from "@/modules/credentials/classes/CredentialDatabase";
 import { privateTopMenuItems, publicTopMenuItems } from "@/settings/menu";
 import UniversalIcon from "@/components/icons/UniversalIcon.vue";
+import { getRoute } from "../../helpers/navigation";
 
 const route = useRoute();
 
@@ -92,7 +26,7 @@ const userMenu = ref();
 const navigation = ref();
 const profileSidebar = ref();
 
-const topMenuItems = computed(() => {
+const links = computed<NavigationItem[]>(() => {
   const items: NavigationItem[] = [];
 
   const aclPrivateItems = user.value?.config?.acl?.topMenu ?? [];
@@ -115,6 +49,7 @@ const topMenuItems = computed(() => {
 
     items.push({
       name: route.name,
+      parentRouteName: route.parentRouteName,
       label: route.title,
     });
   });
@@ -162,13 +97,85 @@ const handleClickSignOut = () => {
   updateAuthUser(null);
 };
 </script>
+<template>
+  <div class="app-header">
+    <div class="top-line">
+      <div class="settings"></div>
+      <div></div>
+      <div class="auth-block">
+        <div v-if="user" class="user">
+          <UniversalIcon
+            prime-icon="cog"
+            class="gear-icon"
+            size="20px"
+            @click="profileSidebar.open()"
+            link
+          />
+          <UniversalIcon
+            prime-icon="user"
+            class="gear-icon"
+            size="20px"
+            @click="handleClickUserMenu"
+            link
+          />
+          <Menu
+            ref="userMenu"
+            :model="userMenuItems"
+            :pt="{ root: { class: 'top-user-menu' } }"
+            popup
+          />
+        </div>
+        <UniversalButton
+          v-if="!isAuthorized"
+          :label="lang.button.signUp"
+          @click="router.push({ name: routes.register.name })"
+          no-border
+        />
+        <UniversalButton
+          v-if="!isAuthorized"
+          :label="lang.button.signIn"
+          @click="router.push({ name: routes.login.name })"
+          no-border
+        />
+      </div>
+    </div>
+    <div class="app-logo">
+      <div class="top-logo">
+        <div class="top-logo__first">
+          {{ lang.title.siteNameBy1 }}
+        </div>
+        <div class="top-logo__second">
+          <span>
+            {{ lang.title.siteNameBy2 }}
+          </span>
+        </div>
+      </div>
+    </div>
+    {{}}
+    <div class="links">
+      <UniversalButton
+        v-for="item in links"
+        :label="item.label"
+        @click="router.push({ name: item.name })"
+        :key="item.label"
+        :selected="
+          $route.name === item.name ||
+          getRoute($route.name)?.parentRouteName === item.name
+        "
+        no-border
+      />
+    </div>
+  </div>
+
+  <ProfileSidebar ref="profileSidebar" :isFullWidth="isMobile" />
+</template>
 <style lang="scss" scoped>
 @import "@/assets/variables.scss";
 @import "@/assets/fonts.scss";
 
 $toolbar-border: 1px solid #aaa;
 
-.site-header {
+.app-header {
   //
 }
 
@@ -236,7 +243,7 @@ $toolbar-border: 1px solid #aaa;
   }
 }
 
-.top-menu {
+.links {
   margin: $px-30 0 $px-50;
   font-size: 1.5rem;
   display: flex;
