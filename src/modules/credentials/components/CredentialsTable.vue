@@ -1,25 +1,3 @@
-<template>
-  <div class="credentials-table">
-    <UniversalTable
-      :config="credentialsTable"
-      :data="tableData"
-      :action-button-text="$lang.button.newCredential"
-      @click:action-button="handleClickAddCredential"
-      @click:delete-item="handleClickDeleteItem"
-      @click:edit-item="handleClickEditItem"
-    />
-  </div>
-  <CredentialSidebar ref="credentialSidebar" />
-  <UniversalDialog
-    :title="$lang.title.confirmDeleteCredentialType"
-    ref="confirmDeleteItemDialog"
-    @cancel="handleCancelDeleteItem"
-    @confirm="handleConfirmDeleteItem"
-    :z-index="1200"
-  >
-    {{ $lang.phrase.doYouConfirmDeleteCredentialType }}
-  </UniversalDialog>
-</template>
 <script lang="ts" setup>
 import UniversalTable from "@/components/tables/UniversalTable.vue";
 import { credentialsTable } from "@/modules/credentials/settings/tables/credentialsTable";
@@ -33,6 +11,7 @@ import type {
 } from "@/modules/credentials/types";
 import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
 import { CredentialType } from "@/modules/credentials/classes/entities/CredentialType";
+import CredentialsGrid from "@/modules/credentials/components/CredentialsGrid.vue";
 
 const credentialSidebar = ref<InstanceType<typeof UniversalDrawer>>();
 const selectedItem = ref<ICredential | null>(null);
@@ -73,8 +52,43 @@ const handleConfirmDeleteItem = () => {
   confirmDeleteItemDialog.value?.close();
 };
 </script>
+
+<template>
+  <div class="credentials-table">
+    <CredentialsGrid
+      :config="credentialsTable"
+      :data="tableData"
+      :action-button-text="$lang.button.newCredential"
+      @click:action-button="handleClickAddCredential"
+      @click:delete-item="handleClickDeleteItem"
+      @click:edit-item="handleClickEditItem"
+    />
+    <UniversalTable
+      v-if="false"
+      :config="credentialsTable"
+      :data="tableData"
+      :action-button-text="$lang.button.newCredential"
+      @click:action-button="handleClickAddCredential"
+      @click:delete-item="handleClickDeleteItem"
+      @click:edit-item="handleClickEditItem"
+    />
+  </div>
+  <CredentialSidebar ref="credentialSidebar" />
+  <UniversalDialog
+    :title="$lang.title.confirmDeleteCredentialType"
+    ref="confirmDeleteItemDialog"
+    @cancel="handleCancelDeleteItem"
+    @confirm="handleConfirmDeleteItem"
+    :z-index="1200"
+  >
+    {{ $lang.phrase.doYouConfirmDeleteCredentialType }}
+  </UniversalDialog>
+</template>
+
 <style lang="scss" scoped>
 .credentials-table {
   height: 100%;
+  display: flex;
+  gap: 20px;
 }
 </style>
