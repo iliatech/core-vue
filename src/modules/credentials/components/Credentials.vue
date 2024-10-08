@@ -11,7 +11,6 @@ import type {
 } from "@/modules/credentials/types";
 import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
 import { CredentialType } from "@/modules/credentials/classes/entities/CredentialType";
-import CredentialsGrid from "@/modules/credentials/components/CredentialsGrid.vue";
 
 const credentialSidebar = ref<InstanceType<typeof UniversalDrawer>>();
 const selectedItem = ref<ICredential | null>(null);
@@ -54,17 +53,9 @@ const handleConfirmDeleteItem = () => {
 </script>
 
 <template>
-  <div class="credentials-table">
-    <CredentialsGrid
-      :config="credentialsTable"
-      :data="tableData"
-      :action-button-text="$lang.button.newCredential"
-      @click:action-button="handleClickAddCredential"
-      @click:delete-item="handleClickDeleteItem"
-      @click:edit-item="handleClickEditItem"
-    />
+  <div class="credentials">
     <UniversalTable
-      v-if="false"
+      v-if="true"
       :config="credentialsTable"
       :data="tableData"
       :action-button-text="$lang.button.newCredential"
@@ -86,9 +77,7 @@ const handleConfirmDeleteItem = () => {
 </template>
 
 <style lang="scss" scoped>
-.credentials-table {
+.credentials {
   height: 100%;
-  display: flex;
-  gap: 20px;
 }
 </style>

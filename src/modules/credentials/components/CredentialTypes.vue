@@ -1,25 +1,3 @@
-<template>
-  <div class="credential-types-table">
-    <UniversalTable
-      :config="credentialTypesTable"
-      :data="tableData"
-      :action-button-text="$lang.button.newCredentialType"
-      @click:action-button="handleClickAddCredentialType"
-      @click:delete-item="handleClickDeleteItem"
-      @click:edit-item="handleClickEditItem"
-    />
-  </div>
-  <CredentialTypeSidebar ref="credentialTypeSidebar" />
-  <UniversalDialog
-    :title="$lang.title.confirmDeleteCredentialType"
-    ref="confirmDeleteItemDialog"
-    @cancel="handleCancelDeleteItem"
-    @confirm="handleConfirmDeleteItem"
-    :z-index="1200"
-  >
-    {{ $lang.phrase.doYouConfirmDeleteCredentialType }}
-  </UniversalDialog>
-</template>
 <script lang="ts" setup>
 import { credentialTypesTable } from "@/modules/credentials/settings/tables/credentialTypesTable";
 import { CredentialType } from "@/modules/credentials/classes/entities/CredentialType";
@@ -73,6 +51,30 @@ const handleConfirmDeleteItem = () => {
   confirmDeleteItemDialog.value?.close();
 };
 </script>
+
+<template>
+  <div class="credential-types-table">
+    <UniversalTable
+      :config="credentialTypesTable"
+      :data="tableData"
+      :action-button-text="$lang.button.newCredentialType"
+      @click:action-button="handleClickAddCredentialType"
+      @click:delete-item="handleClickDeleteItem"
+      @click:edit-item="handleClickEditItem"
+    />
+  </div>
+  <CredentialTypeSidebar ref="credentialTypeSidebar" />
+  <UniversalDialog
+    :title="$lang.title.confirmDeleteCredentialType"
+    ref="confirmDeleteItemDialog"
+    @cancel="handleCancelDeleteItem"
+    @confirm="handleConfirmDeleteItem"
+    :z-index="1200"
+  >
+    {{ $lang.phrase.doYouConfirmDeleteCredentialType }}
+  </UniversalDialog>
+</template>
+
 <style lang="scss" scoped>
 @import "@/assets/variables";
 .credential-types-table {

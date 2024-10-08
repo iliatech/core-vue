@@ -71,13 +71,13 @@ const router = createRouter({
         {
           path: routes.credentialsCredentials.path,
           component: () =>
-            import("@/modules/credentials/components/CredentialsTable.vue"),
+            import("@/modules/credentials/components/Credentials.vue"),
           name: routes.credentialsCredentials.name,
         },
         {
           path: routes.credentialsTypes.path,
           component: () =>
-            import("@/modules/credentials/components/CredentialTypesTable.vue"),
+            import("@/modules/credentials/components/CredentialTypes.vue"),
           name: routes.credentialsTypes.name,
         },
       ],

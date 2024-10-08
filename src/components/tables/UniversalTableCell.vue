@@ -13,7 +13,7 @@
       </div>
     </template>
     <template v-else>
-      {{ get(item, columnConfig.name) }}
+      {{ get(item, columnConfig.name) || "-" }}
     </template>
   </div>
 </template>
@@ -54,10 +54,9 @@ const components = computed<UniversalTableCellComponentProp[] | null>(() => {
 
 .universal-table-cell {
   display: flex;
-  gap: $px-20;
+  gap: 20px;
 
   &__item {
-    width: 100%;
     display: block;
   }
 }

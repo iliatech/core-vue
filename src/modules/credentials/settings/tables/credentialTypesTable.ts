@@ -30,13 +30,19 @@ export const credentialTypesTable: UniversalTableColumn[] = [
   {
     name: "actions",
     label: "Actions",
+    hiddenLabel: true,
     getComponents: ({ value, emit, item }) => [
       {
         component: UniversalIcon,
         props: {
-          label: "edit",
+          label: "Edit",
           primeIcon: "pencil",
           link: true,
+          size: "0.85rem",
+          linkTextStyle: {
+            fontSize: "0.8rem",
+            fontWeight: "bold",
+          },
           onClick: () => {
             return emit("click:edit-item", item);
           },
@@ -45,15 +51,17 @@ export const credentialTypesTable: UniversalTableColumn[] = [
       {
         component: UniversalIcon,
         props: {
-          label: "delete",
+          label: "Delete",
           primeIcon: "trash",
           link: true,
-          disabled: !!item.credentialsNumber,
-          onClick: !item.credentialsNumber
-            ? () => {
-                return emit("click:delete-item", item);
-              }
-            : null,
+          size: "0.85rem",
+          linkTextStyle: {
+            fontSize: "0.8rem",
+            fontWeight: "bold",
+          },
+          onClick: () => {
+            return emit("click:delete-item", item);
+          },
         },
       },
     ],
