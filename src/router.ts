@@ -3,6 +3,7 @@ import { publicRouteNames, routes } from "@/settings/routes";
 import { getAuthToken, getAuthUser } from "@/helpers/auth";
 import { useAppStore } from "@/store/appStore";
 import { lang } from "@/lang";
+import { RegisteredError } from "@/types/errors";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -13,9 +14,9 @@ const router = createRouter({
       component: () => import("@/views/HomeView.vue"),
     },
     {
-      path: routes.contacts.path,
-      name: routes.contacts.name,
-      component: () => import("@/views/ContactsView.vue"),
+      path: routes.portfolio.path,
+      name: routes.portfolio.name,
+      component: () => import("@/views/PortfolioView.vue"),
     },
     {
       path: routes.dashboard.path,
@@ -51,14 +52,6 @@ const router = createRouter({
       component: () => import("@/views/ChangePassword.vue"),
     },
     {
-      path: routes.usefulLinks.path,
-      name: routes.usefulLinks.name,
-      component: () => import("@/modules/links/views/LinksView.vue"),
-      meta: {
-        title: lang.title.usefulLinks,
-      },
-    },
-    {
       path: routes.schedule.path,
       name: routes.schedule.name,
       component: () => import("@/modules/schedule/views/ScheduleView.vue"),
@@ -78,13 +71,13 @@ const router = createRouter({
         {
           path: routes.credentialsCredentials.path,
           component: () =>
-            import("@/modules/credentials/components/CredentialsTable.vue"),
+            import("@/modules/credentials/components/Credentials.vue"),
           name: routes.credentialsCredentials.name,
         },
         {
           path: routes.credentialsTypes.path,
           component: () =>
-            import("@/modules/credentials/components/CredentialTypesTable.vue"),
+            import("@/modules/credentials/components/CredentialTypes.vue"),
           name: routes.credentialsTypes.name,
         },
       ],
@@ -92,7 +85,19 @@ const router = createRouter({
   ],
 });
 
-router.beforeEach((to) => {
+router.beforeEach(async (to) => {
+  const appStore = useAppStore();
+  const { updateAuthUser, loadAuthUser, setGlobalError } = appStore;
+
+  if (!publicRouteNames.includes(to.name as string)) {
+    try {
+      console.log("BRR", await loadAuthUser());
+      console.log("GO GO");
+    } catch (err) {}
+    //setGlobalError(RegisteredError.ServerNotAccessible);
+    console.log("PRIVATE");
+  }
+
   if (!to.meta.title) {
     to.meta.title = lang.title.siteTitle;
   }
@@ -101,8 +106,6 @@ router.beforeEach((to) => {
     to.meta.url = routes.home.path;
   }
 
-  const appStore = useAppStore();
-  const { updateAuthUser } = appStore;
   const user = getAuthUser();
 
   if (getAuthToken() && user) {

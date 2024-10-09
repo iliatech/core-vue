@@ -12,6 +12,7 @@
       :class="{
         'universal-icon__link-text': link,
       }"
+      :style="linkTextStyle"
     >
       {{ label }}
     </span>
@@ -24,6 +25,7 @@ defineProps({
   link: Boolean,
   disabled: Boolean,
   size: String,
+  linkTextStyle: Object,
 });
 </script>
 <style lang="scss" scoped>

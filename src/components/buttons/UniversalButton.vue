@@ -17,6 +17,7 @@
       marginTop,
       fontSize,
     }"
+    @click="handleClick"
   >
     <i
       v-if="iconPre"
@@ -24,7 +25,9 @@
       :class="{ [`pi-${iconPre}`]: !!iconPre }"
       :style="{ fontSize: iconSize }"
     />
-    <span>{{ label }}</span>
+    <span>
+      {{ label }}
+    </span>
     <i
       v-if="iconPost"
       class="pi universal-button__post-icon"
@@ -37,8 +40,11 @@
 <script setup lang="ts">
 import { scheduleColors } from "@/settings/schedule";
 import type { PropType } from "vue";
+import { useRouter } from "vue-router";
 
-defineProps({
+const router = useRouter();
+
+const props = defineProps({
   color: {
     type: String as PropType<keyof typeof scheduleColors>,
     default: scheduleColors.grey,
@@ -60,7 +66,24 @@ defineProps({
   fontSize: String,
   disabled: Boolean,
   text: Boolean,
+  href: String,
+  openInNewTab: Boolean,
+  routeName: String,
 });
+
+const handleClick = () => {
+  if (props.routeName) {
+    router.push({ name: props.routeName });
+  }
+
+  if (props.href) {
+    if (props.openInNewTab) {
+      window.open(props.href, "_blank");
+    } else {
+      window.location.href = props.href;
+    }
+  }
+};
 </script>
 
 <style scoped lang="scss">
@@ -77,6 +100,7 @@ defineProps({
   align-items: center;
   justify-content: center;
   user-select: none;
+  font-family: "Comic Sans MS", sans-serif;
 
   &:hover {
     // TODO create color in colors library and use it here.
@@ -89,6 +113,7 @@ defineProps({
 
   &--selected {
     font-weight: bold;
+    text-decoration: none !important;
     font-size: 1.1em;
   }
 

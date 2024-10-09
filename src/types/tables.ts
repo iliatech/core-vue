@@ -9,6 +9,7 @@ export interface UniversalTableCellComponentProp {
 export interface UniversalTableColumn {
   name: string;
   label: string;
+  hiddenLabel?: boolean;
   defaultSort?: boolean;
   defaultSortOrder?: -1 | 1;
   sortable?: boolean;

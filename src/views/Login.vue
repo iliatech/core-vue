@@ -135,21 +135,28 @@ onBeforeMount(async () => {
 });
 
 const onClickLogin = async () => {
-  const { jwt, user } = await Api.request({
+  const { jwt } = await Api.request({
     method: RequestMethods.Post,
     path: apiPaths.login,
     payload: {
-      user: email.value,
+      email: email.value,
       password: password.value,
       token: token.value,
     },
+  });
+
+  if (jwt) {
+    saveAuthToken(jwt);
+  }
+
+  const user = await Api.request({
+    path: apiPaths.getAuthUser,
   });
 
   token.value = undefined;
   turnstileKey.value++;
 
   if (jwt && user) {
-    saveAuthToken(jwt);
     updateAuthUser(user);
     updatePageMessages("login", []);
     await router.push({ name: mainPrivatePage.name });

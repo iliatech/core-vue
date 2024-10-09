@@ -1,18 +1,24 @@
 export const apiUrl = import.meta.env.VITE_API_URL;
 
 export const apiPaths = {
-  authorization: "authorization",
-  changePassword: "changePassword",
-  confirmEmail: "confirmEmail",
-  getAuthUser: "getAuthUser",
-  client: "client",
-  login: "login",
+  // Auth.
+  login: "auth/login",
+  getAuthUser: "auth/user",
+  register: "auth/register",
+  changePassword: "auth/changePassword",
+  confirmEmail: "auth/confirmEmail",
+  restorePassword: "auth/restorePassword",
+
   saveAuthUserConfig: "saveAuthUserConfig",
-  register: "register",
-  restorePassword: "restorePassword",
-  tag: "tag",
-  timeSlot: "timeSlot",
-  translation: "translation",
+
+  // Schedule.
+  client: "clients",
+  timeSlot: "time-slots",
+
+  // Storage.
+  credentialsFile: `file-storage/${import.meta.env.VITE_CREDENTIALS_FILE_ID}`,
+
   word: "word",
-  credentialDatabase: "fileStorage/credentialsV2",
+  translation: "translation",
+  tag: "tag",
 };

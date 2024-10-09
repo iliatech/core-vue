@@ -1,10 +1,6 @@
-interface LocalRoute {
-  path: string;
-  name: string;
-  title: string;
-}
-
 // The name of the route should be equal to key.
+import type { LocalRoute } from "@/types/common";
+
 export const routes: Record<string, LocalRoute> = {
   login: {
     path: "/login",
@@ -36,16 +32,10 @@ export const routes: Record<string, LocalRoute> = {
     title: "Home",
   },
 
-  contacts: {
-    path: "/contacts",
-    name: "contacts",
-    title: "Contacts",
-  },
-
-  usefulLinks: {
-    path: "/useful-links",
-    name: "usefulLinks",
-    title: "Links",
+  portfolio: {
+    path: "/",
+    name: "portfolio",
+    title: "Portfolio",
   },
 
   dashboard: {
@@ -73,18 +63,19 @@ export const routes: Record<string, LocalRoute> = {
   },
   credentialsCredentials: {
     path: "credentials",
-    name: "credentialsCredentials",
+    name: "credentials.items",
     title: "Credentials",
   },
   credentialsTypes: {
     path: "types",
-    name: "credentialsTypes",
+    name: "credentials.types",
     title: "Credential Types",
+    parentRouteName: "credentials.items",
   },
 };
 
 export const credentialsRoutes = Object.values(routes).filter((item) =>
-  ["credentialsCredentials", "credentialsTypes"].includes(item.name)
+  ["credentials.items", "credentials.types"].includes(item.name)
 );
 
 export const publicRouteNames = [
@@ -93,8 +84,7 @@ export const publicRouteNames = [
   routes.restorePassword.name,
   routes.changePassword.name,
   routes.home.name,
-  routes.usefulLinks.name,
-  routes.contacts.name,
+  routes.portfolio.name,
 ];
 
 export const mainPrivatePage = routes.schedule;

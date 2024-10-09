@@ -1,5 +1,5 @@
 import { routes } from "@/settings/routes";
-import type { NavigationItem } from "@/types/common";
+import type { LocalRoute, NavigationItem } from "@/types/common";
 
 export const generateAvailableAppsList = (): NavigationItem[] => {
   const items: NavigationItem[] = [];
@@ -17,4 +17,10 @@ export const generateAvailableAppsList = (): NavigationItem[] => {
   });
 
   return items;
+};
+
+export const getRoute = (name: string): LocalRoute | null => {
+  return (
+    Object.values(routes).find((item: LocalRoute) => item.name === name) ?? null
+  );
 };

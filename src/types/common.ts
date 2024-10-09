@@ -1,6 +1,7 @@
 export interface NavigationItem {
   label: string;
   name: string;
+  parentRouteName?: string;
 }
 
 export interface ApiValidationError {
@@ -21,4 +22,11 @@ export interface PagesMessages {
   login: PageMessage[];
   restorePassword: PageMessage[];
   changePassword: PageMessage[];
+}
+
+export interface LocalRoute {
+  path: string;
+  name: string;
+  title: string;
+  parentRouteName?: string;
 }
