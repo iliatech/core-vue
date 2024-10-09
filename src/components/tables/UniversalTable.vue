@@ -214,7 +214,7 @@ const dataFiltered = computed<any[]>(() => {
   margin-bottom: 2px;
 }
 
-.data-item {
+.data-item:not(:last-child) {
   margin-bottom: 5px;
 }
 
