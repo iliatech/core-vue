@@ -16,7 +16,7 @@ export const apiPaths = {
   timeSlot: "time-slots",
 
   // Storage.
-  credentialsFile: `file-storage/${import.meta.env.VITE_CREDENTIALS_FILE_ID}`,
+  credentialsFile: `file-storage/auth-user-file-by-type/credentials`,
 
   word: "word",
   translation: "translation",
