@@ -39,4 +39,4 @@ jobs:
           ARGS: "-rlgoDzvc -i --delete --exclude=.htaccess"
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
-            TARGET: ${{ vars.TARGET_DIR }}
+          TARGET: ${{ vars.TARGET_DIR }}
