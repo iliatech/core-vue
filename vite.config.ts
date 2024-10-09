@@ -15,7 +15,7 @@ export default defineConfig({
     createHtmlPlugin({
       inject: {
         data: {
-          title: "SelfPlatform",
+          title: "SelfBear",
           version: `${packageJson?.version}/${new Date().toISOString()}`,
         },
       },
