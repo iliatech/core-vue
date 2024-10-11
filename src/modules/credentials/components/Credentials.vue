@@ -3,7 +3,7 @@ import UniversalTable from "@/components/tables/UniversalTable.vue";
 import { credentialsTable } from "@/modules/credentials/settings/tables/credentialsTable";
 import { Credential } from "@/modules/credentials/classes/entities/Credential";
 import CredentialSidebar from "@/modules/credentials/components/sidebars/CredentialSidebar.vue";
-import { computed, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import type UniversalDrawer from "@/components/dialogs/UniversalDrawer.vue";
 import type {
   ICredential,
@@ -64,15 +64,23 @@ const handleCloseDrawer = () => {
   });
 };
 
+const runAction = () => {
+  if (route.query.action === "add-credential") {
+    handleClickAddCredential();
+  }
+};
+
 watch(
   route,
   () => {
-    if (route.query.action === "add-credential") {
-      handleClickAddCredential();
-    }
+    runAction();
   },
   { deep: true }
 );
+
+onMounted(() => {
+  runAction();
+});
 </script>
 
 <template>

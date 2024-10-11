@@ -4,6 +4,7 @@
     class="universal-sidebar"
     :position="position"
     :dismissable="false"
+    @hide="emit('click:close')"
   >
     <template #header>
       <div class="universal-sidebar__header">

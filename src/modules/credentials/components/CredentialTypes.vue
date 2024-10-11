@@ -5,7 +5,7 @@ import { Credential } from "@/modules/credentials/classes/entities/Credential";
 import UniversalTable from "@/components/tables/UniversalTable.vue";
 import type UniversalDrawer from "@/components/dialogs/UniversalDrawer.vue";
 import CredentialTypeSidebar from "@/modules/credentials/components/sidebars/CredentialTypeSidebar.vue";
-import { computed, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
 import type {
   ICredentialType,
@@ -61,15 +61,23 @@ const handleCloseDrawer = () => {
   });
 };
 
+const runAction = () => {
+  if (route.query.action === "add-credential-type") {
+    handleClickAddCredentialType();
+  }
+};
+
 watch(
   route,
   () => {
-    if (route.query.action === "add-credential-type") {
-      handleClickAddCredentialType();
-    }
+    runAction();
   },
   { deep: true }
 );
+
+onMounted(() => {
+  runAction();
+});
 </script>
 
 <template>
