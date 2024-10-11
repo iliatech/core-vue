@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import UniversalTable from "@/components/tables/UniversalTable.vue";
+import UniversalItems from "@/components/tables/UniversalItems.vue";
 import { credentialsTable } from "@/modules/credentials/settings/tables/credentialsTable";
 import { Credential } from "@/modules/credentials/classes/entities/Credential";
 import CredentialSidebar from "@/modules/credentials/components/sidebars/CredentialSidebar.vue";
-import { computed, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import type UniversalDrawer from "@/components/dialogs/UniversalDrawer.vue";
 import type {
   ICredential,
@@ -11,6 +11,10 @@ import type {
 } from "@/modules/credentials/types";
 import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
 import { CredentialType } from "@/modules/credentials/classes/entities/CredentialType";
+import { useRoute } from "vue-router";
+import router from "@/router";
+
+const route = useRoute();
 
 const credentialSidebar = ref<InstanceType<typeof UniversalDrawer>>();
 const selectedItem = ref<ICredential | null>(null);
@@ -40,6 +44,9 @@ const handleClickEditItem = (item: ICredential) => {
 const handleCancelDeleteItem = () => {
   confirmDeleteItemDialog.value?.close();
   selectedItem.value = null;
+  router.push({
+    path: route.path,
+  });
 };
 
 const handleConfirmDeleteItem = () => {
@@ -50,21 +57,46 @@ const handleConfirmDeleteItem = () => {
   Credential.delete(selectedItem.value.id);
   confirmDeleteItemDialog.value?.close();
 };
+
+const handleCloseDrawer = () => {
+  router.push({
+    path: route.path,
+  });
+};
+
+const runAction = () => {
+  if (route.query.action === "add-credential") {
+    handleClickAddCredential();
+  }
+};
+
+watch(
+  route,
+  () => {
+    runAction();
+  },
+  { deep: true }
+);
+
+onMounted(() => {
+  runAction();
+});
 </script>
 
 <template>
   <div class="credentials">
-    <UniversalTable
-      v-if="true"
+    <UniversalItems
       :config="credentialsTable"
       :data="tableData"
-      :action-button-text="$lang.button.newCredential"
       @click:action-button="handleClickAddCredential"
       @click:delete-item="handleClickDeleteItem"
       @click:edit-item="handleClickEditItem"
     />
   </div>
-  <CredentialSidebar ref="credentialSidebar" />
+  <CredentialSidebar
+    ref="credentialSidebar"
+    @close:drawer="handleCloseDrawer"
+  />
   <UniversalDialog
     :title="$lang.title.confirmDeleteCredentialType"
     ref="confirmDeleteItemDialog"

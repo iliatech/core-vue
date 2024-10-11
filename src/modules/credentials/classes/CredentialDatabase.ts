@@ -22,19 +22,21 @@ export class CredentialDatabase {
       this.getSecretKey()
     );
 
+    const { fileId } = useCredentialStore();
+
     await Api.request({
-      path: apiPaths.credentialsFile,
+      path: `${apiPaths.credentialsFile}/${fileId}`,
       method: RequestMethods.Put,
       payload: { data: encryptedData },
     });
   }
 
   public static async load(secretKey?: string): Promise<void> {
-    const encryptedData = await Api.request({
-      path: apiPaths.credentialsFile,
+    const file = await Api.request({
+      path: apiPaths.authUserFileByType,
     });
 
-    if (!encryptedData) {
+    if (!file) {
       CredentialDatabase.unload();
       return;
     }
@@ -49,12 +51,13 @@ export class CredentialDatabase {
     }
 
     try {
-      const decryptedData = this.decryptDatabase(encryptedData, secretKey);
+      const decryptedData = this.decryptDatabase(file.data, secretKey);
       const parsedAndDecryptedData = await JSON.parse(decryptedData);
 
       debugInfo("CURRENT DATA", parsedAndDecryptedData);
 
       useCredentialStore().updateCredentialDatabase(parsedAndDecryptedData);
+      useCredentialStore().updateFileId(file.id);
     } catch {
       throw new Error("Cannot decrypt data with this secret key");
     }

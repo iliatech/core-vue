@@ -11,6 +11,9 @@ import { computed, ref } from "vue";
 import { prepareName } from "@/helpers/strings";
 import objectHash from "object-hash";
 import UniversalTableCell from "@/components/tables/UniversalTableCell.vue";
+import UniversalIcon from "@/components/icons/UniversalIcon.vue";
+
+const isTableMode = ref(false);
 
 const emit = defineEmits(["click:actionButton"]);
 
@@ -43,12 +46,16 @@ const dataFiltered = computed<any[]>(() => {
 
   return itemsFiltered;
 });
+
+const changeMode = () => {
+  isTableMode.value = !isTableMode.value;
+};
 </script>
 
 <template>
-  <div class="universal-table">
-    <div class="universal-table__header">
-      <div class="universal-table__filters">
+  <div class="universal-items">
+    <div class="universal-items__header">
+      <div class="universal-items__filters">
         <UniversalFilters
           v-model:filter-values="filterValues"
           :config="
@@ -58,17 +65,24 @@ const dataFiltered = computed<any[]>(() => {
           "
         />
       </div>
-      <div class="universal-table__action-button">
+      <div class="universal-items__action-button">
         <UniversalButton
           v-if="actionButtonText"
           @click="emit('click:actionButton')"
           :label="actionButtonText"
         />
       </div>
+      <div class="universal-items__mode">
+        <UniversalIcon
+          @click="changeMode"
+          :prime-icon="isTableMode ? 'th-large' : 'table'"
+          size="20px"
+        />
+      </div>
     </div>
-    <div class="universal-table__container">
-      <div class="universal-table__inner-container">
-        <div class="items" v-if="true">
+    <div class="universal-items__container">
+      <div class="universal-items__inner-container">
+        <div class="items" v-if="!isTableMode">
           <div v-for="item in dataFiltered" :key="item.id" class="item">
             <template v-for="(column, index) in config" :key="column.name">
               <div v-if="!column.hidden" class="data-item">
@@ -87,7 +101,7 @@ const dataFiltered = computed<any[]>(() => {
           </div>
         </div>
         <DataTable
-          v-if="false"
+          v-if="isTableMode"
           scrollable
           :show-gridlines="true"
           :striped-rows="true"
@@ -118,7 +132,7 @@ const dataFiltered = computed<any[]>(() => {
             </Column>
           </template>
           <template #empty>
-            <div class="universal-table__empty">
+            <div class="universal-items__empty">
               {{ $lang.label.noEntitiesFound }}
             </div>
           </template>
@@ -132,7 +146,7 @@ const dataFiltered = computed<any[]>(() => {
 @import "@/assets/variables";
 @import "@/assets/fonts";
 
-.universal-table {
+.universal-items {
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -169,6 +183,10 @@ const dataFiltered = computed<any[]>(() => {
     left: 0;
     height: 100%;
     width: 100%;
+  }
+
+  &__mode {
+    cursor: pointer;
   }
 }
 

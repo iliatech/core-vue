@@ -121,6 +121,8 @@ const currentState = reactive<DrawerState>({ ...initialState });
 const savedState = reactive<DrawerState>({ ...initialState });
 const options = reactive<Options>({ type: [] });
 
+const emit = defineEmits(["close:drawer"]);
+
 const isChanged = computed<boolean>(() => {
   return !isEqual(currentState, savedState);
 });
@@ -176,6 +178,7 @@ const handleCancelDiscardChanges = () => {
 const handleConfirmDiscardChanges = () => {
   discardChangesDialog.value?.close();
   sidebar.value?.close();
+  emit("close:drawer");
 };
 
 const close = () => {
@@ -185,6 +188,7 @@ const close = () => {
   }
 
   sidebar.value?.close();
+  emit("close:drawer");
 };
 
 const handleClickSave = async () => {
@@ -223,6 +227,7 @@ const handleClickSave = async () => {
   });
 
   sidebar.value?.close();
+  emit("close:drawer");
 };
 
 defineExpose({
