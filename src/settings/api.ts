@@ -16,7 +16,8 @@ export const apiPaths = {
   timeSlot: "time-slots",
 
   // Storage.
-  credentialsFile: `file-storage/auth-user-file-by-type/credentials`,
+  credentialsFile: `file-storage`,
+  authUserFileByType: `file-storage/auth-user-file-by-type/credentials`,
 
   word: "word",
   translation: "translation",

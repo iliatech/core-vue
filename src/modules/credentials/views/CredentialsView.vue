@@ -12,9 +12,13 @@
       >
         {{ item.title }}
       </div>
-      <div
-        class="credentials-view__tabs-item credentials-view__tabs-item-last"
-      />
+      <div class="credentials-view__tabs-item-last">
+        <UniversalButton
+          v-if="actionLabel"
+          @click="handleClickAction"
+          :label="actionLabel"
+        />
+      </div>
     </div>
     <div class="credentials-view__content">
       <RouterView />
@@ -31,7 +35,7 @@
 </template>
 <script lang="ts" setup>
 import { LocalStorageKeys } from "@/settings/app";
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
 import UniversalText from "@/components/fields/UniversalText.vue";
 import { prepareName } from "@/helpers/strings";
@@ -40,6 +44,7 @@ import { showErrorToast, showSuccessToast } from "@/helpers/toast";
 import { lang } from "@/lang";
 import { credentialsRoutes } from "@/settings/routes";
 import { useRoute, useRouter } from "vue-router";
+import UniversalButton from "@/components/buttons/UniversalButton.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -59,6 +64,17 @@ onMounted(() => {
   CredentialDatabase.load();
 });
 
+const actionLabel = computed(() => {
+  switch (route.name) {
+    case "credentials.items":
+      return "Add Credential";
+    case "credentials.types":
+      return "Add Credential Type";
+    default:
+      return null;
+  }
+});
+
 const handleConfirmSecretKey = async () => {
   const key = prepareName(secretKey.value);
 
@@ -76,6 +92,24 @@ const handleConfirmSecretKey = async () => {
 
 const handleClickMenuItem = (routeName: string) => {
   router.push({ name: routeName });
+};
+
+const handleClickAction = () => {
+  let action = null;
+
+  switch (route.name) {
+    case "credentials.items":
+      action = "add-credential";
+      break;
+    case "credentials.types":
+      action = "add-credential-type";
+      break;
+  }
+
+  router.push({
+    path: route.path,
+    query: { action },
+  });
 };
 </script>
 <style lang="scss" scoped>
@@ -108,6 +142,8 @@ const handleClickMenuItem = (routeName: string) => {
 
   &__tabs-item-last {
     flex-grow: 1;
+    display: flex;
+    justify-content: flex-end;
   }
 
   &__tabs-item--selected {

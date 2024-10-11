@@ -5,16 +5,20 @@ import { Credential } from "@/modules/credentials/classes/entities/Credential";
 import UniversalTable from "@/components/tables/UniversalTable.vue";
 import type UniversalDrawer from "@/components/dialogs/UniversalDrawer.vue";
 import CredentialTypeSidebar from "@/modules/credentials/components/sidebars/CredentialTypeSidebar.vue";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
 import type {
   ICredentialType,
   ICredentialTypesTableItem,
 } from "@/modules/credentials/types";
+import { useRoute } from "vue-router";
+import router from "@/router";
 
 const credentialTypeSidebar = ref<InstanceType<typeof UniversalDrawer>>();
 const confirmDeleteItemDialog = ref<InstanceType<typeof UniversalDialog>>();
 const selectedItem = ref<ICredentialType | null>(null);
+
+const route = useRoute();
 
 const tableData = computed<ICredentialTypesTableItem[]>(() => {
   const credentials = Credential.get();
@@ -50,6 +54,22 @@ const handleConfirmDeleteItem = () => {
   CredentialType.delete(selectedItem.value.id);
   confirmDeleteItemDialog.value?.close();
 };
+
+const handleCloseDrawer = () => {
+  router.push({
+    path: route.path,
+  });
+};
+
+watch(
+  route,
+  () => {
+    if (route.query.action === "add-credential-type") {
+      handleClickAddCredentialType();
+    }
+  },
+  { deep: true }
+);
 </script>
 
 <template>
@@ -57,13 +77,15 @@ const handleConfirmDeleteItem = () => {
     <UniversalTable
       :config="credentialTypesTable"
       :data="tableData"
-      :action-button-text="$lang.button.newCredentialType"
       @click:action-button="handleClickAddCredentialType"
       @click:delete-item="handleClickDeleteItem"
       @click:edit-item="handleClickEditItem"
     />
   </div>
-  <CredentialTypeSidebar ref="credentialTypeSidebar" />
+  <CredentialTypeSidebar
+    ref="credentialTypeSidebar"
+    @close:drawer="handleCloseDrawer"
+  />
   <UniversalDialog
     :title="$lang.title.confirmDeleteCredentialType"
     ref="confirmDeleteItemDialog"

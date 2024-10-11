@@ -3,7 +3,7 @@ export default {
   back: "Back",
   cancel: "Cancel",
   changePassword: "Change",
-  clients: "Interactions",
+  clients: "People and Events",
   clientsSchedule: "Clients Schedule",
   close: "Close",
   confirm: "Confirm",
