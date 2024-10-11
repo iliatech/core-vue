@@ -125,7 +125,7 @@ const handleClickAction = () => {
     display: flex;
     margin-top: $px-10;
     margin-bottom: $px-20;
-    padding: 0 $px-5 $px-5;
+    padding: 0 0 $px-5;
   }
 
   &__content {

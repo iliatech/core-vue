@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import UniversalTable from "@/components/tables/UniversalTable.vue";
+import UniversalItems from "@/components/tables/UniversalItems.vue";
 import { credentialsTable } from "@/modules/credentials/settings/tables/credentialsTable";
 import { Credential } from "@/modules/credentials/classes/entities/Credential";
 import CredentialSidebar from "@/modules/credentials/components/sidebars/CredentialSidebar.vue";
@@ -85,7 +85,7 @@ onMounted(() => {
 
 <template>
   <div class="credentials">
-    <UniversalTable
+    <UniversalItems
       :config="credentialsTable"
       :data="tableData"
       @click:action-button="handleClickAddCredential"

@@ -2,7 +2,7 @@
 import { credentialTypesTable } from "@/modules/credentials/settings/tables/credentialTypesTable";
 import { CredentialType } from "@/modules/credentials/classes/entities/CredentialType";
 import { Credential } from "@/modules/credentials/classes/entities/Credential";
-import UniversalTable from "@/components/tables/UniversalTable.vue";
+import UniversalItems from "@/components/tables/UniversalItems.vue";
 import type UniversalDrawer from "@/components/dialogs/UniversalDrawer.vue";
 import CredentialTypeSidebar from "@/modules/credentials/components/sidebars/CredentialTypeSidebar.vue";
 import { computed, onMounted, ref, watch } from "vue";
@@ -82,7 +82,7 @@ onMounted(() => {
 
 <template>
   <div class="credential-types-table">
-    <UniversalTable
+    <UniversalItems
       :config="credentialTypesTable"
       :data="tableData"
       @click:action-button="handleClickAddCredentialType"
