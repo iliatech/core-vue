@@ -1,5 +1,5 @@
 <template>
-  <CenteredBlockTemplate>
+  <CentralBlock>
     <template #title>
       {{ lang.title.registration }}
     </template>
@@ -67,7 +67,7 @@
         />
       </div>
     </template>
-  </CenteredBlockTemplate>
+  </CentralBlock>
 </template>
 <script lang="ts" setup>
 import { computed, ref } from "vue";
@@ -85,7 +85,7 @@ import UniversalField from "@/components/fields/UniversalField.vue";
 import { getValidationErrors } from "@/helpers/formValidation";
 import type { ApiValidationError } from "@/types/common";
 import UniversalText from "@/components/fields/UniversalText.vue";
-import CenteredBlockTemplate from "@/components/templates/CenteredBlockTemplate.vue";
+import CentralBlock from "@/components/templates/CentralBlock.vue";
 import UniversalButton from "@/components/buttons/UniversalButton.vue";
 import { CLOUDFLARE_TURNSTILE_SITE_KEY } from "@/settings/app";
 

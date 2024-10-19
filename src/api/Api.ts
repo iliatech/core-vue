@@ -79,22 +79,53 @@ export default class Api {
           : requestResult?.data) ?? null
       );
     } catch (e: any) {
-      console.error("API request error:", e);
-      throw new Error("Custom API error");
+      // console.error("API request error:", e);
+      // throw new Error("Custom API error");
 
-      // if (!e?.response?.status) {
+      console.log("SS", e?.response?.status);
+
+      if (e?.response?.status === 401) {
+        await resetAuthorization();
+        return { validationErrors: ["Incorrect login data"] };
+      }
+
+      if (e?.response?.status === 422) {
+        return { validationErrors: e.response?.data?.errors ?? [] };
+      }
+
+      if (e?.response?.status === 400) {
+        if (e.response?.data?.message[0] === "password is not strong enough") {
+          return {
+            validationErrors: [
+              {
+                path: "password",
+                customMessage: "Password is not strong enough",
+              },
+            ],
+          };
+        }
+
+        return { validationErrors: e.response?.data?.message ?? [] };
+      }
+
+      if (e?.response?.status === 409) {
+        return { validationErrors: e.response?.data?.errors ?? [] };
+      }
+
+      throw new Error("Unexpected server error");
+
       //   // In case when API is not accessible the HTTP status is undefined.
       //   // TODO Is it correct for such a case clean the authorization?
       //   //setGlobalError(RegisteredError.ServerNotAccessible);
       //   return;
       // }
       //
-      // const { status } = e.response;
+      //const { status } = e.response;
       //
-      // const validationErrors = e.response?.data?.errors ?? [];
+      //const validationErrors = e.response?.data?.errors ?? [];
       //
-      // switch (status) {
-      //   case 401:
+      //switch (status) {
+      //case 401:
       //     await resetAuthorization();
       //     break;
       //   case 409:
@@ -112,7 +143,7 @@ export default class Api {
       //       showErrorToast({
       //         text: lang.error.unknownError,
       //       });
-      //     }
+      //    }
       //}
     } finally {
       if (!config.withoutLoader) {

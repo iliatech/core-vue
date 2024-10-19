@@ -50,8 +50,10 @@ defineProps({
 
   &__title {
     flex-grow: 1;
-    @include header-large;
+    @include header-medium;
     margin-bottom: $px-30;
+    text-align: center;
+    font-family: "Comic Sans MS", sans-serif;
   }
 
   &__messages {

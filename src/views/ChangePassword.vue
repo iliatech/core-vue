@@ -1,5 +1,5 @@
 <template>
-  <CenteredBlockTemplate :messages="pagesMessages['changePassword']">
+  <CentralBlock :messages="pagesMessages['changePassword']">
     <template #title>
       {{ lang.title.changePassword }}
     </template>
@@ -44,7 +44,7 @@
         />
       </div>
     </form>
-  </CenteredBlockTemplate>
+  </CentralBlock>
 </template>
 <script lang="ts" setup>
 import { computed, ref } from "vue";
@@ -61,7 +61,7 @@ import { useAppStore } from "@/store/appStore";
 import UniversalField from "@/components/fields/UniversalField.vue";
 import { getValidationErrors } from "@/helpers/formValidation";
 import type { ApiValidationError } from "@/types/common";
-import CenteredBlockTemplate from "@/components/templates/CenteredBlockTemplate.vue";
+import CentralBlock from "@/components/templates/CentralBlock.vue";
 import { CLOUDFLARE_TURNSTILE_SITE_KEY } from "@/settings/app";
 import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";

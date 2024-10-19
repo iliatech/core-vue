@@ -41,6 +41,12 @@
   font-weight: 600;
 }
 
+
+@mixin header-small {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
 @mixin zero-seven-hundred-fifty {
   font-size: 0.875rem;
 }

@@ -51,6 +51,7 @@ const downloadFile = () => {
 @import "@/assets/variables";
 
 .home-page {
+  margin-top: 20px;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -1,5 +1,5 @@
 <template>
-  <CenteredBlockTemplate :messages="pagesMessages['login']">
+  <CentralBlock :messages="pagesMessages['login']">
     <template #title>
       {{ lang.title.login }}
     </template>
@@ -62,7 +62,7 @@
         />
       </div>
     </template>
-  </CenteredBlockTemplate>
+  </CentralBlock>
 </template>
 <script lang="ts" setup>
 import { onBeforeMount, ref } from "vue";
@@ -80,7 +80,7 @@ import { useAppStore } from "@/store/appStore";
 import UniversalButton from "@/components/buttons/UniversalButton.vue";
 import { useRoute, useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
-import CenteredBlockTemplate from "@/components/templates/CenteredBlockTemplate.vue";
+import CentralBlock from "@/components/templates/CentralBlock.vue";
 import { getValidationErrors } from "@/helpers/formValidation";
 import UniversalField from "@/components/fields/UniversalField.vue";
 import type { ApiValidationError } from "@/types/common";
