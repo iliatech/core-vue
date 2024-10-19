@@ -84,8 +84,28 @@ export default class Api {
 
       console.log("SS", e?.response?.status);
 
+      if (e?.response?.status === 401) {
+        await resetAuthorization();
+        return { validationErrors: ["Incorrect login data"] };
+      }
+
       if (e?.response?.status === 422) {
         return { validationErrors: e.response?.data?.errors ?? [] };
+      }
+
+      if (e?.response?.status === 400) {
+        if (e.response?.data?.message[0] === "password is not strong enough") {
+          return {
+            validationErrors: [
+              {
+                path: "password",
+                customMessage: "Password is not strong enough",
+              },
+            ],
+          };
+        }
+
+        return { validationErrors: e.response?.data?.message ?? [] };
       }
 
       if (e?.response?.status === 409) {

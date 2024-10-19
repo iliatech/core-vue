@@ -75,7 +75,7 @@ const changeMode = () => {
       <div class="universal-items__mode">
         <UniversalIcon
           @click="changeMode"
-          :prime-icon="isTableMode ? 'th-large' : 'table'"
+          :prime-icon="!isTableMode ? 'th-large' : 'table'"
           size="20px"
         />
       </div>

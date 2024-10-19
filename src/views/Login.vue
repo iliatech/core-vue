@@ -1,5 +1,8 @@
 <template>
   <CentralBlock :messages="pagesMessages['login']">
+    <template #title>
+      {{ lang.title.login }}
+    </template>
     <form class="login-page__form">
       <UniversalField
         :label="lang.label.email"

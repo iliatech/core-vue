@@ -5,9 +5,9 @@ export const apiPaths = {
   login: "auth/login",
   getAuthUser: "auth/user",
   register: "auth/register",
-  changePassword: "auth/changePassword",
+  changePassword: "auth/change-password",
   confirmEmail: "auth/confirm-email",
-  restorePassword: "auth/restorePassword",
+  restorePassword: "auth/restore-password",
 
   saveAuthUserConfig: "saveAuthUserConfig",
 

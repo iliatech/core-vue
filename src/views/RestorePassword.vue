@@ -1,5 +1,8 @@
 <template>
   <CentralBlock :messages="pagesMessages['restorePassword']">
+    <template #title>
+      {{ lang.title.restorePassword }}
+    </template>
     <form class="restore-password__form">
       <UniversalField
         :label="lang.label.email"

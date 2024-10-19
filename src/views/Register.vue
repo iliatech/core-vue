@@ -1,5 +1,8 @@
 <template>
   <CentralBlock>
+    <template #title>
+      {{ lang.title.registration }}
+    </template>
     <form class="register-page__form">
       <UniversalField
         :label="lang.label.email"
