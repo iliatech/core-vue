@@ -1,8 +1,5 @@
 <template>
-  <CenteredBlockTemplate :messages="pagesMessages['restorePassword']">
-    <template #title>
-      {{ lang.title.restorePassword }}
-    </template>
+  <CentralBlock :messages="pagesMessages['restorePassword']">
     <form class="restore-password__form">
       <UniversalField
         :label="lang.label.email"
@@ -51,7 +48,7 @@
         />
       </div>
     </template>
-  </CenteredBlockTemplate>
+  </CentralBlock>
 </template>
 <script lang="ts" setup>
 import { ref } from "vue";
@@ -65,7 +62,7 @@ import { useAppStore } from "@/store/appStore";
 import UniversalButton from "@/components/buttons/UniversalButton.vue";
 import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
-import CenteredBlockTemplate from "@/components/templates/CenteredBlockTemplate.vue";
+import CentralBlock from "@/components/templates/CentralBlock.vue";
 import { getValidationErrors } from "@/helpers/formValidation";
 import UniversalField from "@/components/fields/UniversalField.vue";
 import type { ApiValidationError } from "@/types/common";
@@ -139,7 +136,6 @@ const handleClickLogin = () => {
   &__field-label {
     display: block;
     margin-bottom: $px-10;
-    margin-top: $px-20;
   }
 
   &__button-container {

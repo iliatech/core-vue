@@ -1,5 +1,5 @@
 export enum RequestMethods {
-  Get = "Get",
+  Get = "get",
   Post = "post",
   Put = "put",
   Patch = "patch",

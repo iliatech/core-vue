@@ -78,7 +78,6 @@ onMounted(async () => {
 
 .app-content {
   flex-grow: 1;
-  margin-bottom: $px-40;
-  overflow: auto; // Do we need it for pages with tables (tables already have scroll)? But it works fine now - second scroll not appear.
+  padding-bottom: $px-40;
 }
 </style>

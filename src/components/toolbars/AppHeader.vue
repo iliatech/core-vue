@@ -244,7 +244,7 @@ $toolbar-border: 1px solid #aaa;
 }
 
 .links {
-  margin: $px-30 0 $px-50;
+  margin: $px-30 0;
   font-size: 1.5rem;
   display: flex;
   justify-content: center;
