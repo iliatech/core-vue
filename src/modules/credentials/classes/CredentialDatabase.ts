@@ -41,6 +41,8 @@ export class CredentialDatabase {
       return;
     }
 
+    useCredentialStore().updateFileId(file.id);
+
     secretKey =
       secretKey ??
       localStorage.getItem(LocalStorageKeys.CredentialDatabaseKey) ??
@@ -57,7 +59,6 @@ export class CredentialDatabase {
       debugInfo("CURRENT DATA", parsedAndDecryptedData);
 
       useCredentialStore().updateCredentialDatabase(parsedAndDecryptedData);
-      useCredentialStore().updateFileId(file.id);
     } catch {
       throw new Error("Cannot decrypt data with this secret key");
     }
