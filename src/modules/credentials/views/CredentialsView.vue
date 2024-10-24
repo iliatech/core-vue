@@ -67,9 +67,9 @@ onMounted(() => {
 const actionLabel = computed(() => {
   switch (route.name) {
     case "credentials.items":
-      return "Add Credential";
+      return "Add MySecret";
     case "credentials.types":
-      return "Add Credential Type";
+      return "Add MySecretType";
     default:
       return null;
   }

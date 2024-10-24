@@ -1,6 +1,6 @@
 export default {
-  addCredential: "Add Credential",
-  addCredentialType: "Add Credential Type",
+  addCredential: "Add MySecret",
+  addCredentialType: "Add MySecretType",
   addSlot: "Add slot",
   changePassword: "Change Password",
   clients: "People and Events",
@@ -14,7 +14,7 @@ export default {
   createTag: "Create tag",
   createWord: "Create word",
   credentials: "Credentials",
-  credentialTypes: "Credential Types",
+  credentialTypes: "MySecretTypes",
   confirmDeleteCredentialType: "Confirm delete credential type",
   discardChanges: "Discard Changes",
   editClient: "Edit client",

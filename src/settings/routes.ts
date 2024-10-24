@@ -69,7 +69,7 @@ export const routes: Record<string, LocalRoute> = {
   credentialsTypes: {
     path: "types",
     name: "credentials.types",
-    title: "Credential Types",
+    title: "MySecretTypes",
     parentRouteName: "credentials.items",
   },
 };

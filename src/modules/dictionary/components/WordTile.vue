@@ -108,6 +108,7 @@ const emit = defineEmits(["onClick", "onClickDelete", "changeTags"]);
   }
 
   &__number {
+    text-align: center;
     color: #333;
     font-size: 0.875rem;
   }
