@@ -12,9 +12,10 @@
 
 .plus-tile {
   position: relative;
-  background: $tomato;
-  aspect-ratio: $tile-aspect-ratio;
+  border: 2px dashed $tomato;
   display: flex;
+  height: 60px;
+  width: 120px;
   justify-content: center;
   align-items: center;
   cursor: pointer;
@@ -23,7 +24,7 @@
 
   &__icon {
     display: block;
-    font-size: 4rem;
+    font-size: 2rem;
     color: $color-white;
   }
 }

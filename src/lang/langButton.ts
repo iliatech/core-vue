@@ -4,7 +4,7 @@ export default {
   cancel: "Cancel",
   changePassword: "Change",
   clients: "People and Events",
-  clientsSchedule: "Clients Schedule",
+  clientsSchedule: "MySchedule",
   close: "Close",
   confirm: "Confirm",
   create: "Create",
@@ -21,5 +21,5 @@ export default {
   signIn: "Sign In",
   signOut: "Sign Out",
   signUp: "Sign Up",
-  wordsApp: "Dictionary",
+  wordsApp: "WordsTraining",
 };

@@ -2,8 +2,7 @@
   <div class="words-view">
     <div class="words-view__top">
       <div class="words-view__top-left">
-        <WordSorting />
-        <WordFiltering />
+        <!--        <WordFiltering />-->
       </div>
       <div class="words-view__top-button">
         <Button
@@ -15,7 +14,9 @@
       </div>
     </div>
     <div class="words-view__words">
-      <PlusTile @click="onClickAddWord" />
+      <div class="plus-container">
+        <PlusTile @click="onClickAddWord" />
+      </div>
       <WordTile
         v-for="(item, index) in wordsSortedAndFiltered"
         :key="item.id"
@@ -25,6 +26,9 @@
         @on-click-delete="onClickDelete(item)"
         @change-tags="loadWords"
       />
+      <div class="plus-container">
+        <PlusTile @click="onClickAddWord" />
+      </div>
     </div>
   </div>
   <CustomConfirmDialog
@@ -35,7 +39,6 @@
     @on-cancel="onCancelDelete"
     @on-confirm="onConfirmDelete"
   />
-  <ManageTagsDrawer ref="manageTagsSidebar" />
   <WordSidebar ref="wordSidebar" />
   <CreateWordSidebar ref="addWordSidebar" @create:word="loadWords" />
 </template>
@@ -154,25 +157,25 @@ const openManageTagsSidebar = () => {
 @import "@/assets/variables";
 
 @mixin flex-wrap-fix($flex-basis, $max-viewport-width: 2000px) {
-  flex-grow: 1;
-  flex-basis: $flex-basis;
-  max-width: 100%;
+  //flex-grow: 1;
+  //flex-basis: $flex-basis;
+  //max-width: 100%;
 
-  $multiplier: 1;
-  $current-width: 0px;
+  //$multiplier: 1;
+  //$current-width: 0px;
 
-  @while $current-width < $max-viewport-width {
-    $current-width: $current-width + $flex-basis;
-    $multiplier: $multiplier + 1;
-
-    @media (min-width: $flex-basis * $multiplier) {
-      max-width: calc(1 / $multiplier);
-    }
-  }
+  //@while $current-width < $max-viewport-width {
+  //  $current-width: $current-width + $flex-basis;
+  //  $multiplier: $multiplier + 1;
+  //
+  //  @media (min-width: $flex-basis * $multiplier) {
+  //    max-width: calc(1 / $multiplier);
+  //  }
+  //}
 }
 
 .words-view {
-  padding: 0 $px-60;
+  padding: 0 $px-20;
 
   &__top {
     display: flex;
@@ -195,13 +198,17 @@ const openManageTagsSidebar = () => {
 
   &__words {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     gap: $px-30;
 
     div {
-      min-width: 350px;
-      @include flex-wrap-fix(250px);
+      min-width: 100px;
     }
   }
+}
+
+.plus-container {
+  display: flex;
+  justify-content: center;
 }
 </style>

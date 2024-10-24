@@ -2,6 +2,7 @@
   <div class="word-tile" :style="{ borderColor: backgroundColor }">
     <div class="word-tile__top">
       <MultiSelect
+        v-if="false"
         :model-value="selectedTags"
         display="chip"
         :options="tags"
@@ -15,14 +16,16 @@
       />
     </div>
     <div class="word-tile__content">
-      <i class="pi pi-eye word-tile__top-icon" @click="emit('onClick')" />
       <div class="word-tile__text">{{ data.title }}</div>
     </div>
     <div class="word-tile__bottom">
       <div class="word-tile__number">
-        {{ $lang.phrase.numberOfTranslations }}: {{ data.translations.length }}
+        {{ $lang.phrase.numberOfTranslations }}: {{ data.translations?.length }}
       </div>
-      <i @click="emit('onClickDelete')" class="pi pi-trash" />
+      <div class="actions">
+        <i class="pi pi-pencil word-tile__top-icon" @click="emit('onClick')" />
+        <i @click="emit('onClickDelete')" class="pi pi-trash" />
+      </div>
     </div>
   </div>
 </template>
@@ -74,11 +77,10 @@ const emit = defineEmits(["onClick", "onClickDelete", "changeTags"]);
 @import "@/assets/variables";
 
 .word-tile {
-  aspect-ratio: $tile-aspect-ratio;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  padding: $px-20;
+  padding: $px-15;
   border-radius: $border-radius-ten;
   border: 2px dashed;
 
@@ -130,8 +132,7 @@ const emit = defineEmits(["onClick", "onClickDelete", "changeTags"]);
   }
 
   &__bottom {
-    display: flex;
-    justify-content: space-between;
+    margin-top: $px-10;
     right: $px-10;
     bottom: $px-10;
     flex-grow: 0;
@@ -165,5 +166,12 @@ const emit = defineEmits(["onClick", "onClickDelete", "changeTags"]);
     width: auto;
     color: #222;
   }
+}
+
+.actions {
+  margin-top: $px-5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

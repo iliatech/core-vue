@@ -1,5 +1,5 @@
 export default {
-  home: "Home",
+  home: "GoHome",
   login: "Login",
   logout: "Logout",
 };

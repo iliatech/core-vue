@@ -29,7 +29,7 @@
     <div class="translations-section">
       {{ $lang.label.translations }}
 
-      <template v-if="translations.length && isTranslationAdded">
+      <template v-if="translations?.length && isTranslationAdded">
         <ul>
           <li v-for="(item, index) in translations" :key="item.id">
             <span :class="{ 'word-sidebar__item-bold': !index }">{{
