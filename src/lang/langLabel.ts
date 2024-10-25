@@ -10,6 +10,7 @@ export default {
   goToPublicArea: "Go to public area",
   hour: "Hour",
   filterBy: (columnName: string) => `Filter by ${columnName}`,
+  language: "Language",
   loader: "Loading",
   logout: "Logout",
   minute: "Minute",
@@ -33,4 +34,5 @@ export default {
   translations: "Translations",
   userId: "User ID",
   username: "Username",
+  wordOrPhrase: "Word or phrase",
 };

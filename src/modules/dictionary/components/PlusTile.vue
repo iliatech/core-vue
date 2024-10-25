@@ -12,10 +12,9 @@
 
 .plus-tile {
   position: relative;
-  border: 2px dashed $tomato;
+  border: 3px dotted $tomato;
   display: flex;
   height: 60px;
-  width: 120px;
   justify-content: center;
   align-items: center;
   cursor: pointer;

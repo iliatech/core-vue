@@ -5,7 +5,7 @@ export interface NavigationItem {
 }
 
 export interface ApiValidationError {
-  path: string;
+  path: string | undefined;
   type?: string;
   value?: string;
   msg?: string;

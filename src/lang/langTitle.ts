@@ -12,7 +12,7 @@ export default {
   createClient: "Create client",
   createInteraction: "Create Person or Event",
   createTag: "Create tag",
-  createWord: "Create word",
+  createWord: "Add word or phrase to dictionary",
   credentials: "Credentials",
   credentialTypes: "MySecretTypes",
   confirmDeleteCredentialType: "Confirm delete credential type",

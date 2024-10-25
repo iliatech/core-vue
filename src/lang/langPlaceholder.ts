@@ -6,6 +6,6 @@ export default {
   selectTags: "No tags",
   inputClientName: "Enter Person name or Event name",
   inputTagName: "Input tag name",
-  enterWord: "Enter word",
+  enterWord: "Enter word or phrase",
   wordOrPhrase: "Write something...",
 };

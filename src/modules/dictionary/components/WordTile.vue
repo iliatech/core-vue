@@ -170,7 +170,7 @@ const emit = defineEmits(["onClick", "onClickDelete", "changeTags"]);
 }
 
 .actions {
-  margin-top: $px-5;
+  margin-top: $px-10;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -1,22 +1,11 @@
 <template>
   <div class="words-view">
     <div class="words-view__top">
-      <div class="words-view__top-left">
-        <!--        <WordFiltering />-->
-      </div>
-      <div class="words-view__top-button">
-        <Button
-          :label="$lang.button.manageTags"
-          @click="openManageTagsSidebar"
-          outlined
-          size="small"
-        />
-      </div>
+      <div class="words-view__top-left"></div>
+      <div class="words-view__top-button"></div>
     </div>
     <div class="words-view__words">
-      <div class="plus-container">
-        <PlusTile @click="onClickAddWord" />
-      </div>
+      <PlusTile @click="onClickAddWord" />
       <WordTile
         v-for="(item, index) in wordsSortedAndFiltered"
         :key="item.id"
@@ -26,9 +15,7 @@
         @on-click-delete="onClickDelete(item)"
         @change-tags="loadWords"
       />
-      <div class="plus-container">
-        <PlusTile @click="onClickAddWord" />
-      </div>
+      <PlusTile @click="onClickAddWord" />
     </div>
   </div>
   <CustomConfirmDialog
@@ -39,7 +26,6 @@
     @on-cancel="onCancelDelete"
     @on-confirm="onConfirmDelete"
   />
-  <WordSidebar ref="wordSidebar" />
   <CreateWordSidebar ref="addWordSidebar" @create:word="loadWords" />
 </template>
 
@@ -51,9 +37,7 @@ import Api from "@/api/Api";
 import { getPaletteColor } from "@/settings/colorPalette";
 import type { ApiWordResponse } from "@/types/word";
 import WordTile from "@/modules/dictionary/components/WordTile.vue";
-import Button from "primevue/button";
 import PlusTile from "@/modules/dictionary/components/PlusTile.vue";
-import WordSorting from "@/modules/dictionary/components/WordSorting.vue";
 import { RequestMethods } from "@/types/api";
 import { lang } from "@/lang";
 import CustomConfirmDialog from "@/components/dialogs/CustomConfirmDialog.vue";
@@ -61,10 +45,7 @@ import { DialogType } from "@/types/dialog";
 import { orderBy } from "lodash";
 import { SortingOptions, useWordsAppStore } from "@/store/wordsAppStore";
 import { storeToRefs } from "pinia";
-import ManageTagsDrawer from "@/modules/dictionary/components/sidebars/ManageTagsDrawer.vue";
-import WordFiltering from "@/modules/dictionary/components/WordFiltering.vue";
 import { useTagsFilteringStore } from "@/store/tagsFilteringStore";
-import WordSidebar from "@/modules/dictionary/components/sidebars/WordSidebar.vue";
 import CreateWordSidebar from "@/modules/dictionary/components/sidebars/CreateWordSidebar.vue";
 
 const wordsAppStore = useWordsAppStore();
@@ -75,7 +56,6 @@ const { selectedSorting, selectedSortingDirection } =
 
 const { filterTags } = storeToRefs(tagsFilteringStore);
 
-const manageTagsSidebar = ref();
 const words = ref([] as ApiWordResponse[]);
 const deleteItem: Ref<ApiWordResponse | null> = ref(null);
 const wordSidebar = ref();
@@ -148,10 +128,6 @@ const onConfirmDelete = async (): Promise<void> => {
 
   deleteItem.value = null;
 };
-
-const openManageTagsSidebar = () => {
-  manageTagsSidebar.value.open();
-};
 </script>
 <style lang="scss" scoped>
 @import "@/assets/variables";
@@ -205,10 +181,5 @@ const openManageTagsSidebar = () => {
       min-width: 100px;
     }
   }
-}
-
-.plus-container {
-  display: flex;
-  justify-content: center;
 }
 </style>

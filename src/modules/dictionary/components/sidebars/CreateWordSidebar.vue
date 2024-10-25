@@ -7,13 +7,16 @@
     close-button
   >
     <div class="add-word-sidebar">
-      <InputText
-        type="text"
-        width="500px"
-        v-model="word"
-        :placeholder="$lang.placeholder.enterWord"
-        :class="{ 'p-invalid': !word && isValidated }"
-      />
+      <UniversalField :label="lang.label.wordOrPhrase">
+        <UniversalText
+          v-model="word"
+          :placeholder="$lang.placeholder.enterWord"
+        />
+      </UniversalField>
+      <UniversalField :label="lang.label.language">
+        <UniversalSelector v-model="language" :options="languageOptions" />
+      </UniversalField>
+      <ErrorDetails :errors="generalValidationErrors" />
     </div>
     <template #buttons-after>
       <UniversalButton
@@ -32,13 +35,21 @@ import Api from "@/api/Api";
 import { apiPaths } from "@/settings/api";
 import { RequestMethods } from "@/types/api";
 import { lang } from "@/lang";
-import InputText from "primevue/inputtext";
 import UniversalDrawer from "@/components/dialogs/UniversalDrawer.vue";
 import UniversalButton from "@/components/buttons/UniversalButton.vue";
+import ErrorDetails from "@/components/error/ErrorDetails.vue";
+import type { ApiValidationError } from "@/types/common";
+import UniversalText from "@/components/fields/UniversalText.vue";
+import UniversalField from "@/components/fields/UniversalField.vue";
+import UniversalSelector from "@/components/fields/UniversalSelector.vue";
+import type { ApiLanguage } from "@/modules/dictionary/types";
 
 const sidebar = ref();
 const isValidated = ref(false);
 const word = ref<string | null>(null);
+const generalValidationErrors = ref<string[]>([]);
+const languageOptions = ref<ApiLanguage[]>([{ id: "test", name: "testRus" }]);
+const language = ref<ApiLanguage | null>(null);
 
 const emit = defineEmits(["create:word"]);
 
@@ -53,14 +64,21 @@ const onClickCreateWord = async (): Promise<void> => {
     return;
   }
 
-  const res = await Api.request({
+  const { validationErrors } = await Api.request({
     path: apiPaths.word,
     method: RequestMethods.Post,
     payload: { title: word.value },
     successToast: lang.success.wordCreated,
   });
 
-  if (res) {
+  if (validationErrors?.length) {
+    generalValidationErrors.value = validationErrors
+      .filter(
+        (item: ApiValidationError) =>
+          item.customMessage && item.path === undefined
+      )
+      .map((item: ApiValidationError) => item.customMessage);
+  } else {
     isValidated.value = false;
     emit("create:word");
     sidebar.value.close();
@@ -69,6 +87,7 @@ const onClickCreateWord = async (): Promise<void> => {
 
 const open = async () => {
   sidebar.value.open();
+  generalValidationErrors.value = [];
 };
 
 const handleClickClose = () => {
