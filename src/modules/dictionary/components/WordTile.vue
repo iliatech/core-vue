@@ -19,8 +19,14 @@
       <div class="word-tile__text">{{ data.title }}</div>
     </div>
     <div class="word-tile__bottom">
-      <div class="word-tile__number">
-        {{ $lang.phrase.numberOfTranslations }}: {{ data.translations?.length }}
+      <div class="fields">
+        <div class="field">
+          {{ $lang.label.language }}: {{ data.language.name }}
+        </div>
+        <div class="field">
+          {{ $lang.phrase.numberOfTranslations }}:
+          {{ data.translations?.length }}
+        </div>
       </div>
       <div class="actions">
         <i class="pi pi-pencil word-tile__top-icon" @click="emit('onClick')" />
@@ -107,12 +113,6 @@ const emit = defineEmits(["onClick", "onClickDelete", "changeTags"]);
     margin-top: 3px;
   }
 
-  &__number {
-    text-align: center;
-    color: #333;
-    font-size: 0.875rem;
-  }
-
   &__content {
     font-size: 1.5rem;
     text-overflow: ellipsis;
@@ -174,5 +174,17 @@ const emit = defineEmits(["onClick", "onClickDelete", "changeTags"]);
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: $px-5;
+}
+
+.field {
+  text-align: center;
+  color: #333;
+  font-size: 0.875rem;
 }
 </style>

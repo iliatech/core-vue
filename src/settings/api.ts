@@ -23,4 +23,5 @@ export const apiPaths = {
   word: "words",
   translation: "translation",
   tag: "tag",
+  languages: "languages",
 };

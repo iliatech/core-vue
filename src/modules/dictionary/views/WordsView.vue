@@ -6,15 +6,20 @@
     </div>
     <div class="words-view__words">
       <PlusTile @click="onClickAddWord" />
-      <WordTile
-        v-for="(item, index) in wordsSortedAndFiltered"
-        :key="item.id"
-        :data="item"
-        :background-color="getPaletteColor(index)"
-        @on-click="onClickWord(item.id)"
-        @on-click-delete="onClickDelete(item)"
-        @change-tags="loadWords"
-      />
+      <template v-if="wordsSortedAndFiltered.length">
+        <WordTile
+          v-for="(item, index) in wordsSortedAndFiltered"
+          :key="item.id"
+          :data="item"
+          :background-color="getPaletteColor(index)"
+          @on-click="onClickWord(item.id)"
+          @on-click-delete="onClickDelete(item)"
+          @change-tags="loadWords"
+        />
+      </template>
+      <div v-else class="no-entities-found">
+        {{ lang.label.noEntitiesFound }}
+      </div>
       <PlusTile @click="onClickAddWord" />
     </div>
   </div>
@@ -181,5 +186,9 @@ const onConfirmDelete = async (): Promise<void> => {
       min-width: 100px;
     }
   }
+}
+
+.no-entities-found {
+  text-align: center;
 }
 </style>

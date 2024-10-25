@@ -48,13 +48,13 @@ const sidebar = ref();
 const isValidated = ref(false);
 const word = ref<string | null>(null);
 const generalValidationErrors = ref<string[]>([]);
-const languageOptions = ref<ApiLanguage[]>([{ id: "test", name: "testRus" }]);
-const language = ref<ApiLanguage | null>(null);
+const languageOptions = ref<ApiLanguage[]>([]);
+const language = ref<string | null>(null);
 
 const emit = defineEmits(["create:word"]);
 
 const validate = (): boolean => {
-  return !!word.value;
+  return !!word.value && !!language.value;
 };
 
 const onClickCreateWord = async (): Promise<void> => {
@@ -67,7 +67,7 @@ const onClickCreateWord = async (): Promise<void> => {
   const { validationErrors } = await Api.request({
     path: apiPaths.word,
     method: RequestMethods.Post,
-    payload: { title: word.value },
+    payload: { title: word.value, languageId: language.value },
     successToast: lang.success.wordCreated,
   });
 
@@ -86,6 +86,10 @@ const onClickCreateWord = async (): Promise<void> => {
 };
 
 const open = async () => {
+  languageOptions.value = await Api.request({
+    path: apiPaths.languages,
+    method: RequestMethods.Get,
+  });
   sidebar.value.open();
   generalValidationErrors.value = [];
 };
