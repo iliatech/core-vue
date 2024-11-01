@@ -9,7 +9,7 @@
   </div>
 
   <div class="app-container">
-    <AppHeader />
+    <AppHeader :is-public="isPublic" />
     <div class="app-content">
       <ErrorProcessing>
         <RouterView />
@@ -35,10 +35,14 @@ const { isLoading, isPersistentLoading } = storeToRefs(appStore);
 const { loadAuthUser } = appStore;
 
 const toast = ref();
+const isPublic = ref<boolean | null>(null);
 
 watch(route, async () => {
   if (!publicRouteNames.includes(route.name as string)) {
     await loadAuthUser();
+    isPublic.value = false;
+  } else {
+    isPublic.value = true;
   }
 });
 
