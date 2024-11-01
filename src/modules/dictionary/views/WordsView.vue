@@ -1,26 +1,28 @@
 <template>
-  <div class="words-view">
-    <div class="words-view__top">
-      <div class="words-view__top-left"></div>
-      <div class="words-view__top-button"></div>
-    </div>
-    <div class="words-view__words">
-      <PlusTile @click="onClickAddWord" />
-      <template v-if="wordsSortedAndFiltered.length">
-        <WordTile
-          v-for="(item, index) in wordsSortedAndFiltered"
-          :key="item.id"
-          :data="item"
-          :background-color="getPaletteColor(index)"
-          @on-click="onClickWord(item.id)"
-          @on-click-delete="onClickDelete(item)"
-          @change-tags="loadWords"
-        />
-      </template>
-      <div v-else class="no-entities-found">
-        {{ lang.label.noEntitiesFound }}
+  <div class="words-view-container">
+    <div class="words-view">
+      <div class="words-view__top">
+        <div class="words-view__top-left"></div>
+        <div class="words-view__top-button"></div>
       </div>
-      <PlusTile @click="onClickAddWord" />
+      <div class="words-view__words">
+        <PlusTile @click="onClickAddWord" />
+        <template v-if="wordsSortedAndFiltered.length">
+          <WordTile
+            v-for="(item, index) in wordsSortedAndFiltered"
+            :key="item.id"
+            :data="item"
+            :background-color="getPaletteColor(index)"
+            @on-click="onClickWord(item.id)"
+            @on-click-delete="onClickDelete(item)"
+            @change-tags="loadWords"
+          />
+        </template>
+        <div v-else class="no-entities-found">
+          {{ lang.label.noEntitiesFound }}
+        </div>
+        <PlusTile @click="onClickAddWord" />
+      </div>
     </div>
   </div>
   <CustomConfirmDialog
@@ -157,6 +159,8 @@ const onConfirmDelete = async (): Promise<void> => {
 
 .words-view {
   padding: 0 $px-20;
+  max-width: 500px;
+  margin: 0 auto;
 
   &__top {
     display: flex;
@@ -190,5 +194,9 @@ const onConfirmDelete = async (): Promise<void> => {
 
 .no-entities-found {
   text-align: center;
+}
+
+.words-view-container {
+  // ---
 }
 </style>

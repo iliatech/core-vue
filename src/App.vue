@@ -18,34 +18,31 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { RouterView, useRouter } from "vue-router";
+import { RouterView, useRoute } from "vue-router";
 import ProgressSpinner from "primevue/progressspinner";
 import Toast from "primevue/toast";
 import { useAppStore } from "@/store/appStore";
 import { storeToRefs } from "pinia";
-import { onBeforeMount, onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { setGlobalToastObject } from "@/helpers/toast";
 import AppHeader from "@/components/toolbars/AppHeader.vue";
 import ErrorProcessing from "@/components/error/ErrorProcessing.vue";
 import { publicRouteNames } from "@/settings/routes";
 
 const appStore = useAppStore();
-const route = useRouter();
+const route = useRoute();
 const { isLoading, isPersistentLoading } = storeToRefs(appStore);
 const { loadAuthUser } = appStore;
 
 const toast = ref();
 
-onBeforeMount(async () => {
-  console.log(publicRouteNames);
-  if (!publicRouteNames.includes(route.name)) {
-    console.log("BU");
-    //await loadAuthUser();
+watch(route, async () => {
+  if (!publicRouteNames.includes(route.name as string)) {
+    await loadAuthUser();
   }
 });
 
 onMounted(async () => {
-  console.log("RN", route.currentRoute.value);
   setGlobalToastObject(toast.value);
 });
 </script>
