@@ -12,14 +12,14 @@
           <div class="basic-dialog__buttons">
             <template v-if="type === DialogType.Confirm">
               <Button
-                @click="emit('onConfirm')"
-                :label="confirmButtonText"
-                class="confirm-button"
-              />
-              <Button
                 @click="emit('onCancel')"
                 :label="$lang.button.cancel"
                 class="cancel-button"
+              />
+              <Button
+                @click="emit('onConfirm')"
+                :label="confirmButtonText"
+                class="confirm-button"
               />
             </template>
           </div>

@@ -1,41 +1,3 @@
-<template>
-  <div class="words-view-container">
-    <div class="words-view">
-      <div class="words-view__top">
-        <div class="words-view__top-left"></div>
-        <div class="words-view__top-button"></div>
-      </div>
-      <div class="words-view__words">
-        <PlusTile @click="onClickAddWord" />
-        <template v-if="wordsSortedAndFiltered.length">
-          <WordTile
-            v-for="(item, index) in wordsSortedAndFiltered"
-            :key="item.id"
-            :data="item"
-            :background-color="getPaletteColor(index)"
-            @on-click="onClickWord(item.id)"
-            @on-click-delete="onClickDelete(item)"
-            @change-tags="loadWords"
-          />
-        </template>
-        <div v-else class="no-entities-found">
-          {{ lang.label.noEntitiesFound }}
-        </div>
-        <PlusTile @click="onClickAddWord" />
-      </div>
-    </div>
-  </div>
-  <CustomConfirmDialog
-    v-model="deleteItem"
-    :type="DialogType.Confirm"
-    :text="lang.title.confirmDeleteWord(deleteItem?.title ?? '')"
-    :confirm-button-text="$lang.button.delete"
-    @on-cancel="onCancelDelete"
-    @on-confirm="onConfirmDelete"
-  />
-  <CreateWordSidebar ref="addWordSidebar" @create:word="loadWords" />
-</template>
-
 <script lang="ts" setup>
 import type { Ref } from "vue";
 import { computed, onBeforeMount, ref } from "vue";
@@ -53,7 +15,7 @@ import { orderBy } from "lodash";
 import { SortingOptions, useWordsAppStore } from "@/store/wordsAppStore";
 import { storeToRefs } from "pinia";
 import { useTagsFilteringStore } from "@/store/tagsFilteringStore";
-import CreateWordSidebar from "@/modules/dictionary/components/sidebars/CreateWordSidebar.vue";
+import WordSidebar from "@/modules/dictionary/components/sidebars/WordSidebar.vue";
 
 const wordsAppStore = useWordsAppStore();
 const tagsFilteringStore = useTagsFilteringStore();
@@ -66,7 +28,6 @@ const { filterTags } = storeToRefs(tagsFilteringStore);
 const words = ref([] as ApiWordResponse[]);
 const deleteItem: Ref<ApiWordResponse | null> = ref(null);
 const wordSidebar = ref();
-const addWordSidebar = ref();
 
 onBeforeMount(async () => {
   await loadWords();
@@ -106,7 +67,7 @@ const onClickWord = (wordId: string): void => {
 };
 
 const onClickAddWord = (): void => {
-  addWordSidebar.value.open();
+  wordSidebar.value.open();
 };
 
 const onClickDelete = async (item: ApiWordResponse): Promise<void> => {
@@ -136,6 +97,45 @@ const onConfirmDelete = async (): Promise<void> => {
   deleteItem.value = null;
 };
 </script>
+
+<template>
+  <div class="words-view-container">
+    <div class="words-view">
+      <div class="words-view__top">
+        <div class="words-view__top-left"></div>
+        <div class="words-view__top-button"></div>
+      </div>
+      <div class="words-view__words">
+        <PlusTile @click="onClickAddWord" />
+        <template v-if="wordsSortedAndFiltered.length">
+          <WordTile
+            v-for="(item, index) in wordsSortedAndFiltered"
+            :key="item.id"
+            :data="item"
+            :background-color="getPaletteColor(index)"
+            @on-click="onClickWord(item.id)"
+            @on-click-delete="onClickDelete(item)"
+            @change-tags="loadWords"
+          />
+        </template>
+        <div v-else class="no-entities-found">
+          {{ lang.label.noEntitiesFound }}
+        </div>
+        <PlusTile @click="onClickAddWord" />
+      </div>
+    </div>
+  </div>
+  <CustomConfirmDialog
+    v-model="deleteItem"
+    :type="DialogType.Confirm"
+    :text="lang.title.confirmDeleteWord(deleteItem?.title ?? '')"
+    :confirm-button-text="$lang.button.delete"
+    @on-cancel="onCancelDelete"
+    @on-confirm="onConfirmDelete"
+  />
+  <WordSidebar ref="wordSidebar" @create:word="loadWords" />
+</template>
+
 <style lang="scss" scoped>
 @import "@/assets/variables";
 
