@@ -13,8 +13,6 @@ import objectHash from "object-hash";
 import UniversalTableCell from "@/components/tables/UniversalTableCell.vue";
 import UniversalIcon from "@/components/icons/UniversalIcon.vue";
 
-const isTableMode = ref(false);
-
 const emit = defineEmits(["click:actionButton"]);
 
 const props = defineProps({
@@ -27,7 +25,11 @@ const props = defineProps({
     required: true,
   },
   actionButtonText: String,
+  tableModeByDefault: Boolean,
+  withoutModeSwitcher: Boolean,
 });
+
+const isTableMode = ref(props.tableModeByDefault);
 
 const filterValues = ref<UniversalFilterValues>({});
 
@@ -72,7 +74,7 @@ const changeMode = () => {
           :label="actionButtonText"
         />
       </div>
-      <div class="universal-items__mode">
+      <div class="universal-items__mode" v-if="!withoutModeSwitcher">
         <UniversalIcon
           @click="changeMode"
           :prime-icon="!isTableMode ? 'th-large' : 'table'"
@@ -147,7 +149,7 @@ const changeMode = () => {
 @import "@/assets/fonts";
 
 .universal-items {
-  height: 100%;
+  height: 500px;
   display: flex;
   flex-direction: column;
 

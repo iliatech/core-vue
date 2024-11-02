@@ -17,7 +17,8 @@ export interface ApiWordResponse {
   id: string;
   tags: ApiTagResponse[];
   title: string;
-  translations: Translation[];
+  translating: ApiWordResponse[];
+  translatedBy: ApiWordResponse[];
   language: ApiLanguage;
   updatedAt: string;
 }
