@@ -21,5 +21,7 @@ export default {
   signIn: "Sign In",
   signOut: "Sign Out",
   signUp: "Sign Up",
+  showAllWords: "Currently in 'Show all words' mode",
+  showOnlyTranslations: "Currently in 'Show only translations' mode",
   wordsApp: "WordsTraining",
 };

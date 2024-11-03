@@ -24,6 +24,8 @@ const languageOptions = ref<ApiLanguage[]>([]);
 const language = ref<string | null>(null);
 const wordId = ref<string | undefined>(undefined);
 const wordObject = ref<ApiWordResponse | null>(null);
+const tableData = ref<ApiWordResponse[]>([]);
+const showAllWordsMode = ref<boolean>(false);
 
 const emit = defineEmits(["create:word"]);
 
@@ -70,6 +72,7 @@ const open = async (id?: string) => {
 
     word.value = data.title;
     wordObject.value = data;
+    tableData.value = data.translating;
     language.value = data.languageId;
   }
 
@@ -87,6 +90,31 @@ const handleClickClose = () => {
   sidebar.value.close();
 };
 
+const changeShowMode = async () => {
+  showAllWordsMode.value = !showAllWordsMode.value;
+
+  if (showAllWordsMode.value) {
+    const data = await Api.request({
+      path: apiPaths.word,
+    });
+
+    tableData.value = data?.length ? (data as ApiWordResponse[]) : [];
+  } else {
+    tableData.value = wordObject.value?.translating ?? [];
+  }
+};
+
+const linkTranslation = async (item: ApiWordResponse) => {
+  await Api.request({
+    path: apiPaths.linkWordsAsTranslations,
+    method: RequestMethods.Post,
+    payload: {
+      word1Id: item.id,
+      word2Id: wordId.value,
+    },
+  });
+};
+
 defineExpose({ open });
 </script>
 
@@ -94,7 +122,7 @@ defineExpose({ open });
   <UniversalDrawer
     ref="sidebar"
     :dismissable="false"
-    :title="$lang.title.createWord"
+    :title="wordId ? $lang.title.editWord : $lang.title.createWord"
     @click:close="handleClickClose"
     close-button
   >
@@ -110,13 +138,21 @@ defineExpose({ open });
       </UniversalField>
       <UniversalField :label="lang.label.translations">
         <div class="word-translations">
-          <UniversalButton :label="lang.button.add" width="80px" />
+          <UniversalButton
+            :label="
+              showAllWordsMode
+                ? lang.button.showAllWords
+                : lang.button.showOnlyTranslations
+            "
+            @click="changeShowMode"
+          />
           <UniversalItems
             v-if="wordObject"
             :config="wordTranslationsTable"
-            :data="wordObject.translating"
+            :data="tableData"
             table-mode-by-default
             without-mode-switcher
+            @click:link="linkTranslation"
           />
         </div>
       </UniversalField>

@@ -29,8 +29,7 @@ export const wordTranslationsTable: UniversalTableColumn[] = [
       {
         component: UniversalIcon,
         props: {
-          label: "Edit",
-          primeIcon: "pencil",
+          primeIcon: "link",
           link: true,
           size: "0.85rem",
           linkTextStyle: {
@@ -38,14 +37,13 @@ export const wordTranslationsTable: UniversalTableColumn[] = [
             fontWeight: "bold",
           },
           onClick: () => {
-            return emit("click:edit-item", item);
+            return emit("click:link", item);
           },
         },
       },
       {
         component: UniversalIcon,
         props: {
-          label: "Delete",
           primeIcon: "trash",
           link: true,
           size: "0.85rem",

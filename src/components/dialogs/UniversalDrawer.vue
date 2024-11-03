@@ -98,6 +98,7 @@ defineExpose({ open, close });
     display: flex;
     justify-content: flex-end;
     gap: $px-15;
+    padding-bottom: $px-15;
   }
 }
 </style>

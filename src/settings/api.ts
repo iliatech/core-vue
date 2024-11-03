@@ -21,6 +21,7 @@ export const apiPaths = {
 
   // WordsTraining.
   word: "words",
+  linkWordsAsTranslations: "words/link-words-as-translations",
   translation: "translation",
   tag: "tag",
   languages: "languages",

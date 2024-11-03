@@ -43,12 +43,13 @@ const wordsSortedAndFiltered = computed<ApiWordResponse[]>(() => {
     : words.value;
 
   switch (selectedSorting.value) {
-    case SortingOptions.ByTranslatedTimes:
-      return orderBy(
-        wordsFiltered,
-        (item) => item.translations.length,
-        selectedSortingDirection.value
-      );
+    // TODO Refactor.
+    // case SortingOptions.ByTranslatedTimes:
+    //   return orderBy(
+    //     wordsFiltered,
+    //     (item) => item.translations.length,
+    //     selectedSortingDirection.value
+    //   );
     case SortingOptions.ById:
     default:
       return orderBy(wordsFiltered, "id", selectedSortingDirection.value);
