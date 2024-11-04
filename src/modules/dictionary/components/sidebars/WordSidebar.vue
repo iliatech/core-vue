@@ -15,6 +15,7 @@ import type { ApiLanguage } from "@/modules/dictionary/types";
 import UniversalItems from "@/components/tables/UniversalItems.vue";
 import { wordTranslationsTable } from "@/modules/dictionary/settings/tables/wordTranslationsTable";
 import type { ApiWordResponse } from "@/types/word";
+import Checkbox from "primevue/checkbox";
 
 const sidebar = ref();
 const isValidated = ref(false);
@@ -86,13 +87,19 @@ const open = async (id?: string) => {
 };
 
 const handleClickClose = () => {
+  // Initialize values.
+  wordId.value = undefined;
+  wordObject.value = null;
   word.value = null;
+  tableData.value = [];
+  showAllWordsMode.value = false;
+  language.value = null;
+
+  // Close sidebar.
   sidebar.value.close();
 };
 
-const changeShowMode = async () => {
-  showAllWordsMode.value = !showAllWordsMode.value;
-
+const loadTableData = async () => {
   if (showAllWordsMode.value) {
     const data = await Api.request({
       path: apiPaths.word,
@@ -113,6 +120,23 @@ const linkTranslation = async (item: ApiWordResponse) => {
       word2Id: wordId.value,
     },
   });
+
+  await open(wordId.value);
+  await loadTableData();
+};
+
+const unlinkTranslation = async (item: ApiWordResponse) => {
+  await Api.request({
+    path: apiPaths.unlinkWordsAsTranslations,
+    method: RequestMethods.Post,
+    payload: {
+      word1Id: item.id,
+      word2Id: wordId.value,
+    },
+  });
+
+  await open(wordId.value);
+  await loadTableData();
 };
 
 defineExpose({ open });
@@ -136,16 +160,22 @@ defineExpose({ open });
       <UniversalField :label="lang.label.language">
         <UniversalSelector v-model="language" :options="languageOptions" />
       </UniversalField>
-      <UniversalField :label="lang.label.translations">
+      <UniversalField
+        v-if="wordId"
+        :label="lang.label.translations"
+        class="translations-field"
+      >
         <div class="word-translations">
-          <UniversalButton
-            :label="
-              showAllWordsMode
-                ? lang.button.showAllWords
-                : lang.button.showOnlyTranslations
-            "
-            @click="changeShowMode"
-          />
+          <div class="word-translations__checkbox-container">
+            <Checkbox
+              v-model="showAllWordsMode"
+              @change="loadTableData"
+              binary
+            />
+            <label class="word-translations__label">
+              {{ lang.label.showAllWordsToAddTranslation }}
+            </label>
+          </div>
           <UniversalItems
             v-if="wordObject"
             :config="wordTranslationsTable"
@@ -153,6 +183,7 @@ defineExpose({ open });
             table-mode-by-default
             without-mode-switcher
             @click:link="linkTranslation"
+            @click:unlink="unlinkTranslation"
           />
         </div>
       </UniversalField>
@@ -169,15 +200,37 @@ defineExpose({ open });
   </UniversalDrawer>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .word-sidebar {
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
 .word-translations {
+  height: 100%;
   display: flex;
   flex-direction: column;
   gap: 10px;
+
+  &__label {
+    font-size: 0.875em;
+  }
+
+  &__checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+}
+
+.translations-field {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+
+  :deep(.universal-field__container) {
+    flex-grow: 1;
+  }
 }
 </style>

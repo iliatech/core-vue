@@ -149,7 +149,7 @@ const changeMode = () => {
 @import "@/assets/fonts";
 
 .universal-items {
-  height: 500px;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
 

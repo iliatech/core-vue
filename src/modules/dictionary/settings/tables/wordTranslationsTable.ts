@@ -1,5 +1,6 @@
 import type { UniversalTableColumn } from "@/types/tables";
 import UniversalIcon from "@/components/icons/UniversalIcon.vue";
+import IconLibrary from "@/components/icons/IconLibrary.vue";
 
 export const wordTranslationsTable: UniversalTableColumn[] = [
   {
@@ -27,32 +28,24 @@ export const wordTranslationsTable: UniversalTableColumn[] = [
     hiddenLabel: true,
     getComponents: ({ value, emit, item }) => [
       {
-        component: UniversalIcon,
+        component: IconLibrary,
         props: {
-          primeIcon: "link",
+          icon: "linkA",
+          width: "13px",
+          height: "13px",
           link: true,
-          size: "0.85rem",
-          linkTextStyle: {
-            fontSize: "0.8rem",
-            fontWeight: "bold",
-          },
           onClick: () => {
             return emit("click:link", item);
           },
         },
       },
       {
-        component: UniversalIcon,
+        component: IconLibrary,
         props: {
-          primeIcon: "trash",
+          icon: "unlinkB",
           link: true,
-          size: "0.85rem",
-          linkTextStyle: {
-            fontSize: "0.8rem",
-            fontWeight: "bold",
-          },
           onClick: () => {
-            return emit("click:delete-item", item);
+            return emit("click:unlink", item);
           },
         },
       },

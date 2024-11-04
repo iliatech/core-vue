@@ -31,6 +31,7 @@ export default {
   defaultInputTimezoneName: "Default Input Timezone Name",
   dashboardTimezoneName: "Dashboard Timezone Name",
   scheduleTitle: "Title",
+  showAllWordsToAddTranslation: "Show all words to add translation",
   translations: "Translations",
   userId: "User ID",
   username: "Username",
