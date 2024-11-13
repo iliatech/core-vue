@@ -212,13 +212,13 @@ const changeMode = () => {
 .items {
   display: flex;
   gap: 10px;
-  flex-wrap: wrap;
+  //flex-wrap: wrap;
   height: 100%;
   overflow-y: auto;
 }
 
 .item {
-  width: 200px;
+  //width: 200px;
   border: 1px solid #666;
   border-radius: 3px;
   padding: 10px;
