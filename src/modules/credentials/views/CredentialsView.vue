@@ -67,9 +67,9 @@ onMounted(() => {
 const actionLabel = computed(() => {
   switch (route.name) {
     case "credentials.items":
-      return "Add Credential";
+      return "Add MySecret";
     case "credentials.types":
-      return "Add Credential Type";
+      return "Add MySecretType";
     default:
       return null;
   }
@@ -126,6 +126,8 @@ const handleClickAction = () => {
     margin-top: $px-10;
     margin-bottom: $px-20;
     padding: 0 0 $px-5;
+    flex-wrap: wrap;
+    gap: $px-20;
   }
 
   &__content {

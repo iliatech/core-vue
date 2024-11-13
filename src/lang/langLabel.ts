@@ -10,6 +10,7 @@ export default {
   goToPublicArea: "Go to public area",
   hour: "Hour",
   filterBy: (columnName: string) => `Filter by ${columnName}`,
+  language: "Language",
   loader: "Loading",
   logout: "Logout",
   minute: "Minute",
@@ -30,7 +31,9 @@ export default {
   defaultInputTimezoneName: "Default Input Timezone Name",
   dashboardTimezoneName: "Dashboard Timezone Name",
   scheduleTitle: "Title",
+  showAllWordsToAddTranslation: "Show all words to add translation",
   translations: "Translations",
   userId: "User ID",
   username: "Username",
+  wordOrPhrase: "Word or phrase",
 };

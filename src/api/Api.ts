@@ -1,13 +1,12 @@
 import type { RequestConfig } from "@/types/api";
 import { RequestMethods } from "@/types/api";
 import axios from "axios";
-import { lang } from "@/lang";
 import { apiUrl } from "@/settings/api";
-import { showErrorToast, showToast } from "@/helpers/toast";
+import { showToast } from "@/helpers/toast";
 import { ToastType } from "@/types/toasts";
 import { getAuthToken, resetAuthorization } from "@/helpers/auth";
 import { useAppStore } from "@/store/appStore";
-import { RegisteredError } from "@/types/errors";
+import { lang } from "@/lang";
 
 export default class Api {
   static async request(config: RequestConfig): Promise<any> {
@@ -109,7 +108,11 @@ export default class Api {
       }
 
       if (e?.response?.status === 409) {
-        return { validationErrors: e.response?.data?.errors ?? [] };
+        return {
+          validationErrors: e.response?.data?.errors ?? [
+            { customMessage: lang.error.duplicateFound },
+          ],
+        };
       }
 
       throw new Error("Unexpected server error");

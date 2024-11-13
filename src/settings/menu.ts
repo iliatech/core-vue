@@ -1,2 +1,6 @@
 export const publicTopMenuItems = ["home"];
-export const privateTopMenuItems = ["schedule", "credentialsCredentials"];
+export const privateTopMenuItems = [
+  "schedule",
+  "words",
+  "credentialsCredentials",
+];

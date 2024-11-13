@@ -1,209 +1,236 @@
-<template>
-  <UniversalDrawer
-    ref="sidebar"
-    position="right"
-    :dismissable="false"
-    :title="word"
-    close-button
-    class="word-sidebar"
-  >
-    <div class="word-sidebar__create-translation">
-      {{ $lang.label.createTranslation }}
-      <InputText
-        type="text"
-        width="500px"
-        :model-value="translation"
-        :placeholder="$lang.placeholder.translationName"
-        :class="{ 'p-invalid': !translation && isValidated }"
-        @update:model-value="onUpdateTranslation"
-      />
-    </div>
-    <div class="word-sidebar__buttons">
-      <Button
-        @click="onClickAddTranslation"
-        :label="$lang.button.create"
-        class="add-button"
-        outlined
-      />
-    </div>
-    <div class="translations-section">
-      {{ $lang.label.translations }}
-
-      <template v-if="translations.length && isTranslationAdded">
-        <ul>
-          <li v-for="(item, index) in translations" :key="item.id">
-            <span :class="{ 'word-sidebar__item-bold': !index }">{{
-              item.text
-            }}</span>
-          </li>
-        </ul>
-      </template>
-      <div v-else class="word-sidebar__has-been-translated">
-        {{ $lang.phrase.hasBeenTranslatedNTimes(translations.length) }}
-      </div>
-    </div>
-  </UniversalDrawer>
-</template>
-
 <script lang="ts" setup>
-import Button from "primevue/button";
-
-import { onBeforeMount, ref } from "vue";
-import { useAppStore } from "@/store/appStore";
+import { ref } from "vue";
 import Api from "@/api/Api";
 import { apiPaths } from "@/settings/api";
 import { RequestMethods } from "@/types/api";
 import { lang } from "@/lang";
-import InputText from "primevue/inputtext";
-import type { Translation } from "@/types/translationType";
-import { orderBy } from "lodash";
 import UniversalDrawer from "@/components/dialogs/UniversalDrawer.vue";
+import UniversalButton from "@/components/buttons/UniversalButton.vue";
+import ErrorDetails from "@/components/error/ErrorDetails.vue";
+import type { ApiValidationError } from "@/types/common";
+import UniversalText from "@/components/fields/UniversalText.vue";
+import UniversalField from "@/components/fields/UniversalField.vue";
+import UniversalSelector from "@/components/fields/UniversalSelector.vue";
+import type { ApiLanguage } from "@/modules/dictionary/types";
+import UniversalItems from "@/components/tables/UniversalItems.vue";
+import { wordTranslationsTable } from "@/modules/dictionary/settings/tables/wordTranslationsTable";
+import type { ApiWordResponse } from "@/types/word";
+import Checkbox from "primevue/checkbox";
 
-const wordId = ref<string | null>(null);
-const appStore = useAppStore();
-const isTranslationAdded = ref(false);
 const sidebar = ref();
-
-const { startLoading, stopLoading } = appStore;
-
-const translation = ref<string | null>(null);
 const isValidated = ref(false);
-const word = ref("");
-const translations = ref<Translation[]>([]);
+const word = ref<string | null>(null);
+const generalValidationErrors = ref<string[]>([]);
+const languageOptions = ref<ApiLanguage[]>([]);
+const language = ref<string | null>(null);
+const wordId = ref<string | undefined>(undefined);
+const wordObject = ref<ApiWordResponse | null>(null);
+const tableData = ref<ApiWordResponse[]>([]);
+const showAllWordsMode = ref<boolean>(false);
 
-const loadData = async (): Promise<void> => {
-  const wordData = await Api.request({
-    path: `${apiPaths.word}/${wordId.value}`,
-  });
+const emit = defineEmits(["create:word"]);
 
-  word.value = wordData.title;
-
-  const translationsData = await Api.request({
-    path: `${apiPaths.translation}?wordId=${wordId.value}`,
-    isDataResult: true,
-  });
-
-  translations.value = orderBy(translationsData, "createdAt", "desc");
+const validate = (): boolean => {
+  return !!word.value && !!language.value;
 };
 
-const onClickAddTranslation = async (): Promise<void> => {
+const handleClickActionButton = async (): Promise<void> => {
   isValidated.value = true;
 
-  if (!checkTranslation()) {
+  if (!validate()) {
     return;
   }
 
-  startLoading();
-
-  await Api.request({
-    path: `${apiPaths.translation}/?wordId=${wordId.value}`,
-    method: RequestMethods.Post,
-    payload: { text: translation.value },
-    successToast: lang.success.translationCreated,
+  const { validationErrors } = await Api.request({
+    path: wordId.value ? `${apiPaths.word}/${wordId.value}` : apiPaths.word,
+    method: wordId.value ? RequestMethods.Put : RequestMethods.Post,
+    payload: { title: word.value, languageId: language.value },
+    successToast: lang.success.wordCreated,
   });
 
-  await loadData();
-
-  translation.value = "";
-  isTranslationAdded.value = true;
-  isValidated.value = false;
-
-  stopLoading();
+  if (validationErrors?.length) {
+    generalValidationErrors.value = validationErrors
+      .filter(
+        (item: ApiValidationError) =>
+          item.customMessage && item.path === undefined
+      )
+      .map((item: ApiValidationError) => item.customMessage);
+  } else {
+    isValidated.value = false;
+    emit("create:word");
+    sidebar.value.close();
+  }
 };
 
-const checkTranslation = (): boolean => {
-  return !!translation.value;
-};
+const open = async (id?: string) => {
+  if (id) {
+    wordId.value = id;
 
-const onUpdateTranslation = (value: string): void => {
-  translation.value = value;
-  isValidated.value = false;
-  isTranslationAdded.value = false;
-};
+    const data = await Api.request({
+      path: `${apiPaths.word}/${id}`,
+      method: RequestMethods.Get,
+    });
 
-const open = async (id: string) => {
-  wordId.value = id;
+    word.value = data.title;
+    wordObject.value = data;
+    tableData.value = data.translating;
+    language.value = data.languageId;
+  }
+
+  languageOptions.value = await Api.request({
+    path: apiPaths.languages,
+    method: RequestMethods.Get,
+  });
 
   sidebar.value.open();
+  generalValidationErrors.value = [];
+};
 
-  startLoading();
-  await loadData();
-  stopLoading();
+const handleClickClose = () => {
+  // Initialize values.
+  wordId.value = undefined;
+  wordObject.value = null;
+  word.value = null;
+  tableData.value = [];
+  showAllWordsMode.value = false;
+  language.value = null;
+
+  // Close sidebar.
+  sidebar.value.close();
+};
+
+const loadTableData = async () => {
+  if (showAllWordsMode.value) {
+    const data = await Api.request({
+      path: apiPaths.word,
+    });
+
+    tableData.value = data?.length ? (data as ApiWordResponse[]) : [];
+  } else {
+    tableData.value = wordObject.value?.translating ?? [];
+  }
+};
+
+const linkTranslation = async (item: ApiWordResponse) => {
+  await Api.request({
+    path: apiPaths.linkWordsAsTranslations,
+    method: RequestMethods.Post,
+    payload: {
+      word1Id: item.id,
+      word2Id: wordId.value,
+    },
+  });
+
+  await open(wordId.value);
+  await loadTableData();
+};
+
+const unlinkTranslation = async (item: ApiWordResponse) => {
+  await Api.request({
+    path: apiPaths.unlinkWordsAsTranslations,
+    method: RequestMethods.Post,
+    payload: {
+      word1Id: item.id,
+      word2Id: wordId.value,
+    },
+  });
+
+  await open(wordId.value);
+  await loadTableData();
 };
 
 defineExpose({ open });
 </script>
 
+<template>
+  <UniversalDrawer
+    ref="sidebar"
+    :dismissable="false"
+    :title="wordId ? $lang.title.editWord : $lang.title.createWord"
+    @click:close="handleClickClose"
+    close-button
+  >
+    <div class="word-sidebar">
+      <UniversalField :label="lang.label.wordOrPhrase">
+        <UniversalText
+          v-model="word"
+          :placeholder="$lang.placeholder.enterWord"
+        />
+      </UniversalField>
+      <UniversalField :label="lang.label.language">
+        <UniversalSelector v-model="language" :options="languageOptions" />
+      </UniversalField>
+      <UniversalField
+        v-if="wordId"
+        :label="lang.label.translations"
+        class="translations-field"
+      >
+        <div class="word-translations">
+          <div class="word-translations__checkbox-container">
+            <Checkbox
+              v-model="showAllWordsMode"
+              @change="loadTableData"
+              binary
+            />
+            <label class="word-translations__label">
+              {{ lang.label.showAllWordsToAddTranslation }}
+            </label>
+          </div>
+          <UniversalItems
+            v-if="wordObject"
+            :config="wordTranslationsTable"
+            :data="tableData"
+            table-mode-by-default
+            without-mode-switcher
+            @click:link="linkTranslation"
+            @click:unlink="unlinkTranslation"
+          />
+        </div>
+      </UniversalField>
+      <ErrorDetails :errors="generalValidationErrors" />
+    </div>
+    <template #buttons-after>
+      <UniversalButton
+        @click="handleClickActionButton"
+        :label="wordId ? $lang.button.save : $lang.button.create"
+        :disabled="!validate()"
+        outlined
+      />
+    </template>
+  </UniversalDrawer>
+</template>
+
 <style lang="scss" scoped>
-@import "@/assets/variables";
-@import "@/assets/fonts";
 .word-sidebar {
-  &__title {
-    padding: 0 0 $px-10;
-    @include font-extra-large;
-  }
-
-  &__buttons {
-    display: flex;
-    gap: $px-10;
-  }
-
-  &__content {
-    padding: $px-20 0;
-    @include font-small-large;
-  }
-
-  &__section {
-    padding-bottom: $px-10;
-  }
-
-  &__section-title {
-    @include font-medium-bold;
-  }
-
-  &__create-translation {
-    margin-bottom: $px-15;
-    display: flex;
-    flex-direction: column;
-    gap: $px-10;
-  }
-
-  &__has-been-translated {
-    color: #666;
-  }
-
-  &__item-bold {
-    font-weight: bold;
-  }
-}
-
-:deep(.p-inputtext) {
-  width: 320px;
-}
-
-.custom-sidebar__content {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   height: 100%;
 }
 
-.translations-section {
-  margin-top: $px-20;
+.word-translations {
+  height: 100%;
   display: flex;
   flex-direction: column;
-  gap: $px-10;
+  gap: 10px;
 
-  ul {
-    margin: 0 0 0 $px-20;
-    padding: 0;
-    @include font-medium;
+  &__label {
+    font-size: 0.875em;
+  }
+
+  &__checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
 }
-</style>
-<style lang="scss">
-.p-sidebar-header {
-  justify-content: space-between !important;
-  padding-left: 1.5rem !important;
+
+.translations-field {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+
+  :deep(.universal-field__container) {
+    flex-grow: 1;
+  }
 }
 </style>

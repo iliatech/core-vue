@@ -141,7 +141,7 @@ const handleClick = () => {
   &--disabled {
     pointer-events: none;
     // TODO create color in colors library and use it here.
-    background: #fff;
+    background: #ccc;
     // TODO create color in colors library and use it here.
     color: #ccc;
   }

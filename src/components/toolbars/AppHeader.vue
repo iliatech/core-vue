@@ -3,6 +3,7 @@ import { lang } from "@/lang";
 import router from "@/router";
 import { routes } from "@/settings/routes";
 import { resetAuthToken, resetAuthUser } from "@/helpers/auth";
+import type { PropType } from "vue";
 import { computed, ref, watch } from "vue";
 import { useAppStore } from "@/store/appStore";
 import { storeToRefs } from "pinia";
@@ -25,6 +26,10 @@ const { updateAuthUser } = appStore;
 const userMenu = ref();
 const navigation = ref();
 const profileSidebar = ref();
+
+defineProps({
+  isPublic: Object as PropType<boolean | null>,
+});
 
 const links = computed<NavigationItem[]>(() => {
   const items: NavigationItem[] = [];
@@ -139,7 +144,7 @@ const handleClickSignOut = () => {
         />
       </div>
     </div>
-    <div class="app-logo">
+    <div class="app-logo" v-if="isPublic">
       <div class="top-logo">
         <div class="top-logo__first">
           {{ lang.title.siteNameBy1 }}
