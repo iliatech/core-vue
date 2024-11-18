@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import UniversalDrawer from "@/components/dialogs/UniversalDrawer.vue";
-import { computed, reactive, ref } from "vue";
+import { computed, reactive, ref, watch } from "vue";
 import UniversalButton from "@/components/buttons/UniversalButton.vue";
 import { CredentialType } from "@/modules/credentials/classes/entities/CredentialType";
 import { showToast } from "@/helpers/toast";
@@ -63,12 +63,12 @@ enum FieldsTypes {
   Id = "id",
 }
 
-const drawerConfig = [
+const drawerConfig: Record<string, any> = [
   {
     id: "7265b3a6-92e1-436e-bea1-7587b20f0459",
     name: "Name",
     type: FieldsTypes.String,
-    label: "",
+    label: "Name",
   },
 ];
 
@@ -76,7 +76,11 @@ const sidebar = ref<InstanceType<typeof UniversalDrawer>>();
 const discardChangesDialog = ref<InstanceType<typeof UniversalDrawer>>();
 const isInputStarted = reactive<IsInputStarted>(isInputStartedInitialValue);
 const currentState = reactive<DrawerState>({ ...initialState });
+
 const superCurrentState = ref<Record<string, any>>({});
+const superIsInputStarted = ref<Record<string, any>>({});
+const superErrorDetails = ref<Record<string, string[]>>({});
+
 const savedState = reactive<DrawerState>({ ...initialState });
 const options = reactive<Options>({ type: [] });
 
@@ -189,6 +193,35 @@ const handleClickSave = async () => {
   emit("close:drawer");
 };
 
+watch(
+  superCurrentState,
+  () => {
+    if (!Object.keys(superCurrentState.value)) {
+      return;
+    }
+
+    console.log("hello");
+
+    drawerConfig.forEach((field: any) => {
+      if (field.type === FieldsTypes.Id) {
+        return;
+      }
+
+      superErrorDetails.value[field.id] = [];
+
+      if (
+        !prepareName(superCurrentState.value[field.id]) &&
+        superIsInputStarted.value[field.id]
+      ) {
+        superErrorDetails.value[field.id].push(
+          lang.error.fieldShouldNotBeEmpty(field.label)
+        );
+      }
+    });
+  },
+  { deep: true }
+);
+
 defineExpose({
   open(item?: ICredentialType) {
     Object.assign(currentState, item ?? initialState);
@@ -198,6 +231,7 @@ defineExpose({
     sidebar.value?.open();
     drawerConfig.forEach((field) => {
       superCurrentState.value[field.id] = null;
+      superIsInputStarted.value[field.id] = null;
     });
   },
   close,
@@ -212,16 +246,22 @@ defineExpose({
     @click:close="close"
   >
     <div>
-      {{ superCurrentState }}
       <div>
         <UniversalField
           :label="field.label"
           v-for="field in drawerConfig"
           :key="field.id"
         >
-          <UniversalText v-model="superCurrentState[field.id]" />
-          <!--          v-model:is-input-started="isInputStarted.name"-->
-          <!--          :errors="showErrors(isInputStarted.name, errorDetails.name)"-->
+          <UniversalText
+            v-model="superCurrentState[field.id]"
+            v-model:is-input-started="superIsInputStarted[field.id]"
+            :errors="
+              showErrors(
+                superIsInputStarted[field.id],
+                superErrorDetails[field.id]
+              )
+            "
+          />
         </UniversalField>
       </div>
     </div>
