@@ -58,17 +58,32 @@ const isInputStartedInitialValue = {
 };
 
 enum FieldsTypes {
-  String = "string",
-  Password = "password",
   Id = "id",
+  Password = "password",
+  String = "string",
+  Text = "text",
+  Selector = "selector",
 }
+
+const TextsFieldsTypes = [
+  FieldsTypes.Password,
+  FieldsTypes.String,
+  FieldsTypes.Text,
+];
+
+const SelectorsFieldsTypes = [FieldsTypes.Selector];
 
 const drawerConfig: Record<string, any> = [
   {
     id: "7265b3a6-92e1-436e-bea1-7587b20f0459",
-    name: "Name",
     type: FieldsTypes.String,
     label: "Name",
+  },
+  {
+    id: "a1334c91-bade-46ba-92e1-87a9cc4321a3",
+    type: FieldsTypes.Selector,
+    label: "Type",
+    sourceObjectId: "75ef436e-3d2d-4061-8e60-970e001f40aa",
   },
 ];
 
@@ -133,6 +148,10 @@ const errorDetails = computed<ErrorsDetails>(() => {
 
   return errors;
 });
+
+const getOptions = (universalObjectId: string) => {
+  return CredentialType.get();
+};
 
 const handleCancelDiscardChanges = () => {
   discardChangesDialog.value?.close();
@@ -245,38 +264,31 @@ defineExpose({
     close-button
     @click:close="close"
   >
-    <div>
-      <div>
-        <UniversalField
-          :label="field.label"
-          v-for="field in drawerConfig"
-          :key="field.id"
-        >
-          <UniversalText
-            v-model="superCurrentState[field.id]"
-            v-model:is-input-started="superIsInputStarted[field.id]"
-            :errors="
-              showErrors(
-                superIsInputStarted[field.id],
-                superErrorDetails[field.id]
-              )
-            "
-          />
-        </UniversalField>
-      </div>
-    </div>
     <div class="credential-sidebar">
-      <UniversalField :label="$lang.label.name">
+      {{ superErrorDetails }}
+      <UniversalField
+        :label="field.label"
+        v-for="field in drawerConfig.filter((item) =>
+          Object.values(TextsFieldsTypes).includes(item.type)
+        )"
+        :key="field.id"
+      >
         <UniversalText
-          v-model="currentState.name"
-          v-model:is-input-started="isInputStarted.name"
-          :errors="showErrors(isInputStarted.name, errorDetails.name)"
+          v-model="superCurrentState[field.id]"
+          v-model:is-input-started="superIsInputStarted[field.id]"
+          :errors="superErrorDetails[field.id]"
         />
       </UniversalField>
-      <UniversalField :label="$lang.label.type">
+      <UniversalField
+        :label="field.label"
+        v-for="field in drawerConfig.filter((item) =>
+          Object.values(SelectorsFieldsTypes).includes(item.type)
+        )"
+        :key="field.id"
+      >
         <UniversalSelector
-          v-model="currentState.typeId"
-          :options="options.type"
+          v-model="superCurrentState[field.id]"
+          :options="getOptions(field.sourceObjectId)"
         />
       </UniversalField>
       <UniversalField :label="$lang.label.password">
