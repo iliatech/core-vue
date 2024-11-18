@@ -65,14 +65,6 @@ enum FieldsTypes {
   Selector = "selector",
 }
 
-const TextsFieldsTypes = [
-  FieldsTypes.Password,
-  FieldsTypes.String,
-  FieldsTypes.Text,
-];
-
-const SelectorsFieldsTypes = [FieldsTypes.Selector];
-
 const drawerConfig: Record<string, any> = [
   {
     id: "7265b3a6-92e1-436e-bea1-7587b20f0459",
@@ -84,6 +76,16 @@ const drawerConfig: Record<string, any> = [
     type: FieldsTypes.Selector,
     label: "Type",
     sourceObjectId: "75ef436e-3d2d-4061-8e60-970e001f40aa",
+  },
+  {
+    id: "729c0e89-eb07-4209-8578-90871942bb6f",
+    type: FieldsTypes.Password,
+    label: "Password",
+  },
+  {
+    id: "70e5e4805-ab32-4062-8ac2-0b228a6f8faa",
+    type: FieldsTypes.Text,
+    label: "Description",
   },
 ];
 
@@ -265,46 +267,26 @@ defineExpose({
     @click:close="close"
   >
     <div class="credential-sidebar">
-      {{ superErrorDetails }}
       <UniversalField
         :label="field.label"
-        v-for="field in drawerConfig.filter((item) =>
-          Object.values(TextsFieldsTypes).includes(item.type)
-        )"
+        v-for="field in drawerConfig"
         :key="field.id"
       >
         <UniversalText
+          v-if="[FieldsTypes.String, FieldsTypes.Password].includes(field.type)"
           v-model="superCurrentState[field.id]"
           v-model:is-input-started="superIsInputStarted[field.id]"
           :errors="superErrorDetails[field.id]"
         />
-      </UniversalField>
-      <UniversalField
-        :label="field.label"
-        v-for="field in drawerConfig.filter((item) =>
-          Object.values(SelectorsFieldsTypes).includes(item.type)
-        )"
-        :key="field.id"
-      >
         <UniversalSelector
+          v-if="field.type === FieldsTypes.Selector"
           v-model="superCurrentState[field.id]"
           :options="getOptions(field.sourceObjectId)"
         />
-      </UniversalField>
-      <UniversalField :label="$lang.label.password">
-        <UniversalText
-          v-model="currentState.password"
-          v-model:is-input-started="isInputStarted.password"
-          :errors="showErrors(isInputStarted.password, errorDetails.password)"
-        />
-      </UniversalField>
-      <UniversalField :label="lang.label.description">
         <UniversalTextarea
-          v-model="currentState.description"
-          v-model:is-input-started="isInputStarted.description"
-          :errors="
-            showErrors(isInputStarted.description, errorDetails.description)
-          "
+          v-if="field.type === FieldsTypes.Text"
+          v-model="superCurrentState[field.id]"
+          :errors="superErrorDetails[field.id]"
         />
       </UniversalField>
     </div>
