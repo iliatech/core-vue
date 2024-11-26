@@ -28,6 +28,18 @@ export interface ICredentialDatabase {
   credentialTypes: ICredentialType[];
 }
 
+export interface Instance {
+  id: string;
+  [key: string]: any;
+}
+
+export interface UniversalDatabase {
+  id: string;
+  lastTransactionId: string;
+  updated: string;
+  data: Record<string, Instance[]>;
+}
+
 export interface ICredentialsTableItem extends ICredential {
   type: ICredentialType | null;
 }

@@ -6,7 +6,7 @@ import { CredentialType } from "@/modules/credentials/classes/entities/Credentia
 import { showToast } from "@/helpers/toast";
 import { ToastType } from "@/types/toasts";
 import { lang } from "@/lang";
-import { isEqual } from "lodash";
+import { clone, cloneDeep, isEqual } from "lodash";
 import { IEntity } from "@/settings/entities";
 import { prepareName } from "@/helpers/strings";
 import UniversalText from "@/components/fields/UniversalText.vue";
@@ -16,7 +16,8 @@ import UniversalSelector from "@/components/fields/UniversalSelector.vue";
 import { Credential } from "@/modules/credentials/classes/entities/Credential";
 import type { ICredentialType } from "@/modules/credentials/types";
 import UniversalTextarea from "@/components/fields/UniversalTextarea.vue";
-import { showErrors } from "@/helpers/formValidation";
+import { UniversalObject } from "@/modules/credentials/classes/entities/UniversalObject";
+import { useUniversalDatabaseStore } from "@/modules/credentials/store/universalDatabaseStore";
 
 interface DrawerState {
   id: string | null;
@@ -65,17 +66,32 @@ enum FieldsTypes {
   Selector = "selector",
 }
 
-const drawerConfig: Record<string, any> = [
+interface FieldConfig {
+  id: string;
+  type: FieldsTypes;
+  label?: string;
+  required?: boolean;
+  sourceObjectId?: string;
+}
+
+interface ObjectConfig {
+  id: string;
+  fields: FieldConfig[];
+}
+
+const drawerConfig: FieldConfig[] = [
   {
     id: "7265b3a6-92e1-436e-bea1-7587b20f0459",
     type: FieldsTypes.String,
     label: "Name",
+    required: true,
   },
   {
     id: "a1334c91-bade-46ba-92e1-87a9cc4321a3",
     type: FieldsTypes.Selector,
     label: "Type",
     sourceObjectId: "75ef436e-3d2d-4061-8e60-970e001f40aa",
+    required: true,
   },
   {
     id: "729c0e89-eb07-4209-8578-90871942bb6f",
@@ -89,19 +105,29 @@ const drawerConfig: Record<string, any> = [
   },
 ];
 
+const objectConfig = {
+  id: "d5faf851-714f-4e4d-a89f-85d0f841798e",
+  fields: drawerConfig,
+};
+
 const sidebar = ref<InstanceType<typeof UniversalDrawer>>();
 const discardChangesDialog = ref<InstanceType<typeof UniversalDrawer>>();
 const isInputStarted = reactive<IsInputStarted>(isInputStartedInitialValue);
 const currentState = reactive<DrawerState>({ ...initialState });
 
 const superCurrentState = ref<Record<string, any>>({});
+const superSavedState = ref<Record<string, any>>({});
 const superIsInputStarted = ref<Record<string, any>>({});
 const superErrorDetails = ref<Record<string, string[]>>({});
+const objectId = ref<string | null>(null);
 
 const savedState = reactive<DrawerState>({ ...initialState });
 const options = reactive<Options>({ type: [] });
 
 const emit = defineEmits(["close:drawer"]);
+
+const universalDatabaseStore = useUniversalDatabaseStore();
+const { addInstance, getInstances } = universalDatabaseStore;
 
 const isChanged = computed<boolean>(() => {
   return !isEqual(currentState, savedState);
@@ -152,6 +178,8 @@ const errorDetails = computed<ErrorsDetails>(() => {
 });
 
 const getOptions = (universalObjectId: string) => {
+  // TODO
+  console.log(universalObjectId);
   return CredentialType.get();
 };
 
@@ -176,21 +204,42 @@ const close = () => {
 };
 
 const handleClickSave = async () => {
+  drawerConfig.forEach((field) => {
+    if (field.required && !superCurrentState.value[field.id]) {
+      // TODO Add field to array of errors, error should be shown under the field.
+    }
+  });
+
+  addInstance(
+    {
+      databaseId: "50bda5a6-b1a0-4d73-b7db-301392037f87",
+      objectId: "2c98151d-4995-49c9-b49e-0070058d951c",
+    },
+    superCurrentState.value
+  );
+
+  console.log(
+    "INSTANCES",
+    getInstances({
+      databaseId: "50bda5a6-b1a0-4d73-b7db-301392037f87",
+      objectId: "2c98151d-4995-49c9-b49e-0070058d951c",
+    })
+  );
+
+  return;
+
   if (!currentState.typeId) {
     throw new Error("currentState.type  is not defined");
   }
 
   if (isEditMode.value) {
-    if (!currentState.id) {
-      throw new Error("currentState.id is not defined");
+    if (!objectId.value) {
+      throw new Error("objectId is null");
     }
 
-    await Credential.update({
-      id: currentState.id,
-      name: currentState.name,
-      typeId: currentState.typeId,
-      password: currentState.password,
-      description: currentState.description,
+    await UniversalObject.update(objectConfig.id, {
+      id: objectId.value,
+      ...superCurrentState.value,
     });
   } else {
     await Credential.add({
@@ -201,7 +250,7 @@ const handleClickSave = async () => {
     });
   }
 
-  Object.assign(savedState, currentState);
+  superSavedState.value = cloneDeep(superCurrentState.value);
 
   showToast({
     type: ToastType.Success,
@@ -295,8 +344,8 @@ defineExpose({
         @click="handleClickSave"
         :label="isEditMode ? $lang.button.save : $lang.button.add"
         width="70px"
-        :disabled="!isChanged || !isValid"
       />
+      <!-- TODO :disabled="!isChanged || !isValid" -->
     </template>
   </UniversalDrawer>
   <UniversalDialog
