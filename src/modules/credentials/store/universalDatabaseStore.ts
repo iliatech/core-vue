@@ -1,21 +1,23 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import type { Instance, UniversalDatabase } from "@/modules/credentials/types";
+import type { Instance, IUniversalDatabase } from "@/modules/credentials/types";
 import { v4 as uuidv4 } from "uuid";
+import { UniversalDatabase } from "@/modules/credentials/classes/UniversalDatabase";
 
 export const useUniversalDatabaseStore = defineStore(
   "universalDatabaseStore",
   () => {
-    const databases = ref<UniversalDatabase[]>([
+    const databases = ref<IUniversalDatabase[]>([
       {
         id: "50bda5a6-b1a0-4d73-b7db-301392037f87",
-        lastTransactionId: "725a4700-7af6-42f2-a089-6a8524919953",
+        clientTransactionId: "725a4700-7af6-42f2-a089-6a8524919953",
+        serverTransactionId: "",
         updated: "", // TODO
-        data: { "": [] },
+        data: {},
       },
     ]);
 
-    const getDatabase = (databaseId: string): UniversalDatabase | null => {
+    const getDatabase = (databaseId: string): IUniversalDatabase | null => {
       return (
         databases.value.find((database) => database.id === databaseId) ?? null
       );
@@ -52,7 +54,7 @@ export const useUniversalDatabaseStore = defineStore(
       );
     };
 
-    const addInstance = (
+    const addInstance = async (
       params: { databaseId: string; objectId: string },
       instance: any
     ) => {
@@ -70,6 +72,38 @@ export const useUniversalDatabaseStore = defineStore(
         id: uuidv4(),
         ...instance,
       });
+
+      console.log("DB", database);
+      await UniversalDatabase.save(params.databaseId);
+    };
+
+    const unloadDatabase = (databaseId: string) => {
+      const databaseIndex = databases.value.findIndex(
+        (database) => database.id === databaseId
+      );
+
+      if (databaseIndex !== -1) {
+        databases.value.splice(databaseIndex);
+      }
+    };
+
+    const updateDatabase = (
+      databaseId: string,
+      databaseData: IUniversalDatabase
+    ) => {
+      const databaseIndex = databases.value.findIndex(
+        (database) => database.id === databaseId
+      );
+
+      if (databaseIndex === -1) {
+        throw new Error(`Database with id ${databaseId} was not updated`);
+      }
+
+      console.log("AAA", databases.value[databaseIndex]);
+
+      databases.value[databaseIndex] = databaseData;
+
+      console.log("BBB", databases.value[databaseIndex]);
     };
 
     //
@@ -101,6 +135,8 @@ export const useUniversalDatabaseStore = defineStore(
       getInstances,
       getInstanceById,
       addInstance,
+      unloadDatabase,
+      updateDatabase,
     };
   }
 );

@@ -25,7 +25,7 @@ export class CredentialDatabase {
     const { fileId } = useCredentialStore();
 
     await Api.request({
-      path: `${apiPaths.credentialsFile}/${fileId}`,
+      path: `${apiPaths.fileStorage}/${fileId}`,
       method: RequestMethods.Put,
       payload: { data: encryptedData },
     });

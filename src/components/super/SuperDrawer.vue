@@ -18,6 +18,7 @@ import type { ICredentialType } from "@/modules/credentials/types";
 import UniversalTextarea from "@/components/fields/UniversalTextarea.vue";
 import { UniversalObject } from "@/modules/credentials/classes/entities/UniversalObject";
 import { useUniversalDatabaseStore } from "@/modules/credentials/store/universalDatabaseStore";
+import { UniversalDatabase } from "@/modules/credentials/classes/UniversalDatabase";
 
 interface DrawerState {
   id: string | null;
@@ -210,7 +211,7 @@ const handleClickSave = async () => {
     }
   });
 
-  addInstance(
+  await addInstance(
     {
       databaseId: "50bda5a6-b1a0-4d73-b7db-301392037f87",
       objectId: "2c98151d-4995-49c9-b49e-0070058d951c",
@@ -293,7 +294,7 @@ watch(
 );
 
 defineExpose({
-  open(item?: ICredentialType) {
+  async open(item?: ICredentialType) {
     Object.assign(currentState, item ?? initialState);
     Object.assign(savedState, currentState);
     options.type = CredentialType.get();
@@ -303,6 +304,8 @@ defineExpose({
       superCurrentState.value[field.id] = null;
       superIsInputStarted.value[field.id] = null;
     });
+
+    await UniversalDatabase.load("50bda5a6-b1a0-4d73-b7db-301392037f87");
   },
   close,
 });

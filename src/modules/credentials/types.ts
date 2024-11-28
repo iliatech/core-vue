@@ -33,11 +33,20 @@ export interface Instance {
   [key: string]: any;
 }
 
-export interface UniversalDatabase {
+export type IUniversalDatabaseData = Record<string, Instance[]>;
+
+export interface IUniversalDatabase {
   id: string;
-  lastTransactionId: string;
+  clientTransactionId: string;
+  serverTransactionId: string;
   updated: string;
-  data: Record<string, Instance[]>;
+  data: IUniversalDatabaseData;
+  encrypted?: boolean;
+}
+
+export interface IUniversalDatabaseApi
+  extends Omit<IUniversalDatabase, "data"> {
+  data: string;
 }
 
 export interface ICredentialsTableItem extends ICredential {
