@@ -77,6 +77,29 @@ export const useUniversalDatabaseStore = defineStore(
       await UniversalDatabase.save(params.databaseId);
     };
 
+    const deleteInstanceById = async (
+      params: { databaseId: string; objectId: string },
+      instanceId: string
+    ) => {
+      const database = getDatabase(params.databaseId);
+
+      if (!database) {
+        return null;
+      }
+
+      if (!database.data[params.objectId]) {
+        return;
+      }
+
+      const index = database.data[params.objectId].findIndex(
+        (item) => item.id === instanceId
+      );
+
+      database.data[params.objectId].splice(index, 1);
+
+      await UniversalDatabase.save(params.databaseId);
+    };
+
     const unloadDatabase = (databaseId: string) => {
       const databaseIndex = databases.value.findIndex(
         (database) => database.id === databaseId
@@ -135,6 +158,7 @@ export const useUniversalDatabaseStore = defineStore(
       getInstances,
       getInstanceById,
       addInstance,
+      deleteInstanceById,
       unloadDatabase,
       updateDatabase,
     };
