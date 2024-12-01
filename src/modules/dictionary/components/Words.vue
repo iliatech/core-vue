@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import UniversalItems from "@/components/tables/UniversalItems.vue";
-import { Credential } from "@/modules/credentials/classes/entities/Credential";
 import { computed, onMounted, ref, watch } from "vue";
 import type UniversalDrawer from "@/components/dialogs/UniversalDrawer.vue";
 import type { Instance } from "@/modules/credentials/types";
@@ -90,13 +89,13 @@ watch(
 
 onMounted(async () => {
   await UniversalDatabase.load(databaseId);
-  database.value = UniversalDatabase.getDatabase(databaseId);
+  database.value = UniversalDatabase.get(databaseId);
   runAction();
 });
 </script>
 
 <template>
-  <div class="words-view">
+  <div class="words">
     <UniversalItems
       :config="wordsTable"
       :data="tableData"
@@ -118,8 +117,7 @@ onMounted(async () => {
 </template>
 
 <style lang="scss" scoped>
-.words-view {
+.words {
   height: 100%;
-  padding: 30px;
 }
 </style>

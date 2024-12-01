@@ -12,6 +12,10 @@ import { useUniversalDatabaseStore } from "@/modules/credentials/store/universal
 import type { IUniversalDatabaseApi } from "@/modules/credentials/types";
 
 export class UniversalDatabase {
+  public static get(databaseId: string) {
+    return useUniversalDatabaseStore().getDatabase(databaseId);
+  }
+
   public static async save(databaseId: string): Promise<void> {
     const database = cloneDeep(
       useUniversalDatabaseStore().getDatabase(databaseId)
@@ -114,9 +118,5 @@ export class UniversalDatabase {
   private static decryptDatabase(text: string, key: string): string {
     const bytes = AES.decrypt(text, key);
     return bytes.toString(enc.Utf8);
-  }
-
-  public static getDatabase(databaseId: string) {
-    return useUniversalDatabaseStore().getDatabase(databaseId);
   }
 }
