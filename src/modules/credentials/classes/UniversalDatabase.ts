@@ -1,7 +1,6 @@
 import Api from "@/api/Api";
 import { apiPaths } from "@/settings/api";
 import { AES, enc } from "crypto-js";
-import { debugInfo } from "@/helpers/debug";
 import { LocalStorageKeys } from "@/settings/app";
 import { cloneDeep } from "lodash";
 import { v4 as uuidv4 } from "uuid";
@@ -115,5 +114,9 @@ export class UniversalDatabase {
   private static decryptDatabase(text: string, key: string): string {
     const bytes = AES.decrypt(text, key);
     return bytes.toString(enc.Utf8);
+  }
+
+  public static getDatabase(databaseId: string) {
+    return useUniversalDatabaseStore().getDatabase(databaseId);
   }
 }

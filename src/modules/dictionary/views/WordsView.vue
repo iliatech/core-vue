@@ -1,203 +1,125 @@
 <script lang="ts" setup>
-import type { Ref } from "vue";
-import { computed, onBeforeMount, ref } from "vue";
-import { apiPaths } from "@/settings/api";
-import Api from "@/api/Api";
-import { getPaletteColor } from "@/settings/colorPalette";
-import type { ApiWordResponse } from "@/types/word";
-import WordTile from "@/modules/dictionary/components/WordTile.vue";
-import PlusTile from "@/modules/dictionary/components/PlusTile.vue";
-import { RequestMethods } from "@/types/api";
-import { lang } from "@/lang";
-import CustomConfirmDialog from "@/components/dialogs/CustomConfirmDialog.vue";
-import { DialogType } from "@/types/dialog";
-import { orderBy } from "lodash";
-import { SortingOptions, useWordsAppStore } from "@/store/wordsAppStore";
-import { storeToRefs } from "pinia";
-import { useTagsFilteringStore } from "@/store/tagsFilteringStore";
-import WordSidebar from "@/modules/dictionary/components/sidebars/WordSidebar.vue";
+import UniversalItems from "@/components/tables/UniversalItems.vue";
+import { Credential } from "@/modules/credentials/classes/entities/Credential";
+import { computed, onMounted, ref, watch } from "vue";
+import type UniversalDrawer from "@/components/dialogs/UniversalDrawer.vue";
+import type {
+  ICredential,
+  ICredentialsTableItem,
+  Instance,
+} from "@/modules/credentials/types";
+import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
+import { CredentialType } from "@/modules/credentials/classes/entities/CredentialType";
+import { useRoute } from "vue-router";
+import router from "@/router";
+import SuperDrawer from "@/components/super/SuperDrawer.vue";
+import { wordsTable } from "@/modules/dictionary/settings/tables/wordsTable";
+import { UniversalDatabase } from "@/modules/credentials/classes/UniversalDatabase";
+import type { IUniversalDatabase } from "@/modules/credentials/types";
 
-const wordsAppStore = useWordsAppStore();
-const tagsFilteringStore = useTagsFilteringStore();
+const databaseId = "50bda5a6-b1a0-4d73-b7db-301392037f87";
+const objectId = "2c98151d-4995-49c9-b49e-0070058d951c";
 
-const { selectedSorting, selectedSortingDirection } =
-  storeToRefs(wordsAppStore);
+const route = useRoute();
 
-const { filterTags } = storeToRefs(tagsFilteringStore);
-
-const words = ref([] as ApiWordResponse[]);
-const deleteItem: Ref<ApiWordResponse | null> = ref(null);
-const wordSidebar = ref();
-
-onBeforeMount(async () => {
-  await loadWords();
+const credentialSidebar = ref<InstanceType<typeof UniversalDrawer>>();
+const selectedItem = ref<ICredential | null>(null);
+const confirmDeleteItemDialog = ref<InstanceType<typeof UniversalDialog>>();
+const database = ref<IUniversalDatabase | null>(null);
+const objects = computed<Instance[]>(() => {
+  return database.value?.data[objectId] ?? [];
 });
 
-const wordsSortedAndFiltered = computed<ApiWordResponse[]>(() => {
-  const wordsFiltered = filterTags.value.length
-    ? words.value.filter(
-        (item) =>
-          !item.tags.length ||
-          item.tags.some((el) => filterTags.value.includes(el.id))
-      )
-    : words.value;
-
-  switch (selectedSorting.value) {
-    // TODO Refactor.
-    // case SortingOptions.ByTranslatedTimes:
-    //   return orderBy(
-    //     wordsFiltered,
-    //     (item) => item.translations.length,
-    //     selectedSortingDirection.value
-    //   );
-    case SortingOptions.ById:
-    default:
-      return orderBy(wordsFiltered, "id", selectedSortingDirection.value);
-  }
+const tableData = computed<ICredentialsTableItem[]>(() => {
+  // TODO
+  //const credentialTypes = CredentialType.get();
+  return objects.value.map((item) => ({
+    ...item,
+    //type: credentialTypes.find((el) => el.id === item.typeId) ?? null,
+  }));
 });
 
-const loadWords = async (): Promise<void> => {
-  const data = await Api.request({
-    path: apiPaths.word,
+const handleClickAddCredential = () => {
+  credentialSidebar.value?.open();
+};
+
+const handleClickDeleteItem = (item: ICredential) => {
+  selectedItem.value = item;
+  confirmDeleteItemDialog.value?.open();
+};
+
+const handleClickEditItem = (item: ICredential) => {
+  credentialSidebar.value?.open(item);
+};
+
+const handleCancelDeleteItem = () => {
+  confirmDeleteItemDialog.value?.close();
+  selectedItem.value = null;
+  router.push({
+    path: route.path,
   });
-
-  words.value = data?.length ? (data as ApiWordResponse[]) : [];
-};
-const onClickWord = (wordId: string): void => {
-  wordSidebar.value.open(wordId);
 };
 
-const onClickAddWord = (): void => {
-  wordSidebar.value.open();
-};
-
-const onClickDelete = async (item: ApiWordResponse): Promise<void> => {
-  deleteItem.value = item;
-};
-
-const onCancelDelete = () => {
-  deleteItem.value = null;
-};
-
-const onConfirmDelete = async (): Promise<void> => {
-  if (!deleteItem.value) {
-    return;
+const handleConfirmDeleteItem = () => {
+  if (!selectedItem.value) {
+    throw new Error("selectedItem is undefined");
   }
 
-  const { id, title } = deleteItem.value;
-
-  await Api.request({
-    method: RequestMethods.Delete,
-    path: `${apiPaths.word}/${id}`,
-    successToast: lang.success.wordDeleted(title),
-    successCallback: () => {
-      loadWords();
-    },
-  });
-
-  deleteItem.value = null;
+  Credential.delete(selectedItem.value.id);
+  confirmDeleteItemDialog.value?.close();
 };
+
+const handleCloseDrawer = () => {
+  router.push({
+    path: route.path,
+  });
+};
+
+const runAction = () => {
+  if (route.query.action === "add-credential") {
+    handleClickAddCredential();
+  }
+};
+
+watch(
+  route,
+  () => {
+    runAction();
+  },
+  { deep: true }
+);
+
+onMounted(async () => {
+  await UniversalDatabase.load(databaseId);
+  database.value = UniversalDatabase.getDatabase(databaseId);
+  runAction();
+});
 </script>
 
 <template>
-  <div class="words-view-container">
-    <div class="words-view">
-      <div class="words-view__top">
-        <div class="words-view__top-left"></div>
-        <div class="words-view__top-button"></div>
-      </div>
-      <div class="words-view__words">
-        <PlusTile @click="onClickAddWord" />
-        <template v-if="wordsSortedAndFiltered.length">
-          <WordTile
-            v-for="(item, index) in wordsSortedAndFiltered"
-            :key="item.id"
-            :data="item"
-            :background-color="getPaletteColor(index)"
-            @on-click="onClickWord(item.id)"
-            @on-click-delete="onClickDelete(item)"
-            @change-tags="loadWords"
-          />
-        </template>
-        <div v-else class="no-entities-found">
-          {{ lang.label.noEntitiesFound }}
-        </div>
-        <PlusTile @click="onClickAddWord" />
-      </div>
-    </div>
+  <div class="credentials">
+    <UniversalItems
+      :config="wordsTable"
+      :data="tableData"
+      @click:action-button="handleClickAddCredential"
+      @click:delete-item="handleClickDeleteItem"
+      @click:edit-item="handleClickEditItem"
+    />
   </div>
-  <CustomConfirmDialog
-    v-model="deleteItem"
-    :type="DialogType.Confirm"
-    :text="lang.title.confirmDeleteWord(deleteItem?.title ?? '')"
-    :confirm-button-text="$lang.button.delete"
-    @on-cancel="onCancelDelete"
-    @on-confirm="onConfirmDelete"
-  />
-  <WordSidebar ref="wordSidebar" @create:word="loadWords" />
+  <SuperDrawer ref="credentialSidebar" @close:drawer="handleCloseDrawer" />
+  <UniversalDialog
+    :title="$lang.title.confirmDeleteCredentialType"
+    ref="confirmDeleteItemDialog"
+    @cancel="handleCancelDeleteItem"
+    @confirm="handleConfirmDeleteItem"
+    :z-index="1200"
+  >
+    {{ $lang.phrase.doYouConfirmDeleteCredentialType }}
+  </UniversalDialog>
 </template>
 
 <style lang="scss" scoped>
-@import "@/assets/variables";
-
-@mixin flex-wrap-fix($flex-basis, $max-viewport-width: 2000px) {
-  //flex-grow: 1;
-  //flex-basis: $flex-basis;
-  //max-width: 100%;
-
-  //$multiplier: 1;
-  //$current-width: 0px;
-
-  //@while $current-width < $max-viewport-width {
-  //  $current-width: $current-width + $flex-basis;
-  //  $multiplier: $multiplier + 1;
-  //
-  //  @media (min-width: $flex-basis * $multiplier) {
-  //    max-width: calc(1 / $multiplier);
-  //  }
-  //}
-}
-
-.words-view {
-  padding: 0 $px-20;
-  max-width: 500px;
-  margin: 0 auto;
-
-  &__top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: $px-15;
-  }
-
-  &__top-left {
-    display: flex;
-    gap: $px-20;
-  }
-
-  &__top-button {
-    //:deep(.p-button) {
-    //  font-size: 0.9em;
-    //  padding: 0;
-    //}
-  }
-
-  &__words {
-    display: flex;
-    flex-direction: column;
-    gap: $px-30;
-
-    div {
-      min-width: 100px;
-    }
-  }
-}
-
-.no-entities-found {
-  text-align: center;
-}
-
-.words-view-container {
-  // ---
+.credentials {
+  height: 100%;
 }
 </style>
