@@ -30,3 +30,24 @@ export interface LocalRoute {
   title: string;
   parentRouteName?: string;
 }
+
+export enum FieldsTypes {
+  Id = "id",
+  Password = "password",
+  String = "string",
+  Text = "text",
+  Selector = "selector",
+}
+
+export interface FieldConfig {
+  id: string;
+  type: FieldsTypes;
+  label?: string;
+  required?: boolean;
+  sourceObjectId?: string;
+}
+
+export interface ObjectConfig {
+  id: string;
+  fields: FieldConfig[];
+}

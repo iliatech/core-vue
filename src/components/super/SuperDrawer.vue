@@ -1,12 +1,13 @@
 <script lang="ts" setup>
 import UniversalDrawer from "@/components/dialogs/UniversalDrawer.vue";
+import type { PropType } from "vue";
 import { computed, reactive, ref, watch } from "vue";
 import UniversalButton from "@/components/buttons/UniversalButton.vue";
 import { CredentialType } from "@/modules/credentials/classes/entities/CredentialType";
 import { showToast } from "@/helpers/toast";
 import { ToastType } from "@/types/toasts";
 import { lang } from "@/lang";
-import { clone, cloneDeep, isEqual } from "lodash";
+import { cloneDeep, isEqual } from "lodash";
 import { IEntity } from "@/settings/entities";
 import { prepareName } from "@/helpers/strings";
 import UniversalText from "@/components/fields/UniversalText.vue";
@@ -19,6 +20,8 @@ import UniversalTextarea from "@/components/fields/UniversalTextarea.vue";
 import { UniversalObject } from "@/modules/credentials/classes/entities/UniversalObject";
 import { useUniversalDatabaseStore } from "@/modules/credentials/store/universalDatabaseStore";
 import { UniversalDatabase } from "@/modules/credentials/classes/UniversalDatabase";
+import type { FieldConfig, ObjectConfig } from "@/types/common";
+import { FieldsTypes } from "@/types/common";
 
 interface DrawerState {
   id: string | null;
@@ -59,58 +62,6 @@ const isInputStartedInitialValue = {
   description: false,
 };
 
-enum FieldsTypes {
-  Id = "id",
-  Password = "password",
-  String = "string",
-  Text = "text",
-  Selector = "selector",
-}
-
-interface FieldConfig {
-  id: string;
-  type: FieldsTypes;
-  label?: string;
-  required?: boolean;
-  sourceObjectId?: string;
-}
-
-interface ObjectConfig {
-  id: string;
-  fields: FieldConfig[];
-}
-
-const drawerConfig: FieldConfig[] = [
-  {
-    id: "7265b3a6-92e1-436e-bea1-7587b20f0459",
-    type: FieldsTypes.String,
-    label: "Name",
-    required: true,
-  },
-  {
-    id: "a1334c91-bade-46ba-92e1-87a9cc4321a3",
-    type: FieldsTypes.Selector,
-    label: "Type",
-    sourceObjectId: "75ef436e-3d2d-4061-8e60-970e001f40aa",
-    required: true,
-  },
-  {
-    id: "729c0e89-eb07-4209-8578-90871942bb6f",
-    type: FieldsTypes.Password,
-    label: "Password",
-  },
-  {
-    id: "70e5e4805-ab32-4062-8ac2-0b228a6f8faa",
-    type: FieldsTypes.Text,
-    label: "Description",
-  },
-];
-
-const objectConfig = {
-  id: "d5faf851-714f-4e4d-a89f-85d0f841798e",
-  fields: drawerConfig,
-};
-
 const sidebar = ref<InstanceType<typeof UniversalDrawer>>();
 const discardChangesDialog = ref<InstanceType<typeof UniversalDrawer>>();
 const isInputStarted = reactive<IsInputStarted>(isInputStartedInitialValue);
@@ -129,6 +80,14 @@ const emit = defineEmits(["close:drawer"]);
 
 const universalDatabaseStore = useUniversalDatabaseStore();
 const { addInstance, getInstances } = universalDatabaseStore;
+
+const props = defineProps({
+  titleAdd: { type: String, required: true },
+  titleEdit: { type: String, required: true },
+  objectConfig: { type: Object as PropType<ObjectConfig>, required: true },
+});
+
+const drawerConfig: FieldConfig[] = props.objectConfig?.fields;
 
 const isChanged = computed<boolean>(() => {
   return !isEqual(currentState, savedState);
@@ -314,7 +273,7 @@ defineExpose({
 <template>
   <UniversalDrawer
     ref="sidebar"
-    :title="isEditMode ? $lang.title.editCredential : $lang.title.addCredential"
+    :title="isEditMode ? titleEdit : titleAdd"
     close-button
     @click:close="close"
   >

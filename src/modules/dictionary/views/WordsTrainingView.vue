@@ -56,7 +56,7 @@ const handleClickAction = () => {
 
   switch (route.name) {
     case "words-training.words":
-      action = "add-word";
+      action = "add-item";
       break;
   }
 

@@ -11,9 +11,42 @@ import { wordsTable } from "@/modules/dictionary/settings/tables/wordsTable";
 import { UniversalDatabase } from "@/modules/credentials/classes/UniversalDatabase";
 import type { IUniversalDatabase } from "@/modules/credentials/types";
 import { useUniversalDatabaseStore } from "@/modules/credentials/store/universalDatabaseStore";
+import type { FieldConfig, ObjectConfig } from "@/types/common";
+import { FieldsTypes } from "@/types/common";
 
 const databaseId = "50bda5a6-b1a0-4d73-b7db-301392037f87";
 const objectId = "2c98151d-4995-49c9-b49e-0070058d951c";
+
+const drawerConfig: FieldConfig[] = [
+  {
+    id: "7265b3a6-92e1-436e-bea1-7587b20f0459",
+    type: FieldsTypes.String,
+    label: "Name",
+    required: true,
+  },
+  {
+    id: "a1334c91-bade-46ba-92e1-87a9cc4321a3",
+    type: FieldsTypes.Selector,
+    label: "Type",
+    sourceObjectId: "75ef436e-3d2d-4061-8e60-970e001f40aa",
+    required: true,
+  },
+  {
+    id: "729c0e89-eb07-4209-8578-90871942bb6f",
+    type: FieldsTypes.Password,
+    label: "Password",
+  },
+  {
+    id: "70e5e4805-ab32-4062-8ac2-0b228a6f8faa",
+    type: FieldsTypes.Text,
+    label: "Description",
+  },
+];
+
+const objectConfig: ObjectConfig = {
+  id: "d5faf851-714f-4e4d-a89f-85d0f841798e",
+  fields: drawerConfig,
+};
 
 const route = useRoute();
 
@@ -104,7 +137,13 @@ onMounted(async () => {
       @click:edit-item="handleClickEditItem"
     />
   </div>
-  <SuperDrawer ref="superDrawerRef" @close:drawer="handleCloseDrawer" />
+  <SuperDrawer
+    ref="superDrawerRef"
+    @close:drawer="handleCloseDrawer"
+    title-add="Add word"
+    title-edit="Edit word"
+    :object-config="objectConfig"
+  />
   <UniversalDialog
     :title="$lang.title.confirmDeleteCredentialType"
     ref="confirmDeleteItemDialog"
