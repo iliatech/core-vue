@@ -15,7 +15,7 @@ import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
 import UniversalField from "@/components/fields/UniversalField.vue";
 import UniversalSelector from "@/components/fields/UniversalSelector.vue";
 import { Credential } from "@/modules/credentials/classes/entities/Credential";
-import type { ICredentialType } from "@/modules/credentials/types";
+import type { ICredentialType, Instance } from "@/modules/credentials/types";
 import UniversalTextarea from "@/components/fields/UniversalTextarea.vue";
 import { UniversalObject } from "@/modules/credentials/classes/entities/UniversalObject";
 import { useUniversalDatabaseStore } from "@/modules/credentials/store/universalDatabaseStore";
@@ -71,15 +71,13 @@ const superCurrentState = ref<Record<string, any>>({});
 const superSavedState = ref<Record<string, any>>({});
 const superIsInputStarted = ref<Record<string, any>>({});
 const superErrorDetails = ref<Record<string, string[]>>({});
-const objectId = ref<string | null>(null);
 
-const savedState = reactive<DrawerState>({ ...initialState });
 const options = reactive<Options>({ type: [] });
 
 const emit = defineEmits(["close:drawer"]);
 
 const universalDatabaseStore = useUniversalDatabaseStore();
-const { addInstance, getInstances } = universalDatabaseStore;
+const { addOrUpdateInstance, getInstances } = universalDatabaseStore;
 
 const props = defineProps({
   titleAdd: { type: String, required: true },
@@ -87,14 +85,14 @@ const props = defineProps({
   objectConfig: { type: Object as PropType<ObjectConfig>, required: true },
 });
 
-const drawerConfig: FieldConfig[] = props.objectConfig?.fields;
+const fieldsConfig: FieldConfig[] = props.objectConfig?.fields;
 
 const isChanged = computed<boolean>(() => {
-  return !isEqual(currentState, savedState);
+  return !isEqual(superCurrentState, superSavedState);
 });
 
 const isEditMode = computed<boolean>(() => {
-  return !!savedState.id;
+  return !!superSavedState.value.id;
 });
 
 const isValid = computed<boolean>(() => {
@@ -117,16 +115,19 @@ const errorDetails = computed<ErrorsDetails>(() => {
     description: [],
   };
 
+  // TODO Restore for Universal object.
   // Name.
   if (!prepareName(currentState.name)) {
     errors.name.push(lang.error.entityShouldNotBeEmpty(IEntity.CredentialName));
   }
 
+  // TODO Restore for Universal object.
   // Type.
   if (!currentState.typeId) {
     errors.type.push(lang.error.entityShouldNotBeEmpty(IEntity.CredentialType));
   }
 
+  // TODO Restore for Universal object.
   // Password.
   if (!prepareName(currentState.password)) {
     errors.password.push(
@@ -164,59 +165,46 @@ const close = () => {
 };
 
 const handleClickSave = async () => {
-  drawerConfig.forEach((field) => {
+  fieldsConfig.forEach((field) => {
     if (field.required && !superCurrentState.value[field.id]) {
       // TODO Add field to array of errors, error should be shown under the field.
     }
   });
 
-  await addInstance(
-    {
-      databaseId: "50bda5a6-b1a0-4d73-b7db-301392037f87",
-      objectId: "2c98151d-4995-49c9-b49e-0070058d951c",
-    },
-    superCurrentState.value
-  );
+  if (isEditMode.value) {
+    await addOrUpdateInstance(
+      {
+        databaseId: props.objectConfig?.databaseId,
+        objectId: props.objectConfig?.objectId,
+        instanceId: superSavedState.value.id,
+      },
+      superCurrentState.value
+    );
+  } else {
+    await addOrUpdateInstance(
+      {
+        databaseId: props.objectConfig?.databaseId,
+        objectId: props.objectConfig?.objectId,
+      },
+      superCurrentState.value
+    );
+  }
 
   console.log(
     "INSTANCES",
     getInstances({
-      databaseId: "50bda5a6-b1a0-4d73-b7db-301392037f87",
-      objectId: "2c98151d-4995-49c9-b49e-0070058d951c",
+      databaseId: props.objectConfig?.databaseId,
+      objectId: props.objectConfig?.objectId,
     })
   );
-
-  return;
-
-  if (!currentState.typeId) {
-    throw new Error("currentState.type  is not defined");
-  }
-
-  if (isEditMode.value) {
-    if (!objectId.value) {
-      throw new Error("objectId is null");
-    }
-
-    await UniversalObject.update(objectConfig.id, {
-      id: objectId.value,
-      ...superCurrentState.value,
-    });
-  } else {
-    await Credential.add({
-      name: currentState.name,
-      typeId: currentState.typeId,
-      password: currentState.password,
-      description: currentState.description,
-    });
-  }
 
   superSavedState.value = cloneDeep(superCurrentState.value);
 
   showToast({
     type: ToastType.Success,
     text: isEditMode.value
-      ? lang.success.credentialSaved
-      : lang.success.credentialAdded,
+      ? lang.success.instanceUpdated
+      : lang.success.instanceAdded,
   });
 
   sidebar.value?.close();
@@ -232,7 +220,7 @@ watch(
 
     console.log("hello");
 
-    drawerConfig.forEach((field: any) => {
+    fieldsConfig.forEach((field: any) => {
       if (field.type === FieldsTypes.Id) {
         return;
       }
@@ -253,18 +241,28 @@ watch(
 );
 
 defineExpose({
-  async open(item?: ICredentialType) {
-    Object.assign(currentState, item ?? initialState);
-    Object.assign(savedState, currentState);
-    options.type = CredentialType.get();
-    Object.assign(isInputStarted, isInputStartedInitialValue);
-    sidebar.value?.open();
-    drawerConfig.forEach((field) => {
+  async open(item?: Instance) {
+    // Clean.
+    fieldsConfig.forEach((field) => {
       superCurrentState.value[field.id] = null;
       superIsInputStarted.value[field.id] = null;
     });
 
-    await UniversalDatabase.load("50bda5a6-b1a0-4d73-b7db-301392037f87");
+    if (item) {
+      Object.assign(superCurrentState.value, item);
+      console.log("IIIIIItem", superCurrentState);
+    }
+
+    Object.assign(superSavedState.value, superCurrentState.value);
+
+    options.type = CredentialType.get();
+
+    // TODO ?
+    Object.assign(isInputStarted, isInputStartedInitialValue);
+
+    sidebar.value?.open();
+
+    await UniversalDatabase.load(props.objectConfig?.databaseId);
   },
   close,
 });
@@ -280,7 +278,7 @@ defineExpose({
     <div class="credential-sidebar">
       <UniversalField
         :label="field.label"
-        v-for="field in drawerConfig"
+        v-for="field in fieldsConfig"
         :key="field.id"
       >
         <UniversalText

@@ -7,13 +7,26 @@ export enum IEntity {
   CredentialPassword = "credentialPassword",
 }
 
-export const universalObjects = [
+interface IUniversalObject {
+  id: string;
+  databaseId: string;
+  description: string;
+}
+
+export const universalObjects: IUniversalObject[] = [
   {
-    id: "46bbedba-7db4-4151-a360-26d266b7bf92",
-    name: "credential",
+    id: "2c98151d-4995-49c9-b49e-0070058d951c",
+    databaseId: "50bda5a6-b1a0-4d73-b7db-301392037f87",
+    description: "Credentials",
   },
   {
     id: "75ef436e-3d2d-4061-8e60-970e001f40aa",
-    name: "credentialType",
+    databaseId: "50bda5a6-b1a0-4d73-b7db-301392037f87",
+    description: "Credential types",
   },
 ];
+
+export const getDatabaseByObjectId = (objectId: string) => {
+  const object = universalObjects.find((item) => item.id === objectId);
+  return object?.databaseId ?? null;
+};

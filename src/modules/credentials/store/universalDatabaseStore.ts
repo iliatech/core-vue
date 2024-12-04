@@ -54,8 +54,8 @@ export const useUniversalDatabaseStore = defineStore(
       );
     };
 
-    const addInstance = async (
-      params: { databaseId: string; objectId: string },
+    const addOrUpdateInstance = async (
+      params: { databaseId: string; objectId: string; instanceId?: string },
       instance: any
     ) => {
       const database = getDatabase(params.databaseId);
@@ -68,12 +68,25 @@ export const useUniversalDatabaseStore = defineStore(
         database.data[params.objectId] = [];
       }
 
-      database.data[params.objectId].push({
-        id: uuidv4(),
-        ...instance,
-      });
+      if (params.instanceId) {
+        const existentInstanceIndex = database.data[params.objectId].findIndex(
+          (item) => item.id === params.instanceId
+        );
 
-      console.log("DB", database);
+        if (existentInstanceIndex !== -1) {
+          database.data[params.objectId].splice(existentInstanceIndex, 1);
+          database.data[params.objectId].push({
+            id: params.instanceId,
+            ...instance,
+          });
+        }
+      } else {
+        database.data[params.objectId].push({
+          id: uuidv4(),
+          ...instance,
+        });
+      }
+
       await UniversalDatabase.save(params.databaseId);
     };
 
@@ -157,7 +170,7 @@ export const useUniversalDatabaseStore = defineStore(
       getDatabase,
       getInstances,
       getInstanceById,
-      addInstance,
+      addOrUpdateInstance,
       deleteInstanceById,
       unloadDatabase,
       updateDatabase,

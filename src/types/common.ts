@@ -48,6 +48,7 @@ export interface FieldConfig {
 }
 
 export interface ObjectConfig {
-  id: string;
+  databaseId: string;
+  objectId: string;
   fields: FieldConfig[];
 }

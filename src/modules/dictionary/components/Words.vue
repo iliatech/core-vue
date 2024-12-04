@@ -13,9 +13,16 @@ import type { IUniversalDatabase } from "@/modules/credentials/types";
 import { useUniversalDatabaseStore } from "@/modules/credentials/store/universalDatabaseStore";
 import type { FieldConfig, ObjectConfig } from "@/types/common";
 import { FieldsTypes } from "@/types/common";
+import { getDatabaseByObjectId } from "@/settings/entities";
 
-const databaseId = "50bda5a6-b1a0-4d73-b7db-301392037f87";
+// TODO Remove this hardcode and pass the object id to this component as prop.
+// TODO Rename component to 'UniversalRepresentation'.
 const objectId = "2c98151d-4995-49c9-b49e-0070058d951c";
+const databaseId = getDatabaseByObjectId(objectId);
+
+if (!databaseId) {
+  throw new Error(`Database id not found for object id '${objectId}'`);
+}
 
 const drawerConfig: FieldConfig[] = [
   {
@@ -44,7 +51,8 @@ const drawerConfig: FieldConfig[] = [
 ];
 
 const objectConfig: ObjectConfig = {
-  id: "d5faf851-714f-4e4d-a89f-85d0f841798e",
+  databaseId,
+  objectId,
   fields: drawerConfig,
 };
 
