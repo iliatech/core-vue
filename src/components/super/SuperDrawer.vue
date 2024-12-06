@@ -14,10 +14,8 @@ import UniversalText from "@/components/fields/UniversalText.vue";
 import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
 import UniversalField from "@/components/fields/UniversalField.vue";
 import UniversalSelector from "@/components/fields/UniversalSelector.vue";
-import { Credential } from "@/modules/credentials/classes/entities/Credential";
 import type { ICredentialType, Instance } from "@/modules/credentials/types";
 import UniversalTextarea from "@/components/fields/UniversalTextarea.vue";
-import { UniversalObject } from "@/modules/credentials/classes/entities/UniversalObject";
 import { useUniversalDatabaseStore } from "@/modules/credentials/store/universalDatabaseStore";
 import { UniversalDatabase } from "@/modules/credentials/classes/UniversalDatabase";
 import type { FieldConfig, ObjectConfig } from "@/types/common";
@@ -138,10 +136,20 @@ const errorDetails = computed<ErrorsDetails>(() => {
   return errors;
 });
 
-const getOptions = (universalObjectId: string) => {
-  // TODO
-  console.log(universalObjectId);
-  return CredentialType.get();
+const getOptions = (field: FieldConfig): Instance[] => {
+  if (!field.sourceObjectId) {
+    throw new Error(
+      `sourceObjectId is not defined in field config for field ${field.id}`
+    );
+  }
+
+  const items = getInstances({
+    databaseId: props.objectConfig?.databaseId,
+    objectId: field.sourceObjectId,
+  });
+
+  console.log("ITTTTTEMS", items);
+  return items;
 };
 
 const handleCancelDiscardChanges = () => {
@@ -245,6 +253,7 @@ defineExpose({
     // Clean.
     fieldsConfig.forEach((field) => {
       superCurrentState.value[field.id] = null;
+      superSavedState.value[field.id] = null;
       superIsInputStarted.value[field.id] = null;
     });
 
@@ -290,7 +299,8 @@ defineExpose({
         <UniversalSelector
           v-if="field.type === FieldsTypes.Selector"
           v-model="superCurrentState[field.id]"
-          :options="getOptions(field.sourceObjectId)"
+          :options="getOptions(field)"
+          :label-field="field.sourceObjectFieldId"
         />
         <UniversalTextarea
           v-if="field.type === FieldsTypes.Text"

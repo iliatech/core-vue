@@ -45,6 +45,7 @@ export interface FieldConfig {
   label?: string;
   required?: boolean;
   sourceObjectId?: string;
+  sourceObjectFieldId?: string;
 }
 
 export interface ObjectConfig {

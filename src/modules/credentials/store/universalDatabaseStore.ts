@@ -26,16 +26,16 @@ export const useUniversalDatabaseStore = defineStore(
     const getInstances = (params: {
       databaseId: string;
       objectId: string;
-    }): Instance[] | null => {
+    }): Instance[] => {
       const database = getDatabase(params.databaseId);
 
       if (!database) {
-        return null;
+        return [];
       }
 
       const instances = database.data[params.objectId];
 
-      return instances ?? null;
+      return instances ?? [];
     };
 
     const getInstanceById = (params: {

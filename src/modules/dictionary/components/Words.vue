@@ -35,7 +35,9 @@ const drawerConfig: FieldConfig[] = [
     id: "a1334c91-bade-46ba-92e1-87a9cc4321a3",
     type: FieldsTypes.Selector,
     label: "Type",
-    sourceObjectId: "75ef436e-3d2d-4061-8e60-970e001f40aa",
+    //sourceObjectId: "75ef436e-3d2d-4061-8e60-970e001f40aa",
+    sourceObjectId: "2c98151d-4995-49c9-b49e-0070058d951c",
+    sourceObjectFieldId: "7265b3a6-92e1-436e-bea1-7587b20f0459",
     required: true,
   },
   {
