@@ -11,50 +11,30 @@ import { wordsTable } from "@/modules/dictionary/settings/tables/wordsTable";
 import { UniversalDatabase } from "@/modules/credentials/classes/UniversalDatabase";
 import type { IUniversalDatabase } from "@/modules/credentials/types";
 import { useUniversalDatabaseStore } from "@/modules/credentials/store/universalDatabaseStore";
-import type { FieldConfig, ObjectConfig } from "@/types/common";
-import { FieldsTypes } from "@/types/common";
-import { getDatabaseByObjectId } from "@/settings/entities";
+import type { ObjectConfig } from "@/types/common";
+import {
+  getDatabaseIdByObjectId,
+  getDrawerConfigByObjectId,
+} from "@/settings/entities";
 
-// TODO Remove this hardcode and pass the object id to this component as prop.
-// TODO Rename component to 'UniversalRepresentation'.
-const objectId = "2c98151d-4995-49c9-b49e-0070058d951c";
-const databaseId = getDatabaseByObjectId(objectId);
+const props = defineProps({
+  objectId: {
+    type: String,
+    required: true,
+  },
+});
+
+const databaseId = getDatabaseIdByObjectId(props.objectId);
 
 if (!databaseId) {
-  throw new Error(`Database id not found for object id '${objectId}'`);
+  throw new Error(`Database id not found for object id '${props.objectId}'`);
 }
 
-const drawerConfig: FieldConfig[] = [
-  {
-    id: "7265b3a6-92e1-436e-bea1-7587b20f0459",
-    type: FieldsTypes.String,
-    label: "Name",
-    required: true,
-  },
-  {
-    id: "a1334c91-bade-46ba-92e1-87a9cc4321a3",
-    type: FieldsTypes.Selector,
-    label: "Type",
-    //sourceObjectId: "75ef436e-3d2d-4061-8e60-970e001f40aa",
-    sourceObjectId: "2c98151d-4995-49c9-b49e-0070058d951c",
-    sourceObjectFieldId: "7265b3a6-92e1-436e-bea1-7587b20f0459",
-    required: true,
-  },
-  {
-    id: "729c0e89-eb07-4209-8578-90871942bb6f",
-    type: FieldsTypes.Password,
-    label: "Password",
-  },
-  {
-    id: "70e5e4805-ab32-4062-8ac2-0b228a6f8faa",
-    type: FieldsTypes.Text,
-    label: "Description",
-  },
-];
+const drawerConfig = getDrawerConfigByObjectId(props.objectId);
 
 const objectConfig: ObjectConfig = {
   databaseId,
-  objectId,
+  objectId: props.objectId,
   fields: drawerConfig,
 };
 
@@ -68,14 +48,15 @@ const selectedItem = ref<Instance | null>(null);
 const confirmDeleteItemDialog = ref<InstanceType<typeof UniversalDialog>>();
 const database = ref<IUniversalDatabase | null>(null);
 const objects = computed<Instance[]>(() => {
-  return database.value?.data[objectId] ?? [];
+  return database.value?.data[props.objectId] ?? [];
 });
 
 const tableData = computed<Instance[]>(() => {
-  // TODO
+  // TODO Restore showing needed property of related instance instead of showing id.
   //const credentialTypes = CredentialType.get();
   return objects.value.map((item) => ({
     ...item,
+    // TODO Restore showing needed property of related instance instead of showing id.
     //type: credentialTypes.find((el) => el.id === item.typeId) ?? null,
   }));
 });
@@ -84,18 +65,19 @@ const handleClickAddItem = () => {
   superDrawerRef.value?.open();
 };
 
+const handleClickEditItem = (item: Instance) => {
+  superDrawerRef.value?.open(item);
+};
+
 const handleClickDeleteItem = (item: Instance) => {
   selectedItem.value = item;
   confirmDeleteItemDialog.value?.open();
 };
 
-const handleClickEditItem = (item: Instance) => {
-  superDrawerRef.value?.open(item);
-};
-
 const handleCancelDeleteItem = () => {
   confirmDeleteItemDialog.value?.close();
   selectedItem.value = null;
+
   router.push({
     path: route.path,
   });
@@ -106,7 +88,10 @@ const handleConfirmDeleteItem = async () => {
     throw new Error("selectedItem is undefined");
   }
 
-  await deleteInstanceById({ databaseId, objectId }, selectedItem.value.id);
+  await deleteInstanceById(
+    { databaseId, objectId: props.objectId },
+    selectedItem.value.id
+  );
   confirmDeleteItemDialog.value?.close();
 };
 

@@ -92,8 +92,14 @@ const router = createRouter({
       children: [
         {
           path: routes.words.path,
-          component: () => import("@/modules/dictionary/components/Words.vue"),
+          component: () =>
+            import(
+              "@/modules/dictionary/components/UniversalRepresentation.vue"
+            ),
           name: routes.words.name,
+          props: {
+            objectId: "2c98151d-4995-49c9-b49e-0070058d951c",
+          },
         },
       ],
     },

@@ -3,7 +3,6 @@ import UniversalDrawer from "@/components/dialogs/UniversalDrawer.vue";
 import type { PropType } from "vue";
 import { computed, reactive, ref, watch } from "vue";
 import UniversalButton from "@/components/buttons/UniversalButton.vue";
-import { CredentialType } from "@/modules/credentials/classes/entities/CredentialType";
 import { showToast } from "@/helpers/toast";
 import { ToastType } from "@/types/toasts";
 import { lang } from "@/lang";
@@ -14,10 +13,9 @@ import UniversalText from "@/components/fields/UniversalText.vue";
 import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
 import UniversalField from "@/components/fields/UniversalField.vue";
 import UniversalSelector from "@/components/fields/UniversalSelector.vue";
-import type { ICredentialType, Instance } from "@/modules/credentials/types";
+import type { Instance } from "@/modules/credentials/types";
 import UniversalTextarea from "@/components/fields/UniversalTextarea.vue";
 import { useUniversalDatabaseStore } from "@/modules/credentials/store/universalDatabaseStore";
-import { UniversalDatabase } from "@/modules/credentials/classes/UniversalDatabase";
 import type { FieldConfig, ObjectConfig } from "@/types/common";
 import { FieldsTypes } from "@/types/common";
 
@@ -29,10 +27,7 @@ interface DrawerState {
   password: string;
 }
 
-interface Options {
-  type: ICredentialType[];
-}
-
+// TODO Make universal.
 interface IsInputStarted {
   name: boolean;
   password: boolean;
@@ -70,8 +65,6 @@ const superSavedState = ref<Record<string, any>>({});
 const superIsInputStarted = ref<Record<string, any>>({});
 const superErrorDetails = ref<Record<string, string[]>>({});
 
-const options = reactive<Options>({ type: [] });
-
 const emit = defineEmits(["close:drawer"]);
 
 const universalDatabaseStore = useUniversalDatabaseStore();
@@ -106,6 +99,7 @@ const isValid = computed<boolean>(() => {
   return !isError;
 });
 
+// TODO Make Universal.
 const errorDetails = computed<ErrorsDetails>(() => {
   const errors: ErrorsDetails = {
     name: [],
@@ -144,13 +138,10 @@ const getOptions = (field: FieldConfig): Instance[] => {
     );
   }
 
-  const items = getInstances({
+  return getInstances({
     databaseId: props.objectConfig?.databaseId,
     objectId: field.sourceObjectId,
   });
-
-  console.log("ITTTTTEMS", items);
-  return items;
 };
 
 const handleCancelDiscardChanges = () => {
@@ -199,14 +190,6 @@ const handleClickSave = async () => {
     );
   }
 
-  console.log(
-    "INSTANCES",
-    getInstances({
-      databaseId: props.objectConfig?.databaseId,
-      objectId: props.objectConfig?.objectId,
-    })
-  );
-
   superSavedState.value = cloneDeep(superCurrentState.value);
 
   showToast({
@@ -217,6 +200,7 @@ const handleClickSave = async () => {
   });
 
   sidebar.value?.close();
+
   emit("close:drawer");
 };
 
@@ -226,8 +210,6 @@ watch(
     if (!Object.keys(superCurrentState.value)) {
       return;
     }
-
-    console.log("hello");
 
     fieldsConfig.forEach((field: any) => {
       if (field.type === FieldsTypes.Id) {
@@ -258,21 +240,17 @@ defineExpose({
       superIsInputStarted.value[field.id] = null;
     });
 
+    // In case of edit.
     if (item) {
       Object.assign(superCurrentState.value, item);
-      console.log("IIIIIItem", superCurrentState);
     }
 
     Object.assign(superSavedState.value, superCurrentState.value);
 
-    options.type = CredentialType.get();
-
-    // TODO ?
+    // // TODO ?
     Object.assign(isInputStarted, isInputStartedInitialValue);
-
+    //
     sidebar.value?.open();
-
-    await UniversalDatabase.load(props.objectConfig?.databaseId);
   },
   close,
 });

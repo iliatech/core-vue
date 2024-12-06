@@ -48,6 +48,8 @@ export interface FieldConfig {
   sourceObjectFieldId?: string;
 }
 
+export type DrawerConfig = FieldConfig[];
+
 export interface ObjectConfig {
   databaseId: string;
   objectId: string;
