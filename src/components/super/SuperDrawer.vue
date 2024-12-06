@@ -86,13 +86,14 @@ const props = defineProps({
 const fieldsConfig: FieldConfig[] = props.objectConfig?.fields;
 
 const isChanged = computed<boolean>(() => {
-  return !isEqual(superCurrentState, superSavedState);
+  return !isEqual(superCurrentState.value, superSavedState.value);
 });
 
 const isEditMode = computed<boolean>(() => {
   return !!superSavedState.value.id;
 });
 
+// TODO Restore check of validity.
 const isValid = computed<boolean>(() => {
   let isError = false;
 

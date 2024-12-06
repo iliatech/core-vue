@@ -74,8 +74,7 @@ export const useUniversalDatabaseStore = defineStore(
         );
 
         if (existentInstanceIndex !== -1) {
-          database.data[params.objectId].splice(existentInstanceIndex, 1);
-          database.data[params.objectId].push({
+          database.data[params.objectId].splice(existentInstanceIndex, 1, {
             id: params.instanceId,
             ...instance,
           });
