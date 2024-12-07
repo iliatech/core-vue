@@ -16,6 +16,7 @@ import {
   getDatabaseIdByObjectId,
   getDrawerConfigByObjectId,
 } from "@/settings/entities";
+import { sortWithCollator } from "@/helpers/sort";
 
 const props = defineProps({
   objectId: {
@@ -43,12 +44,18 @@ const route = useRoute();
 const universalDatabaseStore = useUniversalDatabaseStore();
 const { deleteInstanceById } = universalDatabaseStore;
 
+const defaultSortColumn = wordsTable.find((item) => item.defaultSort);
+
 const superDrawerRef = ref<InstanceType<typeof UniversalDrawer>>();
 const selectedItem = ref<Instance | null>(null);
 const confirmDeleteItemDialog = ref<InstanceType<typeof UniversalDialog>>();
 const database = ref<IUniversalDatabase | null>(null);
 const objects = computed<Instance[]>(() => {
-  return database.value?.data[props.objectId] ?? [];
+  let items = database.value?.data[props.objectId] ?? [];
+  if (defaultSortColumn) {
+    sortWithCollator(items, defaultSortColumn.name);
+  }
+  return items;
 });
 
 const tableData = computed<Instance[]>(() => {
