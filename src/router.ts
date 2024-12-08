@@ -4,6 +4,8 @@ import { getAuthToken, getAuthUser } from "@/helpers/auth";
 import { useAppStore } from "@/store/appStore";
 import { lang } from "@/lang";
 
+import { UniversalObjectsIds } from "@/universal/enums";
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -98,7 +100,7 @@ const router = createRouter({
             ),
           name: routes.words.name,
           props: {
-            objectId: "2c98151d-4995-49c9-b49e-0070058d951c",
+            objectId: UniversalObjectsIds.Credentials,
           },
         },
       ],

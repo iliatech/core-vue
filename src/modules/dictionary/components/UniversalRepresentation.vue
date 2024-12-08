@@ -7,7 +7,6 @@ import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
 import { useRoute } from "vue-router";
 import router from "@/router";
 import SuperDrawer from "@/components/super/SuperDrawer.vue";
-import { wordsTable } from "@/modules/dictionary/settings/tables/wordsTable";
 import { UniversalDatabase } from "@/modules/credentials/classes/UniversalDatabase";
 import type { IUniversalDatabase } from "@/modules/credentials/types";
 import { useUniversalDatabaseStore } from "@/modules/credentials/store/universalDatabaseStore";
@@ -15,6 +14,7 @@ import type { ObjectConfig } from "@/types/common";
 import {
   getDatabaseIdByObjectId,
   getDrawerConfigByObjectId,
+  getTableConfigByObjectId,
 } from "@/settings/entities";
 import { sortWithCollator } from "@/helpers/sort";
 
@@ -33,6 +33,8 @@ if (!databaseId) {
 
 const drawerConfig = getDrawerConfigByObjectId(props.objectId);
 
+const tableConfig = getTableConfigByObjectId(props.objectId);
+
 const objectConfig: ObjectConfig = {
   databaseId,
   objectId: props.objectId,
@@ -42,9 +44,9 @@ const objectConfig: ObjectConfig = {
 const route = useRoute();
 
 const universalDatabaseStore = useUniversalDatabaseStore();
-const { deleteInstanceById } = universalDatabaseStore;
+const { deleteInstanceById, getInstances } = universalDatabaseStore;
 
-const defaultSortColumn = wordsTable.find((item) => item.defaultSort);
+const defaultSortColumn = tableConfig.find((item) => item.defaultSort);
 
 const superDrawerRef = ref<InstanceType<typeof UniversalDrawer>>();
 const selectedItem = ref<Instance | null>(null);
@@ -59,13 +61,36 @@ const objects = computed<Instance[]>(() => {
 });
 
 const tableData = computed<Instance[]>(() => {
-  // TODO Restore showing needed property of related instance instead of showing id.
-  //const credentialTypes = CredentialType.get();
-  return objects.value.map((item) => ({
-    ...item,
-    // TODO Restore showing needed property of related instance instead of showing id.
-    //type: credentialTypes.find((el) => el.id === item.typeId) ?? null,
-  }));
+  const linkedFields = tableConfig.filter((field) => field.linkedObjectId);
+
+  if (!linkedFields.length) {
+    return objects.value;
+  }
+
+  const linkedInstances: Record<string, Instance[]> = {};
+
+  linkedFields.forEach((field) => {
+    if (!field.linkedObjectId) {
+      return;
+    }
+
+    linkedInstances[field.linkedObjectId] = getInstances({
+      databaseId: getDatabaseIdByObjectId(field.linkedObjectId),
+      objectId: field.linkedObjectId,
+    });
+  });
+
+  return objects.value.map((item) => {
+    item.linkedInstance = {};
+    linkedFields.forEach((field) => {
+      item.linkedInstance[field.linkedObjectId] =
+        linkedInstances[field.linkedObjectId].find((instance) => {
+          return instance.id === item[field.name];
+        }) ?? undefined;
+    });
+
+    return item;
+  });
 });
 
 const handleClickAddItem = () => {
@@ -132,7 +157,7 @@ onMounted(async () => {
 <template>
   <div class="words">
     <UniversalItems
-      :config="wordsTable"
+      :config="tableConfig"
       :data="tableData"
       @click:action-button="handleClickAddItem"
       @click:delete-item="handleClickDeleteItem"

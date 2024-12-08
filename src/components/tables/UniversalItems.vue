@@ -88,7 +88,7 @@ const changeMode = () => {
     </div>
     <div class="universal-items__container">
       <div class="universal-items__inner-container">
-        <div class="items" v-if="!isTableMode">
+        <div v-if="!isTableMode" class="items">
           <div v-for="item in dataFiltered" :key="item.id" class="item">
             <template
               v-for="(column, index) in config"
@@ -110,7 +110,7 @@ const changeMode = () => {
           </div>
         </div>
         <DataTable
-          v-if="isTableMode"
+          v-else
           scrollable
           :show-gridlines="true"
           :striped-rows="true"

@@ -4,12 +4,14 @@ import type { Instance, IUniversalDatabase } from "@/modules/credentials/types";
 import { v4 as uuidv4 } from "uuid";
 import { UniversalDatabase } from "@/modules/credentials/classes/UniversalDatabase";
 
+import { UniversalDatabasesIds } from "@/universal/enums";
+
 export const useUniversalDatabaseStore = defineStore(
   "universalDatabaseStore",
   () => {
     const databases = ref<IUniversalDatabase[]>([
       {
-        id: "50bda5a6-b1a0-4d73-b7db-301392037f87",
+        id: UniversalDatabasesIds.MainDatabase,
         clientTransactionId: "725a4700-7af6-42f2-a089-6a8524919953",
         serverTransactionId: "",
         updated: "", // TODO
@@ -56,17 +58,24 @@ export const useUniversalDatabaseStore = defineStore(
 
     const addOrUpdateInstance = async (
       params: { databaseId: string; objectId: string; instanceId?: string },
-      instance: any
+      instance: Instance
     ) => {
       const database = getDatabase(params.databaseId);
 
       if (!database) {
-        return null;
+        throw new Error(
+          `Database with id '${params.databaseId}' not found when try add or update instance`
+        );
       }
 
       if (!database.data[params.objectId]) {
         database.data[params.objectId] = [];
       }
+
+      // Clean to avoid recurring save of instances which fires "Converting circular structure" error.
+      // TODO Implement clean.
+      // delete instance.linkedInstance;
+      console.log("II", instance);
 
       if (params.instanceId) {
         const existentInstanceIndex = database.data[params.objectId].findIndex(
@@ -134,11 +143,7 @@ export const useUniversalDatabaseStore = defineStore(
         throw new Error(`Database with id ${databaseId} was not updated`);
       }
 
-      console.log("AAA", databases.value[databaseIndex]);
-
       databases.value[databaseIndex] = databaseData;
-
-      console.log("BBB", databases.value[databaseIndex]);
     };
 
     //

@@ -39,6 +39,10 @@ export class UniversalDatabase {
         }
       : database;
 
+    //database.data = {};
+
+    console.log("DD", database.data);
+
     const data = JSON.stringify(databaseData);
 
     await Api.request({
@@ -82,8 +86,6 @@ export class UniversalDatabase {
         ...databaseApi,
         data: decryptedData,
       });
-
-      console.log("DI", useUniversalDatabaseStore().getDatabase(databaseId));
     } catch (e) {
       console.error(e);
       throw new Error("Cannot decrypt data with this secret key");

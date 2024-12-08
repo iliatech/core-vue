@@ -13,7 +13,7 @@
       </div>
     </template>
     <template v-else>
-      {{ get(item, columnConfig.name) || "-" }}
+      {{ getValue(item, columnConfig) }}
     </template>
   </div>
 </template>
@@ -24,7 +24,7 @@ import type {
   UniversalTableColumn,
 } from "@/types/tables";
 import { computed, mergeProps } from "vue";
-import { get } from "lodash";
+import type { Instance } from "@/modules/credentials/types";
 
 const emit = defineEmits([]);
 
@@ -48,6 +48,21 @@ const components = computed<UniversalTableCellComponentProp[] | null>(() => {
 
   return null;
 });
+
+const getValue = (item: Instance, columnConfig: UniversalTableColumn) => {
+  let value = null;
+
+  if (columnConfig.linkedObjectId) {
+    value =
+      item.linkedInstance[columnConfig.linkedObjectId]?.[
+        columnConfig.linkedFieldId
+      ];
+  } else {
+    value = item[columnConfig.name];
+  }
+
+  return value ?? "-";
+};
 </script>
 <style lang="scss" scoped>
 @import "@/assets/variables";

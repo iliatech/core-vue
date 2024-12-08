@@ -1,3 +1,5 @@
+import type { UniversalDatabasesIds } from "@/universal/enums";
+
 export type SearchObject = Record<
   string,
   string | number | boolean | undefined | null
@@ -30,13 +32,14 @@ export interface ICredentialDatabase {
 
 export interface Instance {
   id: string;
+  linkedInstance?: Record<string, Instance>; // Key is objectId here.
   [key: string]: any;
 }
 
 export type IUniversalDatabaseData = Record<string, Instance[]>;
 
 export interface IUniversalDatabase {
-  id: string;
+  id: UniversalDatabasesIds;
   clientTransactionId: string;
   serverTransactionId: string;
   updated: string;
