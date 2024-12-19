@@ -17,6 +17,7 @@ import {
   getTableConfigByObjectId,
 } from "@/settings/entities";
 import { sortWithCollator } from "@/helpers/sort";
+import { cloneDeep } from "lodash";
 
 const props = defineProps({
   objectId: {
@@ -83,10 +84,18 @@ const tableData = computed<Instance[]>(() => {
   return objects.value.map((item) => {
     item.linkedInstance = {};
     linkedFields.forEach((field) => {
-      item.linkedInstance[field.linkedObjectId] =
-        linkedInstances[field.linkedObjectId].find((instance) => {
+      const foundInstance = linkedInstances[field.linkedObjectId].find(
+        (instance) => {
           return instance.id === item[field.name];
-        }) ?? undefined;
+        }
+      );
+      const linkedInstance = foundInstance
+        ? cloneDeep(foundInstance)
+        : undefined;
+      if (linkedInstance?.linkedInstance) {
+        delete linkedInstance.linkedInstance;
+      }
+      item.linkedInstance[field.linkedObjectId] = linkedInstance;
     });
 
     return item;
