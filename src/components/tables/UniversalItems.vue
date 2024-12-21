@@ -12,6 +12,7 @@ import { prepareName } from "@/helpers/strings";
 import objectHash from "object-hash";
 import UniversalTableCell from "@/components/tables/UniversalTableCell.vue";
 import UniversalIcon from "@/components/icons/UniversalIcon.vue";
+import { sortWithCollator } from "@/helpers/sort";
 
 const emit = defineEmits(["click:actionButton"]);
 
@@ -49,6 +50,11 @@ const dataFiltered = computed<any[]>(() => {
         .includes(prepareName(filterValue).toLowerCase());
     });
   });
+
+  sortWithCollator(
+    itemsFiltered,
+    props.config.find((item) => item.defaultSort)?.name
+  );
 
   return itemsFiltered;
 });
