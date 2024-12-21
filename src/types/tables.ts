@@ -8,7 +8,7 @@ export interface UniversalTableCellComponentProp {
 }
 
 export interface UniversalTableColumn {
-  name: string; // Field name. Normally it's uuid of field.
+  id: string; // Field name. Normally it's uuid of field.
   label: string;
   hiddenLabel?: boolean;
   defaultSort?: boolean;

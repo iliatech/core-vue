@@ -46,6 +46,10 @@ export interface FieldConfig {
   required?: boolean;
   sourceObjectId?: string;
   sourceObjectFieldId?: string;
+  defaultSort?: boolean;
+  defaultSortOrder?: -1 | 1;
+  sortable?: boolean;
+  filterable?: boolean;
 }
 
 export type DrawerConfig = FieldConfig[];
@@ -54,4 +58,10 @@ export interface ObjectConfig {
   databaseId: string;
   objectId: string;
   fields: FieldConfig[];
+}
+
+export interface Instance {
+  id: string;
+  linkedInstance?: Record<string, Instance>; // Key is objectId here.
+  [key: string]: any;
 }

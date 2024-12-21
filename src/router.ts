@@ -100,7 +100,7 @@ const router = createRouter({
             ),
           name: routes.words.name,
           props: {
-            objectId: UniversalObjectsIds.Credentials,
+            objectId: UniversalObjectsIds.Verbs,
           },
         },
         {

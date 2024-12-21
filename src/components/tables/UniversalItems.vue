@@ -27,7 +27,7 @@ const props = defineProps({
   },
   valueField: {
     type: String,
-    default: "name",
+    default: "id",
   },
   actionButtonText: String,
   tableModeByDefault: Boolean,

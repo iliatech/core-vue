@@ -53,13 +53,13 @@ export const routes: Record<string, LocalRoute> = {
   wordsTraining: {
     path: "/words-training",
     name: "words-training",
-    title: "Words",
+    title: "Verbs",
   },
 
   words: {
     path: "words",
     name: "words-training.words",
-    title: "Words",
+    title: "Verbs",
   },
 
   wordsTypes: {

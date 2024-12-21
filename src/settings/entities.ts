@@ -21,7 +21,7 @@ interface IUniversalObject {
 
 export const universalObjects: IUniversalObject[] = [
   {
-    id: UniversalObjectsIds.Credentials,
+    id: UniversalObjectsIds.Verbs,
     databaseId: UniversalDatabasesIds.MainDatabase,
     description: "Credentials",
   },

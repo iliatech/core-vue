@@ -8,7 +8,7 @@ import { RequestMethods } from "@/types/api";
 import { showToast } from "@/helpers/toast";
 import { ToastType } from "@/types/toasts";
 import { lang } from "@/lang";
-import { useUniversalDatabaseStore } from "@/modules/credentials/store/universalDatabaseStore";
+import { useUniversalDatabaseStore } from "@/store/universalDatabaseStore";
 import type { IUniversalDatabaseApi } from "@/modules/credentials/types";
 
 export class UniversalDatabase {

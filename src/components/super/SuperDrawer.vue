@@ -13,10 +13,9 @@ import UniversalText from "@/components/fields/UniversalText.vue";
 import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
 import UniversalField from "@/components/fields/UniversalField.vue";
 import UniversalSelector from "@/components/fields/UniversalSelector.vue";
-import type { Instance } from "@/modules/credentials/types";
 import UniversalTextarea from "@/components/fields/UniversalTextarea.vue";
-import { useUniversalDatabaseStore } from "@/modules/credentials/store/universalDatabaseStore";
-import type { FieldConfig, ObjectConfig } from "@/types/common";
+import { useUniversalDatabaseStore } from "@/store/universalDatabaseStore";
+import type { FieldConfig, Instance, ObjectConfig } from "@/types/common";
 import { FieldsTypes } from "@/types/common";
 
 interface DrawerState {
@@ -271,7 +270,7 @@ defineExpose({
     close-button
     @click:close="close"
   >
-    <div class="credential-sidebar">
+    <div class="super-drawer">
       <UniversalField
         :label="field.label"
         v-for="field in fieldsConfig"
@@ -318,7 +317,7 @@ defineExpose({
 
 <style lang="scss" scoped>
 @import "@/assets/variables";
-.credential-sidebar {
+.super-drawer {
   // TODO
 }
 </style>

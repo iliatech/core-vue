@@ -1,10 +1,11 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import type { Instance, IUniversalDatabase } from "@/modules/credentials/types";
+import type { IUniversalDatabase } from "@/modules/credentials/types";
 import { v4 as uuidv4 } from "uuid";
 import { UniversalDatabase } from "@/modules/credentials/classes/UniversalDatabase";
 
 import { UniversalDatabasesIds } from "@/universal/enums";
+import type { Instance } from "@/types/common";
 
 export const useUniversalDatabaseStore = defineStore(
   "universalDatabaseStore",

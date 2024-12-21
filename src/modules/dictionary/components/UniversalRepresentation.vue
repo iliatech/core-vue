@@ -2,15 +2,14 @@
 import UniversalItems from "@/components/tables/UniversalItems.vue";
 import { computed, onMounted, ref, watch } from "vue";
 import type UniversalDrawer from "@/components/dialogs/UniversalDrawer.vue";
-import type { Instance } from "@/modules/credentials/types";
 import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
 import { useRoute } from "vue-router";
 import router from "@/router";
 import SuperDrawer from "@/components/super/SuperDrawer.vue";
 import { UniversalDatabase } from "@/modules/credentials/classes/UniversalDatabase";
 import type { IUniversalDatabase } from "@/modules/credentials/types";
-import { useUniversalDatabaseStore } from "@/modules/credentials/store/universalDatabaseStore";
-import type { ObjectConfig } from "@/types/common";
+import { useUniversalDatabaseStore } from "@/store/universalDatabaseStore";
+import type { Instance, ObjectConfig } from "@/types/common";
 import {
   getDatabaseIdByObjectId,
   getDrawerConfigByObjectId,
@@ -166,7 +165,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="words">
+  <div class="universal-representation">
     <UniversalItems
       :config="tableConfig"
       :data="tableData"
@@ -194,7 +193,7 @@ onMounted(async () => {
 </template>
 
 <style lang="scss" scoped>
-.words {
+.universal-representation {
   height: 100%;
 }
 </style>

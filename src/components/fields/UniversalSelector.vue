@@ -3,7 +3,8 @@ import Dropdown from "primevue/dropdown";
 import type { PropType } from "vue";
 import { sortWithCollator } from "@/helpers/sort";
 import { computed } from "vue";
-import type { Instance } from "@/modules/credentials/types";
+
+import type { Instance } from "@/types/common";
 
 interface Option {
   id: string;

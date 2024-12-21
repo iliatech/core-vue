@@ -24,7 +24,8 @@ import type {
   UniversalTableColumn,
 } from "@/types/tables";
 import { computed, mergeProps } from "vue";
-import type { Instance } from "@/modules/credentials/types";
+
+import type { Instance } from "@/types/common";
 
 const emit = defineEmits([]);
 
@@ -39,7 +40,7 @@ const props = defineProps({
 
 const components = computed<UniversalTableCellComponentProp[] | null>(() => {
   const item = props.item;
-  const value = item[props.columnConfig.name];
+  const value = item[props.columnConfig.id];
   const index = props.index;
 
   if (typeof props.columnConfig.getComponents === "function") {
@@ -58,7 +59,7 @@ const getValue = (item: Instance, columnConfig: UniversalTableColumn) => {
         columnConfig.linkedFieldId
       ];
   } else {
-    value = item[columnConfig.name];
+    value = item[columnConfig.id];
   }
 
   return value ?? "-";
