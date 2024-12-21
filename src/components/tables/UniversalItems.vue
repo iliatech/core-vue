@@ -53,7 +53,7 @@ const dataFiltered = computed<any[]>(() => {
 
   sortWithCollator(
     itemsFiltered,
-    props.config.find((item) => item.defaultSort)?.name
+    props.config.find((item) => item.defaultSort)?.id // TODO ??
   );
 
   return itemsFiltered;

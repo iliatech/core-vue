@@ -24,14 +24,6 @@ const router = createRouter({
       name: routes.dashboard.name,
       component: () => import("@/views/DashboardView.vue"),
     },
-    // {
-    //   path: routes.words.path,
-    //   name: routes.words.name,
-    //   component: () => import("@/modules/dictionary/views/WordsView.vue"),
-    //   meta: {
-    //     title: lang.title.wordsApp,
-    //   },
-    // },
     {
       path: routes.login.path,
       name: routes.login.name,
@@ -84,34 +76,29 @@ const router = createRouter({
       ],
     },
     {
-      path: routes.wordsTraining.path,
-      name: routes.wordsTraining.name,
-      component: () =>
-        import("@/modules/dictionary/views/WordsTrainingView.vue"),
+      path: routes.learnEspanol.path,
+      name: routes.learnEspanol.name,
+      component: () => import("@/views/LearnEspanolView.vue"),
       meta: {
-        title: lang.title.wordsApp,
+        title: lang.title.learnEspanol,
       },
       children: [
         {
-          path: routes.words.path,
+          path: routes.learnEspanolVerbs.path,
           component: () =>
-            import(
-              "@/modules/dictionary/components/UniversalRepresentation.vue"
-            ),
-          name: routes.words.name,
+            import("@/components/super/UniversalRepresentation.vue"),
+          name: routes.learnEspanolVerbs.name,
           props: {
             objectId: UniversalObjectsIds.Verbs,
           },
         },
         {
-          path: routes.wordsTypes.path,
+          path: routes.learnEspanolVerbsForms.path,
           component: () =>
-            import(
-              "@/modules/dictionary/components/UniversalRepresentation.vue"
-            ),
-          name: routes.wordsTypes.name,
+            import("@/components/super/UniversalRepresentation.vue"),
+          name: routes.learnEspanolVerbsForms.name,
           props: {
-            objectId: UniversalObjectsIds.CredentialsTypes,
+            objectId: UniversalObjectsIds.VerbsForms,
           },
         },
       ],

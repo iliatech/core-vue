@@ -1,6 +1,6 @@
 export enum UniversalObjectsIds {
   Verbs = "2c98151d-4995-49c9-b49e-0070058d951c",
-  CredentialsTypes = "75ef436e-3d2d-4061-8e60-970e001f40aa",
+  VerbsForms = "75ef436e-3d2d-4061-8e60-970e001f40aa",
 }
 
 export enum UniversalDatabasesIds {

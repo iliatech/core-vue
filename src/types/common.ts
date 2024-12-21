@@ -44,8 +44,8 @@ export interface FieldConfig {
   type: FieldsTypes;
   label?: string;
   required?: boolean;
-  sourceObjectId?: string;
-  sourceObjectFieldId?: string;
+  linkedObjectFieldId?: string;
+  linkedObjectId?: string;
   defaultSort?: boolean;
   defaultSortOrder?: -1 | 1;
   sortable?: boolean;

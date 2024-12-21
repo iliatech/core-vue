@@ -18,12 +18,4 @@ export const apiPaths = {
   // Storage.
   fileStorage: `file-storage`,
   authUserFileByType: `file-storage/auth-user-file-by-type/credentials`,
-
-  // WordsTraining.
-  word: "words",
-  linkWordsAsTranslations: "words/link-words-as-translations",
-  unlinkWordsAsTranslations: "words/unlink-words-as-translations",
-  translation: "translation",
-  tag: "tag",
-  languages: "languages",
 };

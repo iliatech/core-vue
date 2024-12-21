@@ -10,7 +10,6 @@ export default {
   create: "Create",
   delete: "Delete",
   login: "Sign In",
-  manageTags: "Manage tags",
   newCredential: "New Credential",
   newCredentialType: "New Credential Type",
   ok: "OK",
@@ -21,5 +20,4 @@ export default {
   signIn: "Sign In",
   signOut: "Sign Out",
   signUp: "Sign Up",
-  wordsApp: "WordsTraining",
 };

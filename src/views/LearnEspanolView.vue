@@ -39,10 +39,10 @@ const tabId = ref<number>(0);
 const actionLabel = computed(() => {
   // TODO Make universal.
   switch (route.name) {
-    case "words-training.words":
-      return "Add Word";
-    case "words-training.types":
-      return "Add Word Type";
+    case "learn-espanol.verbs":
+      return "Add Verb";
+    case "learn-espanol.verbs-forms":
+      return "Add Verb Form";
     default:
       return null;
   }
@@ -57,10 +57,10 @@ const handleClickAction = () => {
   let action = null;
 
   switch (route.name) {
-    case "words-training.words":
+    case "learn-espanol.verbs":
       action = "add-item";
       break;
-    case "words-training.types":
+    case "learn-espanol.verbs-forms":
       action = "add-item";
       break;
   }

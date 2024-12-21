@@ -55,7 +55,7 @@ const database = ref<IUniversalDatabase | null>(null);
 const objects = computed<Instance[]>(() => {
   let items = database.value?.data[props.objectId] ?? [];
   if (defaultSortColumn) {
-    sortWithCollator(items, defaultSortColumn.name);
+    sortWithCollator(items, defaultSortColumn.id);
   }
   return items;
 });
@@ -87,7 +87,7 @@ const tableData = computed<Instance[]>(() => {
     linkedFields.forEach((field) => {
       const foundInstance = linkedInstances[field.linkedObjectId].find(
         (instance) => {
-          return instance.id === item[field.name];
+          return instance.id === item[field.id];
         }
       );
       const linkedInstance = foundInstance
@@ -177,8 +177,8 @@ onMounted(async () => {
   <SuperDrawer
     ref="superDrawerRef"
     @close:drawer="handleCloseDrawer"
-    title-add="Add word"
-    title-edit="Edit word"
+    title-add="Add item"
+    title-edit="Edit item"
     :object-config="objectConfig"
   />
   <UniversalDialog

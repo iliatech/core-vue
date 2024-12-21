@@ -26,7 +26,7 @@ export const universalObjects: IUniversalObject[] = [
     description: "Credentials",
   },
   {
-    id: UniversalObjectsIds.CredentialsTypes,
+    id: UniversalObjectsIds.VerbsForms,
     databaseId: UniversalDatabasesIds.MainDatabase,
     description: "Credentials types",
   },

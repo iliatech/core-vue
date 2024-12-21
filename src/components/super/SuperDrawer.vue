@@ -131,15 +131,15 @@ const errorDetails = computed<ErrorsDetails>(() => {
 });
 
 const getOptions = (field: FieldConfig): Instance[] => {
-  if (!field.sourceObjectId) {
+  if (!field.linkedObjectId) {
     throw new Error(
-      `sourceObjectId is not defined in field config for field ${field.id}`
+      `linkedObjectId is not defined in field config for field ${field.id}`
     );
   }
 
   return getInstances({
     databaseId: props.objectConfig?.databaseId,
-    objectId: field.sourceObjectId,
+    objectId: field.linkedObjectId,
   });
 };
 
@@ -286,7 +286,7 @@ defineExpose({
           v-if="field.type === FieldsTypes.Selector"
           v-model="superCurrentState[field.id]"
           :options="getOptions(field)"
-          :label-field="field.sourceObjectFieldId"
+          :label-field="field.linkedObjectFieldId"
         />
         <UniversalTextarea
           v-if="field.type === FieldsTypes.Text"

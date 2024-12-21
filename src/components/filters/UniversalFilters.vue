@@ -2,10 +2,10 @@
   <div class="universal-filters">
     <UniversalText
       v-for="filter in config"
-      :model-value="(filterValues[filter.name] ?? '').toString()"
-      @update:modelValue="filterValues[filter.name] = $event"
+      :model-value="(filterValues[filter.id] ?? '').toString()"
+      @update:modelValue="filterValues[filter.id] = $event"
       :placeholder="$lang.label.filterBy(filter.label)"
-      :key="filter.name"
+      :key="filter.id"
       :input-size="'small'"
     />
   </div>

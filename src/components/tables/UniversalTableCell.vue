@@ -56,7 +56,7 @@ const getValue = (item: Instance, columnConfig: UniversalTableColumn) => {
   if (columnConfig.linkedObjectId) {
     value =
       item.linkedInstance[columnConfig.linkedObjectId]?.[
-        columnConfig.linkedFieldId
+        columnConfig.linkedObjectFieldId
       ];
   } else {
     value = item[columnConfig.id];

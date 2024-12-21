@@ -17,7 +17,7 @@ export interface UniversalTableColumn {
   hidden?: boolean;
   filterable?: boolean;
   linkedObjectId?: UniversalObjectsIds;
-  linkedFieldId?: string;
+  linkedObjectFieldId?: string;
   getComponents?: (props: {
     value: any;
     item: ICredentialTypesTableItem;
