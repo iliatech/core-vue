@@ -62,6 +62,12 @@ export const routes: Record<string, LocalRoute> = {
     title: "Words",
   },
 
+  wordsTypes: {
+    path: "words-types",
+    name: "words-training.types",
+    title: "Words Types",
+  },
+
   credentials: {
     path: "/credentials",
     name: "credentials",
@@ -85,7 +91,7 @@ export const credentialsRoutes = Object.values(routes).filter((item) =>
 );
 
 export const wordsRoutes = Object.values(routes).filter((item) =>
-  ["words-training.words"].includes(item.name)
+  ["words-training.words", "words-training.types"].includes(item.name)
 );
 
 export const publicRouteNames = [

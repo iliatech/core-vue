@@ -32,22 +32,22 @@ if (!databaseId) {
   throw new Error(`Database id not found for object id '${props.objectId}'`);
 }
 
-const drawerConfig = getDrawerConfigByObjectId(props.objectId);
+const drawerConfig = computed(() => getDrawerConfigByObjectId(props.objectId));
 
-const tableConfig = getTableConfigByObjectId(props.objectId);
+const tableConfig = computed(() => getTableConfigByObjectId(props.objectId));
 
-const objectConfig: ObjectConfig = {
+const objectConfig = computed<ObjectConfig>(() => ({
   databaseId,
   objectId: props.objectId,
-  fields: drawerConfig,
-};
+  fields: drawerConfig.value,
+}));
 
 const route = useRoute();
 
 const universalDatabaseStore = useUniversalDatabaseStore();
 const { deleteInstanceById, getInstances } = universalDatabaseStore;
 
-const defaultSortColumn = tableConfig.find((item) => item.defaultSort);
+const defaultSortColumn = tableConfig.value.find((item) => item.defaultSort);
 
 const superDrawerRef = ref<InstanceType<typeof UniversalDrawer>>();
 const selectedItem = ref<Instance | null>(null);
@@ -62,7 +62,9 @@ const objects = computed<Instance[]>(() => {
 });
 
 const tableData = computed<Instance[]>(() => {
-  const linkedFields = tableConfig.filter((field) => field.linkedObjectId);
+  const linkedFields = tableConfig.value.filter(
+    (field) => field.linkedObjectId
+  );
 
   if (!linkedFields.length) {
     return objects.value;

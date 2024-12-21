@@ -20,16 +20,13 @@
         />
       </div>
     </div>
-    <div class="tabs-view__content">
+    <div class="tabs-view__content" :key="tabId">
       <RouterView />
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-import { LocalStorageKeys } from "@/settings/app";
-import { computed, onMounted, ref } from "vue";
-import type UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
-import { CredentialDatabase } from "@/modules/credentials/classes/CredentialDatabase";
+import { computed, ref } from "vue";
 import { wordsRoutes } from "@/settings/routes";
 import { useRoute, useRouter } from "vue-router";
 import UniversalButton from "@/components/buttons/UniversalButton.vue";
@@ -37,17 +34,22 @@ import UniversalButton from "@/components/buttons/UniversalButton.vue";
 const router = useRouter();
 const route = useRoute();
 
+const tabId = ref<number>(0);
+
 const actionLabel = computed(() => {
   // TODO Make universal.
   switch (route.name) {
     case "words-training.words":
       return "Add Word";
+    case "words-training.types":
+      return "Add Word Type";
     default:
       return null;
   }
 });
 
 const handleClickMenuItem = (routeName: string) => {
+  // tabId.value++;
   router.push({ name: routeName });
 };
 
@@ -56,6 +58,9 @@ const handleClickAction = () => {
 
   switch (route.name) {
     case "words-training.words":
+      action = "add-item";
+      break;
+    case "words-training.types":
       action = "add-item";
       break;
   }

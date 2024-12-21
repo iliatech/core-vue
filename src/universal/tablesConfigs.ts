@@ -22,10 +22,10 @@ export const tablesConfigs: Record<string, TableConfig> = {
     {
       name: "a1334c91-bade-46ba-92e1-87a9cc4321a3",
       // TODO Link instance.
-      // linkedObjectId: UniversalObjectsIds.CredentialsTypes,
-      // linkedFieldId: "6efe79d6-eb60-4e8b-b903-92a60325b294",
-      linkedObjectId: UniversalObjectsIds.Credentials,
-      linkedFieldId: "7265b3a6-92e1-436e-bea1-7587b20f0459",
+      linkedObjectId: UniversalObjectsIds.CredentialsTypes,
+      linkedFieldId: "7beefc42-7fd7-4322-b9a8-c48bad098f01",
+      //linkedObjectId: UniversalObjectsIds.Credentials,
+      //linkedFieldId: "7265b3a6-92e1-436e-bea1-7587b20f0459",
       label: "Type",
       filterable: true,
     },
@@ -94,12 +94,56 @@ export const tablesConfigs: Record<string, TableConfig> = {
       hidden: true,
     },
     {
-      name: "6efe79d6-eb60-4e8b-b903-92a60325b294",
+      name: "7beefc42-7fd7-4322-b9a8-c48bad098f01",
       label: "Name",
       defaultSort: true,
       defaultSortOrder: 1,
       sortable: true,
       filterable: true,
+    },
+    {
+      name: "b4c209aa-36ad-4dab-8a38-662d01b188fd",
+      label: "Description",
+      filterable: true,
+    },
+    {
+      name: "actions",
+      label: "Actions",
+      hiddenLabel: true,
+      getComponents: ({ value, emit, item }) => [
+        {
+          component: UniversalIcon,
+          props: {
+            label: "Edit",
+            primeIcon: "pencil",
+            link: true,
+            size: "0.85rem",
+            linkTextStyle: {
+              fontSize: "0.8rem",
+              fontWeight: "bold",
+            },
+            onClick: () => {
+              return emit("click:edit-item", item);
+            },
+          },
+        },
+        {
+          component: UniversalIcon,
+          props: {
+            label: "Delete",
+            primeIcon: "trash",
+            link: true,
+            size: "0.85rem",
+            linkTextStyle: {
+              fontSize: "0.8rem",
+              fontWeight: "bold",
+            },
+            onClick: () => {
+              return emit("click:delete-item", item);
+            },
+          },
+        },
+      ],
     },
   ],
 };

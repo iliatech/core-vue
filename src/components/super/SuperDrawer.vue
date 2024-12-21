@@ -76,7 +76,7 @@ const props = defineProps({
   objectConfig: { type: Object as PropType<ObjectConfig>, required: true },
 });
 
-const fieldsConfig: FieldConfig[] = props.objectConfig?.fields;
+const fieldsConfig = computed<FieldConfig[]>(() => props.objectConfig?.fields);
 
 const isChanged = computed<boolean>(() => {
   return !isEqual(superCurrentState.value, superSavedState.value);
@@ -151,7 +151,7 @@ const handleCancelDiscardChanges = () => {
 const handleConfirmDiscardChanges = () => {
   discardChangesDialog.value?.close();
   sidebar.value?.close();
-  emit("close:drawer");
+  emitCloseDrawer();
 };
 
 const close = () => {
@@ -161,11 +161,11 @@ const close = () => {
   }
 
   sidebar.value?.close();
-  emit("close:drawer");
+  emitCloseDrawer();
 };
 
 const handleClickSave = async () => {
-  fieldsConfig.forEach((field) => {
+  fieldsConfig.value.forEach((field) => {
     if (field.required && !superCurrentState.value[field.id]) {
       // TODO Add field to array of errors, error should be shown under the field.
     }
@@ -201,7 +201,15 @@ const handleClickSave = async () => {
 
   sidebar.value?.close();
 
+  emitCloseDrawer();
+};
+
+const emitCloseDrawer = () => {
   emit("close:drawer");
+  superCurrentState.value = {};
+  superSavedState.value = {};
+  superIsInputStarted.value = {};
+  superErrorDetails.value = {};
 };
 
 watch(
@@ -211,7 +219,7 @@ watch(
       return;
     }
 
-    fieldsConfig.forEach((field: any) => {
+    fieldsConfig.value.forEach((field: any) => {
       if (field.type === FieldsTypes.Id) {
         return;
       }
@@ -234,7 +242,7 @@ watch(
 defineExpose({
   async open(item?: Instance) {
     // Clean.
-    fieldsConfig.forEach((field) => {
+    fieldsConfig.value.forEach((field) => {
       superCurrentState.value[field.id] = null;
       superSavedState.value[field.id] = null;
       superIsInputStarted.value[field.id] = null;

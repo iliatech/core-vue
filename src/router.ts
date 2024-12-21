@@ -103,6 +103,17 @@ const router = createRouter({
             objectId: UniversalObjectsIds.Credentials,
           },
         },
+        {
+          path: routes.wordsTypes.path,
+          component: () =>
+            import(
+              "@/modules/dictionary/components/UniversalRepresentation.vue"
+            ),
+          name: routes.wordsTypes.name,
+          props: {
+            objectId: UniversalObjectsIds.CredentialsTypes,
+          },
+        },
       ],
     },
   ],
