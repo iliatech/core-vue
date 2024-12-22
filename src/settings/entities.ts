@@ -16,19 +16,21 @@ export enum IEntity {
 interface IUniversalObject {
   id: UniversalObjectsIds;
   databaseId: UniversalDatabasesIds;
-  description: string;
+  description?: string;
 }
 
 export const universalObjects: IUniversalObject[] = [
   {
     id: UniversalObjectsIds.Verbs,
     databaseId: UniversalDatabasesIds.MainDatabase,
-    description: "Credentials",
   },
   {
     id: UniversalObjectsIds.VerbsForms,
     databaseId: UniversalDatabasesIds.MainDatabase,
-    description: "Credentials types",
+  },
+  {
+    id: UniversalObjectsIds.VerbsPronombres,
+    databaseId: UniversalDatabasesIds.MainDatabase,
   },
 ];
 

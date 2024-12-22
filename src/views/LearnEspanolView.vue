@@ -43,6 +43,8 @@ const actionLabel = computed(() => {
       return "Add Verb";
     case "learn-espanol.verbs-forms":
       return "Add Verb Form";
+    case "learn-espanol.verbs-pronombres":
+      return "Add Verb Pronombre";
     default:
       return null;
   }
@@ -61,6 +63,9 @@ const handleClickAction = () => {
       action = "add-item";
       break;
     case "learn-espanol.verbs-forms":
+      action = "add-item";
+      break;
+    case "learn-espanol.verbs-pronombres":
       action = "add-item";
       break;
   }

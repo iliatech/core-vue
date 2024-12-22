@@ -13,7 +13,8 @@
 <script lang="ts" setup>
 import type { PropType } from "vue";
 import UniversalText from "@/components/fields/UniversalText.vue";
-import type { UniversalFilterValues, UniversalFilter } from "@/types/filters";
+import type { UniversalFilterValues } from "@/types/filters";
+import type { UniversalTableColumn } from "@/types/tables";
 
 defineModel("filterValues", {
   type: Object as PropType<UniversalFilterValues>,
@@ -22,7 +23,7 @@ defineModel("filterValues", {
 
 defineProps({
   config: {
-    type: Array as PropType<UniversalFilter[]>,
+    type: Array as PropType<UniversalTableColumn[]>,
     required: true,
   },
 });

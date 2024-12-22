@@ -68,6 +68,12 @@ export const routes: Record<string, LocalRoute> = {
     title: "Verbs Forms",
   },
 
+  learnEspanolVerbsPronombres: {
+    path: "verbs-pronombres",
+    name: "learn-espanol.verbs-pronombres",
+    title: "Verbs Pronombres",
+  },
+
   credentials: {
     path: "/credentials",
     name: "credentials",
@@ -91,7 +97,11 @@ export const credentialsRoutes = Object.values(routes).filter((item) =>
 );
 
 export const wordsRoutes = Object.values(routes).filter((item) =>
-  ["learn-espanol.verbs", "learn-espanol.verbs-forms"].includes(item.name)
+  [
+    "learn-espanol.verbs",
+    "learn-espanol.verbs-forms",
+    "learn-espanol.verbs-pronombres",
+  ].includes(item.name)
 );
 
 export const publicRouteNames = [

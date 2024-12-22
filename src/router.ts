@@ -101,6 +101,15 @@ const router = createRouter({
             objectId: UniversalObjectsIds.VerbsForms,
           },
         },
+        {
+          path: routes.learnEspanolVerbsPronombres.path,
+          component: () =>
+            import("@/components/super/UniversalRepresentation.vue"),
+          name: routes.learnEspanolVerbsPronombres.name,
+          props: {
+            objectId: UniversalObjectsIds.VerbsPronombres,
+          },
+        },
       ],
     },
   ],

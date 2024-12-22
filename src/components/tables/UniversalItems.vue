@@ -2,17 +2,24 @@
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import type { PropType } from "vue";
+import { computed, ref } from "vue";
 import type { UniversalTableColumn } from "@/types/tables";
 import UniversalButton from "@/components/buttons/UniversalButton.vue";
 import UniversalFilters from "@/components/filters/UniversalFilters.vue";
-import { get, pick } from "lodash";
 import type { UniversalFilterValues } from "@/types/filters";
-import { computed, ref } from "vue";
 import { prepareName } from "@/helpers/strings";
 import objectHash from "object-hash";
 import UniversalTableCell from "@/components/tables/UniversalTableCell.vue";
 import UniversalIcon from "@/components/icons/UniversalIcon.vue";
 import { sortWithCollator } from "@/helpers/sort";
+import type { FieldConfig } from "@/types/common";
+import { FieldsTypes } from "@/types/common";
+import { getDatabaseIdByObjectId } from "@/settings/entities";
+import { useUniversalDatabaseStore } from "@/store/universalDatabaseStore";
+import { trim } from "lodash";
+
+const universalDatabaseStore = useUniversalDatabaseStore();
+const { getInstances } = universalDatabaseStore;
 
 const emit = defineEmits(["click:actionButton"]);
 
@@ -41,16 +48,62 @@ const filterValues = ref<UniversalFilterValues>({});
 const dataFiltered = computed<any[]>(() => {
   let itemsFiltered = props.data;
 
-  Object.entries(filterValues.value).forEach(([columnName, filterValue]) => {
-    itemsFiltered = itemsFiltered.filter((item) => {
-      const value = get(item, columnName);
+  Object.entries(filterValues.value).forEach(([fieldId, filterValue]) => {
+    if (!trim(filterValue)) {
+      return;
+    }
 
-      return prepareName(value)
-        .toLowerCase()
-        .includes(prepareName(filterValue).toLowerCase());
-    });
+    const fieldConfig: FieldConfig | undefined = filtersConfig.value.find(
+      (field) => field.id === fieldId
+    ) as FieldConfig | undefined; // TODO Unite types UniversalTableColumn and FieldConfig
+
+    if (!fieldConfig) {
+      return;
+    }
+
+    if (fieldConfig.type === FieldsTypes.Selector) {
+      if (!fieldConfig.linkedObjectId || !fieldConfig.linkedObjectFieldId) {
+        throw new Error(
+          `linkedObjectId or linkedObjectFieldId is not defined for selector field ${fieldConfig.id}`
+        );
+      }
+
+      console.log("FCE11", fieldConfig);
+      console.log("A", fieldId, filterValue);
+
+      const linkedInstances = getInstances({
+        databaseId: getDatabaseIdByObjectId(fieldConfig.linkedObjectId),
+        objectId: fieldConfig.linkedObjectId,
+      });
+
+      const linkedInstancesFilteredIds = linkedInstances
+        .filter((instance) =>
+          prepareName(instance[fieldConfig.linkedObjectFieldId])
+            .toLowerCase()
+            .includes(prepareName(filterValue).toLowerCase())
+        )
+        .map((instance) => instance.id);
+
+      console.log("LI", linkedInstancesFilteredIds);
+
+      itemsFiltered = itemsFiltered.filter((item) => {
+        const linkedInstanceId = item[fieldId];
+        return linkedInstancesFilteredIds.includes(linkedInstanceId);
+      });
+    }
+
+    if (fieldConfig.type === FieldsTypes.String) {
+      itemsFiltered = itemsFiltered.filter((item) => {
+        const value = item[fieldId];
+
+        return prepareName(value)
+          .toLowerCase()
+          .includes(prepareName(filterValue).toLowerCase());
+      });
+    }
   });
 
+  // TODO Do we need to sort here?
   sortWithCollator(
     itemsFiltered,
     props.config.find((item) => item.defaultSort)?.id // TODO ??
@@ -58,6 +111,10 @@ const dataFiltered = computed<any[]>(() => {
 
   return itemsFiltered;
 });
+
+const filtersConfig = computed(() =>
+  props.config.filter((item) => item.filterable)
+);
 
 const changeMode = () => {
   isTableMode.value = !isTableMode.value;
@@ -70,11 +127,7 @@ const changeMode = () => {
       <div class="universal-items__filters">
         <UniversalFilters
           v-model:filter-values="filterValues"
-          :config="
-            config
-              .filter((item) => item.filterable)
-              .map((item) => pick(item, [valueField, 'label']))
-          "
+          :config="filtersConfig"
         />
       </div>
       <div class="universal-items__action-button">
