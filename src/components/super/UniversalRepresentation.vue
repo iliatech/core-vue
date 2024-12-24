@@ -150,11 +150,8 @@ const handleClickChangeOrder = async (
 
   const instances = database.value?.data[props.objectId] ?? [];
 
-  if (!isOrderUp) {
-    const maxOrderItem = maxBy(instances, orderField.id);
-    if (maxOrderItem && maxOrderItem[orderField.id] === item[orderField.id]) {
-      return;
-    }
+  if (!isOrderUp && item[orderField.id] >= instances.length - 1) {
+    return;
   }
 
   let newOrder = 0;

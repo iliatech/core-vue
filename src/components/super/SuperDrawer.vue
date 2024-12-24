@@ -75,7 +75,9 @@ const props = defineProps({
   objectConfig: { type: Object as PropType<ObjectConfig>, required: true },
 });
 
-const fieldsConfig = computed<FieldConfig[]>(() => props.objectConfig?.fields);
+const fieldsConfig = computed<FieldConfig[]>(() =>
+  props.objectConfig?.fields.filter((field) => field.type !== FieldsTypes.Order)
+);
 
 const isChanged = computed<boolean>(() => {
   return !isEqual(superCurrentState.value, superSavedState.value);

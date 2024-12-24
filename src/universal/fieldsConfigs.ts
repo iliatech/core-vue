@@ -54,6 +54,14 @@ export const fieldsConfigs: Record<string, DrawerConfig> = {
       type: FieldsTypes.Text,
       label: "Description",
     },
+    {
+      id: "ea7a8faf-2103-4504-a299-96bfadd77c6c",
+      type: FieldsTypes.Order,
+      label: "Order",
+      defaultSort: true,
+      sortable: true,
+      //hidden: true,
+    },
   ],
   [UniversalObjectsIds.VerbsPronombres]: [
     {
@@ -68,6 +76,7 @@ export const fieldsConfigs: Record<string, DrawerConfig> = {
       label: "Order",
       defaultSort: true,
       sortable: true,
+      hidden: true,
     },
     {
       id: "ca62662a-778e-4f9f-9354-532ee7a93c6f",

@@ -1,5 +1,6 @@
 import type { UniversalTableColumn } from "@/types/tables";
 import UniversalIcon from "@/components/icons/UniversalIcon.vue";
+import { FieldsTypes } from "@/types/common";
 
 export const standardActionColumn: UniversalTableColumn = {
   id: "actions",
@@ -38,36 +39,44 @@ export const standardActionColumn: UniversalTableColumn = {
         },
       },
     },
-    {
-      component: UniversalIcon,
-      props: {
-        primeIcon: "arrow-up",
-        link: true,
-        size: "0.85rem",
-        linkTextStyle: {
-          fontSize: "0.8rem",
-          fontWeight: "bold",
+    ...(() => {
+      if (!objectConfig.find((field) => field.type === FieldsTypes.Order)) {
+        return [];
+      }
+
+      return [
+        {
+          component: UniversalIcon,
+          props: {
+            primeIcon: "arrow-up",
+            link: true,
+            size: "0.85rem",
+            linkTextStyle: {
+              fontSize: "0.8rem",
+              fontWeight: "bold",
+            },
+            onClick: () => {
+              return emit("click:order-up", item, objectConfig);
+            },
+          },
         },
-        onClick: () => {
-          return emit("click:order-up", item, objectConfig);
+        {
+          component: UniversalIcon,
+          props: {
+            primeIcon: "arrow-down",
+            link: true,
+            size: "0.85rem",
+            linkTextStyle: {
+              fontSize: "0.8rem",
+              fontWeight: "bold",
+            },
+            onClick: () => {
+              return emit("click:order-down", item, objectConfig);
+            },
+          },
         },
-      },
-    },
-    {
-      component: UniversalIcon,
-      props: {
-        primeIcon: "arrow-down",
-        link: true,
-        size: "0.85rem",
-        linkTextStyle: {
-          fontSize: "0.8rem",
-          fontWeight: "bold",
-        },
-        onClick: () => {
-          return emit("click:order-down", item, objectConfig);
-        },
-      },
-    },
+      ];
+    })(),
   ],
 };
 
