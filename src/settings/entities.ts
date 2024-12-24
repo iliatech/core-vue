@@ -1,7 +1,7 @@
 import type { DrawerConfig } from "@/types/common";
 import { tablesConfigs } from "@/universal/tablesConfigs";
 import type { TableConfig } from "@/types/tables";
-import { drawersConfigs } from "@/universal/drawersConfigs";
+import { fieldsConfigs } from "@/universal/fieldsConfigs";
 import { UniversalDatabasesIds, UniversalObjectsIds } from "@/universal/enums";
 
 export enum IEntity {
@@ -47,7 +47,7 @@ export const getDatabaseIdByObjectId = (objectId: string): string => {
 };
 
 export const getDrawerConfigByObjectId = (objectId: string): DrawerConfig => {
-  const config = drawersConfigs[objectId];
+  const config = fieldsConfigs[objectId];
 
   if (!config) {
     throw new Error(

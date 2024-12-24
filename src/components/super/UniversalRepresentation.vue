@@ -9,7 +9,8 @@ import SuperDrawer from "@/components/super/SuperDrawer.vue";
 import { UniversalDatabase } from "@/modules/credentials/classes/UniversalDatabase";
 import type { IUniversalDatabase } from "@/modules/credentials/types";
 import { useUniversalDatabaseStore } from "@/store/universalDatabaseStore";
-import type { Instance, ObjectConfig } from "@/types/common";
+import type { FieldConfig, Instance, ObjectConfig } from "@/types/common";
+import { FieldsTypes } from "@/types/common";
 import {
   getDatabaseIdByObjectId,
   getDrawerConfigByObjectId,
@@ -44,7 +45,8 @@ const objectConfig = computed<ObjectConfig>(() => ({
 const route = useRoute();
 
 const universalDatabaseStore = useUniversalDatabaseStore();
-const { deleteInstanceById, getInstances } = universalDatabaseStore;
+const { deleteInstanceById, getInstances, addOrUpdateInstance } =
+  universalDatabaseStore;
 
 const defaultSortColumn = tableConfig.value.find((item) => item.defaultSort);
 
@@ -116,6 +118,41 @@ const handleClickDeleteItem = (item: Instance) => {
   confirmDeleteItemDialog.value?.open();
 };
 
+const handleClickOrderUp = async (
+  item: Instance,
+  objectConfig: FieldConfig[]
+) => {
+  const orderField = objectConfig.find(
+    (field) => field.type === FieldsTypes.Order
+  );
+  if (!orderField) {
+    throw new Error(
+      `Order field not found for object config of item with id ${item.id}`
+    );
+  }
+  item[orderField.id] = 0;
+  console.log("order up", item, orderField);
+  await addOrUpdateInstance(
+    {
+      databaseId: databaseId,
+      objectId: props.objectId,
+      instanceId: item.id,
+    },
+    item
+  );
+};
+
+const handleClickOrderDown = (item: Instance, objectConfig: FieldConfig[]) => {
+  const orderField = objectConfig.find(
+    (field) => field.type === FieldsTypes.Order
+  );
+  if (!orderField) {
+    throw new Error(
+      `Order field not found for object config of item with id ${item.id}`
+    );
+  }
+};
+
 const handleCancelDeleteItem = () => {
   confirmDeleteItemDialog.value?.close();
   selectedItem.value = null;
@@ -167,11 +204,13 @@ onMounted(async () => {
 <template>
   <div class="universal-representation">
     <UniversalItems
-      :config="tableConfig"
+      :object-config="tableConfig"
       :data="tableData"
       @click:action-button="handleClickAddItem"
       @click:delete-item="handleClickDeleteItem"
       @click:edit-item="handleClickEditItem"
+      @click:order-up="handleClickOrderUp"
+      @click:order-down="handleClickOrderDown"
     />
   </div>
   <SuperDrawer

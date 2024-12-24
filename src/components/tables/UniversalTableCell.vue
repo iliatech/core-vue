@@ -25,13 +25,17 @@ import type {
 } from "@/types/tables";
 import { computed, mergeProps } from "vue";
 
-import type { Instance } from "@/types/common";
+import type { FieldConfig, Instance } from "@/types/common";
 
 const emit = defineEmits([]);
 
 const props = defineProps({
+  objectConfig: {
+    type: Array as PropType<FieldConfig[]>,
+    required: true,
+  },
   columnConfig: {
-    type: Object as PropType<UniversalTableColumn>,
+    type: Object as PropType<FieldConfig>,
     required: true,
   },
   item: { type: Object as PropType<any>, required: true },
@@ -44,7 +48,16 @@ const components = computed<UniversalTableCellComponentProp[] | null>(() => {
   const index = props.index;
 
   if (typeof props.columnConfig.getComponents === "function") {
-    return props.columnConfig.getComponents({ value, item, index, emit }) ?? [];
+    return (
+      props.columnConfig.getComponents({
+        value,
+        item,
+        index,
+        emit,
+        fieldConfig: props.columnConfig,
+        objectConfig: props.objectConfig,
+      }) ?? []
+    );
   }
 
   return null;

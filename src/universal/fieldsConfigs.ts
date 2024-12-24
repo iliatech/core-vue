@@ -3,7 +3,7 @@ import { FieldsTypes } from "@/types/common";
 
 import { UniversalObjectsIds } from "@/universal/enums";
 
-export const drawersConfigs: Record<string, DrawerConfig> = {
+export const fieldsConfigs: Record<string, DrawerConfig> = {
   [UniversalObjectsIds.Verbs]: [
     {
       id: "7265b3a6-92e1-436e-bea1-7587b20f0459",
@@ -61,6 +61,11 @@ export const drawersConfigs: Record<string, DrawerConfig> = {
       type: FieldsTypes.String,
       label: "Pronombre",
       required: true,
+    },
+    {
+      id: "6734b0a5-ed94-4a92-9f2b-b82263d535e1",
+      type: FieldsTypes.Order,
+      label: "Order",
     },
     {
       id: "ca62662a-778e-4f9f-9354-532ee7a93c6f",

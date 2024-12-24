@@ -5,7 +5,7 @@ export const standardActionColumn: UniversalTableColumn = {
   id: "actions",
   label: "Actions",
   hiddenLabel: true,
-  getComponents: ({ value, emit, item }) => [
+  getComponents: ({ value, emit, item, objectConfig }) => [
     {
       component: UniversalIcon,
       props: {
@@ -35,6 +35,36 @@ export const standardActionColumn: UniversalTableColumn = {
         },
         onClick: () => {
           return emit("click:delete-item", item);
+        },
+      },
+    },
+    {
+      component: UniversalIcon,
+      props: {
+        primeIcon: "arrow-up",
+        link: true,
+        size: "0.85rem",
+        linkTextStyle: {
+          fontSize: "0.8rem",
+          fontWeight: "bold",
+        },
+        onClick: () => {
+          return emit("click:order-up", item, objectConfig);
+        },
+      },
+    },
+    {
+      component: UniversalIcon,
+      props: {
+        primeIcon: "arrow-down",
+        link: true,
+        size: "0.85rem",
+        linkTextStyle: {
+          fontSize: "0.8rem",
+          fontWeight: "bold",
+        },
+        onClick: () => {
+          return emit("click:order-down", item, objectConfig);
         },
       },
     },

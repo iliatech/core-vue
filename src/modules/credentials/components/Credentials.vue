@@ -86,7 +86,7 @@ onMounted(() => {
 <template>
   <div class="credentials">
     <UniversalItems
-      :config="credentialsTable"
+      :object-config="credentialsTable"
       :data="tableData"
       @click:action-button="handleClickAddCredential"
       @click:delete-item="handleClickDeleteItem"

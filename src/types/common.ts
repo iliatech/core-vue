@@ -1,3 +1,5 @@
+import type { UniversalTableColumn } from "@/types/tables";
+
 export interface NavigationItem {
   label: string;
   name: string;
@@ -33,13 +35,14 @@ export interface LocalRoute {
 
 export enum FieldsTypes {
   Id = "id",
+  Order = "order",
   Password = "password",
+  Selector = "selector",
   String = "string",
   Text = "text",
-  Selector = "selector",
 }
 
-export interface FieldConfig {
+export interface FieldConfig extends UniversalTableColumn {
   id: string;
   type: FieldsTypes;
   label?: string;

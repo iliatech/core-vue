@@ -28,8 +28,8 @@ const props = defineProps({
     type: Array as PropType<any[]>,
     required: true,
   },
-  config: {
-    type: Array as PropType<UniversalTableColumn[]>,
+  objectConfig: {
+    type: Array as PropType<FieldConfig[]>,
     required: true,
   },
   valueField: {
@@ -68,9 +68,6 @@ const dataFiltered = computed<any[]>(() => {
         );
       }
 
-      console.log("FCE11", fieldConfig);
-      console.log("A", fieldId, filterValue);
-
       const linkedInstances = getInstances({
         databaseId: getDatabaseIdByObjectId(fieldConfig.linkedObjectId),
         objectId: fieldConfig.linkedObjectId,
@@ -83,8 +80,6 @@ const dataFiltered = computed<any[]>(() => {
             .includes(prepareName(filterValue).toLowerCase())
         )
         .map((instance) => instance.id);
-
-      console.log("LI", linkedInstancesFilteredIds);
 
       itemsFiltered = itemsFiltered.filter((item) => {
         const linkedInstanceId = item[fieldId];
@@ -106,14 +101,14 @@ const dataFiltered = computed<any[]>(() => {
   // TODO Do we need to sort here?
   sortWithCollator(
     itemsFiltered,
-    props.config.find((item) => item.defaultSort)?.id // TODO ??
+    props.objectConfig.find((item) => item.defaultSort)?.id // TODO ??
   );
 
   return itemsFiltered;
 });
 
 const filtersConfig = computed(() =>
-  props.config.filter((item) => item.filterable)
+  props.objectConfig.filter((item) => item.filterable)
 );
 
 const changeMode = () => {
@@ -150,7 +145,7 @@ const changeMode = () => {
         <div v-if="!isTableMode" class="items">
           <div v-for="item in dataFiltered" :key="item.id" class="item">
             <template
-              v-for="(column, index) in config"
+              v-for="(column, index) in objectConfig"
               :key="column[valueField]"
             >
               <div v-if="!column.hidden" class="data-item">
@@ -158,6 +153,7 @@ const changeMode = () => {
                   {{ column.label }}
                 </div>
                 <UniversalTableCell
+                  :object-config="objectConfig"
                   :column-config="column"
                   :index="index"
                   :item="item"
@@ -175,13 +171,15 @@ const changeMode = () => {
           :striped-rows="true"
           :row-hover="true"
           :value="dataFiltered"
-          :sort-field="config.find((item) => item.defaultSort)?.[valueField]"
+          :sort-field="
+            objectConfig.find((item) => item.defaultSort)?.[valueField]
+          "
           :sort-order="
-            config.find((item) => item.defaultSortOrder)?.defaultSortOrder
+            objectConfig.find((item) => item.defaultSortOrder)?.defaultSortOrder
           "
           v-bind="$attrs"
         >
-          <template v-for="column in config" :key="column[valueField]">
+          <template v-for="column in objectConfig" :key="column[valueField]">
             <Column
               v-if="!column.hidden"
               :field="column[valueField]"

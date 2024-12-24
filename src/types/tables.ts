@@ -1,6 +1,7 @@
 import type { Component } from "vue";
 import type { ICredentialTypesTableItem } from "@/modules/credentials/types";
 import type { UniversalObjectsIds } from "@/universal/enums";
+import type { FieldConfig, Instance } from "@/types/common";
 
 export interface UniversalTableCellComponentProp {
   component: Component;
@@ -20,9 +21,11 @@ export interface UniversalTableColumn {
   linkedObjectFieldId?: string;
   getComponents?: (props: {
     value: any;
-    item: ICredentialTypesTableItem;
+    item: Instance;
     emit: any;
     index: number;
+    fieldConfig: FieldConfig;
+    objectConfig: FieldConfig[];
   }) => UniversalTableCellComponentProp[];
 }
 

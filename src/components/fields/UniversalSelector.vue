@@ -18,6 +18,9 @@ const props = defineProps({
     type: Object as PropType<Instance[]>,
     required: true,
   },
+  sortOptions: {
+    type: Boolean,
+  },
   idField: {
     type: String,
     default: "id",
@@ -30,7 +33,9 @@ const props = defineProps({
 
 const preparedOptions = computed<Option[]>(() => {
   const items = props.options;
-  sortWithCollator(items, props.labelField);
+  if (props.sortOptions) {
+    sortWithCollator(items, props.labelField);
+  }
   return items;
 });
 </script>

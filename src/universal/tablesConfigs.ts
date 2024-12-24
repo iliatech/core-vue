@@ -1,13 +1,13 @@
 import type { TableConfig } from "@/types/tables";
 
 import { UniversalObjectsIds } from "@/universal/enums";
-import { drawersConfigs } from "@/universal/drawersConfigs";
+import { fieldsConfigs } from "@/universal/fieldsConfigs";
 import { idColumn, standardActionColumn } from "@/universal/standardColumns";
 
 export const tablesConfigs: Record<string, TableConfig> = {
   [UniversalObjectsIds.Verbs]: [
     idColumn,
-    ...(drawersConfigs[UniversalObjectsIds.Verbs] as TableConfig),
+    ...(fieldsConfigs[UniversalObjectsIds.Verbs] as TableConfig),
     // TODO Didn't delete because I'm going to use same approach.
     // {
     //   id: "password",
@@ -26,12 +26,12 @@ export const tablesConfigs: Record<string, TableConfig> = {
   ],
   [UniversalObjectsIds.VerbsForms]: [
     idColumn,
-    ...(drawersConfigs[UniversalObjectsIds.VerbsForms] as TableConfig),
+    ...(fieldsConfigs[UniversalObjectsIds.VerbsForms] as TableConfig),
     standardActionColumn,
   ],
   [UniversalObjectsIds.VerbsPronombres]: [
     idColumn,
-    ...(drawersConfigs[UniversalObjectsIds.VerbsPronombres] as TableConfig),
+    ...(fieldsConfigs[UniversalObjectsIds.VerbsPronombres] as TableConfig),
     standardActionColumn,
   ],
 };
