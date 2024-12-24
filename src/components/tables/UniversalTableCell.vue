@@ -83,7 +83,7 @@ const getValue = (item: Instance, columnConfig: UniversalTableColumn) => {
 
 .universal-table-cell {
   display: flex;
-  gap: 20px;
+  gap: 10px;
 
   &__item {
     display: block;

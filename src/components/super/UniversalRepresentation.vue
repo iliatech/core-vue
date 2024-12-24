@@ -17,7 +17,7 @@ import {
   getTableConfigByObjectId,
 } from "@/settings/entities";
 import { sortWithCollator } from "@/helpers/sort";
-import { cloneDeep } from "lodash";
+import { cloneDeep, maxBy } from "lodash";
 
 const props = defineProps({
   objectId: {
@@ -49,7 +49,6 @@ const { deleteInstanceById, getInstances, addOrUpdateInstance } =
   universalDatabaseStore;
 
 const defaultSortColumn = tableConfig.value.find((item) => item.defaultSort);
-
 const superDrawerRef = ref<InstanceType<typeof UniversalDrawer>>();
 const selectedItem = ref<Instance | null>(null);
 const confirmDeleteItemDialog = ref<InstanceType<typeof UniversalDialog>>();
@@ -118,20 +117,70 @@ const handleClickDeleteItem = (item: Instance) => {
   confirmDeleteItemDialog.value?.open();
 };
 
-const handleClickOrderUp = async (
+const handleClickChangeOrder = async (
+  isOrderUp: boolean,
   item: Instance,
   objectConfig: FieldConfig[]
 ) => {
   const orderField = objectConfig.find(
     (field) => field.type === FieldsTypes.Order
   );
+
   if (!orderField) {
     throw new Error(
       `Order field not found for object config of item with id ${item.id}`
     );
   }
-  item[orderField.id] = 0;
+
+  // if (item[orderField.id] === undefined) {
+  //   item[orderField.id] = 0;
+  // } else {
+  //   if (isOrderUp && item[orderField.id] > 0) {
+  //     item[orderField.id]--;
+  //   }
+  //
+  //   if (!isOrderUp) {
+  //     item[orderField.id]++;
+  //   }
+  // }
+
+  if (item[orderField.id] === 0 && isOrderUp) {
+    return;
+  }
+
+  const instances = database.value?.data[props.objectId] ?? [];
+
+  if (!isOrderUp) {
+    const maxOrderItem = maxBy(instances, orderField.id);
+    if (maxOrderItem && maxOrderItem[orderField.id] === item[orderField.id]) {
+      return;
+    }
+  }
+
+  let newOrder = 0;
+
+  if (item[orderField.id] === undefined) {
+    newOrder = isOrderUp ? 0 : 1;
+  } else {
+    newOrder = isOrderUp ? item[orderField.id] - 1 : item[orderField.id] + 1;
+  }
+
+  console.log("new order", newOrder);
+
+  console.log("DD", database.value?.data[props.objectId]);
+
+  const previousNewOrderItem = instances.find(
+    (instance) => instance[orderField.id] === newOrder
+  );
+
+  if (previousNewOrderItem && item[orderField.id] !== undefined) {
+    previousNewOrderItem[orderField.id] = item[orderField.id];
+  }
+
+  item[orderField.id] = newOrder;
+
   console.log("order up", item, orderField);
+
   await addOrUpdateInstance(
     {
       databaseId: databaseId,
@@ -140,17 +189,25 @@ const handleClickOrderUp = async (
     },
     item
   );
+
+  if (previousNewOrderItem) {
+    await addOrUpdateInstance(
+      {
+        databaseId: databaseId,
+        objectId: props.objectId,
+        instanceId: previousNewOrderItem.id,
+      },
+      previousNewOrderItem
+    );
+  }
+};
+
+const handleClickOrderUp = (item: Instance, objectConfig: FieldConfig[]) => {
+  return handleClickChangeOrder(true, item, objectConfig);
 };
 
 const handleClickOrderDown = (item: Instance, objectConfig: FieldConfig[]) => {
-  const orderField = objectConfig.find(
-    (field) => field.type === FieldsTypes.Order
-  );
-  if (!orderField) {
-    throw new Error(
-      `Order field not found for object config of item with id ${item.id}`
-    );
-  }
+  return handleClickChangeOrder(false, item, objectConfig);
 };
 
 const handleCancelDeleteItem = () => {

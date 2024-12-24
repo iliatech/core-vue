@@ -66,6 +66,8 @@ export const fieldsConfigs: Record<string, DrawerConfig> = {
       id: "6734b0a5-ed94-4a92-9f2b-b82263d535e1",
       type: FieldsTypes.Order,
       label: "Order",
+      defaultSort: true,
+      sortable: true,
     },
     {
       id: "ca62662a-778e-4f9f-9354-532ee7a93c6f",
