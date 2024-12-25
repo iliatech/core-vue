@@ -1,4 +1,4 @@
-import type { DrawerConfig } from "@/types/common";
+import type { DrawerConfig, FieldConfig } from "@/types/common";
 import { tablesConfigs } from "@/universal/tablesConfigs";
 import type { TableConfig } from "@/types/tables";
 import { fieldsConfigs } from "@/universal/fieldsConfigs";
@@ -58,7 +58,7 @@ export const getDrawerConfigByObjectId = (objectId: string): DrawerConfig => {
   return config;
 };
 
-export const getTableConfigByObjectId = (objectId: string): TableConfig => {
+export const getTableConfigByObjectId = (objectId: string): FieldConfig[] => {
   const config = tablesConfigs[objectId];
 
   if (!config) {

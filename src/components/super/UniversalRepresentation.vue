@@ -18,6 +18,7 @@ import {
 } from "@/settings/entities";
 import { sortWithCollator } from "@/helpers/sort";
 import { cloneDeep, maxBy } from "lodash";
+import { initializeOrders } from "@/helpers/common";
 
 const props = defineProps({
   objectId: {
@@ -132,25 +133,21 @@ const handleClickChangeOrder = async (
     );
   }
 
-  // if (item[orderField.id] === undefined) {
-  //   item[orderField.id] = 0;
-  // } else {
-  //   if (isOrderUp && item[orderField.id] > 0) {
-  //     item[orderField.id]--;
-  //   }
-  //
-  //   if (!isOrderUp) {
-  //     item[orderField.id]++;
-  //   }
-  // }
+  const instances = database.value?.data[props.objectId] ?? [];
+
+  initializeOrders(instances, orderField.id);
 
   if (item[orderField.id] === 0 && isOrderUp) {
     return;
   }
 
-  const instances = database.value?.data[props.objectId] ?? [];
+  const maxOrder = maxBy(instances, orderField.id);
 
-  if (!isOrderUp && item[orderField.id] >= instances.length - 1) {
+  if (
+    !isOrderUp &&
+    maxOrder &&
+    item[orderField.id] === maxOrder[orderField.id]
+  ) {
     return;
   }
 
@@ -162,10 +159,6 @@ const handleClickChangeOrder = async (
     newOrder = isOrderUp ? item[orderField.id] - 1 : item[orderField.id] + 1;
   }
 
-  console.log("new order", newOrder);
-
-  console.log("DD", database.value?.data[props.objectId]);
-
   const previousNewOrderItem = instances.find(
     (instance) => instance[orderField.id] === newOrder
   );
@@ -175,8 +168,6 @@ const handleClickChangeOrder = async (
   }
 
   item[orderField.id] = newOrder;
-
-  console.log("order up", item, orderField);
 
   await addOrUpdateInstance(
     {

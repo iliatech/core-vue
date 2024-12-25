@@ -6,6 +6,10 @@ import { UniversalDatabase } from "@/modules/credentials/classes/UniversalDataba
 
 import { UniversalDatabasesIds } from "@/universal/enums";
 import type { Instance } from "@/types/common";
+import { FieldsTypes } from "@/types/common";
+import { getTableConfigByObjectId } from "@/settings/entities";
+import { maxBy, minBy } from "lodash";
+import { initializeOrders } from "@/helpers/common";
 
 export const useUniversalDatabaseStore = defineStore(
   "universalDatabaseStore",
@@ -73,10 +77,28 @@ export const useUniversalDatabaseStore = defineStore(
         database.data[params.objectId] = [];
       }
 
-      // Clean to avoid recurring save of instances which fires "Converting circular structure" error.
-      // TODO Implement clean.
-      // delete instance.linkedInstance;
-      console.log("II", instance);
+      const objectConfig = getTableConfigByObjectId(params.objectId);
+
+      const orderField = objectConfig.find(
+        (field) => field.type === FieldsTypes.Order
+      );
+
+      if (orderField) {
+        initializeOrders(database.data[params.objectId], orderField.id);
+
+        if (instance[orderField.id] === undefined) {
+          const maxOrderInstance = maxBy(
+            database.data[params.objectId],
+            orderField.id
+          );
+
+          const maxOrder = maxOrderInstance
+            ? maxOrderInstance[orderField.id]
+            : -1;
+
+          instance[orderField.id] = maxOrder + 1;
+        }
+      }
 
       if (params.instanceId) {
         const existentInstanceIndex = database.data[params.objectId].findIndex(

@@ -1,5 +1,15 @@
-import type { AuthUser } from "@/types/user";
+import type { Instance } from "@/types/common";
+import { maxBy } from "lodash";
 
-export const fullUserName = (user?: AuthUser | null) => {
-  return `${user?.firstName} ${user?.lastName}`;
+export const initializeOrders = (
+  instances: Instance[],
+  orderFieldId: string
+) => {
+  const maxOrderInstance = maxBy(instances, orderFieldId);
+  const maxOrder = maxOrderInstance ? maxOrderInstance[orderFieldId] : -1;
+  instances.forEach((item, index) => {
+    if (item[orderFieldId] === undefined) {
+      item[orderFieldId] = maxOrder + index + 1;
+    }
+  });
 };
