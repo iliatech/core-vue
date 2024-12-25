@@ -135,11 +135,32 @@ export const useUniversalDatabaseStore = defineStore(
         return;
       }
 
+      const objectConfig = getTableConfigByObjectId(params.objectId);
+
+      const orderField = objectConfig.find(
+        (field) => field.type === FieldsTypes.Order
+      );
+
       const index = database.data[params.objectId].findIndex(
         (item) => item.id === instanceId
       );
 
+      let itemToDelete: Instance | undefined = undefined;
+
+      if (orderField) {
+        itemToDelete = database.data[params.objectId][index];
+      }
+
       database.data[params.objectId].splice(index, 1);
+
+      if (orderField && itemToDelete) {
+        database.data[params.objectId].forEach((item) => {
+          // @ts-ignore IDE defines itemToDelete as possibly undefined by mistake.
+          if (item[orderField.id] > itemToDelete[orderField.id]) {
+            item[orderField.id]--;
+          }
+        });
+      }
 
       await UniversalDatabase.save(params.databaseId);
     };

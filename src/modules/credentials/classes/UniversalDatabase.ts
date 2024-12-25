@@ -39,8 +39,6 @@ export class UniversalDatabase {
         }
       : database;
 
-    //database.data = {};
-
     console.log("SAVED DATABASE DATA", database.data);
 
     const data = JSON.stringify(databaseData);
