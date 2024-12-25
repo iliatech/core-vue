@@ -1,5 +1,4 @@
 import type { Component } from "vue";
-import type { ICredentialTypesTableItem } from "@/modules/credentials/types";
 import type { UniversalObjectsIds } from "@/universal/enums";
 import type { FieldConfig, Instance } from "@/types/common";
 
