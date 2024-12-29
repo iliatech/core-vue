@@ -252,6 +252,7 @@ const changeMode = () => {
   }
 
   &__mode {
+    margin-left: 20px;
     cursor: pointer;
   }
 }

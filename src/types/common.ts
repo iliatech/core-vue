@@ -45,6 +45,10 @@ export enum FieldsTypes {
 export interface FieldConfig extends UniversalTableColumn {
   id: string;
   type: FieldsTypes;
+  selectorFilter?: {
+    fieldId: string;
+    value: string | number | boolean;
+  };
   label?: string;
   required?: boolean;
   linkedObjectFieldId?: string;

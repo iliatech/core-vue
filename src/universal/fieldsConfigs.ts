@@ -17,6 +17,10 @@ export const fieldsConfigs: Record<string, DrawerConfig> = {
     {
       id: "9a696f7c-64eb-4b0c-b97b-f93d5e0dc294",
       type: FieldsTypes.Selector,
+      selectorFilter: {
+        fieldId: "a1334c91-bade-46ba-92e1-87a9cc4321a3",
+        value: "09a157c9-96c8-49a5-a40f-8dcf8bbcc61d",
+      },
       label: "Infinitivo",
       linkedObjectId: UniversalObjectsIds.Verbs,
       linkedObjectFieldId: "7265b3a6-92e1-436e-bea1-7587b20f0459",
@@ -48,6 +52,7 @@ export const fieldsConfigs: Record<string, DrawerConfig> = {
       type: FieldsTypes.String,
       label: "Form",
       required: true,
+      filterable: true,
     },
     {
       id: "b4c209aa-36ad-4dab-8a38-662d01b188fd",
@@ -69,6 +74,7 @@ export const fieldsConfigs: Record<string, DrawerConfig> = {
       type: FieldsTypes.String,
       label: "Pronombre",
       required: true,
+      filterable: true,
     },
     {
       id: "6734b0a5-ed94-4a92-9f2b-b82263d535e1",

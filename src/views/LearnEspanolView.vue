@@ -37,17 +37,7 @@ const route = useRoute();
 const tabId = ref<number>(0);
 
 const actionLabel = computed(() => {
-  // TODO Make universal.
-  switch (route.name) {
-    case "learn-espanol.verbs":
-      return "Add Verb";
-    case "learn-espanol.verbs-forms":
-      return "Add Verb Form";
-    case "learn-espanol.verbs-pronombres":
-      return "Add Verb Pronombre";
-    default:
-      return null;
-  }
+  return "Add Item";
 });
 
 const handleClickMenuItem = (routeName: string) => {
@@ -89,9 +79,9 @@ const handleClickAction = () => {
     display: flex;
     margin-top: $px-10;
     margin-bottom: $px-20;
-    padding: 0 0 $px-5;
     flex-wrap: wrap;
     gap: $px-20;
+    align-items: center;
   }
 
   &__content {
@@ -99,11 +89,12 @@ const handleClickAction = () => {
   }
 
   &__tabs-item {
+    height: 22px;
+    font-size: 0.875rem;
+    line-height: 0.875rem;
     cursor: pointer;
     border-bottom: 2px solid #ccc;
-    padding-left: $px-20;
-    padding-right: $px-20;
-    padding-bottom: $px-5;
+    padding: 0 $px-10;
   }
 
   &__tabs-item-last {

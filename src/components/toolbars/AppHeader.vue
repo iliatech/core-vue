@@ -180,7 +180,7 @@ $toolbar-border: 1px solid #aaa;
 
 .app-header {
   margin-top: 20px;
-  margin-bottom: 50px;
+  margin-bottom: 30px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
 }

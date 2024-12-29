@@ -139,10 +139,19 @@ const getOptions = (field: FieldConfig): Instance[] => {
     );
   }
 
-  return getInstances({
+  let instances = getInstances({
     databaseId: props.objectConfig?.databaseId,
     objectId: field.linkedObjectId,
   });
+
+  if (field.selectorFilter?.fieldId) {
+    instances = instances.filter(
+      (instance) =>
+        instance[field.selectorFilter.fieldId] === field.selectorFilter.value
+    );
+  }
+
+  return instances;
 };
 
 const handleCancelDiscardChanges = () => {
