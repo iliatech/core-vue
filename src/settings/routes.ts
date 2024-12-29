@@ -29,7 +29,7 @@ export const routes: Record<string, LocalRoute> = {
   home: {
     path: "/",
     name: "home",
-    title: "GoHome",
+    title: "Home",
   },
 
   portfolio: {
@@ -47,7 +47,7 @@ export const routes: Record<string, LocalRoute> = {
   schedule: {
     path: "/schedule",
     name: "schedule",
-    title: "MySchedule",
+    title: "Schedule",
   },
 
   learnEspanol: {
@@ -59,7 +59,7 @@ export const routes: Record<string, LocalRoute> = {
   learnEspanolVerbs: {
     path: "verbs",
     name: "learn-espanol.verbs",
-    title: "Verbs",
+    title: "Español",
   },
 
   learnEspanolVerbsForms: {
@@ -77,12 +77,12 @@ export const routes: Record<string, LocalRoute> = {
   credentials: {
     path: "/credentials",
     name: "credentials",
-    title: "MySecrets",
+    title: "Secrets",
   },
   credentialsCredentials: {
     path: "credentials",
     name: "credentials.items",
-    title: "MySecrets",
+    title: "Secrets",
   },
   credentialsTypes: {
     path: "types",

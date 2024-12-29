@@ -4,7 +4,7 @@ export default {
   cancel: "Cancel",
   changePassword: "Change",
   clients: "People and Events",
-  clientsSchedule: "MySchedule",
+  clientsSchedule: "Schedule",
   close: "Close",
   confirm: "Confirm",
   create: "Create",

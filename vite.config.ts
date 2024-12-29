@@ -15,7 +15,7 @@ export default defineConfig({
     createHtmlPlugin({
       inject: {
         data: {
-          title: "SelfBear - your apps are here",
+          title: "Rocket Apps",
           version: `${packageJson?.version}/${new Date().toISOString()}`,
         },
       },
