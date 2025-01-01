@@ -44,6 +44,8 @@ export enum FieldsTypes {
   Actions = "actions",
 }
 
+export const noDrawerFieldsTypes = [FieldsTypes.Id, FieldsTypes.Actions];
+
 export interface FieldConfig extends UniversalTableColumn {
   id: string;
   type: FieldsTypes;

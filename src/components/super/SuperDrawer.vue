@@ -16,7 +16,7 @@ import UniversalSelector from "@/components/fields/UniversalSelector.vue";
 import UniversalTextarea from "@/components/fields/UniversalTextarea.vue";
 import { useUniversalDatabaseStore } from "@/store/universalDatabaseStore";
 import type { FieldConfig, Instance, ObjectConfig } from "@/types/common";
-import { FieldsTypes } from "@/types/common";
+import { FieldsTypes, noDrawerFieldsTypes } from "@/types/common";
 
 interface DrawerState {
   id: string | null;
@@ -229,7 +229,7 @@ watch(
     }
 
     fieldsConfig.value.forEach((field: any) => {
-      if (field.type === FieldsTypes.Id) {
+      if (noDrawerFieldsTypes.includes(field.type)) {
         return;
       }
 
@@ -283,7 +283,7 @@ defineExpose({
     <div class="super-drawer">
       <template v-for="field in fieldsConfig" :key="field.id">
         <UniversalField
-          v-if="![FieldsTypes.Id, FieldsTypes.Actions].includes(field.type)"
+          v-if="!noDrawerFieldsTypes.includes(field.type)"
           :label="field.label"
         >
           <UniversalText
