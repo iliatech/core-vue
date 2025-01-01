@@ -61,7 +61,7 @@ import { prepareName } from "@/helpers/strings";
 import UniversalText from "@/components/fields/UniversalText.vue";
 import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
 import UniversalField from "@/components/fields/UniversalField.vue";
-import type { ICredentialType } from "@/modules/credentials/types";
+import type { ICredentialType } from "@/types/universalDatabase";
 import UniversalTextarea from "@/components/fields/UniversalTextarea.vue";
 import { showErrors } from "@/helpers/formValidation";
 

@@ -71,7 +71,7 @@ import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
 import UniversalField from "@/components/fields/UniversalField.vue";
 import UniversalSelector from "@/components/fields/UniversalSelector.vue";
 import { Credential } from "@/modules/credentials/classes/entities/Credential";
-import type { ICredentialType } from "@/modules/credentials/types";
+import type { ICredentialType } from "@/types/universalDatabase";
 import UniversalTextarea from "@/components/fields/UniversalTextarea.vue";
 import { showErrors } from "@/helpers/formValidation";
 

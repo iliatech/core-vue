@@ -7,7 +7,7 @@ import type UniversalDrawer from "@/components/dialogs/UniversalDrawer.vue";
 import type {
   ICredential,
   ICredentialsTableItem,
-} from "@/modules/credentials/types";
+} from "@/types/universalDatabase";
 import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
 import { CredentialType } from "@/modules/credentials/classes/entities/CredentialType";
 import { useRoute } from "vue-router";

@@ -41,7 +41,7 @@ export const standardActionColumn: UniversalTableColumn = {
       },
     },
     ...(() => {
-      if (!objectConfig.find((field) => field.type === FieldsTypes.Order)) {
+      if (!objectConfig?.find((field) => field.type === FieldsTypes.Order)) {
         return [];
       }
 

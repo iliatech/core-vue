@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { reactive, ref } from "vue";
-import type { ICredentialDatabase } from "@/modules/credentials/types";
+import type { ICredentialDatabase } from "@/types/universalDatabase";
 import { cloneDeep } from "lodash";
 
 const initialDatabaseState = {

@@ -10,7 +10,7 @@ import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
 import type {
   ICredentialType,
   ICredentialTypesTableItem,
-} from "@/modules/credentials/types";
+} from "@/types/universalDatabase";
 import { useRoute } from "vue-router";
 import router from "@/router";
 

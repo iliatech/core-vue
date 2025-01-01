@@ -9,7 +9,7 @@ import { showToast } from "@/helpers/toast";
 import { ToastType } from "@/types/toasts";
 import { lang } from "@/lang";
 import { useUniversalDatabaseStore } from "@/store/universalDatabaseStore";
-import type { IUniversalDatabaseApi } from "@/modules/credentials/types";
+import type { IUniversalDatabaseApi } from "@/types/universalDatabase";
 
 export class UniversalDatabase {
   public static get(databaseId: string) {

@@ -1,6 +1,6 @@
 import { CredentialDatabase } from "@/modules/credentials/classes/CredentialDatabase";
 import { useCredentialStore } from "@/modules/credentials/store/credentialStore";
-import type { ICredential, SearchObject } from "@/modules/credentials/types";
+import type { ICredential, SearchObject } from "@/types/universalDatabase";
 import { v4 as uuidv4 } from "uuid";
 
 export class Credential {
