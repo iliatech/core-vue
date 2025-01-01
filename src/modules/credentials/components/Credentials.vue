@@ -2,7 +2,6 @@
 import UniversalItems from "@/components/tables/UniversalItems.vue";
 import { credentialsTable } from "@/modules/credentials/settings/tables/credentialsTable";
 import { Credential } from "@/modules/credentials/classes/entities/Credential";
-import CredentialSidebar from "@/modules/credentials/components/sidebars/CredentialSidebar.vue";
 import { computed, onMounted, ref, watch } from "vue";
 import type UniversalDrawer from "@/components/dialogs/UniversalDrawer.vue";
 import type {
@@ -13,6 +12,7 @@ import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
 import { CredentialType } from "@/modules/credentials/classes/entities/CredentialType";
 import { useRoute } from "vue-router";
 import router from "@/router";
+import SuperDrawer from "@/components/super/SuperDrawer.vue";
 
 const route = useRoute();
 
@@ -86,17 +86,14 @@ onMounted(() => {
 <template>
   <div class="credentials">
     <UniversalItems
-      :config="credentialsTable"
+      :object-config="credentialsTable"
       :data="tableData"
       @click:action-button="handleClickAddCredential"
       @click:delete-item="handleClickDeleteItem"
       @click:edit-item="handleClickEditItem"
     />
   </div>
-  <CredentialSidebar
-    ref="credentialSidebar"
-    @close:drawer="handleCloseDrawer"
-  />
+  <SuperDrawer ref="credentialSidebar" @close:drawer="handleCloseDrawer" />
   <UniversalDialog
     :title="$lang.title.confirmDeleteCredentialType"
     ref="confirmDeleteItemDialog"

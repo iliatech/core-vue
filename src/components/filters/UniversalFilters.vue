@@ -2,10 +2,10 @@
   <div class="universal-filters">
     <UniversalText
       v-for="filter in config"
-      :model-value="(filterValues[filter.name] ?? '').toString()"
-      @update:modelValue="filterValues[filter.name] = $event"
+      :model-value="(filterValues[filter.id] ?? '').toString()"
+      @update:modelValue="filterValues[filter.id] = $event"
       :placeholder="$lang.label.filterBy(filter.label)"
-      :key="filter.name"
+      :key="filter.id"
       :input-size="'small'"
     />
   </div>
@@ -13,7 +13,8 @@
 <script lang="ts" setup>
 import type { PropType } from "vue";
 import UniversalText from "@/components/fields/UniversalText.vue";
-import type { UniversalFilterValues, UniversalFilter } from "@/types/filters";
+import type { UniversalFilterValues } from "@/types/filters";
+import type { UniversalTableColumn } from "@/types/tables";
 
 defineModel("filterValues", {
   type: Object as PropType<UniversalFilterValues>,
@@ -22,7 +23,7 @@ defineModel("filterValues", {
 
 defineProps({
   config: {
-    type: Array as PropType<UniversalFilter[]>,
+    type: Array as PropType<UniversalTableColumn[]>,
     required: true,
   },
 });

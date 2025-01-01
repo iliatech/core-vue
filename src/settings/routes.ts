@@ -29,7 +29,7 @@ export const routes: Record<string, LocalRoute> = {
   home: {
     path: "/",
     name: "home",
-    title: "GoHome",
+    title: "Home",
   },
 
   portfolio: {
@@ -47,35 +47,62 @@ export const routes: Record<string, LocalRoute> = {
   schedule: {
     path: "/schedule",
     name: "schedule",
-    title: "MySchedule",
+    title: "Schedule",
   },
 
-  words: {
-    path: "/words-training",
-    name: "words-training",
-    title: "WordsTraining",
+  learnEspanol: {
+    path: "/learn-espanol",
+    name: "learn-espanol",
+    title: "Learn Espanol",
+  },
+
+  learnEspanolVerbs: {
+    path: "verbs",
+    name: "learn-espanol.verbs",
+    title: "Español",
+    tabTitle: "Verbs",
+  },
+
+  learnEspanolVerbsForms: {
+    path: "verbs-forms",
+    name: "learn-espanol.verbs-forms",
+    title: "Verbs Forms",
+  },
+
+  learnEspanolVerbsPronombres: {
+    path: "verbs-pronombres",
+    name: "learn-espanol.verbs-pronombres",
+    title: "Verbs Pronombres",
   },
 
   credentials: {
     path: "/credentials",
     name: "credentials",
-    title: "MySecrets",
+    title: "Secrets",
   },
   credentialsCredentials: {
     path: "credentials",
     name: "credentials.items",
-    title: "MySecrets",
+    title: "Secrets",
   },
   credentialsTypes: {
     path: "types",
     name: "credentials.types",
-    title: "MySecretTypes",
+    title: "Secret Types",
     parentRouteName: "credentials.items",
   },
 };
 
 export const credentialsRoutes = Object.values(routes).filter((item) =>
   ["credentials.items", "credentials.types"].includes(item.name)
+);
+
+export const wordsRoutes = Object.values(routes).filter((item) =>
+  [
+    "learn-espanol.verbs",
+    "learn-espanol.verbs-forms",
+    "learn-espanol.verbs-pronombres",
+  ].includes(item.name)
 );
 
 export const publicRouteNames = [

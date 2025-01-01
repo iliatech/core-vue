@@ -10,6 +10,8 @@ export default {
     `${lang.entity[name]} with the same name already exists`,
   entityShouldNotBeEmpty: (name: IEntity): string =>
     `${lang.entity[name]} should not be empty`,
+  fieldShouldNotBeEmpty: (name: string): string =>
+    `${name} should not be empty`,
   fieldError: (fieldName: string): string =>
     `${capitalize(fieldName)} is incorrect`,
   loginFailed: "Login failed",

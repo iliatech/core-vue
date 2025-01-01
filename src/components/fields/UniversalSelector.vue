@@ -1,19 +1,10 @@
-<template>
-  <div class="universal-selector">
-    <Dropdown
-      class="universal-selector__dropdown"
-      v-model="model"
-      :options="preparedOptions"
-      :option-label="fieldName"
-      :option-value="fieldId"
-    />
-  </div>
-</template>
 <script lang="ts" setup>
 import Dropdown from "primevue/dropdown";
 import type { PropType } from "vue";
 import { sortWithCollator } from "@/helpers/sort";
 import { computed } from "vue";
+
+import type { Instance } from "@/types/common";
 
 interface Option {
   id: string;
@@ -24,14 +15,17 @@ const model = defineModel<string | null>();
 
 const props = defineProps({
   options: {
-    type: Object as PropType<Option[]>,
+    type: Object as PropType<Instance[]>,
     required: true,
   },
-  fieldId: {
+  sortOptions: {
+    type: Boolean,
+  },
+  idField: {
     type: String,
     default: "id",
   },
-  fieldName: {
+  labelField: {
     type: String,
     default: "name",
   },
@@ -39,10 +33,23 @@ const props = defineProps({
 
 const preparedOptions = computed<Option[]>(() => {
   const items = props.options;
-  sortWithCollator(items, props.fieldName);
+  if (props.sortOptions) {
+    sortWithCollator(items, props.labelField);
+  }
   return items;
 });
 </script>
+<template>
+  <div class="universal-selector">
+    <Dropdown
+      class="universal-selector__dropdown"
+      v-model="model"
+      :options="preparedOptions"
+      :option-label="labelField"
+      :option-value="idField"
+    />
+  </div>
+</template>
 <style lang="scss" scoped>
 .universal-selector {
   &__dropdown {

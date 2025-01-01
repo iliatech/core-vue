@@ -2,7 +2,7 @@
   <div class="home-page">
     <img
       class="profile-photo"
-      src="@/images/bear-robot-logo.jpg"
+      src="@/images/rocket-logo.png"
       alt="Ilia Domyshev 2024"
     />
 
@@ -51,7 +51,7 @@ const downloadFile = () => {
 @import "@/assets/variables";
 
 .home-page {
-  margin-top: 20px;
+  margin-top: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -66,8 +66,8 @@ const downloadFile = () => {
 .profile-photo {
   width: 200px;
   float: left;
-  border-radius: $px-20;
-  border: 2px dashed #666;
+  border-radius: 100px;
+  border: 1px dashed #666;
 }
 
 .buttons-container {

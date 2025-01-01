@@ -5,7 +5,11 @@ export const generateAvailableAppsList = (): NavigationItem[] => {
   const items: NavigationItem[] = [];
 
   // TODO It's hardcoded now. Alternatively let's use it from user settings.
-  const routeNames = ["schedule", "words", "credentialsCredentials"];
+  const routeNames = [
+    "schedule",
+    "learnEspanolVerbs",
+    "credentialsCredentials",
+  ];
 
   routeNames.forEach((name) => {
     const route = routes[name];

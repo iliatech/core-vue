@@ -1,5 +1,6 @@
 import type { Component } from "vue";
-import type { ICredentialTypesTableItem } from "@/modules/credentials/types";
+import type { UniversalObjectsIds } from "@/universal/enums";
+import type { FieldConfig, Instance } from "@/types/common";
 
 export interface UniversalTableCellComponentProp {
   component: Component;
@@ -7,7 +8,7 @@ export interface UniversalTableCellComponentProp {
 }
 
 export interface UniversalTableColumn {
-  name: string;
+  id: string; // Field name. Normally it's uuid of field.
   label: string;
   hiddenLabel?: boolean;
   defaultSort?: boolean;
@@ -15,10 +16,16 @@ export interface UniversalTableColumn {
   sortable?: boolean;
   hidden?: boolean;
   filterable?: boolean;
+  linkedObjectId?: UniversalObjectsIds;
+  linkedObjectFieldId?: string;
   getComponents?: (props: {
     value: any;
-    item: ICredentialTypesTableItem;
+    item: Instance;
     emit: any;
     index: number;
+    fieldConfig: FieldConfig;
+    objectConfig: FieldConfig[];
   }) => UniversalTableCellComponentProp[];
 }
+
+export type TableConfig = FieldConfig[];

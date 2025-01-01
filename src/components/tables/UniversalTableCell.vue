@@ -13,7 +13,7 @@
       </div>
     </template>
     <template v-else>
-      {{ get(item, columnConfig.name) || "-" }}
+      {{ getValue(item, columnConfig) }}
     </template>
   </div>
 </template>
@@ -24,13 +24,18 @@ import type {
   UniversalTableColumn,
 } from "@/types/tables";
 import { computed, mergeProps } from "vue";
-import { get } from "lodash";
+
+import type { FieldConfig, Instance } from "@/types/common";
 
 const emit = defineEmits([]);
 
 const props = defineProps({
+  objectConfig: {
+    type: Array as PropType<FieldConfig[]>,
+    required: true,
+  },
   columnConfig: {
-    type: Object as PropType<UniversalTableColumn>,
+    type: Object as PropType<FieldConfig>,
     required: true,
   },
   item: { type: Object as PropType<any>, required: true },
@@ -39,22 +44,46 @@ const props = defineProps({
 
 const components = computed<UniversalTableCellComponentProp[] | null>(() => {
   const item = props.item;
-  const value = item[props.columnConfig.name];
+  const value = item[props.columnConfig.id];
   const index = props.index;
 
   if (typeof props.columnConfig.getComponents === "function") {
-    return props.columnConfig.getComponents({ value, item, index, emit }) ?? [];
+    return (
+      props.columnConfig.getComponents({
+        value,
+        item,
+        index,
+        emit,
+        fieldConfig: props.columnConfig,
+        objectConfig: props.objectConfig,
+      }) ?? []
+    );
   }
 
   return null;
 });
+
+const getValue = (item: Instance, columnConfig: UniversalTableColumn) => {
+  let value = null;
+
+  if (columnConfig.linkedObjectId) {
+    value =
+      item.linkedInstance[columnConfig.linkedObjectId]?.[
+        columnConfig.linkedObjectFieldId
+      ];
+  } else {
+    value = item[columnConfig.id];
+  }
+
+  return value ?? "-";
+};
 </script>
 <style lang="scss" scoped>
 @import "@/assets/variables";
 
 .universal-table-cell {
   display: flex;
-  gap: 20px;
+  gap: 10px;
 
   &__item {
     display: block;

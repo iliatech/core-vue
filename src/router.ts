@@ -4,6 +4,8 @@ import { getAuthToken, getAuthUser } from "@/helpers/auth";
 import { useAppStore } from "@/store/appStore";
 import { lang } from "@/lang";
 
+import { UniversalObjectsIds } from "@/universal/enums";
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -21,14 +23,6 @@ const router = createRouter({
       path: routes.dashboard.path,
       name: routes.dashboard.name,
       component: () => import("@/views/DashboardView.vue"),
-    },
-    {
-      path: routes.words.path,
-      name: routes.words.name,
-      component: () => import("@/modules/dictionary/views/WordsView.vue"),
-      meta: {
-        title: lang.title.wordsApp,
-      },
     },
     {
       path: routes.login.path,
@@ -78,6 +72,43 @@ const router = createRouter({
           component: () =>
             import("@/modules/credentials/components/CredentialTypes.vue"),
           name: routes.credentialsTypes.name,
+        },
+      ],
+    },
+    {
+      path: routes.learnEspanol.path,
+      name: routes.learnEspanol.name,
+      component: () => import("@/views/LearnEspanolView.vue"),
+      meta: {
+        title: lang.title.learnEspanol,
+      },
+      children: [
+        {
+          path: routes.learnEspanolVerbs.path,
+          component: () =>
+            import("@/components/super/UniversalRepresentation.vue"),
+          name: routes.learnEspanolVerbs.name,
+          props: {
+            objectId: UniversalObjectsIds.Verbs,
+          },
+        },
+        {
+          path: routes.learnEspanolVerbsForms.path,
+          component: () =>
+            import("@/components/super/UniversalRepresentation.vue"),
+          name: routes.learnEspanolVerbsForms.name,
+          props: {
+            objectId: UniversalObjectsIds.VerbsForms,
+          },
+        },
+        {
+          path: routes.learnEspanolVerbsPronombres.path,
+          component: () =>
+            import("@/components/super/UniversalRepresentation.vue"),
+          name: routes.learnEspanolVerbsPronombres.name,
+          props: {
+            objectId: UniversalObjectsIds.VerbsPronombres,
+          },
         },
       ],
     },

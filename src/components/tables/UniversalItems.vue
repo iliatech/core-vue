@@ -2,16 +2,24 @@
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import type { PropType } from "vue";
+import { computed, ref } from "vue";
 import type { UniversalTableColumn } from "@/types/tables";
 import UniversalButton from "@/components/buttons/UniversalButton.vue";
 import UniversalFilters from "@/components/filters/UniversalFilters.vue";
-import { get, pick } from "lodash";
 import type { UniversalFilterValues } from "@/types/filters";
-import { computed, ref } from "vue";
 import { prepareName } from "@/helpers/strings";
 import objectHash from "object-hash";
 import UniversalTableCell from "@/components/tables/UniversalTableCell.vue";
 import UniversalIcon from "@/components/icons/UniversalIcon.vue";
+import { sortWithCollator } from "@/helpers/sort";
+import type { FieldConfig } from "@/types/common";
+import { FieldsTypes } from "@/types/common";
+import { getDatabaseIdByObjectId } from "@/settings/entities";
+import { useUniversalDatabaseStore } from "@/store/universalDatabaseStore";
+import { trim } from "lodash";
+
+const universalDatabaseStore = useUniversalDatabaseStore();
+const { getInstances } = universalDatabaseStore;
 
 const emit = defineEmits(["click:actionButton"]);
 
@@ -20,9 +28,13 @@ const props = defineProps({
     type: Array as PropType<any[]>,
     required: true,
   },
-  config: {
-    type: Array as PropType<UniversalTableColumn[]>,
+  objectConfig: {
+    type: Array as PropType<FieldConfig[]>,
     required: true,
+  },
+  valueField: {
+    type: String,
+    default: "id",
   },
   actionButtonText: String,
   tableModeByDefault: Boolean,
@@ -36,18 +48,68 @@ const filterValues = ref<UniversalFilterValues>({});
 const dataFiltered = computed<any[]>(() => {
   let itemsFiltered = props.data;
 
-  Object.entries(filterValues.value).forEach(([columnName, filterValue]) => {
-    itemsFiltered = itemsFiltered.filter((item) => {
-      const value = get(item, columnName);
+  Object.entries(filterValues.value).forEach(([fieldId, filterValue]) => {
+    if (!trim(filterValue)) {
+      return;
+    }
 
-      return prepareName(value)
-        .toLowerCase()
-        .includes(prepareName(filterValue).toLowerCase());
-    });
+    const fieldConfig: FieldConfig | undefined = filtersConfig.value.find(
+      (field) => field.id === fieldId
+    ) as FieldConfig | undefined; // TODO Unite types UniversalTableColumn and FieldConfig
+
+    if (!fieldConfig) {
+      return;
+    }
+
+    if (fieldConfig.type === FieldsTypes.Selector) {
+      if (!fieldConfig.linkedObjectId || !fieldConfig.linkedObjectFieldId) {
+        throw new Error(
+          `linkedObjectId or linkedObjectFieldId is not defined for selector field ${fieldConfig.id}`
+        );
+      }
+
+      const linkedInstances = getInstances({
+        databaseId: getDatabaseIdByObjectId(fieldConfig.linkedObjectId),
+        objectId: fieldConfig.linkedObjectId,
+      });
+
+      const linkedInstancesFilteredIds = linkedInstances
+        .filter((instance) =>
+          prepareName(instance[fieldConfig.linkedObjectFieldId])
+            .toLowerCase()
+            .includes(prepareName(filterValue).toLowerCase())
+        )
+        .map((instance) => instance.id);
+
+      itemsFiltered = itemsFiltered.filter((item) => {
+        const linkedInstanceId = item[fieldId];
+        return linkedInstancesFilteredIds.includes(linkedInstanceId);
+      });
+    }
+
+    if (fieldConfig.type === FieldsTypes.String) {
+      itemsFiltered = itemsFiltered.filter((item) => {
+        const value = item[fieldId];
+
+        return prepareName(value)
+          .toLowerCase()
+          .includes(prepareName(filterValue).toLowerCase());
+      });
+    }
   });
+
+  // TODO Do we need to sort here?
+  sortWithCollator(
+    itemsFiltered,
+    props.objectConfig.find((item) => item.defaultSort)?.id // TODO ??
+  );
 
   return itemsFiltered;
 });
+
+const filtersConfig = computed(() =>
+  props.objectConfig.filter((item) => item.filterable)
+);
 
 const changeMode = () => {
   isTableMode.value = !isTableMode.value;
@@ -60,11 +122,7 @@ const changeMode = () => {
       <div class="universal-items__filters">
         <UniversalFilters
           v-model:filter-values="filterValues"
-          :config="
-            config
-              .filter((item) => item.filterable)
-              .map((item) => pick(item, ['name', 'label']))
-          "
+          :config="filtersConfig"
         />
       </div>
       <div class="universal-items__action-button">
@@ -84,14 +142,18 @@ const changeMode = () => {
     </div>
     <div class="universal-items__container">
       <div class="universal-items__inner-container">
-        <div class="items" v-if="!isTableMode">
+        <div v-if="!isTableMode" class="items">
           <div v-for="item in dataFiltered" :key="item.id" class="item">
-            <template v-for="(column, index) in config" :key="column.name">
+            <template
+              v-for="(column, index) in objectConfig"
+              :key="column[valueField]"
+            >
               <div v-if="!column.hidden" class="data-item">
                 <div v-if="!column.hiddenLabel" class="label">
                   {{ column.label }}
                 </div>
                 <UniversalTableCell
+                  :object-config="objectConfig"
                   :column-config="column"
                   :index="index"
                   :item="item"
@@ -103,22 +165,24 @@ const changeMode = () => {
           </div>
         </div>
         <DataTable
-          v-if="isTableMode"
+          v-else
           scrollable
           :show-gridlines="true"
           :striped-rows="true"
           :row-hover="true"
           :value="dataFiltered"
-          :sort-field="config.find((item) => item.defaultSort)?.name"
+          :sort-field="
+            objectConfig.find((item) => item.defaultSort)?.[valueField]
+          "
           :sort-order="
-            config.find((item) => item.defaultSortOrder)?.defaultSortOrder
+            objectConfig.find((item) => item.defaultSortOrder)?.defaultSortOrder
           "
           v-bind="$attrs"
         >
-          <template v-for="column in config" :key="column.name">
+          <template v-for="column in objectConfig" :key="column[valueField]">
             <Column
               v-if="!column.hidden"
-              :field="column.name"
+              :field="column[valueField]"
               :header="column.label"
               :sortable="column.sortable"
             >
@@ -188,6 +252,7 @@ const changeMode = () => {
   }
 
   &__mode {
+    margin-left: 20px;
     cursor: pointer;
   }
 }
@@ -211,14 +276,14 @@ const changeMode = () => {
 
 .items {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
-  //flex-wrap: wrap;
   height: 100%;
   overflow-y: auto;
 }
 
 .item {
-  //width: 200px;
+  width: 200px;
   border: 1px solid #666;
   border-radius: 3px;
   padding: 10px;
