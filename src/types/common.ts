@@ -30,6 +30,7 @@ export interface LocalRoute {
   path: string;
   name: string;
   title: string;
+  tabTitle?: string;
   parentRouteName?: string;
 }
 

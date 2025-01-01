@@ -10,7 +10,7 @@
         :key="item.title"
         @click="handleClickMenuItem(item.name)"
       >
-        {{ item.title }}
+        {{ item.tabTitle ?? item.title }}
       </div>
       <div class="tabs-view__tabs-item-last">
         <UniversalButton

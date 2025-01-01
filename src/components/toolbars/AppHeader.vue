@@ -104,7 +104,14 @@ const handleClickSignOut = () => {
 </script>
 <template>
   <div class="app-header">
-    <div class="left-column"></div>
+    <div class="left-column">
+      <img
+        v-if="!isPublic"
+        class="small-logo"
+        src="@/images/rocket-logo.png"
+        alt="Rocket Workspace"
+      />
+    </div>
     <div class="center-column">
       <div class="app-logo" v-if="isPublic">
         <div class="top-logo">
@@ -206,10 +213,7 @@ $toolbar-border: 1px solid #aaa;
 }
 
 .left-column {
-  padding-left: $px-20;
-  padding-top: $px-20;
-  display: flex;
-  flex-direction: row;
+  padding-left: 20px;
 }
 
 .logo-notes {
@@ -265,6 +269,12 @@ $toolbar-border: 1px solid #aaa;
   :deep(.universal-button--selected) {
     text-decoration: underline;
   }
+}
+.small-logo {
+  width: 50px;
+  height: 50px;
+  border-radius: 30px;
+  margin-top: -10px;
 }
 </style>
 <style lang="scss">

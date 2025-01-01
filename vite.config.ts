@@ -15,7 +15,7 @@ export default defineConfig({
     createHtmlPlugin({
       inject: {
         data: {
-          title: "Rocket Apps",
+          title: "Rocket Workspace",
           version: `${packageJson?.version}/${new Date().toISOString()}`,
         },
       },

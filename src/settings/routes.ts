@@ -60,6 +60,7 @@ export const routes: Record<string, LocalRoute> = {
     path: "verbs",
     name: "learn-espanol.verbs",
     title: "Español",
+    tabTitle: "Verbs",
   },
 
   learnEspanolVerbsForms: {
@@ -87,7 +88,7 @@ export const routes: Record<string, LocalRoute> = {
   credentialsTypes: {
     path: "types",
     name: "credentials.types",
-    title: "MySecretTypes",
+    title: "Secret Types",
     parentRouteName: "credentials.items",
   },
 };
