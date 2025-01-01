@@ -112,10 +112,12 @@ export const useUniversalDatabaseStore = defineStore(
           });
         }
       } else {
-        database.data[params.objectId].push({
-          id: uuidv4(),
+        const itemToAdd = {
           ...instance,
-        });
+          id: uuidv4(),
+        };
+
+        database.data[params.objectId].push(itemToAdd);
       }
 
       await UniversalDatabase.save(params.databaseId);
