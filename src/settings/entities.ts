@@ -2,15 +2,6 @@ import type { FieldConfig } from "@/types/common";
 import { fieldsConfigs } from "@/universal/fieldsConfigs";
 import { UniversalDatabasesIds, UniversalObjectsIds } from "@/universal/enums";
 
-export enum IEntity {
-  Credential = "credential",
-  CredentialType = "credentialType",
-  CredentialTypeName = "credentialTypeName",
-  CredentialName = "credentialName",
-  CredentialDescription = "credentialDescription",
-  CredentialPassword = "credentialPassword",
-}
-
 interface IUniversalObject {
   id: UniversalObjectsIds;
   databaseId: UniversalDatabasesIds;

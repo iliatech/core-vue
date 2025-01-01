@@ -6,7 +6,6 @@ import title from "@/lang/langTitle";
 import success from "@/lang/langSuccess";
 import phrase from "@/lang/langPhrase";
 import placeholder from "@/lang/langPlaceholder";
-import entity from "@/lang/langEntity";
 
 export const lang = {
   button,
@@ -17,5 +16,4 @@ export const lang = {
   placeholder,
   success,
   title,
-  entity,
 };

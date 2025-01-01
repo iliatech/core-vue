@@ -266,13 +266,13 @@ onMounted(async () => {
     :object-config="objectConfig"
   />
   <UniversalDialog
-    :title="$lang.title.confirmDeleteCredentialType"
+    :title="$lang.title.confirmAction"
     ref="confirmDeleteItemDialog"
     @cancel="handleCancelDeleteItem"
     @confirm="handleConfirmDeleteItem"
     :z-index="1200"
   >
-    {{ $lang.phrase.doYouConfirmDeleteCredentialType }}
+    {{ $lang.phrase.confirmDeleteItem }}
   </UniversalDialog>
 </template>
 

@@ -10,8 +10,6 @@ export default {
   create: "Create",
   delete: "Delete",
   login: "Sign In",
-  newCredential: "New Credential",
-  newCredentialType: "New Credential Type",
   ok: "OK",
   register: "Sign Up",
   restore: "Restore",

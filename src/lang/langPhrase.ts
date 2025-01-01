@@ -4,6 +4,6 @@ export default {
   dontRememberPassword: "In case you forgot password:",
   noClientsFound: "No interactions found.",
   areYouSureToDiscardChanges: "Are you sure you want to discard changes?",
-  doYouConfirmDeleteCredentialType: "Do you confirm to delete credential type?",
+  confirmDeleteItem: "Do you confirm to delete item?",
   returnToLoginPage: "Return to login page:",
 };

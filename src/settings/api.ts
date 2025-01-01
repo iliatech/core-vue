@@ -17,5 +17,4 @@ export const apiPaths = {
 
   // Storage.
   fileStorage: `file-storage`,
-  authUserFileByType: `file-storage/auth-user-file-by-type/credentials`,
 };
