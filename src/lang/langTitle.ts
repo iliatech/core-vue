@@ -14,7 +14,7 @@ export default {
   editSlot: "Edit slot",
   enterSecretKey: "Enter Secret Key",
   error: "Error",
-  siteName: "Rocket Workspace,",
+  siteName: "Rocket Workspace",
   siteSlogan: "'easy data' solution",
   learnEspanol: "Learn Espanol",
   login: "Sign In",

@@ -15,7 +15,6 @@ import Menu from "primevue/menu";
 import { privateTopMenuItems, publicTopMenuItems } from "@/settings/menu";
 import UniversalIcon from "@/components/icons/UniversalIcon.vue";
 import { getRoute } from "../../helpers/navigation";
-import { UniversalDatabase } from "@/classes/UniversalDatabase";
 
 const route = useRoute();
 
@@ -97,7 +96,7 @@ const handleClickUserMenu = (event: Event) => {
 const handleClickSignOut = () => {
   router.push(routes.home.path);
   // TODO Need to implement 'unloadAll' method.
-  UniversalDatabase.unloadAll();
+  //UniversalDatabase.unloadAll();
   resetAuthUser();
   resetAuthToken();
   updateAuthUser(null);
@@ -201,6 +200,7 @@ $toolbar-border: 1px solid #aaa;
   flex-direction: column;
   gap: $px-5;
   font-family: "Comic Sans MS", sans-serif;
+  white-space: nowrap;
 }
 
 .site-name {
@@ -224,17 +224,20 @@ $toolbar-border: 1px solid #aaa;
 
 .user {
   font-size: 1rem;
-  margin-right: $px-20;
   display: flex;
   gap: $px-20;
 }
 
 .right-column {
+  margin-left: 20px;
+
   padding-top: $px-5;
+  padding-right: 20px;
   display: flex;
   align-items: flex-start;
   justify-content: flex-end;
   gap: $px-10;
+  white-space: nowrap;
 
   :deep(.universal-button) {
     font-size: 1rem;
