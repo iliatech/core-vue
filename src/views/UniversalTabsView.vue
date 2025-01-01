@@ -6,7 +6,7 @@
         :class="{
           'tabs-view__tabs-item--selected': item.name === route.name,
         }"
-        v-for="item in wordsRoutes"
+        v-for="item in tabsRoutes"
         :key="item.title"
         @click="handleClickMenuItem(item.name)"
       >
@@ -26,39 +26,35 @@
   </div>
 </template>
 <script lang="ts" setup>
+import type { PropType } from "vue";
 import { computed, ref } from "vue";
-import { wordsRoutes } from "@/settings/routes";
 import { useRoute, useRouter } from "vue-router";
 import UniversalButton from "@/components/buttons/UniversalButton.vue";
+import type { UniversalRoute } from "@/universal/universalRoutes";
 
 const router = useRouter();
 const route = useRoute();
 
 const tabId = ref<number>(0);
 
+defineProps({
+  tabsRoutes: {
+    type: Object as PropType<UniversalRoute[]>,
+    required: true,
+  },
+});
+
 const actionLabel = computed(() => {
   return "Add Item";
 });
 
 const handleClickMenuItem = (routeName: string) => {
-  // tabId.value++;
+  tabId.value++;
   router.push({ name: routeName });
 };
 
 const handleClickAction = () => {
-  let action = null;
-
-  switch (route.name) {
-    case "learn-espanol.verbs":
-      action = "add-item";
-      break;
-    case "learn-espanol.verbs-forms":
-      action = "add-item";
-      break;
-    case "learn-espanol.verbs-pronombres":
-      action = "add-item";
-      break;
-  }
+  let action = "add-item";
 
   router.push({
     path: route.path,

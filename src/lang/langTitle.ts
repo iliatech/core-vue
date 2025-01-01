@@ -21,7 +21,7 @@ export default {
   enterSecretKey: "Enter Secret Key",
   error: "Error",
   siteName: "Rocket Workspace,",
-  siteSlogan: "data management",
+  siteSlogan: "data solutions",
   learnEspanol: "Learn Espanol",
   login: "Sign In",
   password: "Password",
