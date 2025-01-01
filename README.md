@@ -1,2 +1,2 @@
-Self Vue Application
-made by selfBear
+'Rocket Workspace' Application
+made by Ilia Domyshev

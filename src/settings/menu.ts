@@ -1,2 +1,2 @@
 export const publicTopMenuItems = ["home"];
-export const privateTopMenuItems = ["schedule", "learnEspanolVerbs"];
+export const privateTopMenuItems = ["learnEspanolVerbs"];

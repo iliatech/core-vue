@@ -1,6 +1,4 @@
 export default {
-  clientCreated: "Interaction created",
-  clientUpdated: "Interaction updated",
   copiedToClipboard: (entityLabel: string) =>
     `${entityLabel} copied to clipboard`,
   databaseSaved: "Database saved",

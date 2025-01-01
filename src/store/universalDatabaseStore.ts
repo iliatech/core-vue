@@ -8,7 +8,7 @@ import { UniversalDatabasesIds } from "@/universal/enums";
 import type { Instance } from "@/types/common";
 import { FieldsTypes } from "@/types/common";
 import { getTableConfigByObjectId } from "@/settings/entities";
-import { maxBy, minBy } from "lodash";
+import { maxBy } from "lodash";
 import { initializeOrders } from "@/helpers/common";
 
 export const useUniversalDatabaseStore = defineStore(

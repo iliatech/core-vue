@@ -44,12 +44,6 @@ export const routes: Record<string, LocalRoute> = {
     title: "Dashboard",
   },
 
-  schedule: {
-    path: "/schedule",
-    name: "schedule",
-    title: "Schedule",
-  },
-
   learnEspanol: {
     path: "/learn-espanol",
     name: "learn-espanol",
@@ -85,4 +79,4 @@ export const publicRouteNames = [
   routes.portfolio.name,
 ];
 
-export const mainPrivatePage = routes.schedule;
+export const mainPrivatePage = routes.home;

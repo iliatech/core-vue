@@ -1,15 +1,10 @@
 export default {
   addSlot: "Add slot",
   changePassword: "Change Password",
-  clients: "People and Events",
-  clientsSchedule: "Schedule",
-  confirmDeleteClient: "Confirm archive interaction?",
   confirmDeleteSlot: "Confirm delete slot?",
-  createClient: "Create client",
   createInteraction: "Create Person or Event",
   confirmAction: "Confirm action",
   discardChanges: "Discard Changes",
-  editClient: "Edit client",
   editInteraction: "Edit interaction",
   editSlot: "Edit slot",
   enterSecretKey: "Enter Secret Key",
@@ -25,7 +20,5 @@ export default {
   registration: "Sign Up",
   restorePassword: "Restore Password",
   siteTitle: "Home",
-  schedule: "Schedule",
-  scheduleSettings: "Schedule Settings",
   userSettings: "Personal settings",
 };

@@ -60,10 +60,6 @@ defineExpose({ open });
   font-weight: bold;
 }
 
-.timezone-shift {
-  margin-bottom: $px-10;
-}
-
 label {
   display: block;
   margin-bottom: $px-5;

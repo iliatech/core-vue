@@ -12,7 +12,7 @@
         <UniversalButton
           v-for="item in generateAvailableAppsList()"
           :key="item.label"
-          :label="item.label"
+          :label="item.label + 99"
           @click="router.push({ name: item.name })"
           color="magenta"
         />

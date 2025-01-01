@@ -1,14 +1,7 @@
-export interface AuthUserScheduleConfig {
-  title: string;
-  defaultInputTimezoneName: string;
-  dashboardTimezoneName: string;
-}
-
 export interface AuthUserConfig {
   acl: {
     topMenu: string[];
   };
-  schedule: AuthUserScheduleConfig;
 }
 
 export interface AuthUser {

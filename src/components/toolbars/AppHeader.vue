@@ -10,7 +10,7 @@ import { storeToRefs } from "pinia";
 import type { NavigationItem } from "@/types/common";
 import { useRoute } from "vue-router";
 import UniversalButton from "@/components/buttons/UniversalButton.vue";
-import ProfileSidebar from "@/modules/schedule/components/sidebars/ProfileSidebar.vue";
+import ProfileSidebar from "@/components/drawers/ProfileSidebar.vue";
 import Menu from "primevue/menu";
 import { privateTopMenuItems, publicTopMenuItems } from "@/settings/menu";
 import UniversalIcon from "@/components/icons/UniversalIcon.vue";

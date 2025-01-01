@@ -44,14 +44,6 @@ const router = createRouter({
       name: routes.changePassword.name,
       component: () => import("@/views/ChangePassword.vue"),
     },
-    {
-      path: routes.schedule.path,
-      name: routes.schedule.name,
-      component: () => import("@/modules/schedule/views/ScheduleView.vue"),
-      meta: {
-        title: lang.title.clientsSchedule,
-      },
-    },
     ...mapUniversalRoutes(),
   ],
 });

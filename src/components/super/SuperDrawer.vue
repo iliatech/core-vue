@@ -17,14 +17,6 @@ import { useUniversalDatabaseStore } from "@/store/universalDatabaseStore";
 import type { FieldConfig, Instance, ObjectConfig } from "@/types/common";
 import { FieldsTypes, noDrawerFieldsTypes } from "@/types/common";
 
-interface DrawerState {
-  id: string | null;
-  name: string;
-  typeId: string | null;
-  description: string;
-  password: string;
-}
-
 // TODO Make universal.
 interface IsInputStarted {
   name: boolean;
@@ -38,14 +30,6 @@ interface ErrorsDetails {
   password: string[];
   description: string[];
 }
-
-const initialState: DrawerState = {
-  id: null,
-  name: "",
-  typeId: null,
-  description: "",
-  password: "",
-};
 
 const isInputStartedInitialValue = {
   name: false,

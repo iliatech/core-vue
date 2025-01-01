@@ -5,7 +5,6 @@ import type { AuthUser, AuthUserConfig } from "@/types/user";
 import Api from "@/api/Api";
 import { apiPaths } from "@/settings/api";
 import { authorizedUserField, initialUserConfig } from "@/settings/auth";
-import { RequestMethods } from "@/types/api";
 import type { RegisteredError } from "@/types/errors";
 import type { PageMessage, PagesMessages } from "@/types/common";
 
@@ -62,14 +61,6 @@ export const useAppStore = defineStore("appStore", () => {
     }
   };
 
-  const saveAuthUserConfig = async () => {
-    await Api.request({
-      method: RequestMethods.Put,
-      path: apiPaths.saveAuthUserConfig,
-      payload: { config: authUserConfig.value },
-    });
-  };
-
   const setGlobalError = (value: RegisteredError | undefined) => {
     globalError.value = value;
   };
@@ -90,7 +81,6 @@ export const useAppStore = defineStore("appStore", () => {
     authUserConfig,
     pagesMessages,
     loadAuthUser,
-    saveAuthUserConfig,
     setGlobalError,
     startLoading,
     stopLoading,

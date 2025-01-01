@@ -1,6 +1,6 @@
 {
-  "name": "core",
-  "version": "0.2.3",
+  "name": "rocket-workspace",
+  "version": "0.5",
   "private": true,
   "scripts": {
     "dev": "vite",
