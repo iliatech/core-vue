@@ -12,10 +12,10 @@ import { useRoute } from "vue-router";
 import UniversalButton from "@/components/buttons/UniversalButton.vue";
 import ProfileSidebar from "@/modules/schedule/components/sidebars/ProfileSidebar.vue";
 import Menu from "primevue/menu";
-import { CredentialDatabase } from "@/modules/credentials/classes/CredentialDatabase";
 import { privateTopMenuItems, publicTopMenuItems } from "@/settings/menu";
 import UniversalIcon from "@/components/icons/UniversalIcon.vue";
 import { getRoute } from "../../helpers/navigation";
+import { UniversalDatabase } from "@/classes/UniversalDatabase";
 
 const route = useRoute();
 
@@ -96,7 +96,8 @@ const handleClickUserMenu = (event: Event) => {
 
 const handleClickSignOut = () => {
   router.push(routes.home.path);
-  CredentialDatabase.unload();
+  // TODO Need to implement 'unloadAll' method.
+  UniversalDatabase.unloadAll();
   resetAuthUser();
   resetAuthToken();
   updateAuthUser(null);

@@ -74,36 +74,7 @@ export const routes: Record<string, LocalRoute> = {
     name: "learn-espanol.verbs-pronombres",
     title: "Verbs Pronombres",
   },
-
-  credentials: {
-    path: "/credentials",
-    name: "credentials",
-    title: "Secrets",
-  },
-  credentialsCredentials: {
-    path: "credentials",
-    name: "credentials.items",
-    title: "Secrets",
-  },
-  credentialsTypes: {
-    path: "types",
-    name: "credentials.types",
-    title: "Secret Types",
-    parentRouteName: "credentials.items",
-  },
 };
-
-export const credentialsRoutes = Object.values(routes).filter((item) =>
-  ["credentials.items", "credentials.types"].includes(item.name)
-);
-
-export const wordsRoutes = Object.values(routes).filter((item) =>
-  [
-    "learn-espanol.verbs",
-    "learn-espanol.verbs-forms",
-    "learn-espanol.verbs-pronombres",
-  ].includes(item.name)
-);
 
 export const publicRouteNames = [
   routes.login.name,

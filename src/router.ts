@@ -52,29 +52,6 @@ const router = createRouter({
         title: lang.title.clientsSchedule,
       },
     },
-    {
-      path: routes.credentials.path,
-      name: routes.credentials.name,
-      component: () =>
-        import("@/modules/credentials/views/CredentialsView.vue"),
-      meta: {
-        title: lang.title.credentials,
-      },
-      children: [
-        {
-          path: routes.credentialsCredentials.path,
-          component: () =>
-            import("@/modules/credentials/components/Credentials.vue"),
-          name: routes.credentialsCredentials.name,
-        },
-        {
-          path: routes.credentialsTypes.path,
-          component: () =>
-            import("@/modules/credentials/components/CredentialTypes.vue"),
-          name: routes.credentialsTypes.name,
-        },
-      ],
-    },
     ...mapUniversalRoutes(),
   ],
 });

@@ -9,7 +9,6 @@ export default {
   confirmDeleteSlot: "Confirm delete slot?",
   createClient: "Create client",
   createInteraction: "Create Person or Event",
-  credentials: "Credentials",
   credentialTypes: "Secret Types",
   confirmDeleteCredentialType: "Confirm delete credential type",
   discardChanges: "Discard Changes",
