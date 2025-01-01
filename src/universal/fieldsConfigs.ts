@@ -1,10 +1,12 @@
-import type { DrawerConfig } from "@/types/common";
+import type { FieldConfig } from "@/types/common";
 import { FieldsTypes } from "@/types/common";
 
 import { UniversalObjectsIds } from "@/universal/enums";
+import { idColumn, standardActionColumn } from "@/universal/standardColumns";
 
-export const fieldsConfigs: Record<string, DrawerConfig> = {
+export const fieldsConfigs: Record<string, FieldConfig[]> = {
   [UniversalObjectsIds.Verbs]: [
+    idColumn,
     {
       id: "7265b3a6-92e1-436e-bea1-7587b20f0459",
       type: FieldsTypes.String,
@@ -45,8 +47,10 @@ export const fieldsConfigs: Record<string, DrawerConfig> = {
       required: true,
       filterable: true,
     },
+    standardActionColumn,
   ],
   [UniversalObjectsIds.VerbsForms]: [
+    idColumn,
     {
       id: "7beefc42-7fd7-4322-b9a8-c48bad098f01",
       type: FieldsTypes.String,
@@ -67,8 +71,10 @@ export const fieldsConfigs: Record<string, DrawerConfig> = {
       sortable: true,
       hidden: true,
     },
+    standardActionColumn,
   ],
   [UniversalObjectsIds.VerbsPronombres]: [
+    idColumn,
     {
       id: "12d1dd74-4caf-4310-b392-fd6fea1ca1e0",
       type: FieldsTypes.String,
@@ -89,5 +95,6 @@ export const fieldsConfigs: Record<string, DrawerConfig> = {
       type: FieldsTypes.Text,
       label: "Description",
     },
+    standardActionColumn,
   ],
 };

@@ -41,6 +41,7 @@ export enum FieldsTypes {
   Selector = "selector",
   String = "string",
   Text = "text",
+  Actions = "actions",
 }
 
 export interface FieldConfig extends UniversalTableColumn {
@@ -59,8 +60,6 @@ export interface FieldConfig extends UniversalTableColumn {
   sortable?: boolean;
   filterable?: boolean;
 }
-
-export type DrawerConfig = FieldConfig[];
 
 export interface ObjectConfig {
   databaseId: string;

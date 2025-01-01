@@ -6,6 +6,7 @@ export const standardActionColumn: UniversalTableColumn = {
   id: "actions",
   label: "Actions",
   hiddenLabel: true,
+  type: FieldsTypes.Actions,
   getComponents: ({ value, emit, item, objectConfig }) => [
     {
       component: UniversalIcon,
@@ -84,4 +85,5 @@ export const idColumn = {
   id: "id",
   label: "Id",
   hidden: true,
+  type: FieldsTypes.Id,
 };

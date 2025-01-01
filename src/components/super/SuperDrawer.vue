@@ -57,7 +57,6 @@ const isInputStartedInitialValue = {
 const sidebar = ref<InstanceType<typeof UniversalDrawer>>();
 const discardChangesDialog = ref<InstanceType<typeof UniversalDrawer>>();
 const isInputStarted = reactive<IsInputStarted>(isInputStartedInitialValue);
-const currentState = reactive<DrawerState>({ ...initialState });
 
 const superCurrentState = ref<Record<string, any>>({});
 const superSavedState = ref<Record<string, any>>({});
@@ -111,23 +110,23 @@ const errorDetails = computed<ErrorsDetails>(() => {
 
   // TODO Restore for Universal object.
   // Name.
-  if (!prepareName(currentState.name)) {
-    errors.name.push(lang.error.entityShouldNotBeEmpty(IEntity.CredentialName));
-  }
+  // if (!prepareName(currentState.name)) {
+  //   errors.name.push(lang.error.entityShouldNotBeEmpty(IEntity.CredentialName));
+  // }
 
   // TODO Restore for Universal object.
   // Type.
-  if (!currentState.typeId) {
-    errors.type.push(lang.error.entityShouldNotBeEmpty(IEntity.CredentialType));
-  }
+  // if (!currentState.typeId) {
+  //   errors.type.push(lang.error.entityShouldNotBeEmpty(IEntity.CredentialType));
+  // }
 
   // TODO Restore for Universal object.
   // Password.
-  if (!prepareName(currentState.password)) {
-    errors.password.push(
-      lang.error.entityShouldNotBeEmpty(IEntity.CredentialPassword)
-    );
-  }
+  // if (!prepareName(currentState.password)) {
+  //   errors.password.push(
+  //     lang.error.entityShouldNotBeEmpty(IEntity.CredentialPassword)
+  //   );
+  // }
 
   return errors;
 });
@@ -282,29 +281,32 @@ defineExpose({
     @click:close="close"
   >
     <div class="super-drawer">
-      <UniversalField
-        :label="field.label"
-        v-for="field in fieldsConfig"
-        :key="field.id"
-      >
-        <UniversalText
-          v-if="[FieldsTypes.String, FieldsTypes.Password].includes(field.type)"
-          v-model="superCurrentState[field.id]"
-          v-model:is-input-started="superIsInputStarted[field.id]"
-          :errors="superErrorDetails[field.id]"
-        />
-        <UniversalSelector
-          v-if="field.type === FieldsTypes.Selector"
-          v-model="superCurrentState[field.id]"
-          :options="getOptions(field)"
-          :label-field="field.linkedObjectFieldId"
-        />
-        <UniversalTextarea
-          v-if="field.type === FieldsTypes.Text"
-          v-model="superCurrentState[field.id]"
-          :errors="superErrorDetails[field.id]"
-        />
-      </UniversalField>
+      <template v-for="field in fieldsConfig" :key="field.id">
+        <UniversalField
+          v-if="![FieldsTypes.Id, FieldsTypes.Actions].includes(field.type)"
+          :label="field.label"
+        >
+          <UniversalText
+            v-if="
+              [FieldsTypes.String, FieldsTypes.Password].includes(field.type)
+            "
+            v-model="superCurrentState[field.id]"
+            v-model:is-input-started="superIsInputStarted[field.id]"
+            :errors="superErrorDetails[field.id]"
+          />
+          <UniversalSelector
+            v-if="field.type === FieldsTypes.Selector"
+            v-model="superCurrentState[field.id]"
+            :options="getOptions(field)"
+            :label-field="field.linkedObjectFieldId"
+          />
+          <UniversalTextarea
+            v-if="field.type === FieldsTypes.Text"
+            v-model="superCurrentState[field.id]"
+            :errors="superErrorDetails[field.id]"
+          />
+        </UniversalField>
+      </template>
     </div>
     <template #buttons-after>
       <UniversalButton
