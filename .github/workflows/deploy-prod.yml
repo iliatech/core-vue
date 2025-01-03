@@ -3,7 +3,7 @@ name: Deploy Self-Platform.es UI
 on:
   push:
     branches:
-      - main
+      - r2024
 
 jobs:
   web-deploy:
