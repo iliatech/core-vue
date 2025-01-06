@@ -109,7 +109,7 @@ const handleClickSignOut = () => {
         v-if="!isPublic"
         class="small-logo"
         src="@/images/rocket-logo.png"
-        alt="Rocket Workspace"
+        alt="Free Rocket - smart data"
       />
     </div>
     <div class="center-column">

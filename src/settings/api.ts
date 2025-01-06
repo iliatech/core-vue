@@ -11,4 +11,6 @@ export const apiPaths = {
 
   // Storage.
   fileStorage: `file-storage`,
+
+  universalObject: "universal-object",
 };

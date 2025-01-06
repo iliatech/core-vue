@@ -1,2 +1,2 @@
-'Rocket Workspace' Application
-made by Ilia Domyshev
+'Free Rocket' - smart data solution
+Author and creator: Ilia Domyshev

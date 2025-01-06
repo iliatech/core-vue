@@ -19,6 +19,8 @@ import {
 import { sortWithCollator } from "@/helpers/sort";
 import { cloneDeep, maxBy } from "lodash";
 import { initializeOrders } from "@/helpers/common";
+import Api from "@/api/Api";
+import { apiPaths } from "@/settings/api";
 
 const props = defineProps({
   objectId: {
@@ -240,6 +242,13 @@ watch(
 );
 
 onMounted(async () => {
+  // TODO
+  const objectId = "98f410b9-a280-46b4-a9f2-560bf9fcc8f6";
+  const data = await Api.request({
+    path: `${apiPaths.universalObject}/${objectId}/instances`,
+  });
+  console.log("get database", data);
+
   await UniversalDatabase.load(databaseId);
   database.value = UniversalDatabase.get(databaseId);
   runAction();
