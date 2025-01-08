@@ -247,6 +247,7 @@ onMounted(async () => {
   const data = await Api.request({
     path: `${apiPaths.universalObject}/${objectId}/instances`,
   });
+
   console.log("get database", data);
 
   await UniversalDatabase.load(databaseId);

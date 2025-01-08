@@ -5,17 +5,16 @@ import { apiUrl } from "@/settings/api";
 import { showToast } from "@/helpers/toast";
 import { ToastType } from "@/types/toasts";
 import { getAuthToken, resetAuthorization } from "@/helpers/auth";
-import { useAppStore } from "@/store/appStore";
 import { lang } from "@/lang";
 
 export default class Api {
   static async request(config: RequestConfig): Promise<any> {
-    const appStore = useAppStore();
-    const { startLoading, stopLoading, setGlobalError } = appStore;
+    // const appStore = useAppStore();
+    // const { startLoading, stopLoading, setGlobalError } = appStore;
 
-    if (!config.withoutLoader) {
-      startLoading();
-    }
+    // if (!config.withoutLoader) {
+    //   startLoading();
+    // }
 
     config.method = config.method ?? RequestMethods.Get;
     let requestResult;
@@ -70,7 +69,7 @@ export default class Api {
         config.successCallback();
       }
 
-      setGlobalError(undefined);
+      // setGlobalError(undefined);
 
       return (
         (config.isDataResult
@@ -149,9 +148,9 @@ export default class Api {
       //    }
       //}
     } finally {
-      if (!config.withoutLoader) {
-        stopLoading();
-      }
+      // if (!config.withoutLoader) {
+      //   stopLoading();
+      // }
     }
   }
 }

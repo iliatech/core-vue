@@ -52,20 +52,20 @@ export const routes: Record<string, LocalRoute> = {
 
   learnEspanolVerbs: {
     path: "verbs",
-    name: "learn-espanol.verbs",
+    name: "espanol.verbs",
     title: "Español",
     tabTitle: "Verbs",
   },
 
   learnEspanolVerbsForms: {
     path: "verbs-forms",
-    name: "learn-espanol.verbs-forms",
+    name: "espanol.verbs-forms",
     title: "Verbs Forms",
   },
 
   learnEspanolVerbsPronombres: {
     path: "verbs-pronombres",
-    name: "learn-espanol.verbs-pronombres",
+    name: "espanol.verbs-pronombres",
     title: "Verbs Pronombres",
   },
 };

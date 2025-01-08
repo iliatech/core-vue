@@ -1,5 +1,6 @@
 import { lang } from "@/lang";
 import { UniversalObjectsIds } from "@/universal/enums";
+import type { SystemApp } from "@/types/common";
 
 export interface UniversalRoute {
   name: string;
@@ -33,29 +34,29 @@ export const universalRoutes: UniversalRoute[] = [
   },
 ];
 
-export const mapUniversalRoutes = () => {
-  return universalRoutes.map((universalRoute) => {
+export const mapUniversalRoutes = (appsArray: SystemApp[]) => {
+  return appsArray.map((universalRoute) => {
     return {
-      path: `/${universalRoute.name}`,
-      name: universalRoute.name,
+      path: `/${universalRoute.url}`,
+      name: universalRoute.url,
       component: () => import("@/views/UniversalTabsView.vue"),
       props: {
-        tabsRoutes: (universalRoute.children ?? []).map((item) => ({
+        tabsRoutes: (universalRoute.objects ?? []).map((item) => ({
           ...item,
-          name: `${universalRoute.name}.${item.name}`,
+          name: `${universalRoute.url}.${item.url}`,
         })),
       },
       meta: {
         title: lang.title.learnEspanol,
       },
-      children: (universalRoute.children ?? []).map((child) => {
+      children: (universalRoute.objects ?? []).map((child) => {
         return {
-          path: child.name,
+          path: child.url,
           component: () =>
             import("@/components/super/UniversalRepresentation.vue"),
-          name: `${universalRoute.name}.${child.name}`,
+          name: `${universalRoute.url}.${child.url}`,
           props: {
-            objectId: child.objectId,
+            objectId: child.id,
           },
         };
       }),

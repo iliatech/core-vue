@@ -15,7 +15,7 @@ export default defineConfig({
     createHtmlPlugin({
       inject: {
         data: {
-          title: "Free Rocket - smart data",
+          title: "Rocket Data",
           version: `${packageJson?.version}/${new Date().toISOString()}`,
         },
       },

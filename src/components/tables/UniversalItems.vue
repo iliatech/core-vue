@@ -280,10 +280,12 @@ const changeMode = () => {
   gap: 10px;
   height: 100%;
   overflow-y: auto;
+  align-items: flex-start;
 }
 
 .item {
   width: 200px;
+  flex-shrink: 1;
   border: 1px solid #666;
   border-radius: 3px;
   padding: 10px;

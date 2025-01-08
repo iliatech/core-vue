@@ -74,3 +74,32 @@ export interface Instance {
   linkedInstance?: Record<string, Instance>; // Key is objectId here.
   [key: string]: any;
 }
+
+export interface SystemField {
+  id: string;
+  name: string;
+}
+
+export interface ConfigurationObjectField {
+  id: string;
+  type: string;
+  label: string;
+  required: boolean;
+  defaultSort: boolean;
+  sortable: boolean;
+  filterable: boolean;
+}
+
+export interface ConfigurationObject {
+  id: string;
+  label: string;
+  url: string;
+  fields: ConfigurationObjectField[];
+}
+
+export interface SystemApp {
+  id: string;
+  label: string;
+  url: string;
+  objects: ConfigurationObject[];
+}

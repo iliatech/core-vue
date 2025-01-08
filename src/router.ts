@@ -5,6 +5,17 @@ import { useAppStore } from "@/store/appStore";
 import { lang } from "@/lang";
 
 import { mapUniversalRoutes } from "@/universal/universalRoutes";
+import Api from "@/api/Api";
+import { apiPaths } from "@/settings/api";
+import type { SystemApp } from "@/types/common";
+
+const apps = (await Api.request({
+  path: `${apiPaths.universalObject}/apps`,
+})) as SystemApp[];
+
+console.log("APPS", apps);
+
+console.log("ROUTER START");
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,7 +55,7 @@ const router = createRouter({
       name: routes.changePassword.name,
       component: () => import("@/views/ChangePassword.vue"),
     },
-    ...mapUniversalRoutes(),
+    ...mapUniversalRoutes(apps),
   ],
 });
 

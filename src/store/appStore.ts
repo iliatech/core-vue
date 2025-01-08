@@ -6,7 +6,12 @@ import Api from "@/api/Api";
 import { apiPaths } from "@/settings/api";
 import { authorizedUserField, initialUserConfig } from "@/settings/auth";
 import type { RegisteredError } from "@/types/errors";
-import type { PageMessage, PagesMessages } from "@/types/common";
+import type {
+  SystemApp,
+  SystemField,
+  PageMessage,
+  PagesMessages,
+} from "@/types/common";
 
 export const useAppStore = defineStore("appStore", () => {
   const isLoading: Ref<boolean> = ref(false);
@@ -20,6 +25,9 @@ export const useAppStore = defineStore("appStore", () => {
   });
 
   const authUserConfig = ref<AuthUserConfig>(initialUserConfig);
+
+  const configurableApps = ref<SystemApp[]>([]);
+  const configurableFields = ref<SystemField[]>([]);
 
   const isAuthorized = computed(() => !!user.value);
 
@@ -72,6 +80,18 @@ export const useAppStore = defineStore("appStore", () => {
     pagesMessages[pageName] = messages;
   };
 
+  const loadSystemApps = async () => {
+    // configurableApps.value = await Api.request({
+    //   path: `${apiPaths.universalObject}/apps`,
+    // });
+  };
+
+  const loadSystemFields = async () => {
+    configurableApps.value = await Api.request({
+      path: `${apiPaths.universalObject}/fields`,
+    });
+  };
+
   return {
     globalError,
     isAuthorized,
@@ -88,5 +108,7 @@ export const useAppStore = defineStore("appStore", () => {
     stopPersistentLoading,
     updateAuthUser,
     updatePageMessages,
+    loadSystemApps,
+    loadSystemFields,
   };
 });
