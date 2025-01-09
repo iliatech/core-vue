@@ -8,14 +8,15 @@
         {{ $lang.title.privateArea[1] }}<br />
         {{ $lang.title.privateArea[2] }}
       </h4>
+
       <div class="private-area__buttons-container">
-        <UniversalButton
-          v-for="item in generateAvailableAppsList()"
-          :key="item.label"
-          :label="item.label + 99"
-          @click="router.push({ name: item.name })"
-          color="magenta"
-        />
+        <template v-for="item in generateAvailableAppsList()" :key="item.label">
+          <UniversalButton
+            :label="item.label"
+            @click="router.push({ name: item.name })"
+            color="magenta"
+          />
+        </template>
       </div>
     </div>
   </div>

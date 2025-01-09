@@ -103,3 +103,7 @@ export interface SystemApp {
   url: string;
   objects: ConfigurationObject[];
 }
+
+export interface SystemAppRoute extends SystemApp {
+  name: string;
+}

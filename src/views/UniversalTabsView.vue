@@ -6,11 +6,11 @@
         :class="{
           'tabs-view__tabs-item--selected': item.name === route.name,
         }"
-        v-for="item in tabsRoutes"
-        :key="item.title"
+        v-for="item in tabs"
+        :key="item.label"
         @click="handleClickMenuItem(item.name)"
       >
-        {{ item.tabTitle ?? item.title }}
+        {{ item.label }}
       </div>
       <div class="tabs-view__tabs-item-last">
         <UniversalButton
@@ -30,7 +30,7 @@ import type { PropType } from "vue";
 import { computed, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import UniversalButton from "@/components/buttons/UniversalButton.vue";
-import type { UniversalRoute } from "@/universal/universalRoutes";
+import type { SystemAppRoute } from "@/types/common";
 
 const router = useRouter();
 const route = useRoute();
@@ -38,8 +38,8 @@ const route = useRoute();
 const tabId = ref<number>(0);
 
 defineProps({
-  tabsRoutes: {
-    type: Object as PropType<UniversalRoute[]>,
+  tabs: {
+    type: Object as PropType<SystemAppRoute[]>,
     required: true,
   },
 });

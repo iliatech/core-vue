@@ -34,27 +34,27 @@ export const universalRoutes: UniversalRoute[] = [
   },
 ];
 
-export const mapUniversalRoutes = (appsArray: SystemApp[]) => {
-  return appsArray.map((universalRoute) => {
+export const mapUniversalRoutes = (apps: SystemApp[]) => {
+  return apps.map((app) => {
     return {
-      path: `/${universalRoute.url}`,
-      name: universalRoute.url,
+      path: `/${app.url}`,
+      name: app.url,
       component: () => import("@/views/UniversalTabsView.vue"),
       props: {
-        tabsRoutes: (universalRoute.objects ?? []).map((item) => ({
+        tabs: (app.objects ?? []).map((item) => ({
           ...item,
-          name: `${universalRoute.url}.${item.url}`,
+          name: `${app.url}.${item.url}`,
         })),
       },
       meta: {
         title: lang.title.learnEspanol,
       },
-      children: (universalRoute.objects ?? []).map((child) => {
+      children: (app.objects ?? []).map((child) => {
         return {
           path: child.url,
           component: () =>
             import("@/components/super/UniversalRepresentation.vue"),
-          name: `${universalRoute.url}.${child.url}`,
+          name: `${app.url}.${child.url}`,
           props: {
             objectId: child.id,
           },
