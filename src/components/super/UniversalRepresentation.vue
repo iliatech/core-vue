@@ -3,8 +3,7 @@ import UniversalItems from "@/components/tables/UniversalItems.vue";
 import { computed, onMounted, ref, watch } from "vue";
 import type UniversalDrawer from "@/components/dialogs/UniversalDrawer.vue";
 import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
-import { useRoute } from "vue-router";
-import router from "@/router";
+import { useRoute, useRouter } from "vue-router";
 import SuperDrawer from "@/components/super/SuperDrawer.vue";
 import { UniversalDatabase } from "@/classes/UniversalDatabase";
 import type { IUniversalDatabase } from "@/types/universalDatabase";
@@ -46,6 +45,7 @@ const objectConfig = computed<ObjectConfig>(() => ({
 }));
 
 const route = useRoute();
+const router = useRouter();
 
 const universalDatabaseStore = useUniversalDatabaseStore();
 const { deleteInstanceById, getInstances, addOrUpdateInstance } =

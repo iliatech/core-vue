@@ -11,20 +11,18 @@
 
       <div class="private-area__buttons-container">
         <template v-for="item in generateAvailableAppsList()" :key="item.label">
-          <UniversalButton
-            :label="item.label"
-            @click="router.push({ name: item.name })"
-            color="magenta"
-          />
+          <!--          <UniversalButton-->
+          <!--            :label="item.label"-->
+          <!--            @click="router.push({ name: item.name })"-->
+          <!--            color="magenta"-->
+          <!--          />-->
         </template>
       </div>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-import router from "@/router";
 import { generateAvailableAppsList } from "@/helpers/navigation";
-import UniversalButton from "@/components/buttons/UniversalButton.vue";
 </script>
 <style lang="scss" scoped>
 @import "@/assets/variables";

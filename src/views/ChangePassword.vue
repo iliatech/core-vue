@@ -55,7 +55,6 @@ import VueTurnstile from "vue-turnstile";
 import Api from "@/api/Api";
 import { RequestMethods } from "@/types/api";
 import { apiPaths } from "@/settings/api";
-import router from "@/router";
 import { routes } from "@/settings/routes";
 import { useAppStore } from "@/store/appStore";
 import UniversalField from "@/components/fields/UniversalField.vue";
@@ -71,6 +70,7 @@ const { updatePageMessages } = appStore;
 const { pagesMessages } = storeToRefs(appStore);
 
 const route = useRoute();
+const router = useRouter();
 
 const passwordMain = ref("");
 const passwordConfirm = ref("");

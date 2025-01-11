@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { lang } from "@/lang";
-import router from "@/router";
 import { routes } from "@/settings/routes";
 import { resetAuthToken, resetAuthUser } from "@/helpers/auth";
 import type { PropType } from "vue";
@@ -8,7 +7,7 @@ import { computed, ref, watch } from "vue";
 import { useAppStore } from "@/store/appStore";
 import { storeToRefs } from "pinia";
 import type { NavigationItem } from "@/types/common";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import UniversalButton from "@/components/buttons/UniversalButton.vue";
 import ProfileSidebar from "@/components/drawers/ProfileSidebar.vue";
 import Menu from "primevue/menu";
@@ -17,6 +16,7 @@ import UniversalIcon from "@/components/icons/UniversalIcon.vue";
 import { getRoute } from "../../helpers/navigation";
 
 const route = useRoute();
+const router = useRouter();
 
 const appStore = useAppStore();
 const { isAuthorized, user } = storeToRefs(appStore);
