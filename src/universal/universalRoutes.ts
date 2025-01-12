@@ -49,14 +49,15 @@ export const mapUniversalRoutes = (apps: SystemApp[]) => {
       meta: {
         title: lang.title.learnEspanol,
       },
-      children: (app.objects ?? []).map((child) => {
+      children: (app.objects ?? []).map((object) => {
         return {
-          path: child.url,
+          path: object.url,
           component: () =>
             import("@/components/super/UniversalRepresentation.vue"),
-          name: `${app.url}.${child.url}`,
+          name: `${app.url}.${object.url}`,
           props: {
-            objectId: child.id,
+            objectId: object.id,
+            object,
           },
         };
       }),

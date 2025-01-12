@@ -108,6 +108,11 @@ router.beforeEach(async (to) => {
 const app = createApp(App);
 
 app.use(createPinia());
+
+const appStore = useAppStore();
+const { setSystemApps } = appStore;
+setSystemApps(apps);
+
 app.use(router);
 app.use(PrimeVue);
 app.use(langPlugin);

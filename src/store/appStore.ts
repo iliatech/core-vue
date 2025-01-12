@@ -14,6 +14,7 @@ import type {
 } from "@/types/common";
 
 export const useAppStore = defineStore("appStore", () => {
+  const configurableApps: Ref<SystemApp[]> = ref([]);
   const isLoading: Ref<boolean> = ref(false);
   const isPersistentLoading: Ref<boolean> = ref(false);
   const user = ref<AuthUser | null>(null);
@@ -26,7 +27,6 @@ export const useAppStore = defineStore("appStore", () => {
 
   const authUserConfig = ref<AuthUserConfig>(initialUserConfig);
 
-  const configurableApps = ref<SystemApp[]>([]);
   const configurableFields = ref<SystemField[]>([]);
 
   const isAuthorized = computed(() => !!user.value);
@@ -86,8 +86,12 @@ export const useAppStore = defineStore("appStore", () => {
     // });
   };
 
+  const setSystemApps = (apps: SystemApp[]) => {
+    configurableApps.value = apps;
+  };
+
   const loadSystemFields = async () => {
-    configurableApps.value = await Api.request({
+    configurableFields.value = await Api.request({
       path: `${apiPaths.universalObject}/fields`,
     });
   };
@@ -110,5 +114,6 @@ export const useAppStore = defineStore("appStore", () => {
     updatePageMessages,
     loadSystemApps,
     loadSystemFields,
+    setSystemApps,
   };
 });

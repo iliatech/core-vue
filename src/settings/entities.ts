@@ -1,6 +1,7 @@
-import type { FieldConfig } from "@/types/common";
+import type { ConfigurationObject, FieldConfig } from "@/types/common";
 import { fieldsConfigs } from "@/universal/fieldsConfigs";
 import { UniversalDatabasesIds, UniversalObjectsIds } from "@/universal/enums";
+import { idColumn, standardActionColumn } from "@/universal/standardColumns";
 
 interface IUniversalObject {
   id: UniversalObjectsIds;
@@ -47,6 +48,12 @@ export const getDrawerConfigByObjectId = (objectId: string): FieldConfig[] => {
   return config;
 };
 
+export const getDrawerConfigByObject = (
+  object: ConfigurationObject
+): FieldConfig[] => {
+  return [idColumn, ...object.fields, standardActionColumn];
+};
+
 export const getTableConfigByObjectId = (objectId: string): FieldConfig[] => {
   const config = fieldsConfigs[objectId];
 
@@ -57,4 +64,10 @@ export const getTableConfigByObjectId = (objectId: string): FieldConfig[] => {
   }
 
   return config;
+};
+
+export const getTableConfigByObject = (
+  object: ConfigurationObject
+): FieldConfig[] => {
+  return [idColumn, ...object.fields, standardActionColumn];
 };

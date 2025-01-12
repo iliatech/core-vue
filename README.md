@@ -1,2 +1,2 @@
-'Rocket Data' - smart data
-Author and creator: Ilia Domyshev
+'Rocket Data' - agile data solution
+Author of idea and creator: Ilia Domyshev

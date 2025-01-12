@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import UniversalItems from "@/components/tables/UniversalItems.vue";
+import type { PropType } from "vue";
 import { computed, onMounted, ref, watch } from "vue";
 import type UniversalDrawer from "@/components/dialogs/UniversalDrawer.vue";
 import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
@@ -8,12 +9,17 @@ import SuperDrawer from "@/components/super/SuperDrawer.vue";
 import { UniversalDatabase } from "@/classes/UniversalDatabase";
 import type { IUniversalDatabase } from "@/types/universalDatabase";
 import { useUniversalDatabaseStore } from "@/store/universalDatabaseStore";
-import type { FieldConfig, Instance, ObjectConfig } from "@/types/common";
+import type {
+  ConfigurationObject,
+  FieldConfig,
+  Instance,
+  ObjectConfig,
+} from "@/types/common";
 import { FieldsTypes } from "@/types/common";
 import {
   getDatabaseIdByObjectId,
-  getDrawerConfigByObjectId,
-  getTableConfigByObjectId,
+  getDrawerConfigByObject,
+  getTableConfigByObject,
 } from "@/settings/entities";
 import { sortWithCollator } from "@/helpers/sort";
 import { cloneDeep, maxBy } from "lodash";
@@ -26,6 +32,10 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  object: {
+    type: Object as PropType<ConfigurationObject>,
+    required: true,
+  },
 });
 
 const databaseId = getDatabaseIdByObjectId(props.objectId);
@@ -34,9 +44,9 @@ if (!databaseId) {
   throw new Error(`Database id not found for object id '${props.objectId}'`);
 }
 
-const drawerConfig = computed(() => getDrawerConfigByObjectId(props.objectId));
+const drawerConfig = computed(() => getDrawerConfigByObject(props.object));
 
-const tableConfig = computed(() => getTableConfigByObjectId(props.objectId));
+const tableConfig = computed(() => getTableConfigByObject(props.object));
 
 const objectConfig = computed<ObjectConfig>(() => ({
   databaseId,
