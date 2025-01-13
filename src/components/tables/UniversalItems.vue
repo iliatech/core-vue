@@ -68,23 +68,23 @@ const dataFiltered = computed<any[]>(() => {
         );
       }
 
-      const linkedInstances = getInstances({
-        databaseId: getDatabaseIdByObjectId(fieldConfig.linkedObjectId),
-        objectId: fieldConfig.linkedObjectId,
-      });
+      // TODO Refactor for updated method getInstances.
+      // const linkedInstances = await getInstances({
+      //   objectId: fieldConfig.linkedObjectId,
+      // });
 
-      const linkedInstancesFilteredIds = linkedInstances
-        .filter((instance) =>
-          prepareName(instance[fieldConfig.linkedObjectFieldId])
-            .toLowerCase()
-            .includes(prepareName(filterValue).toLowerCase())
-        )
-        .map((instance) => instance.id);
+      // const linkedInstancesFilteredIds = linkedInstances
+      //   .filter((instance) =>
+      //     prepareName(instance[fieldConfig.linkedObjectFieldId])
+      //       .toLowerCase()
+      //       .includes(prepareName(filterValue).toLowerCase())
+      //   )
+      //   .map((instance) => instance.id);
 
-      itemsFiltered = itemsFiltered.filter((item) => {
-        const linkedInstanceId = item[fieldId];
-        return linkedInstancesFilteredIds.includes(linkedInstanceId);
-      });
+      // itemsFiltered = itemsFiltered.filter((item) => {
+      //   const linkedInstanceId = item[fieldId];
+      //   return linkedInstancesFilteredIds.includes(linkedInstanceId);
+      // });
     }
 
     if (fieldConfig.type === FieldsTypes.String) {

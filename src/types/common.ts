@@ -64,8 +64,7 @@ export interface FieldConfig extends UniversalTableColumn {
 }
 
 export interface ObjectConfig {
-  databaseId: string;
-  objectId: string;
+  object: ConfigurationObject;
   fields: FieldConfig[];
 }
 

@@ -49,8 +49,7 @@ const drawerConfig = computed(() => getDrawerConfigByObject(props.object));
 const tableConfig = computed(() => getTableConfigByObject(props.object));
 
 const objectConfig = computed<ObjectConfig>(() => ({
-  databaseId,
-  objectId: props.objectId,
+  object: props.object,
   fields: drawerConfig.value,
 }));
 
@@ -90,10 +89,11 @@ const tableData = computed<Instance[]>(() => {
       return;
     }
 
-    linkedInstances[field.linkedObjectId] = getInstances({
-      databaseId: getDatabaseIdByObjectId(field.linkedObjectId),
-      objectId: field.linkedObjectId,
-    });
+    // TODO Refactor it to take instances again.
+    // linkedInstances[field.linkedObjectId] = getInstances({
+    //   databaseId: getDatabaseIdByObjectId(field.linkedObjectId),
+    //   objectId: field.linkedObjectId,
+    // });
   });
 
   return objects.value.map((item) => {

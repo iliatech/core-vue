@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import UniversalDrawer from "@/components/dialogs/UniversalDrawer.vue";
 import type { PropType } from "vue";
-import { computed, reactive, ref, watch } from "vue";
+import { computed, onBeforeMount, reactive, ref, watch } from "vue";
 import UniversalButton from "@/components/buttons/UniversalButton.vue";
 import { showToast } from "@/helpers/toast";
 import { ToastType } from "@/types/toasts";
@@ -14,7 +14,11 @@ import UniversalField from "@/components/fields/UniversalField.vue";
 import UniversalSelector from "@/components/fields/UniversalSelector.vue";
 import UniversalTextarea from "@/components/fields/UniversalTextarea.vue";
 import { useUniversalDatabaseStore } from "@/store/universalDatabaseStore";
-import type { FieldConfig, Instance, ObjectConfig } from "@/types/common";
+import type {
+  ConfigurationObject,
+  FieldConfig,
+  Instance,
+} from "@/types/common";
 import { FieldsTypes, noDrawerFieldsTypes } from "@/types/common";
 
 // TODO Make universal.
@@ -46,6 +50,8 @@ const superSavedState = ref<Record<string, any>>({});
 const superIsInputStarted = ref<Record<string, any>>({});
 const superErrorDetails = ref<Record<string, string[]>>({});
 
+const optionsArrays = ref<Record<string, Instance[]>>({});
+
 const emit = defineEmits(["close:drawer"]);
 
 const universalDatabaseStore = useUniversalDatabaseStore();
@@ -54,7 +60,13 @@ const { addOrUpdateInstance, getInstances } = universalDatabaseStore;
 const props = defineProps({
   titleAdd: { type: String, required: true },
   titleEdit: { type: String, required: true },
-  objectConfig: { type: Object as PropType<ObjectConfig>, required: true },
+  objectConfig: {
+    type: Object as PropType<{
+      object: ConfigurationObject;
+      fields: FieldConfig[];
+    }>,
+    required: true,
+  },
 });
 
 const fieldsConfig = computed<FieldConfig[]>(() =>
@@ -114,15 +126,14 @@ const errorDetails = computed<ErrorsDetails>(() => {
   return errors;
 });
 
-const getOptions = (field: FieldConfig): Instance[] => {
+const getOptions = async (field: FieldConfig): Promise<Instance[]> => {
   if (!field.linkedObjectId) {
     throw new Error(
       `linkedObjectId is not defined in field config for field ${field.id}`
     );
   }
 
-  let instances = getInstances({
-    databaseId: props.objectConfig?.databaseId,
+  let instances = await getInstances({
     objectId: field.linkedObjectId,
   });
 
@@ -132,6 +143,8 @@ const getOptions = (field: FieldConfig): Instance[] => {
         instance[field.selectorFilter.fieldId] === field.selectorFilter.value
     );
   }
+
+  console.log("INS", instances);
 
   return instances;
 };
@@ -166,8 +179,7 @@ const handleClickSave = async () => {
   if (isEditMode.value) {
     await addOrUpdateInstance(
       {
-        databaseId: props.objectConfig?.databaseId,
-        objectId: props.objectConfig?.objectId,
+        objectId: props.objectConfig?.object.id,
         instanceId: superSavedState.value.id,
       },
       superCurrentState.value
@@ -175,8 +187,7 @@ const handleClickSave = async () => {
   } else {
     await addOrUpdateInstance(
       {
-        databaseId: props.objectConfig?.databaseId,
-        objectId: props.objectConfig?.objectId,
+        objectId: props.objectConfig?.object.id,
       },
       superCurrentState.value
     );
@@ -231,6 +242,17 @@ watch(
   { deep: true }
 );
 
+onBeforeMount(async () => {
+  for (let field of fieldsConfig.value) {
+    if (field.type === FieldsTypes.Selector) {
+      console.log("FF", field);
+      optionsArrays.value[field.id] = await getOptions(field);
+    }
+  }
+
+  console.log("getOpt", optionsArrays.value);
+});
+
 defineExpose({
   async open(item?: Instance) {
     // Clean.
@@ -278,9 +300,11 @@ defineExpose({
             :errors="superErrorDetails[field.id]"
           />
           <UniversalSelector
-            v-if="field.type === FieldsTypes.Selector"
+            v-if="
+              field.type === FieldsTypes.Selector && optionsArrays[field.id]
+            "
             v-model="superCurrentState[field.id]"
-            :options="getOptions(field)"
+            :options="optionsArrays[field.id]"
             :label-field="field.linkedObjectFieldId"
           />
           <UniversalTextarea

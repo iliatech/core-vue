@@ -7,9 +7,14 @@ import { UniversalDatabase } from "@/classes/UniversalDatabase";
 import { UniversalDatabasesIds } from "@/universal/enums";
 import type { Instance } from "@/types/common";
 import { FieldsTypes } from "@/types/common";
-import { getTableConfigByObjectId } from "@/settings/entities";
+import {
+  getTableConfigByObject,
+  getTableConfigByObjectId,
+} from "@/settings/entities";
 import { maxBy } from "lodash";
 import { initializeOrders } from "@/helpers/common";
+import Api from "@/api/Api";
+import { apiPaths } from "@/settings/api";
 
 export const useUniversalDatabaseStore = defineStore(
   "universalDatabaseStore",
@@ -30,54 +35,22 @@ export const useUniversalDatabaseStore = defineStore(
       );
     };
 
-    const getInstances = (params: {
-      databaseId: string;
+    const getInstances = async (params: {
       objectId: string;
-    }): Instance[] => {
-      const database = getDatabase(params.databaseId);
-
-      if (!database) {
-        return [];
-      }
-
-      const instances = database.data[params.objectId];
-
-      return instances ?? [];
-    };
-
-    const getInstanceById = (params: {
-      databaseId: string;
-      objectId: string;
-      instanceId: string;
-    }) => {
-      const instances = getInstances(params);
-
-      if (!instances) {
-        return null;
-      }
-
-      return (
-        instances.find((instance) => instance.id === params.instanceId) ?? null
-      );
+    }): Promise<Instance[]> => {
+      return await Api.request({
+        path: `${apiPaths.universalObject}/${params.objectId}/instances`,
+      });
     };
 
     const addOrUpdateInstance = async (
-      params: { databaseId: string; objectId: string; instanceId?: string },
+      params: { objectId: string; instanceId?: string },
       instance: Instance
     ) => {
-      const database = getDatabase(params.databaseId);
+      // TODO Refactor for updated API.
 
-      if (!database) {
-        throw new Error(
-          `Database with id '${params.databaseId}' not found when try add or update instance`
-        );
-      }
-
-      if (!database.data[params.objectId]) {
-        database.data[params.objectId] = [];
-      }
-
-      const objectConfig = getTableConfigByObjectId(params.objectId);
+      // TODO Change here to take object
+      const objectConfig = getTableConfigByObject(params.object);
 
       const orderField = objectConfig.find(
         (field) => field.type === FieldsTypes.Order
@@ -195,7 +168,6 @@ export const useUniversalDatabaseStore = defineStore(
     return {
       getDatabase,
       getInstances,
-      getInstanceById,
       addOrUpdateInstance,
       deleteInstanceById,
       unloadDatabase,
