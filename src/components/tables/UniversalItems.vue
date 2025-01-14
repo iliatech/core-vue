@@ -3,7 +3,6 @@ import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import type { PropType } from "vue";
 import { computed, ref } from "vue";
-import type { UniversalTableColumn } from "@/types/tables";
 import UniversalButton from "@/components/buttons/UniversalButton.vue";
 import UniversalFilters from "@/components/filters/UniversalFilters.vue";
 import type { UniversalFilterValues } from "@/types/filters";
@@ -94,10 +93,10 @@ const dataFiltered = computed<any[]>(() => {
   });
 
   // TODO Do we need to sort here?
-  sortWithCollator(
-    itemsFiltered,
-    props.objectConfig.find((item) => item.defaultSort)?.id // TODO ??
-  );
+  // sortWithCollator(
+  //   itemsFiltered,
+  //   props.objectConfig.find((item) => item.defaultSort)?.id // TODO ??
+  // );
 
   return itemsFiltered;
 });
@@ -184,6 +183,7 @@ const changeMode = () => {
               <template #body="{ data: item, index }">
                 <UniversalTableCell
                   :column-config="column"
+                  :object-config="objectConfig"
                   :index="index"
                   :item="item"
                   :key="objectHash(item)"

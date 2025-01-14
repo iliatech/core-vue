@@ -1,27 +1,22 @@
 <script lang="ts" setup>
 import UniversalItems from "@/components/tables/UniversalItems.vue";
 import type { PropType } from "vue";
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onBeforeMount, onMounted, ref, watch } from "vue";
 import type UniversalDrawer from "@/components/dialogs/UniversalDrawer.vue";
 import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
 import { useRoute, useRouter } from "vue-router";
 import SuperDrawer from "@/components/super/SuperDrawer.vue";
-import type { IUniversalDatabase } from "@/types/universalDatabase";
 import type {
   ConfigurationObject,
   FieldConfig,
   Instance,
   ObjectConfig,
 } from "@/types/common";
-import { FieldsTypes } from "@/types/common";
 import {
-  getDatabaseIdByObjectId,
   getDrawerConfigByObject,
   getTableConfigByObject,
 } from "@/settings/entities";
-import { sortWithCollator } from "@/helpers/sort";
-import { cloneDeep, maxBy } from "lodash";
-import { initializeOrders } from "@/helpers/common";
+import { Instances } from "@/classes/Instances";
 
 const props = defineProps({
   objectId: {
@@ -33,12 +28,6 @@ const props = defineProps({
     required: true,
   },
 });
-
-const databaseId = getDatabaseIdByObjectId(props.objectId);
-
-if (!databaseId) {
-  throw new Error(`Database id not found for object id '${props.objectId}'`);
-}
 
 const drawerConfig = computed(() => getDrawerConfigByObject(props.object));
 
@@ -52,62 +41,55 @@ const objectConfig = computed<ObjectConfig>(() => ({
 const route = useRoute();
 const router = useRouter();
 
-const defaultSortColumn = tableConfig.value.find((item) => item.defaultSort);
 const superDrawerRef = ref<InstanceType<typeof UniversalDrawer>>();
 const selectedItem = ref<Instance | null>(null);
 const confirmDeleteItemDialog = ref<InstanceType<typeof UniversalDialog>>();
-const database = ref<IUniversalDatabase | null>(null);
-const objects = computed<Instance[]>(() => {
-  let items = database.value?.data[props.objectId] ?? [];
-  if (defaultSortColumn) {
-    sortWithCollator(items, defaultSortColumn.id);
-  }
-  return items;
-});
 
-const tableData = computed<Instance[]>(() => {
-  const linkedFields = tableConfig.value.filter(
-    (field) => field.linkedObjectId
-  );
+const instances = ref<Instance[]>([]);
 
-  if (!linkedFields.length) {
-    return objects.value;
-  }
-
-  const linkedInstances: Record<string, Instance[]> = {};
-
-  linkedFields.forEach((field) => {
-    if (!field.linkedObjectId) {
-      return;
-    }
-
-    // TODO Refactor it to take instances again.
-    // linkedInstances[field.linkedObjectId] = getInstances({
-    //   databaseId: getDatabaseIdByObjectId(field.linkedObjectId),
-    //   objectId: field.linkedObjectId,
-    // });
-  });
-
-  return objects.value.map((item) => {
-    item.linkedInstance = {};
-    linkedFields.forEach((field) => {
-      const foundInstance = linkedInstances[field.linkedObjectId].find(
-        (instance) => {
-          return instance.id === item[field.id];
-        }
-      );
-      const linkedInstance = foundInstance
-        ? cloneDeep(foundInstance)
-        : undefined;
-      if (linkedInstance?.linkedInstance) {
-        delete linkedInstance.linkedInstance;
-      }
-      item.linkedInstance[field.linkedObjectId] = linkedInstance;
-    });
-
-    return item;
-  });
-});
+// const tableData = computed<Instance[]>(() => {
+//   const linkedFields = tableConfig.value.filter(
+//     (field) => field.linkedObjectId
+//   );
+//
+//   if (!linkedFields.length) {
+//     return objects.value;
+//   }
+//
+//   const linkedInstances: Record<string, Instance[]> = {};
+//
+//   linkedFields.forEach((field) => {
+//     if (!field.linkedObjectId) {
+//       return;
+//     }
+//
+//     // TODO Refactor it to take instances again.
+//     // linkedInstances[field.linkedObjectId] = getInstances({
+//     //   databaseId: getDatabaseIdByObjectId(field.linkedObjectId),
+//     //   objectId: field.linkedObjectId,
+//     // });
+//   });
+//
+//   return objects.value.map((item) => {
+//     item.linkedInstance = {};
+//     linkedFields.forEach((field) => {
+//       const foundInstance = linkedInstances[field.linkedObjectId].find(
+//         (instance) => {
+//           return instance.id === item[field.id];
+//         }
+//       );
+//       const linkedInstance = foundInstance
+//         ? cloneDeep(foundInstance)
+//         : undefined;
+//       if (linkedInstance?.linkedInstance) {
+//         delete linkedInstance.linkedInstance;
+//       }
+//       item.linkedInstance[field.linkedObjectId] = linkedInstance;
+//     });
+//
+//     return item;
+//   });
+// });
 
 const handleClickAddItem = () => {
   superDrawerRef.value?.open();
@@ -127,69 +109,70 @@ const handleClickChangeOrder = async (
   item: Instance,
   objectConfig: FieldConfig[]
 ) => {
-  const orderField = objectConfig.find(
-    (field) => field.type === FieldsTypes.Order
-  );
-
-  if (!orderField) {
-    throw new Error(
-      `Order field not found for object config of item with id ${item.id}`
-    );
-  }
-
-  const instances = database.value?.data[props.objectId] ?? [];
-
-  initializeOrders(instances, orderField.id);
-
-  if (item[orderField.id] === 0 && isOrderUp) {
-    return;
-  }
-
-  const maxOrder = maxBy(instances, orderField.id);
-
-  if (
-    !isOrderUp &&
-    maxOrder &&
-    item[orderField.id] === maxOrder[orderField.id]
-  ) {
-    return;
-  }
-
-  let newOrder = 0;
-
-  if (item[orderField.id] === undefined) {
-    newOrder = isOrderUp ? 0 : 1;
-  } else {
-    newOrder = isOrderUp ? item[orderField.id] - 1 : item[orderField.id] + 1;
-  }
-
-  const previousNewOrderItem = instances.find(
-    (instance) => instance[orderField.id] === newOrder
-  );
-
-  if (previousNewOrderItem && item[orderField.id] !== undefined) {
-    previousNewOrderItem[orderField.id] = item[orderField.id];
-  }
-
-  item[orderField.id] = newOrder;
-
-  await addOrUpdateInstance(
-    {
-      objectId: props.objectId,
-      instanceId: item.id,
-    },
-    item
-  );
-
-  if (previousNewOrderItem) {
-    await addOrUpdateInstance(
-      {
-        objectId: props.objectId,
-        instanceId: previousNewOrderItem.id,
-      },
-      previousNewOrderItem
-    );
-  }
+  // TODO Restore method.
+  // const orderField = objectConfig.find(
+  //   (field) => field.type === FieldsTypes.Order
+  // );
+  //
+  // if (!orderField) {
+  //   throw new Error(
+  //     `Order field not found for object config of item with id ${item.id}`
+  //   );
+  // }
+  //
+  // const instances = database.value?.data[props.objectId] ?? [];
+  //
+  // initializeOrders(instances, orderField.id);
+  //
+  // if (item[orderField.id] === 0 && isOrderUp) {
+  //   return;
+  // }
+  //
+  // const maxOrder = maxBy(instances, orderField.id);
+  //
+  // if (
+  //   !isOrderUp &&
+  //   maxOrder &&
+  //   item[orderField.id] === maxOrder[orderField.id]
+  // ) {
+  //   return;
+  // }
+  //
+  // let newOrder = 0;
+  //
+  // if (item[orderField.id] === undefined) {
+  //   newOrder = isOrderUp ? 0 : 1;
+  // } else {
+  //   newOrder = isOrderUp ? item[orderField.id] - 1 : item[orderField.id] + 1;
+  // }
+  //
+  // const previousNewOrderItem = instances.find(
+  //   (instance) => instance[orderField.id] === newOrder
+  // );
+  //
+  // if (previousNewOrderItem && item[orderField.id] !== undefined) {
+  //   previousNewOrderItem[orderField.id] = item[orderField.id];
+  // }
+  //
+  // item[orderField.id] = newOrder;
+  //
+  // await addOrUpdateInstance(
+  //   {
+  //     objectId: props.objectId,
+  //     instanceId: item.id,
+  //   },
+  //   item
+  // );
+  //
+  // if (previousNewOrderItem) {
+  //   await addOrUpdateInstance(
+  //     {
+  //       objectId: props.objectId,
+  //       instanceId: previousNewOrderItem.id,
+  //     },
+  //     previousNewOrderItem
+  //   );
+  // }
 };
 
 const handleClickOrderUp = (item: Instance, objectConfig: FieldConfig[]) => {
@@ -214,10 +197,8 @@ const handleConfirmDeleteItem = async () => {
     throw new Error("selectedItem is undefined");
   }
 
-  await deleteInstanceById(
-    { databaseId, objectId: props.objectId },
-    selectedItem.value.id
-  );
+  await Instances.deleteOne(props.object.id, selectedItem.value.id);
+
   confirmDeleteItemDialog.value?.close();
 };
 
@@ -235,13 +216,18 @@ const runAction = () => {
 
 watch(
   route,
-  () => {
+  async () => {
+    instances.value = await Instances.getAll(props.object.id);
     runAction();
   },
   { deep: true }
 );
 
-onMounted(async () => {
+onBeforeMount(async () => {
+  instances.value = await Instances.getAll(props.object.id);
+});
+
+onMounted(() => {
   runAction();
 });
 </script>
@@ -250,7 +236,7 @@ onMounted(async () => {
   <div class="universal-representation">
     <UniversalItems
       :object-config="tableConfig"
-      :data="tableData"
+      :data="instances"
       @click:action-button="handleClickAddItem"
       @click:delete-item="handleClickDeleteItem"
       @click:edit-item="handleClickEditItem"

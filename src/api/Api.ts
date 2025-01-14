@@ -9,13 +9,6 @@ import { lang } from "@/lang";
 
 export default class Api {
   static async request(config: RequestConfig): Promise<any> {
-    // const appStore = useAppStore();
-    // const { startLoading, stopLoading, setGlobalError } = appStore;
-
-    // if (!config.withoutLoader) {
-    //   startLoading();
-    // }
-
     config.method = config.method ?? RequestMethods.Get;
     let requestResult;
 

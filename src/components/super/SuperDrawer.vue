@@ -19,7 +19,7 @@ import type {
   Instance,
 } from "@/types/common";
 import { FieldsTypes, noDrawerFieldsTypes } from "@/types/common";
-import { Instances } from "@/classes/UniversalDatabase";
+import { Instances } from "@/classes/Instances";
 
 // TODO Make universal.
 interface IsInputStarted {
@@ -130,9 +130,7 @@ const getOptions = async (field: FieldConfig): Promise<Instance[]> => {
     );
   }
 
-  let instances = await Instances.getAll({
-    objectId: field.linkedObjectId,
-  });
+  let instances = await Instances.getAll(field.linkedObjectId);
 
   if (field.selectorFilter?.fieldId) {
     instances = instances.filter(

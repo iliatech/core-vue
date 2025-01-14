@@ -74,6 +74,8 @@ export interface Instance {
   [key: string]: any;
 }
 
+export type InstanceWithoutId = Omit<Instance, "id">;
+
 export interface SystemField {
   id: string;
   name: string;
