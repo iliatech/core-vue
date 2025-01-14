@@ -144,8 +144,6 @@ const getOptions = async (field: FieldConfig): Promise<Instance[]> => {
     );
   }
 
-  console.log("INS", instances);
-
   return instances;
 };
 
@@ -245,12 +243,9 @@ watch(
 onBeforeMount(async () => {
   for (let field of fieldsConfig.value) {
     if (field.type === FieldsTypes.Selector) {
-      console.log("FF", field);
       optionsArrays.value[field.id] = await getOptions(field);
     }
   }
-
-  console.log("getOpt", optionsArrays.value);
 });
 
 defineExpose({

@@ -6,7 +6,6 @@ import type UniversalDrawer from "@/components/dialogs/UniversalDrawer.vue";
 import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
 import { useRoute, useRouter } from "vue-router";
 import SuperDrawer from "@/components/super/SuperDrawer.vue";
-import { UniversalDatabase } from "@/classes/UniversalDatabase";
 import type { IUniversalDatabase } from "@/types/universalDatabase";
 import { useUniversalDatabaseStore } from "@/store/universalDatabaseStore";
 import type {
@@ -24,8 +23,6 @@ import {
 import { sortWithCollator } from "@/helpers/sort";
 import { cloneDeep, maxBy } from "lodash";
 import { initializeOrders } from "@/helpers/common";
-import Api from "@/api/Api";
-import { apiPaths } from "@/settings/api";
 
 const props = defineProps({
   objectId: {
@@ -57,8 +54,7 @@ const route = useRoute();
 const router = useRouter();
 
 const universalDatabaseStore = useUniversalDatabaseStore();
-const { deleteInstanceById, getInstances, addOrUpdateInstance } =
-  universalDatabaseStore;
+const { deleteInstanceById, addOrUpdateInstance } = universalDatabaseStore;
 
 const defaultSortColumn = tableConfig.value.find((item) => item.defaultSort);
 const superDrawerRef = ref<InstanceType<typeof UniversalDrawer>>();
@@ -183,7 +179,6 @@ const handleClickChangeOrder = async (
 
   await addOrUpdateInstance(
     {
-      databaseId: databaseId,
       objectId: props.objectId,
       instanceId: item.id,
     },
@@ -193,7 +188,6 @@ const handleClickChangeOrder = async (
   if (previousNewOrderItem) {
     await addOrUpdateInstance(
       {
-        databaseId: databaseId,
         objectId: props.objectId,
         instanceId: previousNewOrderItem.id,
       },
@@ -252,16 +246,6 @@ watch(
 );
 
 onMounted(async () => {
-  // TODO
-  const objectId = "98f410b9-a280-46b4-a9f2-560bf9fcc8f6";
-  const data = await Api.request({
-    path: `${apiPaths.universalObject}/${objectId}/instances`,
-  });
-
-  console.log("get database", data);
-
-  await UniversalDatabase.load(databaseId);
-  database.value = UniversalDatabase.get(databaseId);
   runAction();
 });
 </script>
