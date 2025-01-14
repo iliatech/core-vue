@@ -9,13 +9,8 @@ export const apiPaths = {
   confirmEmail: "auth/confirm-email",
   restorePassword: "auth/restore-password",
 
-  saveAuthUserConfig: "saveAuthUserConfig",
-
-  // Schedule.
-  client: "clients",
-  timeSlot: "time-slots",
-
   // Storage.
   fileStorage: `file-storage`,
-  authUserFileByType: `file-storage/auth-user-file-by-type/credentials`,
+
+  universalObject: "universal-object",
 };

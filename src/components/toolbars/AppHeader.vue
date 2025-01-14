@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { lang } from "@/lang";
-import router from "@/router";
 import { routes } from "@/settings/routes";
 import { resetAuthToken, resetAuthUser } from "@/helpers/auth";
 import type { PropType } from "vue";
@@ -8,16 +7,16 @@ import { computed, ref, watch } from "vue";
 import { useAppStore } from "@/store/appStore";
 import { storeToRefs } from "pinia";
 import type { NavigationItem } from "@/types/common";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import UniversalButton from "@/components/buttons/UniversalButton.vue";
-import ProfileSidebar from "@/modules/schedule/components/sidebars/ProfileSidebar.vue";
+import ProfileSidebar from "@/components/drawers/ProfileSidebar.vue";
 import Menu from "primevue/menu";
-import { CredentialDatabase } from "@/modules/credentials/classes/CredentialDatabase";
 import { privateTopMenuItems, publicTopMenuItems } from "@/settings/menu";
 import UniversalIcon from "@/components/icons/UniversalIcon.vue";
 import { getRoute } from "../../helpers/navigation";
 
 const route = useRoute();
+const router = useRouter();
 
 const appStore = useAppStore();
 const { isAuthorized, user } = storeToRefs(appStore);
@@ -96,7 +95,6 @@ const handleClickUserMenu = (event: Event) => {
 
 const handleClickSignOut = () => {
   router.push(routes.home.path);
-  CredentialDatabase.unload();
   resetAuthUser();
   resetAuthToken();
   updateAuthUser(null);
@@ -109,7 +107,7 @@ const handleClickSignOut = () => {
         v-if="!isPublic"
         class="small-logo"
         src="@/images/rocket-logo.png"
-        alt="Rocket Workspace"
+        alt="Rocket Data - smart data"
       />
     </div>
     <div class="center-column">
@@ -200,6 +198,7 @@ $toolbar-border: 1px solid #aaa;
   flex-direction: column;
   gap: $px-5;
   font-family: "Comic Sans MS", sans-serif;
+  white-space: nowrap;
 }
 
 .site-name {
@@ -223,17 +222,20 @@ $toolbar-border: 1px solid #aaa;
 
 .user {
   font-size: 1rem;
-  margin-right: $px-20;
   display: flex;
   gap: $px-20;
 }
 
 .right-column {
+  margin-left: 20px;
+
   padding-top: $px-5;
+  padding-right: 20px;
   display: flex;
   align-items: flex-start;
   justify-content: flex-end;
   gap: $px-10;
+  white-space: nowrap;
 
   :deep(.universal-button) {
     font-size: 1rem;

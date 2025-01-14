@@ -1,2 +1,2 @@
-Self Vue Application
-made by selfBear
+'Rocket Data' - agile data solution
+Author of idea and creator: Ilia Domyshev

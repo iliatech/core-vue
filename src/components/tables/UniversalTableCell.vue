@@ -66,7 +66,11 @@ const components = computed<UniversalTableCellComponentProp[] | null>(() => {
 const getValue = (item: Instance, columnConfig: UniversalTableColumn) => {
   let value = null;
 
-  if (columnConfig.linkedObjectId) {
+  if (
+    columnConfig.linkedObjectId &&
+    columnConfig.linkedObjectFieldId &&
+    item.linkedInstance
+  ) {
     value =
       item.linkedInstance[columnConfig.linkedObjectId]?.[
         columnConfig.linkedObjectFieldId

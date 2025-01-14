@@ -1,30 +1,25 @@
 <script lang="ts" setup>
 import UniversalDrawer from "@/components/dialogs/UniversalDrawer.vue";
 import type { PropType } from "vue";
-import { computed, reactive, ref, watch } from "vue";
+import { computed, onBeforeMount, reactive, ref, watch } from "vue";
 import UniversalButton from "@/components/buttons/UniversalButton.vue";
 import { showToast } from "@/helpers/toast";
 import { ToastType } from "@/types/toasts";
 import { lang } from "@/lang";
 import { cloneDeep, isEqual } from "lodash";
-import { IEntity } from "@/settings/entities";
 import { prepareName } from "@/helpers/strings";
 import UniversalText from "@/components/fields/UniversalText.vue";
 import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
 import UniversalField from "@/components/fields/UniversalField.vue";
 import UniversalSelector from "@/components/fields/UniversalSelector.vue";
 import UniversalTextarea from "@/components/fields/UniversalTextarea.vue";
-import { useUniversalDatabaseStore } from "@/store/universalDatabaseStore";
-import type { FieldConfig, Instance, ObjectConfig } from "@/types/common";
-import { FieldsTypes } from "@/types/common";
-
-interface DrawerState {
-  id: string | null;
-  name: string;
-  typeId: string | null;
-  description: string;
-  password: string;
-}
+import type {
+  ConfigurationObject,
+  FieldConfig,
+  Instance,
+} from "@/types/common";
+import { FieldsTypes, noDrawerFieldsTypes } from "@/types/common";
+import { Instances } from "@/classes/Instances";
 
 // TODO Make universal.
 interface IsInputStarted {
@@ -40,14 +35,6 @@ interface ErrorsDetails {
   description: string[];
 }
 
-const initialState: DrawerState = {
-  id: null,
-  name: "",
-  typeId: null,
-  description: "",
-  password: "",
-};
-
 const isInputStartedInitialValue = {
   name: false,
   password: false,
@@ -57,22 +44,26 @@ const isInputStartedInitialValue = {
 const sidebar = ref<InstanceType<typeof UniversalDrawer>>();
 const discardChangesDialog = ref<InstanceType<typeof UniversalDrawer>>();
 const isInputStarted = reactive<IsInputStarted>(isInputStartedInitialValue);
-const currentState = reactive<DrawerState>({ ...initialState });
 
 const superCurrentState = ref<Record<string, any>>({});
 const superSavedState = ref<Record<string, any>>({});
 const superIsInputStarted = ref<Record<string, any>>({});
 const superErrorDetails = ref<Record<string, string[]>>({});
 
-const emit = defineEmits(["close:drawer"]);
+const optionsArrays = ref<Record<string, Instance[]>>({});
 
-const universalDatabaseStore = useUniversalDatabaseStore();
-const { addOrUpdateInstance, getInstances } = universalDatabaseStore;
+const emit = defineEmits(["close:drawer"]);
 
 const props = defineProps({
   titleAdd: { type: String, required: true },
   titleEdit: { type: String, required: true },
-  objectConfig: { type: Object as PropType<ObjectConfig>, required: true },
+  objectConfig: {
+    type: Object as PropType<{
+      object: ConfigurationObject;
+      fields: FieldConfig[];
+    }>,
+    required: true,
+  },
 });
 
 const fieldsConfig = computed<FieldConfig[]>(() =>
@@ -111,38 +102,35 @@ const errorDetails = computed<ErrorsDetails>(() => {
 
   // TODO Restore for Universal object.
   // Name.
-  if (!prepareName(currentState.name)) {
-    errors.name.push(lang.error.entityShouldNotBeEmpty(IEntity.CredentialName));
-  }
+  // if (!prepareName(currentState.name)) {
+  //   errors.name.push(lang.error.entityShouldNotBeEmpty(IEntity.CredentialName));
+  // }
 
   // TODO Restore for Universal object.
   // Type.
-  if (!currentState.typeId) {
-    errors.type.push(lang.error.entityShouldNotBeEmpty(IEntity.CredentialType));
-  }
+  // if (!currentState.typeId) {
+  //   errors.type.push(lang.error.entityShouldNotBeEmpty(IEntity.CredentialType));
+  // }
 
   // TODO Restore for Universal object.
   // Password.
-  if (!prepareName(currentState.password)) {
-    errors.password.push(
-      lang.error.entityShouldNotBeEmpty(IEntity.CredentialPassword)
-    );
-  }
+  // if (!prepareName(currentState.password)) {
+  //   errors.password.push(
+  //     lang.error.entityShouldNotBeEmpty(IEntity.CredentialPassword)
+  //   );
+  // }
 
   return errors;
 });
 
-const getOptions = (field: FieldConfig): Instance[] => {
+const getOptions = async (field: FieldConfig): Promise<Instance[]> => {
   if (!field.linkedObjectId) {
     throw new Error(
       `linkedObjectId is not defined in field config for field ${field.id}`
     );
   }
 
-  let instances = getInstances({
-    databaseId: props.objectConfig?.databaseId,
-    objectId: field.linkedObjectId,
-  });
+  let instances = await Instances.getAll(field.linkedObjectId);
 
   if (field.selectorFilter?.fieldId) {
     instances = instances.filter(
@@ -182,10 +170,9 @@ const handleClickSave = async () => {
   });
 
   if (isEditMode.value) {
-    await addOrUpdateInstance(
+    await Instances.addOrUpdateOne(
       {
-        databaseId: props.objectConfig?.databaseId,
-        objectId: props.objectConfig?.objectId,
+        objectId: props.objectConfig?.object.id,
         instanceId: superSavedState.value.id,
       },
       superCurrentState.value
@@ -193,8 +180,7 @@ const handleClickSave = async () => {
   } else {
     await addOrUpdateInstance(
       {
-        databaseId: props.objectConfig?.databaseId,
-        objectId: props.objectConfig?.objectId,
+        objectId: props.objectConfig?.object.id,
       },
       superCurrentState.value
     );
@@ -230,7 +216,7 @@ watch(
     }
 
     fieldsConfig.value.forEach((field: any) => {
-      if (field.type === FieldsTypes.Id) {
+      if (noDrawerFieldsTypes.includes(field.type)) {
         return;
       }
 
@@ -248,6 +234,14 @@ watch(
   },
   { deep: true }
 );
+
+onBeforeMount(async () => {
+  for (let field of fieldsConfig.value) {
+    if (field.type === FieldsTypes.Selector) {
+      optionsArrays.value[field.id] = await getOptions(field);
+    }
+  }
+});
 
 defineExpose({
   async open(item?: Instance) {
@@ -282,29 +276,34 @@ defineExpose({
     @click:close="close"
   >
     <div class="super-drawer">
-      <UniversalField
-        :label="field.label"
-        v-for="field in fieldsConfig"
-        :key="field.id"
-      >
-        <UniversalText
-          v-if="[FieldsTypes.String, FieldsTypes.Password].includes(field.type)"
-          v-model="superCurrentState[field.id]"
-          v-model:is-input-started="superIsInputStarted[field.id]"
-          :errors="superErrorDetails[field.id]"
-        />
-        <UniversalSelector
-          v-if="field.type === FieldsTypes.Selector"
-          v-model="superCurrentState[field.id]"
-          :options="getOptions(field)"
-          :label-field="field.linkedObjectFieldId"
-        />
-        <UniversalTextarea
-          v-if="field.type === FieldsTypes.Text"
-          v-model="superCurrentState[field.id]"
-          :errors="superErrorDetails[field.id]"
-        />
-      </UniversalField>
+      <template v-for="field in fieldsConfig" :key="field.id">
+        <UniversalField
+          v-if="!noDrawerFieldsTypes.includes(field.type)"
+          :label="field.label"
+        >
+          <UniversalText
+            v-if="
+              [FieldsTypes.String, FieldsTypes.Password].includes(field.type)
+            "
+            v-model="superCurrentState[field.id]"
+            v-model:is-input-started="superIsInputStarted[field.id]"
+            :errors="superErrorDetails[field.id]"
+          />
+          <UniversalSelector
+            v-if="
+              field.type === FieldsTypes.Selector && optionsArrays[field.id]
+            "
+            v-model="superCurrentState[field.id]"
+            :options="optionsArrays[field.id]"
+            :label-field="field.linkedObjectFieldId"
+          />
+          <UniversalTextarea
+            v-if="field.type === FieldsTypes.Text"
+            v-model="superCurrentState[field.id]"
+            :errors="superErrorDetails[field.id]"
+          />
+        </UniversalField>
+      </template>
     </div>
     <template #buttons-after>
       <UniversalButton

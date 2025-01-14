@@ -5,11 +5,16 @@ import type { AuthUser, AuthUserConfig } from "@/types/user";
 import Api from "@/api/Api";
 import { apiPaths } from "@/settings/api";
 import { authorizedUserField, initialUserConfig } from "@/settings/auth";
-import { RequestMethods } from "@/types/api";
 import type { RegisteredError } from "@/types/errors";
-import type { PageMessage, PagesMessages } from "@/types/common";
+import type {
+  SystemApp,
+  SystemField,
+  PageMessage,
+  PagesMessages,
+} from "@/types/common";
 
 export const useAppStore = defineStore("appStore", () => {
+  const configurableApps: Ref<SystemApp[]> = ref([]);
   const isLoading: Ref<boolean> = ref(false);
   const isPersistentLoading: Ref<boolean> = ref(false);
   const user = ref<AuthUser | null>(null);
@@ -21,6 +26,8 @@ export const useAppStore = defineStore("appStore", () => {
   });
 
   const authUserConfig = ref<AuthUserConfig>(initialUserConfig);
+
+  const configurableFields = ref<SystemField[]>([]);
 
   const isAuthorized = computed(() => !!user.value);
 
@@ -62,14 +69,6 @@ export const useAppStore = defineStore("appStore", () => {
     }
   };
 
-  const saveAuthUserConfig = async () => {
-    await Api.request({
-      method: RequestMethods.Put,
-      path: apiPaths.saveAuthUserConfig,
-      payload: { config: authUserConfig.value },
-    });
-  };
-
   const setGlobalError = (value: RegisteredError | undefined) => {
     globalError.value = value;
   };
@@ -81,6 +80,22 @@ export const useAppStore = defineStore("appStore", () => {
     pagesMessages[pageName] = messages;
   };
 
+  const loadSystemApps = async () => {
+    // configurableApps.value = await Api.request({
+    //   path: `${apiPaths.universalObject}/apps`,
+    // });
+  };
+
+  const setSystemApps = (apps: SystemApp[]) => {
+    configurableApps.value = apps;
+  };
+
+  const loadSystemFields = async () => {
+    configurableFields.value = await Api.request({
+      path: `${apiPaths.universalObject}/fields`,
+    });
+  };
+
   return {
     globalError,
     isAuthorized,
@@ -90,7 +105,6 @@ export const useAppStore = defineStore("appStore", () => {
     authUserConfig,
     pagesMessages,
     loadAuthUser,
-    saveAuthUserConfig,
     setGlobalError,
     startLoading,
     stopLoading,
@@ -98,5 +112,8 @@ export const useAppStore = defineStore("appStore", () => {
     stopPersistentLoading,
     updateAuthUser,
     updatePageMessages,
+    loadSystemApps,
+    loadSystemFields,
+    setSystemApps,
   };
 });

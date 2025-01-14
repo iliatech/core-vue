@@ -1,15 +1,9 @@
 import { RegisteredError } from "@/types/errors";
-import { lang } from "@/lang";
-import type { IEntity } from "@/settings/entities";
 import { capitalize } from "lodash";
 
 export default {
   interactionDuplicate: "Interaction with same name already exists",
   duplicateFound: "Duplicate found",
-  entityWithSameNameExists: (name: IEntity): string =>
-    `${lang.entity[name]} with the same name already exists`,
-  entityShouldNotBeEmpty: (name: IEntity): string =>
-    `${lang.entity[name]} should not be empty`,
   fieldShouldNotBeEmpty: (name: string): string =>
     `${name} should not be empty`,
   fieldError: (fieldName: string): string =>

@@ -10,8 +10,8 @@
       'universal-button--text': text,
     }"
     :style="{
-      color: scheduleColors[color],
-      borderColor: scheduleColors[color],
+      color: buttonsColors[color],
+      borderColor: buttonsColors[color],
       width,
       height,
       marginTop,
@@ -38,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import { scheduleColors } from "@/settings/schedule";
+import { buttonsColors } from "@/settings/buttonsColors";
 import type { PropType } from "vue";
 import { useRouter } from "vue-router";
 
@@ -46,8 +46,8 @@ const router = useRouter();
 
 const props = defineProps({
   color: {
-    type: String as PropType<keyof typeof scheduleColors>,
-    default: scheduleColors.grey,
+    type: String as PropType<keyof typeof buttonsColors>,
+    default: buttonsColors.grey,
   },
   label: String,
   iconPre: String,

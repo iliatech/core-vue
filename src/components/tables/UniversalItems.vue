@@ -3,7 +3,6 @@ import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import type { PropType } from "vue";
 import { computed, ref } from "vue";
-import type { UniversalTableColumn } from "@/types/tables";
 import UniversalButton from "@/components/buttons/UniversalButton.vue";
 import UniversalFilters from "@/components/filters/UniversalFilters.vue";
 import type { UniversalFilterValues } from "@/types/filters";
@@ -14,12 +13,7 @@ import UniversalIcon from "@/components/icons/UniversalIcon.vue";
 import { sortWithCollator } from "@/helpers/sort";
 import type { FieldConfig } from "@/types/common";
 import { FieldsTypes } from "@/types/common";
-import { getDatabaseIdByObjectId } from "@/settings/entities";
-import { useUniversalDatabaseStore } from "@/store/universalDatabaseStore";
 import { trim } from "lodash";
-
-const universalDatabaseStore = useUniversalDatabaseStore();
-const { getInstances } = universalDatabaseStore;
 
 const emit = defineEmits(["click:actionButton"]);
 
@@ -68,23 +62,23 @@ const dataFiltered = computed<any[]>(() => {
         );
       }
 
-      const linkedInstances = getInstances({
-        databaseId: getDatabaseIdByObjectId(fieldConfig.linkedObjectId),
-        objectId: fieldConfig.linkedObjectId,
-      });
+      // TODO Refactor for updated method getInstances.
+      // const linkedInstances = await getInstances({
+      //   objectId: fieldConfig.linkedObjectId,
+      // });
 
-      const linkedInstancesFilteredIds = linkedInstances
-        .filter((instance) =>
-          prepareName(instance[fieldConfig.linkedObjectFieldId])
-            .toLowerCase()
-            .includes(prepareName(filterValue).toLowerCase())
-        )
-        .map((instance) => instance.id);
+      // const linkedInstancesFilteredIds = linkedInstances
+      //   .filter((instance) =>
+      //     prepareName(instance[fieldConfig.linkedObjectFieldId])
+      //       .toLowerCase()
+      //       .includes(prepareName(filterValue).toLowerCase())
+      //   )
+      //   .map((instance) => instance.id);
 
-      itemsFiltered = itemsFiltered.filter((item) => {
-        const linkedInstanceId = item[fieldId];
-        return linkedInstancesFilteredIds.includes(linkedInstanceId);
-      });
+      // itemsFiltered = itemsFiltered.filter((item) => {
+      //   const linkedInstanceId = item[fieldId];
+      //   return linkedInstancesFilteredIds.includes(linkedInstanceId);
+      // });
     }
 
     if (fieldConfig.type === FieldsTypes.String) {
@@ -99,10 +93,10 @@ const dataFiltered = computed<any[]>(() => {
   });
 
   // TODO Do we need to sort here?
-  sortWithCollator(
-    itemsFiltered,
-    props.objectConfig.find((item) => item.defaultSort)?.id // TODO ??
-  );
+  // sortWithCollator(
+  //   itemsFiltered,
+  //   props.objectConfig.find((item) => item.defaultSort)?.id // TODO ??
+  // );
 
   return itemsFiltered;
 });
@@ -189,6 +183,7 @@ const changeMode = () => {
               <template #body="{ data: item, index }">
                 <UniversalTableCell
                   :column-config="column"
+                  :object-config="objectConfig"
                   :index="index"
                   :item="item"
                   :key="objectHash(item)"
@@ -280,10 +275,12 @@ const changeMode = () => {
   gap: 10px;
   height: 100%;
   overflow-y: auto;
+  align-items: flex-start;
 }
 
 .item {
   width: 200px;
+  flex-shrink: 1;
   border: 1px solid #666;
   border-radius: 3px;
   padding: 10px;

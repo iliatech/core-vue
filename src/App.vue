@@ -32,7 +32,7 @@ import { publicRouteNames } from "@/settings/routes";
 const appStore = useAppStore();
 const route = useRoute();
 const { isLoading, isPersistentLoading } = storeToRefs(appStore);
-const { loadAuthUser } = appStore;
+const { loadAuthUser, loadSystemApps, loadSystemFields } = appStore;
 
 const toast = ref();
 const isPublic = ref<boolean | null>(null);
@@ -47,6 +47,11 @@ watch(route, async () => {
 });
 
 onMounted(async () => {
+  if (!isPublic.value) {
+    await loadSystemApps();
+    await loadSystemFields();
+  }
+
   setGlobalToastObject(toast.value);
 });
 </script>

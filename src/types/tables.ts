@@ -27,5 +27,3 @@ export interface UniversalTableColumn {
     objectConfig: FieldConfig[];
   }) => UniversalTableCellComponentProp[];
 }
-
-export type TableConfig = FieldConfig[];

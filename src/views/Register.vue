@@ -78,7 +78,6 @@ import VueTurnstile from "vue-turnstile";
 import Api from "@/api/Api";
 import { RequestMethods } from "@/types/api";
 import { apiPaths } from "@/settings/api";
-import router from "@/router";
 import { routes } from "@/settings/routes";
 import { useAppStore } from "@/store/appStore";
 import UniversalField from "@/components/fields/UniversalField.vue";
@@ -88,9 +87,12 @@ import UniversalText from "@/components/fields/UniversalText.vue";
 import CentralBlock from "@/components/templates/CentralBlock.vue";
 import UniversalButton from "@/components/buttons/UniversalButton.vue";
 import { CLOUDFLARE_TURNSTILE_SITE_KEY } from "@/settings/app";
+import { useRouter } from "vue-router";
 
 const appStore = useAppStore();
 const { updatePageMessages } = appStore;
+
+const router = useRouter();
 
 const email = ref("");
 const passwordMain = ref("");
