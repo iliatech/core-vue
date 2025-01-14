@@ -1,122 +1,113 @@
+// TODO Implement.
+import type { Instance } from "@/types/common";
+import { FieldsTypes } from "@/types/common";
 import Api from "@/api/Api";
 import { apiPaths } from "@/settings/api";
-import { AES, enc } from "crypto-js";
-import { LocalStorageKeys } from "@/settings/app";
-import { cloneDeep } from "lodash";
+import {
+  getTableConfigByObject,
+  getTableConfigByObjectId,
+} from "@/settings/entities";
+import { maxBy } from "lodash";
 import { v4 as uuidv4 } from "uuid";
-import { RequestMethods } from "@/types/api";
-import { showToast } from "@/helpers/toast";
-import { ToastType } from "@/types/toasts";
-import { lang } from "@/lang";
-import { useUniversalDatabaseStore } from "@/store/universalDatabaseStore";
-import type { IUniversalDatabaseApi } from "@/types/universalDatabase";
 
-export class UniversalDatabase {
-  public static get(databaseId: string) {
-    return useUniversalDatabaseStore().getDatabase(databaseId);
-  }
-
-  public static async save(databaseId: string): Promise<void> {
-    const database = cloneDeep(
-      useUniversalDatabaseStore().getDatabase(databaseId)
-    );
-
-    if (!database) {
-      throw new Error(`Database with id ${databaseId} not found`);
-    }
-
-    database.serverTransactionId = database.clientTransactionId;
-    database.clientTransactionId = uuidv4();
-    database.updated = new Date().toISOString();
-
-    const databaseData = database.encrypted
-      ? {
-          ...database,
-          data: this.encryptDatabase(
-            JSON.stringify(database.data),
-            this.getSecretKey()
-          ),
-        }
-      : database;
-
-    console.log("SAVED DATABASE DATA", database.data);
-
-    const data = JSON.stringify(databaseData);
-
-    await Api.request({
-      path: `${apiPaths.fileStorage}/${databaseId}`,
-      method: RequestMethods.Put,
-      payload: { data },
+export class Instances {
+  static async getAll(params: { objectId: string }): Promise<Instance[]> {
+    return await Api.request({
+      path: `${apiPaths.universalObject}/${params.objectId}/instances`,
     });
   }
 
-  public static async load(
-    databaseId: string,
-    secretKey?: string
-  ): Promise<void> {
-    const databaseApi: IUniversalDatabaseApi | null =
-      (await Api.request({
-        path: `${apiPaths.fileStorage}/${databaseId}`,
-      })) ?? null;
+  static async addOrUpdateOne(
+    params: { objectId: string; instanceId?: string },
+    instance: Instance
+  ) {
+    // TODO Refactor for updated API.
 
-    if (!databaseApi) {
-      this.unload(databaseId);
+    // TODO Change here to take object
+    const objectConfig = getTableConfigByObject(params.objectId);
+
+    const orderField = objectConfig.find(
+      (field) => field.type === FieldsTypes.Order
+    );
+
+    if (orderField) {
+      // TODO
+      //initializeOrders(database.data[params.objectId], orderField.id);
+
+      if (instance[orderField.id] === undefined) {
+        const maxOrderInstance = maxBy(
+          database.data[params.objectId],
+          orderField.id
+        );
+
+        const maxOrder = maxOrderInstance
+          ? maxOrderInstance[orderField.id]
+          : -1;
+
+        instance[orderField.id] = maxOrder + 1;
+      }
+    }
+
+    if (params.instanceId) {
+      const existentInstanceIndex = database.data[params.objectId].findIndex(
+        (item) => item.id === params.instanceId
+      );
+
+      if (existentInstanceIndex !== -1) {
+        database.data[params.objectId].splice(existentInstanceIndex, 1, {
+          id: params.instanceId,
+          ...instance,
+        });
+      }
+    } else {
+      const itemToAdd = {
+        ...instance,
+        id: uuidv4(),
+      };
+
+      database.data[params.objectId].push(itemToAdd);
+    }
+  }
+
+  static async deleteInstanceById(
+    params: { databaseId: string; objectId: string },
+    instanceId: string
+  ) {
+    const database = getDatabase(params.databaseId);
+
+    if (!database) {
+      return null;
+    }
+
+    if (!database.data[params.objectId]) {
       return;
     }
 
-    secretKey =
-      secretKey ??
-      localStorage.getItem(LocalStorageKeys.CredentialDatabaseKey) ??
-      undefined;
+    const objectConfig = getTableConfigByObjectId(params.objectId);
 
-    // TODO Use dedicated secret key for each database?
-    if (!secretKey) {
-      throw new Error("Secret key is not defined");
-    }
-
-    try {
-      // TODO Test encrypted case.
-      const decryptedData = databaseApi.encrypted
-        ? JSON.stringify(this.decryptDatabase(databaseApi.data, secretKey))
-        : databaseApi.data;
-
-      useUniversalDatabaseStore().updateDatabase(databaseId, {
-        ...databaseApi,
-        data: decryptedData,
-      });
-    } catch (e) {
-      console.error(e);
-      throw new Error("Cannot decrypt data with this secret key");
-    }
-  }
-
-  public static unload = (databaseId: string) => {
-    useUniversalDatabaseStore().unloadDatabase(databaseId);
-  };
-
-  private static getSecretKey = (): string => {
-    const secretKey = localStorage.getItem(
-      LocalStorageKeys.CredentialDatabaseKey
+    const orderField = objectConfig.find(
+      (field) => field.type === FieldsTypes.Order
     );
 
-    if (!secretKey) {
-      showToast({
-        type: ToastType.Error,
-        text: lang.error.secretKeyIsNotDefined,
-      });
+    const index = database.data[params.objectId].findIndex(
+      (item) => item.id === instanceId
+    );
 
-      throw new Error("Secret key is not defined");
+    let itemToDelete: Instance | undefined = undefined;
+
+    if (orderField) {
+      itemToDelete = database.data[params.objectId][index];
     }
 
-    return secretKey;
-  };
+    database.data[params.objectId].splice(index, 1);
 
-  private static encryptDatabase(text: string, key: string): string {
-    return AES.encrypt(text, key).toString();
-  }
-
-  private static decryptDatabase(text: string, key: string): string {
-    const bytes = AES.decrypt(text, key);
-    return bytes.toString(enc.Utf8);
+    if (orderField && itemToDelete) {
+      database.data[params.objectId].forEach((item) => {
+        // @ts-ignore IDE defines itemToDelete as possibly undefined by mistake.
+        if (item[orderField.id] > itemToDelete[orderField.id]) {
+          item[orderField.id]--;
+        }
+      });
+    }
   }
 }

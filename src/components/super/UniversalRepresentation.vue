@@ -7,7 +7,6 @@ import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
 import { useRoute, useRouter } from "vue-router";
 import SuperDrawer from "@/components/super/SuperDrawer.vue";
 import type { IUniversalDatabase } from "@/types/universalDatabase";
-import { useUniversalDatabaseStore } from "@/store/universalDatabaseStore";
 import type {
   ConfigurationObject,
   FieldConfig,
@@ -52,9 +51,6 @@ const objectConfig = computed<ObjectConfig>(() => ({
 
 const route = useRoute();
 const router = useRouter();
-
-const universalDatabaseStore = useUniversalDatabaseStore();
-const { deleteInstanceById, addOrUpdateInstance } = universalDatabaseStore;
 
 const defaultSortColumn = tableConfig.value.find((item) => item.defaultSort);
 const superDrawerRef = ref<InstanceType<typeof UniversalDrawer>>();

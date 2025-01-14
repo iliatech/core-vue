@@ -14,12 +14,7 @@ import UniversalIcon from "@/components/icons/UniversalIcon.vue";
 import { sortWithCollator } from "@/helpers/sort";
 import type { FieldConfig } from "@/types/common";
 import { FieldsTypes } from "@/types/common";
-import { getDatabaseIdByObjectId } from "@/settings/entities";
-import { useUniversalDatabaseStore } from "@/store/universalDatabaseStore";
 import { trim } from "lodash";
-
-const universalDatabaseStore = useUniversalDatabaseStore();
-const { getInstances } = universalDatabaseStore;
 
 const emit = defineEmits(["click:actionButton"]);
 

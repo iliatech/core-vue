@@ -95,8 +95,6 @@ const handleClickUserMenu = (event: Event) => {
 
 const handleClickSignOut = () => {
   router.push(routes.home.path);
-  // TODO Need to implement 'unloadAll' method.
-  //UniversalDatabase.unloadAll();
   resetAuthUser();
   resetAuthToken();
   updateAuthUser(null);

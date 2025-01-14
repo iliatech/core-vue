@@ -13,13 +13,13 @@ import UniversalDialog from "@/components/dialogs/UniversalDialog.vue";
 import UniversalField from "@/components/fields/UniversalField.vue";
 import UniversalSelector from "@/components/fields/UniversalSelector.vue";
 import UniversalTextarea from "@/components/fields/UniversalTextarea.vue";
-import { useUniversalDatabaseStore } from "@/store/universalDatabaseStore";
 import type {
   ConfigurationObject,
   FieldConfig,
   Instance,
 } from "@/types/common";
 import { FieldsTypes, noDrawerFieldsTypes } from "@/types/common";
+import { Instances } from "@/classes/UniversalDatabase";
 
 // TODO Make universal.
 interface IsInputStarted {
@@ -53,9 +53,6 @@ const superErrorDetails = ref<Record<string, string[]>>({});
 const optionsArrays = ref<Record<string, Instance[]>>({});
 
 const emit = defineEmits(["close:drawer"]);
-
-const universalDatabaseStore = useUniversalDatabaseStore();
-const { addOrUpdateInstance, getInstances } = universalDatabaseStore;
 
 const props = defineProps({
   titleAdd: { type: String, required: true },
@@ -133,7 +130,7 @@ const getOptions = async (field: FieldConfig): Promise<Instance[]> => {
     );
   }
 
-  let instances = await getInstances({
+  let instances = await Instances.getAll({
     objectId: field.linkedObjectId,
   });
 
@@ -175,7 +172,7 @@ const handleClickSave = async () => {
   });
 
   if (isEditMode.value) {
-    await addOrUpdateInstance(
+    await Instances.addOrUpdateOne(
       {
         objectId: props.objectConfig?.object.id,
         instanceId: superSavedState.value.id,
